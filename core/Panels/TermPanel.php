@@ -2,11 +2,13 @@
 namespace Kontentblocks\Panels;
 
 
+use Kontentblocks\Backend\DataProvider\DataProviderService;
 use Kontentblocks\Backend\DataProvider\TermMetaDataProvider;
 use Kontentblocks\Backend\Environment\TermEnvironment;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -95,14 +97,16 @@ abstract class TermPanel extends AbstractPanel
 
     public function init()
     {
-        add_action("edited_{$this->args['taxonomy']}", array($this, 'save'));
-        if ($this->args['insideTable']) {
-            add_action("{$this->args['taxonomy']}_edit_form_fields", array($this, 'form'));
-        } else {
-            add_action("{$this->args['taxonomy']}_edit_form", array($this, 'form'));
+        if (is_admin()) {
+            add_action("edited_{$this->args['taxonomy']}", array($this, 'save'));
+            if ($this->args['insideTable']) {
+                add_action("{$this->args['taxonomy']}_edit_form_fields", array($this, 'form'));
+            } else {
+                add_action("{$this->args['taxonomy']}_edit_form", array($this, 'form'));
 
+            }
+            add_action('admin_footer', array($this, 'toJSON'), 5);
         }
-        add_action('admin_footer', array($this, 'toJSON'), 5);
     }
 
     public function toJSON()
@@ -125,11 +129,11 @@ abstract class TermPanel extends AbstractPanel
      */
     public function save($termId)
     {
-        $this->dataProvider = new TermMetaDataProvider($termId);
+        $this->dataProvider = DataProviderService::getTermProvider($termId);
         $old = $this->model->export();
         $new = $this->fields->save($_POST[$this->baseId], $old);
         $merged = Utilities::arrayMergeRecursive($new, $old);
-        $this->dataProvider->update($this->baseId, $merged);
+        $this->model->set($merged)->sync();
     }
 
     /**
@@ -138,7 +142,7 @@ abstract class TermPanel extends AbstractPanel
      */
     public function form($termId)
     {
-        $this->dataProvider = new TermMetaDataProvider($termId->term_id);
+        $this->dataProvider = DataProviderService::getTermProvider($termId->term_id);
 
         // @TODO what? deprecate, replace
         do_action('kb.do.enqueue.admin.files');
@@ -210,19 +214,6 @@ abstract class TermPanel extends AbstractPanel
         return $this->term;
     }
 
-    /**
-     * @return mixed
-     * @throws \Exception
-     */
-    public function setupFrontendData()
-    {
-        foreach ($this->model as $key => $v) {
-            /** @var \Kontentblocks\Fields\Field $field */
-            $field = $this->fields->getFieldByKey($key);
-            $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue() : $v;
-        }
-        return $this->model;
-    }
 
     /**
      * Get specific key value from data

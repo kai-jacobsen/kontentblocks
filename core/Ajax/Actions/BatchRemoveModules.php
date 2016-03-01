@@ -47,6 +47,8 @@ class BatchRemoveModules implements AjaxActionInterface
                 $update = $storage->removeFromIndex( $mid );
                 if ($update) {
                     do_action( 'kb.module.delete', $module );
+                    Utilities::remoteConcatGet( $postId );
+
                     $responseMap[$mid] = true;
                 } else {
                     $responseMap[$mid] = false;

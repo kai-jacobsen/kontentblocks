@@ -3,9 +3,11 @@
 namespace Kontentblocks;
 
 use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayoutsRegistry;
+use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
+use Kontentblocks\Panels\TermPanel;
 use Kontentblocks\Utils\CommonTwig\SimpleView;
 use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
@@ -130,7 +132,7 @@ function renderContext($context, $post_id, $areaSettings = array(), $moduleSetti
 
     $Environment = Utilities::getPostEnvironment($postId);
     $areas = $Environment->getAreasForContext($context);
-    $contextsOrder = $Environment->getDataProvider()->get('kb.contexts');
+    $contextsOrder = $Environment->getDataProvider()->get('_kbcontexts');
 
     if (is_array($contextsOrder) && !empty($contextsOrder)) {
         foreach ($contextsOrder as $context => $areaIds) {
@@ -190,7 +192,7 @@ function hasModules($area, $postId)
 /**
  * @param null $id
  * @param null $post_id
- * @return Panels\OptionsPanel|null|\WP_Error
+ * @return Panels\OptionPanel|null|\WP_Error
  */
 function getPanel($id = null, $post_id = null)
 {
@@ -227,7 +229,7 @@ function getPostPanel($panelId = null, $postId = null)
  * @param $panelId
  * @param $termId
  * @param null $taxonomy
- * @return null|\WP_Error
+ * @return TermPanel|\WP_Error
  */
 function getTermPanel($panelId, $termId, $taxonomy = null)
 {
@@ -296,7 +298,7 @@ function getOptionsPanel($panelId)
 function getOptionsPanelModel($panelId)
 {
     $panel = getOptionsPanel($panelId);
-    if (is_a($panel, '\Kontentblocks\Panels\OptionsPanel')) {
+    if (is_a($panel, '\Kontentblocks\Panels\OptionPanel')) {
         return $panel->setupFrontendData();
     }
 }
@@ -315,4 +317,12 @@ function EditScreenLayoutsRegistry()
 function JSONTransport()
 {
     return Kontentblocks()->getService('utility.jsontransport');
+}
+
+/**
+ * @return FieldRegistry
+ */
+function fieldRegistry()
+{
+    return Kontentblocks()->getService('registry.fields');
 }

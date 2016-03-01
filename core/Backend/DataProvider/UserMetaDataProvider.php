@@ -26,17 +26,17 @@ class UserMetaDataProvider implements DataProviderInterface
     /**
      * Class constructor
      *
-     * @param $userId
+     * @param $postId
      *
      * @throws \Exception
      * @since 0.1.0
      */
-    public function __construct($userId)
+    public function __construct($postId)
     {
-        if (!isset($userId) || $userId === 0) {
+        if (!isset($postId) || $postId === 0) {
             throw new \Exception('a valid post id must be provided');
         }
-        $this->userId = $userId;
+        $this->userId = $postId;
         $this->reset();
     }
 
@@ -48,20 +48,8 @@ class UserMetaDataProvider implements DataProviderInterface
      */
     public function reset()
     {
-        clean_user_cache($this->getUserId());
         $this->getUserCustom();
-
         return $this;
-    }
-
-    /**
-     * Getter for objects post id
-     * @return int
-     * @since 0.1.0
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**
@@ -90,6 +78,16 @@ class UserMetaDataProvider implements DataProviderInterface
     }
 
     /**
+     * Getter for objects post id
+     * @return int
+     * @since 0.1.0
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
      * Updates existing keys or creates new ones
      * Wrapper to ::update() since the plugin does not make use of multiple
      * equal keys (yet)
@@ -115,6 +113,7 @@ class UserMetaDataProvider implements DataProviderInterface
      */
     public function update($key, $value)
     {
+        $this->meta[$key] = $value;
         return update_user_meta($this->userId, $key, $value);
     }
 
@@ -145,6 +144,7 @@ class UserMetaDataProvider implements DataProviderInterface
      */
     public function delete($key)
     {
+        unset($this->meta[$key]);
         return delete_user_meta($this->userId, $key);
     }
 

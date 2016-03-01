@@ -4,8 +4,7 @@ namespace Kontentblocks\Panels;
 
 use Kontentblocks\Backend\DataProvider\SerOptionsDataProvider;
 use Kontentblocks\Customizer\CustomizerIntegration;
-use Kontentblocks\Fields\Renderer\FieldRendererTabs;
-use Kontentblocks\Fields\PanelFieldController;
+use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
@@ -17,7 +16,7 @@ use Kontentblocks\Utils\Utilities;
  *
  * @package Kontentblocks\Panels
  */
-abstract class OptionsPanel extends AbstractPanel
+abstract class OptionPanel extends AbstractPanel
 {
 
     /**
@@ -45,6 +44,11 @@ abstract class OptionsPanel extends AbstractPanel
      */
     protected $menuUri;
 
+    /**
+     * @var StandardFieldController
+     */
+    protected $fields;
+
 
     /**
      * Class constructor
@@ -53,24 +57,14 @@ abstract class OptionsPanel extends AbstractPanel
      *
      * @throws \Exception
      */
-    public function __construct( $args )
+    public function __construct($args)
     {
-        $this->args = $this->parseDefaults( $args );
-        $this->setupArgs( $this->args );
-        $this->dataProvider = new SerOptionsDataProvider( $this->baseId );
-        $this->model = new OptionsPanelModel($this->dataProvider->export(), $this);
-        $this->fields = new PanelFieldController( $this );
+        $this->args = $this->parseDefaults($args);
+        $this->setupArgs($this->args);
+        $this->dataProvider = new SerOptionsDataProvider($this->baseId);
+        $this->model = new PanelModel($this->dataProvider->export(), $this);
+        $this->fields = new StandardFieldController($this->baseId, $this);
         $this->fields();
-    }
-
-
-    /**
-     * @param $args
-     */
-    public static function run( $args )
-    {
-        $instance = new $args['class']( $args );
-        $instance->init();
     }
 
     /**
@@ -78,7 +72,7 @@ abstract class OptionsPanel extends AbstractPanel
      * @param $args
      * @return mixed
      */
-    public function parseDefaults( $args )
+    public function parseDefaults($args)
     {
         $defaults = array(
             'baseId' => null,
@@ -87,19 +81,45 @@ abstract class OptionsPanel extends AbstractPanel
             'customizer' => false
         );
 
-        return wp_parse_args( $args, $defaults );
+        return wp_parse_args($args, $defaults);
     }
 
+    /**
+     * Auto setup args to class properties
+     * and look for optional method for each arg
+     * @param $args
+     */
+    public function setupArgs($args)
+    {
+        foreach ($args as $k => $v) {
+            if (method_exists($this, "set" . strtoupper($k))) {
+                $method = "set" . strtoupper($k);
+                $this->$method($v);
+            } else {
+                $this->$k = $v;
+            }
+        }
+    }
 
+    abstract public function fields();
+
+    /**
+     * @param $args
+     */
+    public static function run($args)
+    {
+        $instance = new $args['class']($args);
+        $instance->init();
+    }
 
     public function init()
     {
-        add_action( 'admin_init', array( $this, 'observeSaveRequest' ) );
-        add_action( 'admin_menu', array( $this, 'setupMenu' ) );
+        add_action('admin_init', array($this, 'observeSaveRequest'));
+        add_action('admin_menu', array($this, 'setupMenu'));
 //        add_action( 'wp_footer', array( $this, 'toJSON' ) );
 
         if ($this->customizer) {
-            add_action( 'customize_register', array( $this, 'setupCustomizer' ) );
+            add_action('customize_register', array($this, 'setupCustomizer'));
         }
     }
 
@@ -123,7 +143,7 @@ abstract class OptionsPanel extends AbstractPanel
                     )
                 );
 
-                $this->menuUri = admin_url( 'admin.php?page=' . $this->menu['slug'] );
+                $this->menuUri = admin_url('admin.php?page=' . $this->menu['slug']);
 
                 break;
 
@@ -134,26 +154,13 @@ abstract class OptionsPanel extends AbstractPanel
                     $this->menu['name'],
                     'edit_kontentblocks',
                     $this->menu['slug'],
-                    array( $this, 'form' )
+                    array($this, 'form')
                 );
-                $this->menuUri = admin_url( 'admin.php?page=' . $this->menu['slug'] );
+                $this->menuUri = admin_url('admin.php?page=' . $this->menu['slug']);
 
                 break;
         }
 
-    }
-
-    public function toJSON()
-    {
-        $args = array(
-            'baseId' => $this->getBaseId(),
-            'mid' => $this->getBaseId(),
-            'entityData' => $this->model->getOriginalData(),
-            'area' => '_internal',
-            'type' => 'option',
-            'settings' => $this->args
-        );
-        Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
     }
 
     /**
@@ -162,7 +169,7 @@ abstract class OptionsPanel extends AbstractPanel
     public function observeSaveRequest()
     {
 
-        if (isset( $_POST[$this->menu['slug'] . '_save'] ) && filter_var(
+        if (isset($_POST[$this->menu['slug'] . '_save']) && filter_var(
                 $_POST[$this->menu['slug'] . '_save'],
                 FILTER_VALIDATE_BOOLEAN
             )
@@ -179,15 +186,13 @@ abstract class OptionsPanel extends AbstractPanel
     public function save()
     {
         $old = $this->model->export();
-        $new = $this->fields->save( $_POST[$this->baseId], $old );
-        $merged = Utilities::arrayMergeRecursive( $new, $old );
-        $this->dataProvider->set( $merged )->save();
-        $location = add_query_arg( array( 'message' => '1' ) );
-        wp_redirect( $location );
+        $new = $this->fields->save($_POST[$this->baseId], $old);
+        $merged = Utilities::arrayMergeRecursive($new, $old);
+        $this->dataProvider->set($merged)->save();
+        $location = add_query_arg(array('message' => '1'));
+        wp_redirect($location);
         exit;
     }
-
-    abstract public function fields();
 
     /**
      * @return bool
@@ -195,9 +200,9 @@ abstract class OptionsPanel extends AbstractPanel
     public function form()
     {
         // @TODO what? deprecate, replace
-        do_action( 'kb.do.enqueue.admin.files' );
+        do_action('kb.do.enqueue.admin.files');
 
-        if (!current_user_can( 'edit_kontentblocks' )) {
+        if (!current_user_can('edit_kontentblocks')) {
             return false;
         }
 
@@ -209,6 +214,19 @@ abstract class OptionsPanel extends AbstractPanel
         echo $this->renderFields();
         echo $this->afterForm();
 
+    }
+
+    public function toJSON()
+    {
+        $args = array(
+            'baseId' => $this->getBaseId(),
+            'mid' => $this->getBaseId(),
+            'entityData' => $this->model->getOriginalData(),
+            'area' => '_internal',
+            'type' => 'option',
+            'settings' => $this->args
+        );
+        Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
     }
 
     /**
@@ -251,31 +269,17 @@ abstract class OptionsPanel extends AbstractPanel
     }
 
     /**
-     * @return mixed
-     * @throws \Exception
-     */
-    public function setupFrontendData()
-    {
-        foreach ($this->model as $key => $v) {
-            /** @var \Kontentblocks\Fields\Field $field */
-            $field = $this->fields->getFieldByKey( $key );
-            $this->model[$key] = ( !is_null( $field ) ) ? $field->getFrontendValue() : $v;
-        }
-        return $this->model;
-    }
-
-    /**
      * Get specific key value from data
      * Setup data, if not already done
      * @param null $key
      * @param null $default
      * @return mixed
      */
-    public function getKey( $key = null, $default = null )
+    public function getKey($key = null, $default = null)
     {
         $data = $this->getData();
 
-        if (isset( $data[$key] )) {
+        if (isset($data[$key])) {
             return $data[$key];
         }
 
@@ -296,7 +300,7 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function getMenuLink()
     {
-        if (current_user_can( 'edit_kontentblocks' )) {
+        if (current_user_can('edit_kontentblocks')) {
             return $this->menuUri;
         }
     }
@@ -304,9 +308,9 @@ abstract class OptionsPanel extends AbstractPanel
     /**
      * @param \WP_Customize_Manager $wpCustomize
      */
-    public function setupCustomizer( \WP_Customize_Manager $wpCustomize )
+    public function setupCustomizer(\WP_Customize_Manager $wpCustomize)
     {
-        new CustomizerIntegration( $this->fields, $wpCustomize, $this );
+        new CustomizerIntegration($this->fields, $wpCustomize, $this);
     }
 
     /**
@@ -315,23 +319,6 @@ abstract class OptionsPanel extends AbstractPanel
     public function getName()
     {
         return $this->menu['name'];
-    }
-
-    /**
-     * Auto setup args to class properties
-     * and look for optional method for each arg
-     * @param $args
-     */
-    public function setupArgs( $args )
-    {
-        foreach ($args as $k => $v) {
-            if (method_exists( $this, "set" . strtoupper( $k ) )) {
-                $method = "set" . strtoupper( $k );
-                $this->$method( $v );
-            } else {
-                $this->$k = $v;
-            }
-        }
     }
 
 }

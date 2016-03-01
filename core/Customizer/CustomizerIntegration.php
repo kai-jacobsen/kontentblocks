@@ -5,7 +5,7 @@ namespace Kontentblocks\Customizer;
 
 use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Panels\OptionsPanel;
+use Kontentblocks\Panels\OptionPanel;
 
 /**
  * Class CustomizerIntegration
@@ -26,19 +26,19 @@ class CustomizerIntegration
      */
     protected $fieldController;
     /**
-     * @var OptionsPanel
+     * @var OptionPanel
      */
     protected $panel;
 
     /**
      * @param StandardFieldController $fieldController
      * @param \WP_Customize_Manager $wpCustomize
-     * @param OptionsPanel $panel
+     * @param OptionPanel $panel
      */
     public function __construct(
         StandardFieldController $fieldController,
         \WP_Customize_Manager $wpCustomize,
-        OptionsPanel $panel
+        OptionPanel $panel
     )
     {
         add_action( 'customize_update_kb_option_panel', array($this, 'save'), 10, 2 );

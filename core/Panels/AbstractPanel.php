@@ -3,9 +3,12 @@
 namespace Kontentblocks\Panels;
 
 
+use Kontentblocks\Backend\DataProvider\DataProviderInterface;
 use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Interfaces\EntityInterface;
+use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\PanelFieldController;
+use Kontentblocks\Fields\StandardFieldController;
 
 /**
  * Class AbstractPanel
@@ -14,6 +17,10 @@ use Kontentblocks\Fields\PanelFieldController;
 abstract class AbstractPanel implements EntityInterface
 {
 
+    /**
+     * @var DataProviderInterface
+     */
+    protected $dataProvider;
 
     /**
      * Form data
@@ -42,6 +49,11 @@ abstract class AbstractPanel implements EntityInterface
      * @var string
      */
     protected $baseId;
+
+    /**
+     * @var StandardFieldController
+     */
+    public $fields;
 
 
     /**
@@ -100,17 +112,74 @@ abstract class AbstractPanel implements EntityInterface
         // TODO: Implement getProperties() method.
     }
 
+    /**
+     * @return PanelModel
+     */
     public function getModel()
     {
         return $this->model;
     }
 
     /**
-     * @return mixed
+     * Auto setup args to class properties
+     * and look for optional method for each arg
+     * @param $args
      */
-    protected function getType()
+    public function setupArgs($args)
+    {
+        foreach ($args as $k => $v) {
+            if (method_exists($this, "set" . strtoupper($k))) {
+                $method = "set" . strtoupper($k);
+                $this->$method($v);
+            } else {
+                $this->$k = $v;
+            }
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
     {
         return $this->type;
     }
 
+    /**
+     * @return DataProviderInterface
+     */
+    public function getDataProvider()
+    {
+        return $this->dataProvider;
+    }
+
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
+    public function setupFrontendData()
+    {
+        foreach ($this->model as $key => $v) {
+            /** @var \Kontentblocks\Fields\Field $field */
+            $field = $this->fields->getFieldByKey($key);
+            $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue() : $v;
+        }
+        return $this->model;
+    }
+
+    /**
+     * @return EntityModel
+     */
+    public function setupRawData(){
+        $fields = $this->fields->collectAllFields();
+        if (!empty($fields) && is_array($fields)){
+            /** @var Field $field */
+            foreach ($fields as $field) {
+                $this->model->set(array(
+                   $field->getKey() => $field->getValue()
+                ));
+            }
+        }
+        return $this->model;
+    }
 }

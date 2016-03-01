@@ -6,6 +6,7 @@ use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Areas\AreaSettingsModel;
+use Kontentblocks\Backend\DataProvider\DataProviderService;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Kontentblocks;
@@ -35,7 +36,7 @@ class SyncAreaSettings implements AjaxActionInterface
         $environment = Utilities::getPostEnvironment( $postId );
         $Area = $environment->getAreaDefinition( $areaId );
 
-        $areaSettings = new AreaSettingsModel( $Area, $postId );
+        $areaSettings = new AreaSettingsModel( $Area, $postId, DataProviderService::getPostProvider($postId) );
         $areaSettings->import( Utilities::validateBoolRecursive( $settings ) );
         $update = $areaSettings->save();
 

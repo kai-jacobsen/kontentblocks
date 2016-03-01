@@ -15,6 +15,7 @@ class ImageObject
     public $attachment;
 
     public $classes = array();
+    public $fallback = true;
 
     protected $width = 150;
 
@@ -29,16 +30,16 @@ class ImageObject
      *
      * @since 0.1.0
      */
-    public function __construct( $att )
+    public function __construct($att)
     {
 
-        if (!isset( $att )) {
-            throw new \BadFunctionCallException( 'Missing attachment' );
+        if (!isset($att)) {
+            throw new \BadFunctionCallException('Missing attachment');
         }
 
-        $this->attachment = $this->prepareAttachment( $att );
+        $this->attachment = $this->prepareAttachment($att);
 
-        if (is_null( $this->attachment )) {
+        if (is_null($this->attachment)) {
             throw new \UnexpectedValueException(
                 "Image object could not be created. Either the attachment type is not an image or the input value was wrong0"
             );
@@ -53,20 +54,20 @@ class ImageObject
      *
      * @return array|null
      */
-    private function prepareAttachment( $att )
+    private function prepareAttachment($att)
     {
         $attachment = null;
 
-        if (( is_string( $att ) && is_numeric( $att ) ) || is_int( $att )) {
-            $attachment = wp_prepare_attachment_for_js( $att );
-        } else if (is_array( $att )) {
+        if ((is_string($att) && is_numeric($att)) || is_int($att)) {
+            $attachment = wp_prepare_attachment_for_js($att);
+        } else if (is_array($att)) {
             // check for keys
-            $keys = array_keys( $att );
+            $keys = array_keys($att);
             if (
-                in_array( 'id', $keys ) &&
-                in_array( 'filename', $keys ) &&
-                in_array( 'uploadedTo', $keys ) &&
-                in_array( 'type', $keys ) &&
+                in_array('id', $keys) &&
+                in_array('filename', $keys) &&
+                in_array('uploadedTo', $keys) &&
+                in_array('type', $keys) &&
                 $att['type'] === 'image'
             ) {
                 $attachment = $att;
@@ -76,13 +77,13 @@ class ImageObject
         return $attachment;
     }
 
-    public function addClass( $class )
+    public function addClass($class)
     {
 
-        if (is_array( $class )) {
-            $this->classes = array_merge( $this->classes, $class );
+        if (is_array($class)) {
+            $this->classes = array_merge($this->classes, $class);
         } else {
-            $this->classes = array_merge( explode( ' ', $this->_cleanSpaces( $class ) ), $this->classes );
+            $this->classes = array_merge(explode(' ', $this->_cleanSpaces($class)), $this->classes);
 
         }
 
@@ -90,21 +91,27 @@ class ImageObject
 
     }
 
-    public function removeClass( $class )
+    private function _cleanSpaces($string)
     {
-        $key = array_search( $class, $this->classes );
+        return esc_attr(preg_replace('/\s{2,}/', ' ', $string));
+
+    }
+
+    public function removeClass($class)
+    {
+        $key = array_search($class, $this->classes);
         if ($key) {
-            unset( $this->classes[$key] );
+            unset($this->classes[$key]);
         }
 
 
         return $this;
     }
 
-    public function addAttr( $attr, $value = '' )
+    public function addAttr($attr, $value = '')
     {
-        if (is_array( $attr )) {
-            $this->attributes = array_merge( $this->attributes, $attr );
+        if (is_array($attr)) {
+            $this->attributes = array_merge($this->attributes, $attr);
         } else {
             $this->attributes[$attr] = $value;
         }
@@ -113,13 +120,60 @@ class ImageObject
 
     }
 
-
     public function html()
     {
         $this->prepareSrc();
         $format = '<%1$s %3$s src="%2$s" >';
 
-        return sprintf( $format, 'img', $this->src, $this->_renderAttributes() );
+        return sprintf($format, 'img', $this->src, $this->_renderAttributes());
+
+    }
+
+    private function prepareSrc()
+    {
+
+        if ($this->attachment['id']) {
+            $this->src = ImageResize::getInstance()->process(
+                $this->attachment['id'],
+                $this->width,
+                $this->height,
+                $this->crop,
+                true,
+                $this->upscale
+            );
+
+        }
+
+        if (empty($this->src) && $this->fallback) {
+            $this->src = 'http://placehold.it/' . $this->width . '/' . $this->height;
+        }
+
+        return false;
+    }
+
+    private function _renderAttributes()
+    {
+        $return = "class='{$this->_classList()}' ";
+        $return .= $this->_attributesList();
+
+        return trim($return);
+
+    }
+
+    private function _classList()
+    {
+        return trim(implode(' ', $this->classes));
+
+    }
+
+    private function _attributesList()
+    {
+        $returnstr = '';
+        foreach ($this->attributes as $attr => $value) {
+            $returnstr .= "{$attr}='{$value}' ";
+        }
+
+        return trim($returnstr);
 
     }
 
@@ -137,31 +191,10 @@ class ImageObject
 
         $format = ' %2$s style="background-image: url(\'%1$s\');"';
 
-        return sprintf( $format, $this->src, $this->_renderAttributes() );
+        return sprintf($format, $this->src, $this->_renderAttributes());
     }
 
-    private function _cleanSpaces( $string )
-    {
-        return esc_attr( preg_replace( '/\s{2,}/', ' ', $string ) );
-
-    }
-
-    private function _renderAttributes()
-    {
-        $return = "class='{$this->_classList()}' ";
-        $return .= $this->_attributesList();
-
-        return trim( $return );
-
-    }
-
-    private function _classList()
-    {
-        return trim( implode( ' ', $this->classes ) );
-
-    }
-
-    public function size( $w = null, $h = null )
+    public function size($w = null, $h = null)
     {
         $this->width = $w;
         $this->height = $h;
@@ -176,43 +209,16 @@ class ImageObject
         return $this;
     }
 
-    public function crop( $crop )
+    public function crop($crop)
     {
         $this->crop = $crop;
 
         return $this;
     }
 
-    private function _attributesList()
+    public function meta($field)
     {
-        $returnstr = '';
-        foreach ($this->attributes as $attr => $value) {
-            $returnstr .= "{$attr}='{$value}' ";
-        }
-
-        return trim( $returnstr );
-
-    }
-
-    private function prepareSrc()
-    {
-        if ($this->attachment['id']) {
-            return $this->src = ImageResize::getInstance()->process(
-                $this->attachment['id'],
-                $this->width,
-                $this->height,
-                $this->crop,
-                true,
-                $this->upscale
-            );
-        }
-
-        return false;
-    }
-
-    public function meta( $field )
-    {
-        if (isset( $this->attachment[$field] )) {
+        if (isset($this->attachment[$field])) {
             return $this->attachment[$field];
         }
     }

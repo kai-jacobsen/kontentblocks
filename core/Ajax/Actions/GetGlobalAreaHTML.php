@@ -6,10 +6,8 @@ use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Areas\AreaSettingsModel;
-use Kontentblocks\Areas\DynamicAreaBackendHTML;
-use Kontentblocks\Backend\Storage\ModuleStorage;
+use Kontentblocks\Backend\Renderer\DynamicAreaBackendRenderer;
 use Kontentblocks\Common\Data\ValueStorageInterface;
-use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -35,13 +33,13 @@ class GetGlobalAreaHTML implements AjaxActionInterface
         $environment = Utilities::getPostEnvironment( $postId );
         $area = $environment->getAreaDefinition( $areaId );
 
-        $areaSettings = new AreaSettingsModel( $area, $postId );
+        $areaSettings = new AreaSettingsModel( $area, $postId, $environment->getDataProvider() );
         $areaSettings->import( Utilities::validateBoolRecursive( $settings ) );
         $update = $areaSettings->save();
         $html = '';
 
         if ($areaSettings->isAttached()) {
-            $node = new DynamicAreaBackendHTML( $area, $environment, $area->context );
+            $node = new DynamicAreaBackendRenderer( $area, $environment, $area->context );
             ob_start();
             $node->build();
             $html = ob_get_clean();

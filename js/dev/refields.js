@@ -1578,7 +1578,6 @@ Fields.registerObject('multiselect', require('./controls/multiselect'));
 Fields.registerObject('editor', require('./controls/editor'));
 Fields.registerObject('otimes', require('./controls/otimes'));
 Fields.registerObject('mlayout', require('./controls/mlayout'));
-
 },{"./Fields":23,"./controls/color":25,"./controls/datetime":26,"./controls/editor":27,"./controls/file":28,"./controls/flexfields":29,"./controls/gallery":35,"./controls/gallery2":38,"./controls/image":41,"./controls/link":42,"./controls/mlayout":43,"./controls/multiselect":50,"./controls/otimes":51,"./controls/tagsinput":52,"./controls/text":53,"./controls/textarea":54}],25:[function(require,module,exports){
 var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({

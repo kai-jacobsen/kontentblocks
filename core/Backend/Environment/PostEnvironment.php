@@ -140,7 +140,10 @@ class PostEnvironment implements JsonSerializable
      */
     public function getPostType()
     {
-        return get_post_type($this->storageId);
+        if (!$this->postType){
+            return $this->postType = get_post_type($this->storageId);
+        }
+        return $this->postType;
     }
 
     /**
@@ -153,7 +156,8 @@ class PostEnvironment implements JsonSerializable
         $areas = $this->findAreas();
         /** @var \Kontentblocks\Areas\AreaProperties $area */
         foreach ($areas as $area) {
-            $area->set('settings', new AreaSettingsModel($area, $this->postObj->ID));
+
+            $area->set('settings', new AreaSettingsModel($area, $this->postObj->ID, $this->getDataProvider()));
         }
         return $areas;
 

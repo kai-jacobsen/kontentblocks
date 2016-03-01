@@ -7,7 +7,7 @@ namespace Kontentblocks\Modules;
  * Class ModuleGuard
  * @package Kontentblocks\Modules
  */
-class ModuleGuard
+class ModuleValidator
 {
 
     public $loggedInOnly = false;

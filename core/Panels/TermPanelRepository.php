@@ -9,7 +9,7 @@ use Kontentblocks\Kontentblocks;
  * Class TermPanelRepository
  * @package Kontentblocks\Panels
  */
-class TermPanelRepository
+class TermPanelRepository extends StandardPanelRepository
 {
     public $panels;
 
@@ -20,7 +20,6 @@ class TermPanelRepository
     {
         $this->environment = $environment;
         $this->setupPanelsForTerm();
-
     }
 
     private function setupPanelsForTerm()

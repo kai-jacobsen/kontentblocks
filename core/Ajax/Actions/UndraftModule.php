@@ -7,6 +7,7 @@ use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorageInterface;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class UndraftModule
@@ -21,15 +22,15 @@ class UndraftModule implements AjaxActionInterface
     {
 
         $module = $request->get( 'module' );
-        $post_id = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
+        $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
 
         $state = filter_var( $module['state']['draft'], FILTER_VALIDATE_BOOLEAN );
 
-        if (!is_int( absint( $post_id ) )) {
-            return new AjaxErrorResponse( 'Invalid parameters', array( 'mid' => $module, 'postId' => $post_id ) );
+        if (!is_int( absint( $postId ) )) {
+            return new AjaxErrorResponse( 'Invalid parameters', array( 'mid' => $module, 'postId' => $postId ) );
         }
 
-        $storage = new ModuleStorage( $post_id, null );
+        $storage = new ModuleStorage( $postId, null );
         $module = $storage->getModuleDefinition( $module['mid'] );
 
         if (array_key_exists( 'state', $module )) {
@@ -37,6 +38,7 @@ class UndraftModule implements AjaxActionInterface
         }
 
         $storage->addToIndex( $module['mid'], $module );
+        Utilities::remoteConcatGet( $postId );
 
         return new AjaxSuccessResponse( 'Module published', array( 'module' => $module ) );
     }

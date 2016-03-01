@@ -25,7 +25,8 @@ var ContextView = require('backend/Views/ContextView');
 var ContextModel = require('backend/Models/ContextModel');
 var TabbedEditScreen = require('backend/Views/Ui/TabbedEditScreen');
 var ChangeObserver = require('shared/ChangeObserver');
-
+var Refields = require('fields/RefieldsController');
+var FieldsAPI = require('fieldsAPI/FieldsAPIController');
 // ---------------
 // Collections
 // ---------------

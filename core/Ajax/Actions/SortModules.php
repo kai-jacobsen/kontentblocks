@@ -9,6 +9,7 @@ use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Utils\RequestWrapper;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class SortModules
@@ -55,6 +56,7 @@ class SortModules implements AjaxActionInterface
         $save = array_merge( $old, $new );
         $update = $storage->saveIndex( $save );
         if ($update || count( $storage ) > 1) {
+            Utilities::remoteConcatGet( $postId );
             return new AjaxSuccessResponse( 'Modules successfully resorted', $save );
         } else {
             return new AjaxErrorResponse( ' Resorting failed', array( 'updateMsg' => $update ) );

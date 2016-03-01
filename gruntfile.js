@@ -14,18 +14,6 @@ module.exports = function (grunt) {
       }
     },
     uglify: {
-      backend: {
-        options: {
-          banner: '/*! <%= pkg.name %> ProdVersion <%= grunt.template.today("yyyy-mm-dd hh:mm") %> */\n',
-          mangle: true,
-          beautify: false,
-          compress: {},
-          drop_console: true
-        },
-        files: {
-          'js/dist/backend.min.js': ['<%= browserify.backend.dest %>']
-        }
-      },
       dist: {
         options: {
           banner: '/*! <%= pkg.name %> ProdVersion <%= grunt.template.today("yyyy-mm-dd hh:mm") %> */\n',
@@ -37,10 +25,10 @@ module.exports = function (grunt) {
         files: {
           'js/dist/frontend.min.js': ['<%= browserify.frontend.dest %>'],
           'js/dist/backend.min.js': ['<%= browserify.backend.dest %>'],
-          'js/dist/refields.min.js': ['<%= browserify.refields.dest %>'],
+          //'js/dist/refields.min.js': ['<%= browserify.refields.dest %>'],
           'js/dist/extensions.min.js': ['<%= browserify.extensions.dest %>'],
           'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>'],
-          'js/dist/fieldsAPI.min.js': ['<%= browserify.fieldsAPI.dest %>'],
+          //'js/dist/fieldsAPI.min.js': ['<%= browserify.fieldsAPI.dest %>'],
           'js/dist/mediaExt.min.js': ['<%= concat.mediaExt.dest %>'],
           'js/dist/customizer.min.js': ['<%= browserify.customizer.dest %>'],
           'js/dist/client.min.js' : 'js/dev/client.js'
@@ -90,18 +78,18 @@ module.exports = function (grunt) {
         src: 'js/src/frontend/FrontendController.js',
         dest: 'js/dev/frontend.js'
       },
-      fieldsAPI: {
-        src: 'js/src/fieldsAPI/FieldsAPIController.js',
-        dest: 'js/dev/fieldsAPI.js'
-      },
+      //fieldsAPI: {
+      //  src: 'js/src/fieldsAPI/FieldsAPIController.js',
+      //  dest: 'js/dev/fieldsAPI.js'
+      //},
       backend: {
         src: 'js/src/backend/BackendController.js',
         dest: 'js/dev/backend.js'
       },
-      refields: {
-        src: 'js/src/fields/RefieldsController.js',
-        dest: 'js/dev/refields.js'
-      },
+      //refields: {
+      //  src: 'js/src/fields/RefieldsController.js',
+      //  dest: 'js/dev/refields.js'
+      //},
       extensions: {
         src: 'js/src/extensions/ExtensionsController.js',
         dest: 'js/dev/extensions.js'
@@ -169,7 +157,7 @@ module.exports = function (grunt) {
       },
       refields: {
         files: ['js/src/fields/**/*.js', 'js/src/shared/**/*.js', 'js/**/*.hbs'],
-        tasks: ['jsrefields', 'cc']
+        tasks: ['cc']
       },
       plugins: {
         files: ['js/src/plugins/**/*.js'],
@@ -177,7 +165,7 @@ module.exports = function (grunt) {
       },
       fieldsApi: {
         files: ['js/src/fieldsAPI/**/*.js', 'js/**/*.hbs'],
-        tasks: ['jsfieldsAPI']
+        tasks: ['cc']
       },
       customizer: {
         files: ['js/src/customizer/**/*.js'],
@@ -260,11 +248,11 @@ module.exports = function (grunt) {
   grunt.registerTask('jsclient', ['uglify:dev']);
   grunt.registerTask('jsbackend', ['browserify:backend']);
   grunt.registerTask('jsextensions', ['browserify:extensions']);
-  grunt.registerTask('jsrefields', ['browserify:refields']);
+  grunt.registerTask('jsrefields', ['browserify:backend']);
   grunt.registerTask('jsplugins', ['concat','uglify:dev', 'clean']);
-  grunt.registerTask('jsfieldsAPI', ['browserify:fieldsAPI']);
+  grunt.registerTask('jsfieldsAPI', ['browserify:backend']);
   grunt.registerTask('jsCustomizer', ['browserify:customizer']);
-  grunt.registerTask('jshbs', ['jsfrontend', 'jsbackend', 'jsrefields']);
+  grunt.registerTask('jshbs', ['cc']);
   grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
 
   grunt.registerTask('cc', ['concurrent']);

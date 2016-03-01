@@ -6,6 +6,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\EditScreens\ScreenManager;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Language\I18n;
 use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\Utilities;
 
@@ -66,9 +67,10 @@ class AreaRegistry
 
         // action is triggerd by AreaDynamicManager setup
         // to make sure external areas are properly setup
-        add_action( 'kb.areas.dynamic.setup', array( $this, 'init' ) );
-        add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
+        add_action('kb.areas.dynamic.setup', array($this, 'init'));
+        add_action('wp_footer', array($this, 'setupJSON'), 8);
         $this->addMockArea();
+
     }
 
     /**
@@ -102,23 +104,25 @@ class AreaRegistry
      * @return void
      * @since 0.1.0
      */
-    public function addArea( $args, $manual = true )
+    public function addArea($args, $manual = true)
     {
-        if (!empty( $args['id'] )) {
-            $args['id'] = sanitize_title( $args['id'] );
+        if (!empty($args['id'])) {
+            $args['id'] = sanitize_title($args['id']);
         }
-        if (isset( $args['dynamic'] ) && $args['dynamic']) {
-            $args['context'] = 'dynamic';
+        if (isset($args['dynamic']) && $args['dynamic']) {
+            if (!isset($args['context'])) {
+                $args['context'] = 'dynamic';
+            }
         }
 
-        $area = new AreaProperties( $args );
+        $area = new AreaProperties($args);
         // merge defaults with provided args
         if ($area->dynamic === true && $manual) {
-            $this->areaDynamicManager->add( $area );
+            $this->areaDynamicManager->add($area);
         }
 
         $this->areas[$area->id] = $area;
-        $this->preFilterAreas( $this->areas[$area->id] );
+        $this->preFilterAreas($this->areas[$area->id]);
     }
 
     /**
@@ -128,7 +132,7 @@ class AreaRegistry
      *
      * @since 0.1.0
      */
-    public function preFilterAreas( $area )
+    public function preFilterAreas($area)
     {
         if ($area->dynamic === true
         ) {
@@ -151,33 +155,37 @@ class AreaRegistry
      */
     public function init()
     {
-        $areas = get_posts(
-            array(
-                'post_type' => 'kb-dyar',
-                'posts_per_page' => - 1,
-                'suppress_filters' => false // let multilanguage plugins set the right context
-            )
-        );
+        $areas = wp_cache_get('dynamicareas', Utilities::getCacheGroup());
 
-        if (!empty( $areas )) {
+        if ($areas === false) {
+            $areas = get_posts(
+                array(
+                    'post_type' => 'kb-dyar',
+                    'posts_per_page' => -1,
+                    'suppress_filters' => false // let multilanguage plugins set the right context
+                )
+            );
+            wp_cache_add('dynamicareas', $areas, Utilities::getCacheGroup(), 60 * 60 * 6);
+        }
+
+        if (is_array($areas) && !empty($areas)) {
             foreach ($areas as $areapost) {
-                $storage = new ModuleStorage( $areapost->ID );
-                $area = $storage->getDataProvider()->get( '_area' );
+                $storage = new ModuleStorage($areapost->ID);
+                $area = $storage->getDataProvider()->get('_area');
                 $area['parent_id'] = $areapost->ID; //deprecated old key
                 $area['parentObjectId'] = $areapost->ID;
                 $dynamicAreas[] = $area;
             }
         }
-        if (!empty( $dynamicAreas )) {
+        if (!empty($dynamicAreas)) {
             foreach ($dynamicAreas as $area) {
-                $this->addArea( $area, false );
+                $this->addArea($area, false);
             }
         }
-
-        _K::info( 'Dynamic areas queried and setup' );
-
-        do_action( 'kb.areas.setup' );
+        _K::info('Dynamic areas queried and setup');
+        do_action('kb.areas.setup');
     }
+
 
     /**
      * Getter for global sidebars
@@ -207,7 +215,7 @@ class AreaRegistry
      *
      * @since 0.1.0
      */
-    public function addTemplate( $args )
+    public function addTemplate($args)
     {
 
         $defaults = array(
@@ -218,8 +226,8 @@ class AreaRegistry
             'wrap' => false
         );
 
-        if (!empty( $args['id'] )) {
-            $this->templates[$args['id']] = wp_parse_args( $args, $defaults );
+        if (!empty($args['id'])) {
+            $this->templates[$args['id']] = wp_parse_args($args, $defaults);
         }
 
     }
@@ -232,9 +240,9 @@ class AreaRegistry
      * @return null | array of params
      * @since 0.1.0
      */
-    public function getTemplate( $id )
+    public function getTemplate($id)
     {
-        if (isset( $this->templates[$id] )) {
+        if (isset($this->templates[$id])) {
             return $this->templates[$id];
         } else {
             return null;
@@ -248,9 +256,9 @@ class AreaRegistry
      * @return bool
      * @since 0.1.0
      */
-    public function templateExists( $id )
+    public function templateExists($id)
     {
-        if (isset( $this->templates[$id] )) {
+        if (isset($this->templates[$id])) {
             return true;
         } else {
             return false;
@@ -270,48 +278,48 @@ class AreaRegistry
      * @param array $args module args
      * @return bool
      */
-    public function connect( $classname, $args )
+    public function connect($classname, $args)
     {
         $setting = $args['settings']['connect'];
 
-        if (empty( $setting )) {
+        if (empty($setting)) {
             return false;
         }
 
         if ($setting === 'any') {
             /** @var \Kontentblocks\Areas\AreaProperties $area */
             foreach ($this->areas as $area) {
-                $area->connect( $classname );
+                $area->connect($classname);
             }
-        } else if (is_array( $setting )) {
+        } else if (is_array($setting)) {
             foreach ($setting as $target) {
                 // check for context
-                if (in_array( $target, array_keys( ScreenManager::getDefaultContextLayout() ) )) {
-                    foreach ($this->getAreasByContext( $target ) as $connection) {
-                        $args['settings']['connect'] = array( $connection->id );
-                        $this->connect( $classname, $args );
+                if (in_array($target, array_keys(ScreenManager::getDefaultContextLayout()))) {
+                    foreach ($this->getAreasByContext($target) as $connection) {
+                        $args['settings']['connect'] = array($connection->id);
+                        $this->connect($classname, $args);
                     }
                     // check for page template
-                } else if (is_string( $target ) && ( strpos( $target, '.php' ) !== false || $target === 'default' )) {
-                    foreach ($this->getAreasByPageTemplate( $target ) as $tplcon) {
-                        $args['settings']['connect'] = array( $tplcon->id );
-                        $this->connect( $classname, $args );
+                } else if (is_string($target) && (strpos($target, '.php') !== false || $target === 'default')) {
+                    foreach ($this->getAreasByPageTemplate($target) as $tplcon) {
+                        $args['settings']['connect'] = array($tplcon->id);
+                        $this->connect($classname, $args);
                     }
                 } else if ($target === 'global') {
                     foreach ($this->getGlobalAreas() as $connection) {
-                        $connection->connect( $classname );
+                        $connection->connect($classname);
                     }
 
                 } else {
                     // its not a context, not a page template
                     // area id not existent
-                    if (empty( $this->areas[$target] )) {
+                    if (empty($this->areas[$target])) {
                         continue;
                     }
                     //area id exists, connect
                     /** @var \Kontentblocks\Areas\AreaProperties $area */
                     $area = $this->areas[$target];
-                    $area->connect( $classname );
+                    $area->connect($classname);
                 }
             }
         }
@@ -325,12 +333,12 @@ class AreaRegistry
      * @return array
      * @since 0.1.0
      */
-    public function getAreasByContext( $context )
+    public function getAreasByContext($context)
     {
         return array_filter(
             $this->areas,
-            function ( $area ) use ( $context ) {
-                return ( $area->context === $context );
+            function ($area) use ($context) {
+                return ($area->context === $context);
             }
         );
     }
@@ -342,12 +350,12 @@ class AreaRegistry
      *
      * @return array
      */
-    public function getAreasByPageTemplate( $tpl )
+    public function getAreasByPageTemplate($tpl)
     {
         return array_filter(
             $this->areas,
-            function ( $area ) use ( $tpl ) {
-                return ( in_array( $tpl, $area->pageTemplates ) );
+            function ($area) use ($tpl) {
+                return (in_array($tpl, $area->pageTemplates));
             }
         );
     }
@@ -372,19 +380,19 @@ class AreaRegistry
      *
      * @return boolean
      */
-    public function filterForPost( PostEnvironment $environment )
+    public function filterForPost(PostEnvironment $environment)
     {
 
         $pageTemplate = $environment->getPageTemplate();
         $postType = $environment->getPostType();
         $areas = array();
         // bail out if this is a redirect template
-        if (false !== strpos( $pageTemplate, 'redirect' )) {
+        if (false !== strpos($pageTemplate, 'redirect')) {
             return false;
         }
 
         if ($postType === 'kb-gmd') {
-            return array( 'global-module' => $this->getArea( 'global-module' ) );
+            return array('global-module' => $this->getArea('global-module'));
         }
         if ($postType === 'kb-dyar') {
             return $this->getGlobalAreas();
@@ -393,29 +401,29 @@ class AreaRegistry
         // loop through areas and find all which are attached to this post type and/or page template
         /** @var \Kontentblocks\Areas\AreaProperties $area */
         foreach ($this->areas as $area) {
-            if (empty( $area->context )) {
+            if (empty($area->context)) {
                 $area->context = 'side';
             }
-            if (( !empty( $area->pageTemplates ) ) && ( !empty( $area->postTypes ) )) {
-                if (Utilities::strposa( $pageTemplate, $area->pageTemplates ) && in_array(
+            if ((!empty($area->pageTemplates)) && (!empty($area->postTypes))) {
+                if (Utilities::strposa($pageTemplate, $area->pageTemplates) && in_array(
                         $postType,
                         $area->postTypes
                     )
                 ) {
                     $areas[$area->id] = $area;
                 }
-            } elseif (!empty( $area->pageTemplates )) {
-                if (Utilities::strposa( $pageTemplate, $area->pageTemplates )) {
+            } elseif (!empty($area->pageTemplates)) {
+                if (Utilities::strposa($pageTemplate, $area->pageTemplates)) {
                     $areas[$area->id] = $area;
                 }
-            } elseif (!empty( $area->postTypes )) {
-                if (in_array( $postType, $area->postTypes )) {
+            } elseif (!empty($area->postTypes)) {
+                if (in_array($postType, $area->postTypes)) {
                     $areas[$area->id] = $area;
                 }
             }
 
         }
-        $sareas = self::orderBy( $areas, 'order' );
+        $sareas = self::orderBy($areas, 'order');
         return $sareas;
 
     }
@@ -428,10 +436,10 @@ class AreaRegistry
      * @return mixed null if area is not set | area array args if area is set
      * @since 0.1.0
      */
-    public function getArea( $id )
+    public function getArea($id)
     {
-        if (isset( $this->areas[$id] )) {
-            array_push( $this->reserved, $id );
+        if (isset($this->areas[$id])) {
+            array_push($this->reserved, $id);
             return $this->areas[$id];
         } else {
             return null;
@@ -446,10 +454,10 @@ class AreaRegistry
      * @param string $field
      * @return array
      */
-    private function orderBy( $areas, $field )
+    private function orderBy($areas, $field)
     {
         $code = "return strnatcmp(\$a->$field, \$b->$field);";
-        uasort( $areas, create_function( '$a,$b', $code ) );
+        uasort($areas, create_function('$a,$b', $code));
         return $areas;
     }
 
@@ -459,9 +467,9 @@ class AreaRegistry
      * @param $areaId
      * @return bool
      */
-    public function areaExists( $areaId )
+    public function areaExists($areaId)
     {
-        return isset( $this->areas[$areaId] );
+        return isset($this->areas[$areaId]);
     }
 
     /**
@@ -469,11 +477,11 @@ class AreaRegistry
      * @param $id
      * @return mixed
      */
-    public function isDynamic( $id )
+    public function isDynamic($id)
     {
-        $area = $this->getArea( $id );
+        $area = $this->getArea($id);
 
-        if (is_object( $area )) {
+        if (is_object($area)) {
             return $area->dynamic;
         }
 
@@ -488,10 +496,8 @@ class AreaRegistry
     public function setupJSON()
     {
         Utilities::setupCats();
-        Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'AreaTemplates', null, $this->templates );
-        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->getArea( '_internal' ) );
-
-
+        Kontentblocks::getService('utility.jsontransport')->registerData('AreaTemplates', null, $this->templates);
+        Kontentblocks::getService('utility.jsontransport')->registerArea($this->getArea('_internal'));
     }
 
 }

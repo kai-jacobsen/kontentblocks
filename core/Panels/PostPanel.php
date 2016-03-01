@@ -71,10 +71,11 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function __construct($args, PostEnvironment $environment)
     {
+        $this->environment = $environment;
+        $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
-        $this->environment = $environment;
-        $this->model = new PanelModel($this->environment->getDataProvider()->get($this->baseId));
+        $this->model = new PanelModel($this->dataProvider->get($this->baseId), $this);
         $this->fields = new StandardFieldController($this->baseId, $this);
         $this->fields();
     }
@@ -127,14 +128,17 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function init()
     {
-        $postType = $this->environment->getPostType();
-        if (is_array($this->metaBox)) {
-            add_action("add_meta_boxes_{$postType}", array($this, 'metaBox'), $this->args['priority'], 1);
-        } else {
-            add_action($this->hook, array($this, 'prepForm'), $this->args['priority']);
+        if (is_admin()) {
+            $postType = $this->environment->getPostType();
+            if (is_array($this->metaBox)) {
+                add_action("add_meta_boxes_{$postType}", array($this, 'metaBox'), $this->args['priority'], 1);
+            } else {
+                add_action($this->hook, array($this, 'prepForm'), $this->args['priority']);
+            }
+            add_action("save_post", array($this, 'saveCallback'), 10, 1);
         }
+
         add_action('wp_footer', array($this, 'toJSON'));
-        add_action("save_post", array($this, 'saveCallback'), 10, 1);
     }
 
     /**
@@ -255,9 +259,9 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
     {
         $old = $this->model->export();
         $new = $this->fields->save($postData->get($this->baseId), $old);
-        $dataProvider = $this->environment->getDataProvider();
-        $dataProvider->update($this->baseId, $new);
-        $this->model->set($new);
+        $merged = Utilities::arrayMergeRecursive($new, $old);
+        $dataProvider = $this->dataProvider;
+        $this->model->set($merged)->sync();
         if ($this->saveAsSingle) {
             foreach ($new as $k => $v) {
                 if (empty($v)) {
@@ -298,20 +302,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function getModel()
     {
-        return $this->model;
-    }
-
-    /**
-     * @return mixed
-     * @throws \Exception
-     */
-    public function setupFrontendData()
-    {
-        foreach ($this->model as $key => $v) {
-            /** @var \Kontentblocks\Fields\Field $field */
-            $field = $this->fields->getFieldByKey($key);
-            $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue($this->postId) : $v;
-        }
         return $this->model;
     }
 

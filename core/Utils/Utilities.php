@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Utils;
 
+use Detection\MobileDetect;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\TermEnvironment;
 use Kontentblocks\Backend\Environment\UserEnvironment;
@@ -425,9 +426,11 @@ class Utilities
     /**
      * Call the ghost to visit the url in concat mode
      * @param null $postId
+     * @param bool $blocking
+     * @param null $host
      * @return null|void
      */
-    public static function remoteConcatGet($postId = null)
+    public static function remoteConcatGet($postId = null, $blocking = false, $host = null)
     {
         if (apply_filters('kb.remote.concat.get', false)) {
             return null;
@@ -437,10 +440,17 @@ class Utilities
             return;
         }
 
-        $url = add_query_arg('concat', 'true', get_permalink($postId));
+        $base = get_permalink($postId);
+
+        if (!is_null($host)) {
+            $parsed = parse_url($base);
+            $base = str_replace($parsed['host'], $host, $base);
+        }
+
+        $url = add_query_arg('concat', 'true', $base);
 
         if ($url !== false) {
-            wp_remote_get($url, array('timeout' => 2));
+            return wp_remote_get($url, array('timeout' => 2, 'blocking' => $blocking));
         }
     }
 
@@ -521,4 +531,15 @@ class Utilities
         $arr = $value;
     }
 
+
+    public static function getCacheGroup()
+    {
+        $parts = array();
+        $parts[] = 'kontentblocks';
+        if (defined('ICL_LANGUAGE_CODE')) {
+            $parts[] = ICL_LANGUAGE_CODE;
+        }
+
+        return implode('_', $parts);
+    }
 }

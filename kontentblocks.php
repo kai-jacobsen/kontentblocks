@@ -52,7 +52,7 @@ Class Kontentblocks
     const DEVMODE = true;
     const TABLEVERSION = '1.0.13';
     const DEBUG = true;
-    const DEBUG_LOG = false;
+    const DEBUG_LOG = true;
     static $instance;
     static $AjaxHandler;
     public $Services;
@@ -168,7 +168,7 @@ Class Kontentblocks
 
             $ajax = defined( 'DOING_AJAX' ) && DOING_AJAX;
             $Logger = new Logger( 'kontentblocks' );
-            if (Kontentblocks::DEBUG && is_user_logged_in() && apply_filters( 'kb.use.logger.console', false )) {
+            if (Kontentblocks::DEBUG && is_user_logged_in() && apply_filters( 'kb.use.logger.console', true )) {
                 if (!$ajax) {
                     $Logger->pushHandler( new BrowserConsoleHandler() );
                     $Logger->addInfo(
@@ -369,12 +369,13 @@ Class Kontentblocks
                     }
                 }
             }
-            $files = glob( $path . '*.php' );
-            foreach ($files as $template) {
-                if (strpos( basename( $template ), '__' ) === false) {
-                    $Registry->add( $template );
-                }
-            }
+
+//            $files = glob( $path . '*.php' );
+//            foreach ($files as $template) {
+//                if (strpos( basename( $template ), '__' ) === false) {
+//                    $Registry->add( $template );
+//                }
+//            }
         }
         _K::info( 'Modules loaded' );
 

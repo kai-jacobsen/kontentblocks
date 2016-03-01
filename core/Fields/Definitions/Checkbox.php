@@ -31,20 +31,20 @@ Class Checkbox extends Field
      * @param string $oldData value of key from saved data
      * @return boolean
      */
-    public function save( $data, $oldData )
+    public function save($data, $oldData)
     {
         // if this field is not present in the current $_POST array
         // check if old data exists and return that if it is valid
         // else set the value of the checkbox to false instead of null
-        if (is_null( $data )) {
-            if (isset( $oldData[$this->getKey()] ) && is_bool( $oldData[$this->getKey()] )) {
-                return filter_var( $oldData[$this->getKey()], FILTER_VALIDATE_BOOLEAN );
+        if (is_null($data)) {
+            if (isset($oldData[$this->getKey()]) && is_bool($oldData[$this->getKey()])) {
+                return filter_var($oldData[$this->getKey()], FILTER_VALIDATE_BOOLEAN);
             } else {
                 return false;
             }
         }
 
-        if (filter_var( $data, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE )) {
+        if (filter_var($data, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)) {
             return true;
         } else {
             return false;
@@ -59,9 +59,9 @@ Class Checkbox extends Field
      * @param $val
      * @return bool
      */
-    public function prepareFormValue( $val )
+    public function prepareFormValue($val)
     {
-        return filter_var( $val, FILTER_VALIDATE_BOOLEAN );
+        return filter_var($val, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -69,19 +69,18 @@ Class Checkbox extends Field
      * @param $val
      * @return mixed
      */
-    public function prepareFrontendValue( $val )
+    public function prepareFrontendValue($val)
     {
-        return filter_var( $val, FILTER_VALIDATE_BOOLEAN );
+        return filter_var($val, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
      * @param FieldFormRenderer $form
      */
-    public function renderHidden( FieldFormRenderer $form )
+    public function renderHidden(FieldFormRenderer $form)
     {
         echo "<input type='hidden' name='{$form->getFieldName()}' value='{$this->getValue()}' >";
     }
-
 
 
 }

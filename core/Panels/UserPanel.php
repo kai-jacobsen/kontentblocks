@@ -55,7 +55,7 @@ abstract class UserPanel extends AbstractPanel
         $this->setupArgs($this->args);
         $this->user = $environment->userObj;
         $this->fields = new StandardFieldController($args['baseId'], $this);
-        $this->model = new PanelModel($environment->getDataProvider()->get($args['baseId']), $this);
+        $this->model = new PanelModel($this->dataProvider->get($args['baseId']), $this);
         $this->data = $this->model->export();
         $this->fields();
 
@@ -75,22 +75,6 @@ abstract class UserPanel extends AbstractPanel
         return wp_parse_args($args, $defaults);
     }
 
-    /**
-     * Auto setup args to class properties
-     * and look for optional method for each arg
-     * @param $args
-     */
-    public function setupArgs($args)
-    {
-        foreach ($args as $k => $v) {
-            if (method_exists($this, "set" . strtoupper($k))) {
-                $method = "set" . strtoupper($k);
-                $this->$method($v);
-            } else {
-                $this->$k = $v;
-            }
-        }
-    }
 
     abstract public function fields();
 
@@ -117,19 +101,17 @@ abstract class UserPanel extends AbstractPanel
     }
 
     /**
-     * Post Id not needed in this context
-     * @return mixed|void
+     *
      */
     public function save()
     {
         $old = $this->model->export();
         $new = $this->fields->save($_POST[$this->baseId], $old);
         $merged = Utilities::arrayMergeRecursive($new, $old);
-        $this->dataProvider->update($this->baseId, $merged);
+        $this->model->set($merged)->sync();
     }
 
     /**
-     * @param $termId
      * @return bool
      */
     public function form()
@@ -164,20 +146,6 @@ abstract class UserPanel extends AbstractPanel
     public function getTerm()
     {
         return $this->term;
-    }
-
-    /**
-     * @return mixed
-     * @throws \Exception
-     */
-    public function setupFrontendData()
-    {
-        foreach ($this->model as $key => $v) {
-            /** @var \Kontentblocks\Fields\Field $field */
-            $field = $this->fields->getFieldByKey($key);
-            $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue() : $v;
-        }
-        return $this->model;
     }
 
     /**

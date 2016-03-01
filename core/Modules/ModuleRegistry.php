@@ -27,13 +27,13 @@ class ModuleRegistry
      * Gets instantiated by pimple once
      * @param Container $services
      */
-    public function __construct( Container $services )
+    public function __construct(Container $services)
     {
         $this->services = $services;
-        add_action( 'admin_footer', array( $this, 'setupJSON' ), 8 );
+        add_action('admin_footer', array($this, 'setupJSON'), 8);
 
         if (is_user_logged_in()) {
-            add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
+            add_action('wp_footer', array($this, 'setupJSON'), 8);
         }
     }
 
@@ -43,34 +43,35 @@ class ModuleRegistry
      * attributes
      * @param $file
      */
-    public function add( $file )
+    public function add($file)
     {
         include_once $file;
         // extract class name from file
-        $classname = str_replace( '.php', '', basename( $file ) );
-        if (!isset( $this->modules[$classname] ) && property_exists( $classname, 'settings' )) {
+//        $classname = str_replace( '.php', '', basename( $file ) );
+        $classname = basename(dirname($file));
+        if (!isset($this->modules[$classname]) && property_exists($classname, 'settings')) {
             // Defaults from the specific Module
             // contains id, name, public name etc..
             $moduleArgs = array();
-            $args = wp_parse_args( $classname::$settings, Module::getDefaultSettings() );
+            $args = wp_parse_args($classname::$settings, Module::getDefaultSettings());
             $args['class'] = $classname;
-            $args['hash'] = md5( $classname );
-            $args['path'] = trailingslashit( dirname( $file ) );
-            $args['uri'] = content_url( str_replace( WP_CONTENT_DIR, '', $args['path'] ) );
+            $args['hash'] = md5($classname);
+            $args['path'] = trailingslashit(dirname($file));
+            $args['uri'] = content_url(str_replace(WP_CONTENT_DIR, '', $args['path']));
             $args['helpfile'] = false;
-            $args['publicName'] = ( empty( $args['publicName'] ) ) ? $args['name'] : $args['publicName'];
+            $args['publicName'] = (empty($args['publicName'])) ? $args['name'] : $args['publicName'];
 
-            if (!empty( $args['id'] ) && empty( $args['slug'] )) {
+            if (!empty($args['id']) && empty($args['slug'])) {
                 $args['slug'] = $args['id'];
             }
 
-            if (empty( $args['slug'] )) {
-                $args['slug'] = sanitize_title( $args['class'] );
+            if (empty($args['slug'])) {
+                $args['slug'] = sanitize_title($args['class']);
             }
 
 
             if (is_admin()) {
-                $args = $this->setupFilePaths( $args, $classname );
+                $args = $this->setupFilePaths($args, $classname);
             }
 
             // settings array
@@ -82,20 +83,20 @@ class ModuleRegistry
             // Handle connection to regions
             /** @var \Kontentblocks\Areas\AreaRegistry $areaRegistry */
             $areaRegistry = $this->services['registry.areas'];
-            $areaRegistry->connect( $classname, $moduleArgs );
+            $areaRegistry->connect($classname, $moduleArgs);
 
             // call static init method, if present
-            if (method_exists( $classname, 'init' )) {
-                $classname::init( $moduleArgs );
+            if (method_exists($classname, 'init')) {
+                $classname::init($moduleArgs);
             }
         }
     }
 
-    private function setupFilePaths( $args, $classname )
+    private function setupFilePaths($args, $classname)
     {
         // setup helpfile
         $locale = get_locale();
-        if (file_exists( trailingslashit( $args['path'] ) . $classname . '_' . $locale . '.hbs' )) {
+        if (file_exists(trailingslashit($args['path']) . $classname . '_' . $locale . '.hbs')) {
             $args['helpfile'] = content_url(
                                     str_replace(
                                         WP_CONTENT_DIR,
@@ -105,7 +106,7 @@ class ModuleRegistry
                                 ) . $classname . '_' . $locale . '.hbs';
         }
 
-        if (file_exists( trailingslashit( $args['path'] ) . $classname . '.jpg' )) {
+        if (file_exists(trailingslashit($args['path']) . $classname . '.jpg')) {
             $args['poster'] = content_url(
                                   str_replace(
                                       WP_CONTENT_DIR,
@@ -115,7 +116,7 @@ class ModuleRegistry
                               ) . $classname . '.jpg';
         }
 
-        if (file_exists( trailingslashit( $args['path'] ) . $classname . '.png' )) {
+        if (file_exists(trailingslashit($args['path']) . $classname . '.png')) {
             $args['poster'] = content_url(
                                   str_replace(
                                       WP_CONTENT_DIR,
@@ -144,7 +145,7 @@ class ModuleRegistry
     public function setupJSON()
     {
         foreach ($this->modules as $classname => $moduleArgs) {
-            Kontentblocks::getService( 'utility.jsontransport' )->registerData(
+            Kontentblocks::getService('utility.jsontransport')->registerData(
                 'ModuleDefinitions',
                 $classname,
                 $moduleArgs
@@ -154,9 +155,9 @@ class ModuleRegistry
         // Extra global modules
         foreach (GlobalModules::getInstance()->getAllGmodules() as $id => $moduleArgs) {
             $moduleClass = $moduleArgs['class'];
-            $clone = wp_parse_args( $moduleArgs, $this->get( $moduleClass ) );
+            $clone = wp_parse_args($moduleArgs, $this->get($moduleClass));
             $clone['settings']['category'] = 'gmodule';
-            Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'ModuleDefinitions', $id, $clone );
+            Kontentblocks::getService('utility.jsontransport')->registerData('ModuleDefinitions', $id, $clone);
         }
     }
 
@@ -166,9 +167,9 @@ class ModuleRegistry
      *
      * @return null
      */
-    public function get( $classname )
+    public function get($classname)
     {
-        if (isset( $this->modules[$classname] )) {
+        if (isset($this->modules[$classname])) {
             return $this->modules[$classname];
         } else {
             return null;
@@ -207,21 +208,21 @@ class ModuleRegistry
      * @author Gabriel Sobrinho <gabriel (dot) sobrinho (at) gmail (dot) com>
      * @author Anton Medvedev <anton (at) elfet (dot) ru>
      */
-    protected function arrayMergeRecursiveDistinct( array &$array1, array &$array2 )
+    protected function arrayMergeRecursiveDistinct(array &$array1, array &$array2)
     {
         $merged = $array1;
 
         foreach ($array2 as $key => &$value) {
-            if (is_array( $value ) && isset ( $merged[$key] ) && is_array( $merged[$key] )) {
-                if (is_int( $key )) {
-                    $merged[] = $this->arrayMergeRecursiveDistinct( $merged[$key], $value );
+            if (is_array($value) && isset ($merged[$key]) && is_array($merged[$key])) {
+                if (is_int($key)) {
+                    $merged[] = $this->arrayMergeRecursiveDistinct($merged[$key], $value);
                 } else {
-                    $merged[$key] = $this->arrayMergeRecursiveDistinct( $merged[$key], $value );
+                    $merged[$key] = $this->arrayMergeRecursiveDistinct($merged[$key], $value);
                 }
             } else {
-                if (is_int( $key )) {
+                if (is_int($key)) {
                     $merged[] = $value;
-                } elseif (is_null( $merged[$key] )) {
+                } elseif (is_null($merged[$key])) {
                     $merged[$key] = $value;
                 }
             }

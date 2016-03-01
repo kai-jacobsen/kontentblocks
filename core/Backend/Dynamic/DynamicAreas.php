@@ -32,17 +32,18 @@ class DynamicAreas
      */
     public function __construct()
     {
-        add_action( 'init', array( $this, 'registerPostType' ) );
+        add_action('init', array($this, 'registerPostType'));
 
         if (is_admin()) {
-            add_action( 'admin_menu', array( $this, 'addAdminMenu' ), 19 );
-            add_action( 'edit_form_after_title', array( $this, 'addForm' ), 1 );
-            add_action( 'save_post', array( $this, 'save' ) );
-            add_action( 'wp_insert_post_data', array( $this, 'postData' ), 10, 2 );
-            add_filter( 'post_updated_messages', array( $this, 'postTypeMessages' ) );
-            add_filter( 'post_row_actions', array( $this, 'rowActions' ), 10, 2 );
-            add_action( 'admin_footer', array( $this, 'hackItAway' ), 99 );
-            add_filter( 'post_class', array( $this, 'addRowClass' ), 10, 3 );
+            add_action('admin_menu', array($this, 'addAdminMenu'), 19);
+            add_action('edit_form_after_title', array($this, 'addForm'), 1);
+            add_action('save_post', array($this, 'save'));
+            add_action('trash_kb-dyar', array($this, 'flushCache'));
+            add_action('wp_insert_post_data', array($this, 'postData'), 10, 2);
+            add_filter('post_updated_messages', array($this, 'postTypeMessages'));
+            add_filter('post_row_actions', array($this, 'rowActions'), 10, 2);
+            add_action('admin_footer', array($this, 'hackItAway'), 99);
+            add_filter('post_class', array($this, 'addRowClass'), 10, 3);
         }
 
     }
@@ -57,7 +58,7 @@ class DynamicAreas
     public function addAdminMenu()
     {
 
-        if (!Utilities::adminMenuExists( 'Kontentblocks' )) {
+        if (!Utilities::adminMenuExists('Kontentblocks')) {
             add_menu_page(
                 'kontentblocks',
                 'Kontentblocks',
@@ -91,19 +92,19 @@ class DynamicAreas
             return;
         }
 
-        $this->storage = new ModuleStorage( get_the_ID() );
-        $area = $this->storage->getDataProvider()->get( '_area' );
-        $payload = filter_input( INPUT_POST, 'area', FILTER_DEFAULT );
-        $data = ( isset( $payload ) ) ? $payload : $area;
+        $this->storage = new ModuleStorage(get_the_ID());
+        $area = $this->storage->getDataProvider()->get('_area');
+        $payload = filter_input(INPUT_POST, 'area', FILTER_DEFAULT);
+        $data = (isset($payload)) ? $payload : $area;
 
-        wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename' );
-        wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );
+        wp_nonce_field('kontentblocks_save_post', 'kb_noncename');
+        wp_nonce_field('kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce');
 
-        if (!empty( $area )) {
-            $this->renderArea( $data );
-            $this->settingsForm( $data );
+        if (!empty($area)) {
+            $this->renderArea($data);
+            $this->settingsForm($data);
         } else {
-            $this->settingsForm( $data );
+            $this->settingsForm($data);
         }
 
     }
@@ -115,16 +116,16 @@ class DynamicAreas
      * @since 0.1.0
      * @return void
      */
-    private function renderArea( $area )
+    private function renderArea($area)
     {
-        $environment = Utilities::getPostEnvironment( get_the_ID() );
+        $environment = Utilities::getPostEnvironment(get_the_ID());
         $blogId = get_current_blog_id();
 
         /** @var \Kontentblocks\Areas\AreaRegistry $registry */
-        $registry = Kontentblocks::getService( 'registry.areas' );
-        $areaDef = $registry->getArea( $area['id'] );
+        $registry = Kontentblocks::getService('registry.areas');
+        $areaDef = $registry->getArea($area['id']);
 
-        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $areaDef );
+        Kontentblocks::getService('utility.jsontransport')->registerArea($areaDef);
 
         print "<div class='postbox dynamic-area-wrap'>";
         print "<div id='kontentblocks-core-ui'>";
@@ -133,10 +134,10 @@ class DynamicAreas
         // The infamous hidden editor hack
         Utilities::hiddenEditor();
 
-        echo Utilities::getBaseIdField( $environment->getStorage()->getIndex() );
+        echo Utilities::getBaseIdField($environment->getStorage()->getIndex());
         echo "<input type='hidden' name='blog_id' value='{$blogId}' >";
 
-        $areaHTML = new AreaBackendRenderer( $areaDef, $environment );
+        $areaHTML = new AreaBackendRenderer($areaDef, $environment);
         $areaHTML->build();
 
         print "</div></div>";
@@ -150,11 +151,11 @@ class DynamicAreas
      * @since 0.1.0
      * @return void
      */
-    private function settingsForm( $data )
+    private function settingsForm($data)
     {
         $templateData = array(
-            'strings' => I18n::getPackages( 'Areas', 'Common' ),
-            'editMode' => ( !empty( $data ) ),
+            'strings' => I18n::getPackages('Areas', 'Common'),
+            'editMode' => (!empty($data)),
             'basename' => 'area',
             'renderContextSelect' => true,
             'contexts' => wp_parse_args(
@@ -162,25 +163,25 @@ class DynamicAreas
                 array(
                     'dynamic' => array(
                         'id' => 'dynamic',
-                        'title' => __( 'Dynamic', 'Kontentblocks' ),
+                        'title' => __('Dynamic', 'Kontentblocks'),
                         'description' => ''
                     )
                 )
             ),
-            'postTypes' => $this->preparedPostTypes( $data ),
-            'pageTemplates' => $this->preparedPageTemplates( $data ),
-            'description' => ( !empty( $data['description'] ) ) ?
+            'postTypes' => $this->preparedPostTypes($data),
+            'pageTemplates' => $this->preparedPageTemplates($data),
+            'description' => (!empty($data['description'])) ?
                 $data['description'] :
                 '',
             'areaContext' => $data['context'],
             'name' => $data['name'],
             'id' => $data['id'],
             'sortable' => true,
-            'manual' => ( isset( $data['manual'] ) ) ? $data['manual'] : false
+            'manual' => (isset($data['manual'])) ? $data['manual'] : false
         );
 
-        $Form = new CoreView( 'new-area-form.twig', $templateData );
-        $Form->render( true );
+        $Form = new CoreView('new-area-form.twig', $templateData);
+        $Form->render(true);
     }
 
     /**
@@ -190,14 +191,14 @@ class DynamicAreas
      * @since 0.1.0
      * @return array
      */
-    private function preparedPostTypes( $data )
+    private function preparedPostTypes($data)
     {
         $collect = array();
-        $postData = ( isset( $data['postTypes'] ) ) ? ( $data['postTypes'] ) : array();
+        $postData = (isset($data['postTypes'])) ? ($data['postTypes']) : array();
         $postTypes = Utilities::getPostTypes();
 
         foreach ($postTypes as $pt) {
-            if (in_array( $pt['value'], $postData )) {
+            if (in_array($pt['value'], $postData)) {
                 $pt['checked'] = "checked='checked'";
             } else {
                 $pt['checked'] = '';
@@ -216,14 +217,14 @@ class DynamicAreas
      * @since 0.1.0
      * @return array
      */
-    private function preparedPageTemplates( $data )
+    private function preparedPageTemplates($data)
     {
         $collect = array();
-        $postData = ( isset( $data['pageTemplates'] ) ) ? ( $data['pageTemplates'] ) : array();
+        $postData = (isset($data['pageTemplates'])) ? ($data['pageTemplates']) : array();
         $pageTemplates = Utilities::getPageTemplates();
 
         foreach ($pageTemplates as $pt) {
-            if (in_array( $pt['value'], $postData )) {
+            if (in_array($pt['value'], $postData)) {
                 $pt['checked'] = "checked='checked'";
             } else {
                 $pt['checked'] = '';
@@ -241,16 +242,19 @@ class DynamicAreas
      * @since 0.1.0
      * @return void
      */
-    public function save( $postId )
+    public function save($postId)
     {
-        if (!$this->auth( $postId )) {
+
+        if (!$this->auth($postId)) {
             return;
         }
 
-        $environment = Utilities::getPostEnvironment( $postId );
+
+        $environment = Utilities::getPostEnvironment($postId);
         $environment->save();
 
-        $this->saveArea( $postId );
+        $this->saveArea($postId);
+        $this->flushCache();
     }
 
     /**
@@ -259,39 +263,39 @@ class DynamicAreas
      * @since 0.1.0
      * @return bool
      */
-    private function auth( $postId )
+    private function auth($postId)
     {
         // verify if this is an auto save routine.
         // If it is our form has not been submitted, so we dont want to do anything
-        if (empty( $_POST )) {
+        if (empty($_POST)) {
             return false;
         }
 
         // no area data send
-        if (empty( $_POST['area'] )) {
+        if (empty($_POST['area'])) {
             return false;
         }
 
-        if (defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE) {
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return false;
         }
 
         // verify this came from our screen and with proper authorization,
         // because save_post can be triggered at other times
-        if (!wp_verify_nonce( $_POST['kb_noncename'], 'kontentblocks_save_post' )) {
+        if (!wp_verify_nonce($_POST['kb_noncename'], 'kontentblocks_save_post')) {
             return false;
         }
 
         // Check permissions
-        if (!current_user_can( 'edit_post', $postId )) {
+        if (!current_user_can('edit_post', $postId)) {
             return false;
         }
 
-        if (!current_user_can( 'edit_kontentblocks' )) {
+        if (!current_user_can('edit_kontentblocks')) {
             return false;
         }
 
-        if (get_post_type( $postId ) == 'revision' && !isset( $_POST['wp-preview'] )) {
+        if (get_post_type($postId) == 'revision' && !isset($_POST['wp-preview'])) {
             return false;
         }
         // checks passed
@@ -305,9 +309,9 @@ class DynamicAreas
      * @since 0.1.0
      * @return void
      */
-    protected function saveArea( $postId )
+    protected function saveArea($postId)
     {
-        $this->storage = new ModuleStorage( $postId );
+        $this->storage = new ModuleStorage($postId);
 
         $defaults = array(
             'name' => null,
@@ -317,25 +321,30 @@ class DynamicAreas
             'pageTemplates' => array()
         );
 
-        $newArea = wp_parse_args( wp_unslash( $_POST['area'] ), $defaults );
+        $newArea = wp_parse_args(wp_unslash($_POST['area']), $defaults);
 
         $data = array(
-            'name' => filter_var( $newArea['name'], FILTER_SANITIZE_STRING ),
-            'id' => filter_var( $newArea['id'], FILTER_SANITIZE_STRING ),
-            'description' => filter_var( $newArea['description'], FILTER_SANITIZE_STRING ),
+            'name' => filter_var($newArea['name'], FILTER_SANITIZE_STRING),
+            'id' => filter_var($newArea['id'], FILTER_SANITIZE_STRING),
+            'description' => filter_var($newArea['description'], FILTER_SANITIZE_STRING),
             'postTypes' => $newArea['postTypes'],
             'pageTemplates' => $newArea['pageTemplates'],
             'dynamic' => true,
             'context' => $newArea['context'],
-            'manual' => filter_var( $newArea['manual'], FILTER_VALIDATE_BOOLEAN ),
+            'manual' => filter_var($newArea['manual'], FILTER_VALIDATE_BOOLEAN),
             'sortable' => true
 
         );
 
-        $full = wp_parse_args( $data, AreaProperties::getDefaults( false ) );
-        $this->storage->getDataProvider()->update( '_area', $full );
+        $full = wp_parse_args($data, AreaProperties::getDefaults(false));
+        $this->storage->getDataProvider()->update('_area', $full);
 //        $this->Storage->getDataProvider()->update( '_area_context', $full['context'] );
 
+    }
+
+    public function flushCache()
+    {
+        wp_cache_flush();
     }
 
     /**
@@ -346,9 +355,9 @@ class DynamicAreas
      *
      * @return array
      */
-    public function postData( $data, $postarr )
+    public function postData($data, $postarr)
     {
-        if (!isset( $_POST['area'] ) || $postarr['post_type'] !== 'kb-dyar') {
+        if (!isset($_POST['area']) || $postarr['post_type'] !== 'kb-dyar') {
             return $data;
         }
 
@@ -370,20 +379,20 @@ class DynamicAreas
 
 
         $labels = array(
-            'name' => _x( 'Areas', 'post type general name', 'Kontentblocks' ),
-            'singular_name' => _x( 'Area', 'post type singular name', 'Kontentblocks' ),
-            'menu_name' => _x( 'Areas', 'admin menu', 'Kontentblocks' ),
-            'name_admin_bar' => _x( 'Areas', 'add new on admin bar', 'Kontentblocks' ),
-            'add_new' => _x( 'Add New', 'book', 'Kontentblocks' ),
-            'add_new_item' => __( 'Add New Area', 'Kontentblocks' ),
-            'new_item' => __( 'New Area', 'Kontentblocks' ),
-            'edit_item' => __( 'Edit Area', 'Kontentblocks' ),
-            'view_item' => __( 'View Area', 'Kontentblocks' ),
-            'all_items' => __( 'All Areas', 'Kontentblocks' ),
-            'search_items' => __( 'Search Areas', 'Kontentblocks' ),
-            'parent_item_colon' => __( 'Parent Area:', 'Kontentblocks' ),
-            'not_found' => __( 'No Areas found.', 'Kontentblocks' ),
-            'not_found_in_trash' => __( 'No Areas found in Trash.', 'Kontentblocks' ),
+            'name' => _x('Areas', 'post type general name', 'Kontentblocks'),
+            'singular_name' => _x('Area', 'post type singular name', 'Kontentblocks'),
+            'menu_name' => _x('Areas', 'admin menu', 'Kontentblocks'),
+            'name_admin_bar' => _x('Areas', 'add new on admin bar', 'Kontentblocks'),
+            'add_new' => _x('Add New', 'book', 'Kontentblocks'),
+            'add_new_item' => __('Add New Area', 'Kontentblocks'),
+            'new_item' => __('New Area', 'Kontentblocks'),
+            'edit_item' => __('Edit Area', 'Kontentblocks'),
+            'view_item' => __('View Area', 'Kontentblocks'),
+            'all_items' => __('All Areas', 'Kontentblocks'),
+            'search_items' => __('Search Areas', 'Kontentblocks'),
+            'parent_item_colon' => __('Parent Area:', 'Kontentblocks'),
+            'not_found' => __('No Areas found.', 'Kontentblocks'),
+            'not_found_in_trash' => __('No Areas found in Trash.', 'Kontentblocks'),
         );
 
         $args = array(
@@ -400,10 +409,10 @@ class DynamicAreas
             'supports' => array()
         );
 
-        register_post_type( 'kb-dyar', $args );
-        remove_post_type_support( 'kb-dyar', 'editor' );
-        remove_post_type_support( 'kb-dyar', 'title' );
-        remove_post_type_support( 'kb-dyar', 'revisions' );
+        register_post_type('kb-dyar', $args);
+        remove_post_type_support('kb-dyar', 'editor');
+        remove_post_type_support('kb-dyar', 'title');
+        remove_post_type_support('kb-dyar', 'revisions');
     }
 
     /**
@@ -413,30 +422,30 @@ class DynamicAreas
      * @since 0.1.0
      * @return mixed
      */
-    public function postTypeMessages( $messages )
+    public function postTypeMessages($messages)
     {
         $post = get_post();
 
         $messages['kb-dyar'] = array(
             0 => '', // Unused. Messages start at index 1.
-            1 => __( 'Area updated.', 'Kontentblocks' ),
-            2 => __( 'Custom field updated.', 'Kontentblocks' ), // not used
-            3 => __( 'Custom field deleted.', 'Kontentblocks' ), // not used
-            4 => __( 'Area updated.', 'Kontentblocks' ),
+            1 => __('Area updated.', 'Kontentblocks'),
+            2 => __('Custom field updated.', 'Kontentblocks'), // not used
+            3 => __('Custom field deleted.', 'Kontentblocks'), // not used
+            4 => __('Area updated.', 'Kontentblocks'),
             /* translators: %s: date and time of the revision */
-            5 => isset( $_GET['revision'] ) ? sprintf(
-                __( 'Area restored to revision from %s', 'Kontentblocks' ),
-                wp_post_revision_title( (int) $_GET['revision'], false )
+            5 => isset($_GET['revision']) ? sprintf(
+                __('Area restored to revision from %s', 'Kontentblocks'),
+                wp_post_revision_title((int)$_GET['revision'], false)
             ) : false,
-            6 => __( 'Area published.', 'Kontentblocks' ),
-            7 => __( 'Area saved.', 'Kontentblocks' ),
-            8 => __( 'Area submitted.', 'Kontentblocks' ),
+            6 => __('Area published.', 'Kontentblocks'),
+            7 => __('Area saved.', 'Kontentblocks'),
+            8 => __('Area submitted.', 'Kontentblocks'),
             9 => sprintf(
-                __( 'Area scheduled for: <strong>%1$s</strong>.', 'Kontentblocks' ),
+                __('Area scheduled for: <strong>%1$s</strong>.', 'Kontentblocks'),
                 // translators: Publish box date format, see http://php.net/date
-                date_i18n( __( 'M j, Y @ G:i', 'Kontentblocks' ), strtotime( $post->post_date ) )
+                date_i18n(__('M j, Y @ G:i', 'Kontentblocks'), strtotime($post->post_date))
             ),
-            10 => __( 'Area draft updated.', 'Kontentblocks' ),
+            10 => __('Area draft updated.', 'Kontentblocks'),
         );
 
         return $messages;
@@ -451,11 +460,11 @@ class DynamicAreas
      * @since 0.1.0
      * @return array
      */
-    public function rowActions( $actions, $post )
+    public function rowActions($actions, $post)
     {
         if ($post->post_type === 'kb-dyar') {
-            $storage = new ModuleStorage( $post->ID );
-            $meta = $storage->getDataProvider()->get( '_area' );
+            $storage = new ModuleStorage($post->ID);
+            $meta = $storage->getDataProvider()->get('_area');
             if ($meta['dynamic'] === true && $meta['manual'] === true) {
                 $actions['trash'] = "<span class='kb-js-predefined-area'>Area is predefined</span>";
             }
@@ -475,13 +484,13 @@ class DynamicAreas
      * @since 0.1.0
      * @return array
      */
-    public function addRowClass( $classes, $class, $post_id )
+    public function addRowClass($classes, $class, $post_id)
     {
         $screen = get_current_screen();
-        if (isset( $screen->post_type ) && $screen->post_type === 'kb-dyar' && $screen->base === 'edit') {
+        if (isset($screen->post_type) && $screen->post_type === 'kb-dyar' && $screen->base === 'edit') {
 
-            $storage = new ModuleStorage( $post_id );
-            $meta = $storage->getDataProvider()->get( '_area' );
+            $storage = new ModuleStorage($post_id);
+            $meta = $storage->getDataProvider()->get('_area');
             if ($meta['dynamic'] === true && $meta['manual'] === true) {
                 $classes[] = ' kb-is-dynamic-area';
             }
@@ -500,7 +509,7 @@ class DynamicAreas
     public function hackItAway()
     {
         $screen = get_current_screen();
-        if (isset( $screen->post_type ) && $screen->post_type === 'kb-dyar' && $screen->base === 'edit') {
+        if (isset($screen->post_type) && $screen->post_type === 'kb-dyar' && $screen->base === 'edit') {
 
             echo "<script>
             jQuery('.kb-is-dynamic-area .check-column input[type=checkbox]').attr('disabled', 'disabled');

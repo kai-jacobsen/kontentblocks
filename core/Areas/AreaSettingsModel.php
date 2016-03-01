@@ -42,11 +42,12 @@ class AreaSettingsModel implements \JsonSerializable
      *
      * @param AreaProperties $area
      * @param $postId
+     * @param DataProviderController $dataProvider
      */
-    public function __construct( AreaProperties $area, $postId )
+    public function __construct( AreaProperties $area, $postId,  DataProviderController $dataProvider )
     {
         $this->postId = $postId;
-        $this->dataProvider = new DataProviderController( $postId );
+        $this->dataProvider = $dataProvider;
         $this->area = $area;
         $this->setupSettings();
     }

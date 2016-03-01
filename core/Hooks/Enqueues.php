@@ -101,28 +101,28 @@ class Enqueues
 
 
         // FieldsAPI
-        wp_register_script(
-            'kb-fields-api',
-            KB_PLUGIN_URL . 'js/' . $folder . '/fieldsAPI' . $suffix . '.js',
-            array(),
-            null,
-            true
-        );
+//        wp_register_script(
+//            'kb-fields-api',
+//            KB_PLUGIN_URL . 'js/' . $folder . '/fieldsAPI' . $suffix . '.js',
+//            array(),
+//            null,
+//            true
+//        );
 
-        // fields handler
-        wp_register_script(
-            'kb-refields',
-            KB_PLUGIN_URL . 'js/' . $folder . '/refields' . $suffix . '.js',
-            array('kb-fields-api', 'kb-media-ext'),
-            null,
-            true
-        );
+//        // fields handler
+//        wp_register_script(
+//            'kb-refields',
+//            KB_PLUGIN_URL . 'js/' . $folder . '/refields' . $suffix . '.js',
+//            array('kb-fields-api', 'kb-media-ext'),
+//            null,
+//            true
+//        );
 
         // Backend 'controller'
         wp_register_script(
             'kb-backend',
             KB_PLUGIN_URL . 'js/' . $folder . '/backend' . $suffix . '.js',
-            array('kb-plugins', 'kb-refields'),
+            array('kb-plugins'),
             null,
             true
         );
@@ -130,13 +130,13 @@ class Enqueues
         wp_register_script(
             'kb-frontend',
             KB_PLUGIN_URL . 'js/' . $folder . '/frontend' . $suffix . '.js',
-            array('kb-plugins', 'kb-refields'),
+            array('kb-plugins'),
             null,
             true
         );
 
         // Extensions
-        wp_register_script(
+            wp_register_script(
             'kb-extensions',
             KB_PLUGIN_URL . 'js/' . $folder . '/extensions' . $suffix . '.js',
             array(),
@@ -206,7 +206,7 @@ class Enqueues
             self::enqueueStyles();
 
             wp_enqueue_script('kb-backend');
-            wp_enqueue_script('kb-refields');
+//            wp_enqueue_script('kb-refields');
             wp_enqueue_script('heartbeat');
             wp_enqueue_script('kb-media-ext');
             wp_enqueue_script('kb-extensions');
@@ -345,7 +345,7 @@ class Enqueues
     public static function userEnqueue()
     {
 
-        if (!apply_filters('kb.enqueue.frontend.scripts', true)){
+        if (!apply_filters('kb.enqueue.frontend.scripts', true)) {
             return false;
         }
 
@@ -355,7 +355,7 @@ class Enqueues
 
             wp_enqueue_script('kb-frontend');
             wp_enqueue_script('kb-onsite-editing');
-            wp_enqueue_script('kb-refields');
+//            wp_enqueue_script('kb-refields');
             wp_enqueue_script('heartbeat');
 
 

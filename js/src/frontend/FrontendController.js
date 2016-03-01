@@ -28,6 +28,9 @@ var ChangeObserver = require('shared/ChangeObserver');
 var Tether = require('tether');
 var AdminBar = require('frontend/AdminBar');
 var Checks = require('common/Checks');
+var Refields = require('fields/RefieldsController');
+var FieldsAPI = require('fieldsAPI/FieldsAPIController');
+
 
 
 /*

@@ -5,6 +5,7 @@ namespace Kontentblocks\Modules;
 
 use AdamBrett\ShellWrapper\Command\Value;
 use Kontentblocks\Areas\AreaSettingsModel;
+use Kontentblocks\Backend\DataProvider\DataProviderService;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
@@ -94,7 +95,7 @@ class ModuleProperties
     public $submodule;
 
     /**
-     * @var ModuleGuard;
+     * @var ModuleValidator;
      */
 
     private $guard;
@@ -102,11 +103,11 @@ class ModuleProperties
     /**
      * @param array $properties
      */
-    public function __construct( $properties )
+    public function __construct($properties)
     {
 
-        $properties = $this->parseInSettings( $properties );
-        $this->setupProperties( $properties );
+        $properties = $this->parseInSettings($properties);
+        $this->setupProperties($properties);
 
     }
 
@@ -116,47 +117,53 @@ class ModuleProperties
      *
      * @return array
      */
-    private function parseInSettings( $properties )
+    private function parseInSettings($properties)
     {
         /** @var \Kontentblocks\Modules\ModuleRegistry $moduleRegistry */
-        $moduleRegistry = Kontentblocks::getService( 'registry.modules' );
+        $moduleRegistry = Kontentblocks::getService('registry.modules');
         return Utilities::validateBoolRecursive(
-            wp_parse_args( $properties, $moduleRegistry->get( $properties['class'] ) )
+            wp_parse_args($properties, $moduleRegistry->get($properties['class']))
         );
     }
 
-    private function setupProperties( $properties )
+    /**
+     * @param $properties
+     */
+    private function setupProperties($properties)
     {
         foreach ($properties as $k => $v) {
-            if (method_exists( $this, 'set' . ucfirst( $k ) )) {
-                $this->$k = $this->{'set' . ucfirst( $k )}( $v );
+            if (method_exists($this, 'set' . ucfirst($k))) {
+                $this->$k = $this->{'set' . ucfirst($k)}($v);
             } else {
                 $this->$k = $v;
             }
         }
 
-        $this->guard = new ModuleGuard( $this );
+        $this->guard = new ModuleValidator($this);
 
-        if (is_array( $properties['overrides'] )) {
-            $this->parseOverrides( $properties['overrides'] );
+        if (is_array($properties['overrides'])) {
+            $this->parseOverrides($properties['overrides']);
         }
 
     }
 
-    public function parseOverrides( $overrides )
+    /**
+     * @param $overrides
+     */
+    public function parseOverrides($overrides)
     {
-        $whitelist = array( 'name', 'loggedinonly' );
+        $whitelist = array('name', 'loggedinonly');
 
         foreach ($overrides as $key => $value) {
-            if (!is_null( $value ) && in_array( $key, $whitelist )) {
+            if (!is_null($value) && in_array($key, $whitelist)) {
                 switch ($key) {
                     case 'name':
-                        if (!empty($value)){
-                            $this->settings[$key] = $value = filter_var( $value, FILTER_SANITIZE_STRING );
+                        if (!empty($value)) {
+                            $this->settings[$key] = $value = filter_var($value, FILTER_SANITIZE_STRING);
                         }
                         break;
                     case 'loggedinonly':
-                        $this->guard->setLoggedInOnly( $value = filter_var( $value, FILTER_VALIDATE_BOOLEAN ) );
+                        $this->guard->setLoggedInOnly($value = filter_var($value, FILTER_VALIDATE_BOOLEAN));
                         break;
                 }
                 $this->overrides[$key] = $value;
@@ -170,15 +177,15 @@ class ModuleProperties
      * ------------------------------------
      */
 
-    public function set( $prop, $value )
+    public function set($prop, $value)
     {
-        $this->setupProperties( array( $prop => $value ) );
+        $this->setupProperties(array($prop => $value));
         return $this;
     }
 
-    public function get( $key )
+    public function get($key)
     {
-        if (property_exists( $this, $key )) {
+        if (property_exists($this, $key)) {
             return $this->$key;
         }
 
@@ -190,9 +197,9 @@ class ModuleProperties
      * @param $var string setting key
      * @return mixed|null
      */
-    public function getSetting( $var )
+    public function getSetting($var)
     {
-        if (isset( $this->settings[$var] )) {
+        if (isset($this->settings[$var])) {
             return $this->settings[$var];
         } else {
             return null;
@@ -210,16 +217,16 @@ class ModuleProperties
      * @param $var string setting key
      * @return mixed|null
      */
-    public function getState( $var )
+    public function getState($var)
     {
-        if (isset( $this->state[$var] )) {
+        if (isset($this->state[$var])) {
             return $this->state[$var];
         } else {
             return null;
         }
     }
 
-    public function setId( $mid )
+    public function setId($mid)
     {
         $this->mid = $mid;
     }
@@ -232,9 +239,9 @@ class ModuleProperties
      */
     public function sync()
     {
-        $storage = new ModuleStorage( $this->parentObjectId );
-        apply_filters( 'kb.modify.module.save', $this );
-        return $storage->addToIndex( $this->mid, $this->export() );
+        $storage = new ModuleStorage($this->parentObjectId);
+        apply_filters('kb.modify.module.save', $this);
+        return $storage->addToIndex($this->mid, $this->export());
     }
 
     /**
@@ -243,9 +250,9 @@ class ModuleProperties
      * @return array
      * @since 0.1.0
      */
-    public function export( $keepSettings = false )
+    public function export($keepSettings = false)
     {
-        $vars = get_object_vars( $this );
+        $vars = get_object_vars($this);
         $vars['area'] = $this->area->id;
         $vars['parentObject'] = null;
         $vars['guard'] = $this->guard->export();
@@ -253,7 +260,7 @@ class ModuleProperties
 
         // settings are not persistent
         if (!$keepSettings) {
-            unset( $vars['settings'] );
+            unset($vars['settings']);
         }
 
         return $vars;
@@ -275,23 +282,24 @@ class ModuleProperties
      * @param $var
      * @return mixed
      */
-    private function setArea( $var )
+    private function setArea($var)
     {
 
-        if (is_array($var) && array_key_exists('id', $var)){
+        if (is_array($var) && array_key_exists('id', $var)) {
             $var = $var['id'];
         }
 
         /** @var \Kontentblocks\Areas\AreaRegistry $areaRegistry */
-        $areaRegistry = Kontentblocks::getService( 'registry.areas' );
-        $area = $areaRegistry->getArea( $var );
+        $areaRegistry = Kontentblocks::getService('registry.areas');
+        $area = $areaRegistry->getArea($var);
 
-        if (is_null( $area )) {
-            $area = $areaRegistry->getArea( '_internal' );
+        if (is_null($area)) {
+            $area = $areaRegistry->getArea('_internal');
         }
 
-        if (is_null( $area->settings )) {
-            $area->set( 'settings', new AreaSettingsModel( $area, $this->postId ) );
+        if (is_null($area->settings)) {
+            $area->set('settings',
+                new AreaSettingsModel($area, $this->postId, DataProviderService::getPostProvider($this->postId)));
         }
 
         /**
@@ -299,7 +307,7 @@ class ModuleProperties
          * make certain area properties accessible by js frontend-only
          */
         if (is_user_logged_in()) {
-            Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $area );
+            Kontentblocks::getService('utility.jsontransport')->registerArea($area);
         }
         return $area;
 

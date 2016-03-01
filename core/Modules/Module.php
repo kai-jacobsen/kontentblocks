@@ -415,4 +415,9 @@ abstract class Module implements EntityInterface
     {
         return $this->properties;
     }
+
+    public function getType()
+    {
+        return 'module';
+    }
 }

@@ -48,6 +48,7 @@ class PostMetaDataProvider implements DataProviderInterface
         }, 10, 4);
 
         $this->postId = $storageId;
+
         $this->reset();
 
     }
@@ -60,20 +61,8 @@ class PostMetaDataProvider implements DataProviderInterface
      */
     public function reset()
     {
-        clean_post_cache($this->getPostId());
         $this->getPostCustom();
-
         return $this;
-    }
-
-    /**
-     * Getter for objects post id
-     * @return int
-     * @since 0.1.0
-     */
-    public function getPostId()
-    {
-        return $this->postId;
     }
 
     /**
@@ -98,6 +87,16 @@ class PostMetaDataProvider implements DataProviderInterface
 
         return $this;
 
+    }
+
+    /**
+     * Getter for objects post id
+     * @return int
+     * @since 0.1.0
+     */
+    public function getPostId()
+    {
+        return $this->postId;
     }
 
     /**
@@ -126,6 +125,8 @@ class PostMetaDataProvider implements DataProviderInterface
      */
     public function update($key, $value)
     {
+
+        $this->meta[$key] = $value;
         return update_post_meta($this->postId, $key, $value);
     }
 
@@ -156,6 +157,7 @@ class PostMetaDataProvider implements DataProviderInterface
      */
     public function delete($key)
     {
+        unset($this->meta[$key]);
         return delete_post_meta($this->postId, $key);
     }
 
@@ -169,6 +171,9 @@ class PostMetaDataProvider implements DataProviderInterface
         return $this->meta;
     }
 
+    /**
+     * @return bool
+     */
     public function addSlashes()
     {
         return true;
