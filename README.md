@@ -25,7 +25,7 @@ If you:
 - need a toolset which helps to quickly develop flexible sites
 
 then this might be something for you.
-And if you like it, I'd more than happy to hear your feedback, your ideas and critic.
+And if you like it, I'd more than happy to hear your feedback, your ideas and criticism.
 And if you are really interested, but don't know where or why to start..find me on twitter (@kjcbsn) and get in contact...
 ..the whole thing grew a bit too large for a single person, really.
 
