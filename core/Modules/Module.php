@@ -188,7 +188,6 @@ abstract class Module implements EntityInterface
         // render fields if set
         if (isset($this->fields) && is_object($this->fields)) {
             $rendererClass = $this->properties->getSetting('fieldRenderer');
-            var_dump( $rendererClass);
             $renderer = new $rendererClass($this->fields);
             $concat .= $renderer->render();
         } else {
