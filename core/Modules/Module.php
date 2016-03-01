@@ -350,7 +350,7 @@ abstract class Module implements EntityInterface
      */
     public function verifyRender()
     {
-        return $this->properties->getGuard()->verify();
+        return $this->properties->getValidator()->verify();
     }
 
     /**
@@ -368,7 +368,7 @@ abstract class Module implements EntityInterface
                 $this->model->getOriginalData(),
                 $this
             ),
-            'guard' => $this->properties->getGuard(),
+            'validator' => $this->properties->getValidator(),
             'area' => $this->properties->area->id,
             'post_id' => $this->properties->postId,
             'postId' => $this->properties->postId,

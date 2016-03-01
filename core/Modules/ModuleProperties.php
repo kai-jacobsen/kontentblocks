@@ -12,7 +12,6 @@ use Kontentblocks\Utils\Utilities;
 
 /**
  * Class ModuleProperties
- * @property  getGuard
  * @package Kontentblocks\Modules
  */
 class ModuleProperties
@@ -98,7 +97,7 @@ class ModuleProperties
      * @var ModuleValidator;
      */
 
-    private $guard;
+    private $validator;
 
     /**
      * @param array $properties
@@ -139,7 +138,7 @@ class ModuleProperties
             }
         }
 
-        $this->guard = new ModuleValidator($this);
+        $this->validator = new ModuleValidator($this);
 
         if (is_array($properties['overrides'])) {
             $this->parseOverrides($properties['overrides']);
@@ -163,7 +162,7 @@ class ModuleProperties
                         }
                         break;
                     case 'loggedinonly':
-                        $this->guard->setLoggedInOnly($value = filter_var($value, FILTER_VALIDATE_BOOLEAN));
+                        $this->validator->setLoggedInOnly($value = filter_var($value, FILTER_VALIDATE_BOOLEAN));
                         break;
                 }
                 $this->overrides[$key] = $value;
@@ -255,7 +254,7 @@ class ModuleProperties
         $vars = get_object_vars($this);
         $vars['area'] = $this->area->id;
         $vars['parentObject'] = null;
-        $vars['guard'] = $this->guard->export();
+        $vars['guard'] = $this->validator->export();
 
 
         // settings are not persistent
@@ -266,9 +265,9 @@ class ModuleProperties
         return $vars;
     }
 
-    public function getGuard()
+    public function getValidator()
     {
-        return $this->guard;
+        return $this->validator;
     }
 
 //    public function __set( $k, $v )
