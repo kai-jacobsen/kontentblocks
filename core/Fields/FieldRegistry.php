@@ -91,4 +91,8 @@ class FieldRegistry
         return null;
     }
 
+    public function validType($type){
+        return isset($this->fields[$type]);
+    }
+
 }

@@ -369,12 +369,13 @@ Class Kontentblocks
                     }
                 }
             }
-            $files = glob( $path . '*.php' );
-            foreach ($files as $template) {
-                if (strpos( basename( $template ), '__' ) === false) {
-                    $Registry->add( $template );
-                }
-            }
+
+//            $files = glob( $path . '*.php' );
+//            foreach ($files as $template) {
+//                if (strpos( basename( $template ), '__' ) === false) {
+//                    $Registry->add( $template );
+//                }
+//            }
         }
         _K::info( 'Modules loaded' );
 

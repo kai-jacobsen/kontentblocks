@@ -18,7 +18,7 @@ class StandardFieldController
      * @var array
      * @since 0.1.0
      */
-    public $sections;
+    public $sections = array();
 
     /**
      * @var EntityModel
@@ -40,19 +40,26 @@ class StandardFieldController
      * @var string
      */
     public $baseId;
+    /**
+     * @var string
+     */
+    public $fieldFormRenderer = '\Kontentblocks\Fields\FieldFormRenderer';
 
+    /**
+     * @var FieldsYamlLoader
+     */
+    public $yamlLoader;
+
+    /**
+     * @var bool
+     */
+    public $fileLoaded = false;
 
     /**
      * Default field renderer
      * @var InterfaceFieldRenderer
      */
     protected $renderer = 'Kontentblocks\Fields\Renderer\FieldRendererTabs';
-
-    /**
-     * @var string
-     */
-    public $fieldFormRenderer = '\Kontentblocks\Fields\FieldFormRenderer';
-
     /**
      * registered fields in one flat array
      * @var array
@@ -152,7 +159,7 @@ class StandardFieldController
     public function getFieldByKey($key, $fromArray = null)
     {
         if (empty($this->fieldsById)) {
-           $this->collectAllFields();
+            $this->collectAllFields();
         }
 
         if (isset($fromArray) && $this->fieldsById[$fromArray]) {
@@ -282,6 +289,18 @@ class StandardFieldController
         if (is_a($string, '\Kontentblocks\Fields\FieldFormRenderer', true)) {
             $this->fieldFormRenderer = $string;
         }
+    }
+
+    /**
+     * @param null $file
+     * @return FieldsYamlLoader
+     */
+    public function yamlLoader($file = null)
+    {
+        if (!is_null($file) && file_exists($file)) {
+            return $this->yamlLoader = new FieldsYamlLoader($file, $this);
+        }
+
     }
 
 }

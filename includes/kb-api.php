@@ -3,6 +3,7 @@
 namespace Kontentblocks;
 
 use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayoutsRegistry;
+use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
@@ -316,4 +317,12 @@ function EditScreenLayoutsRegistry()
 function JSONTransport()
 {
     return Kontentblocks()->getService('utility.jsontransport');
+}
+
+/**
+ * @return FieldRegistry
+ */
+function fieldRegistry()
+{
+    return Kontentblocks()->getService('registry.fields');
 }

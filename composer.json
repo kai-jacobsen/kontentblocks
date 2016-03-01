@@ -27,7 +27,8 @@
     "twig/twig": "1.*",
     "pimple/pimple": "~3.0",
     "mobiledetect/mobiledetectlib": "2.8.*",
-    "monolog/monolog": "1.*"
+    "monolog/monolog": "1.*",
+    "symfony/yaml": "3.0.*"
   },
   "require-dev": {
     "codeclimate/php-test-reporter": "dev-master"

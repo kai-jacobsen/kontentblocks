@@ -50,6 +50,7 @@ abstract class AbstractFieldRenderer implements InterfaceFieldRenderer
     {
         $arr = array();
         $sections = $this->fieldController->sections;
+
         /** @var StandardFieldSection $section */
         foreach ($sections as $section) {
             $fields = array_map(
