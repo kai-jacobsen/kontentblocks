@@ -29,7 +29,7 @@ class AfterAreaChangeTest extends \WP_UnitTestCase
         );
 
         \Kontentblocks\Hooks\Capabilities::setup();
-        Kontentblocks::getService( 'registry.modules' )->add( TESTS_DIR . '/assets/ModuleText.php' );
+        Kontentblocks::getService( 'registry.modules' )->add( TESTS_DIR . '/assets/ModuleText/ModuleText.php' );
 
         \Kontentblocks\registerArea(array(
             'id' => 'dump'
