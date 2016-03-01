@@ -58,7 +58,6 @@ abstract class TermPanel extends AbstractPanel
         $this->model = new PanelModel($environment->getDataProvider()->get($args['baseId']), $this);
         $this->data = $this->model->export();
         $this->fields();
-
     }
 
     /**
