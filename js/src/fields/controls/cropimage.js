@@ -58,11 +58,10 @@ module.exports = BaseView.extend({
         } else {
           metadata = {};
         }
-
         that.frame = new wp.media.view.KBCropperFrame({
           cropOptions: {
-            maxWidth: 360, //target width
-            maxHeight: 360 // target height
+            maxWidth: that.model.get('width') || 300, //target width
+            maxHeight: that.model.get('height') || 300 // target height
           },
           croppedCallback: that.handleAttachment,
           parentController: that,
@@ -72,7 +71,7 @@ module.exports = BaseView.extend({
             uploadedTo: KB.Environment.postId || 0
           }
         }).on('update', function (attachmentObj) { // bind callback to 'update'
-          console.log('update');
+            console.log('update');
             that.update(attachmentObj);
           })
           .on('close', function (att) {
@@ -114,29 +113,58 @@ module.exports = BaseView.extend({
   prepareArgs: function () {
     var that = this;
     return {
-      width: that.model.get('width') || null,
-      height: that.model.get('height') || null,
-      crop: false,
+      width: that.model.get('previewWidth') || null,
+      height: that.model.get('previewHeight') || null,
+      crop: true,
       upscale: that.model.get('upscale') || false
     };
   },
   handleAttachment: function (attachment) {
     var that = this;
-    console.log(attachment);
     var id = attachment.get('id');
     var value = this.prepareValue(attachment);
     var entityData = _.clone(this.model.get('ModuleModel').get('entityData'));
     var path = this.model.get('kpath');
     Utilities.setIndex(entityData, path, value);
     this.model.get('ModuleModel').set('entityData', entityData);
-    var args = that.prepareArgs();
-    var url = attachment.get('sizes').full.url;
-    that.$container.html('<img src="' + url +' " >');
+
+
+    var preW = this.model.get('previewWidth');
+    var preH = this.model.get('previewHeight');
+
+    if (preW && preH) {
+      var args = that.prepareArgs();
+      that.retrieveImage(args, id);
+    } else {
+      var url = attachment.get('sizes').full.url;
+      that.$container.html('<img src="' + url + ' " >');
+    }
+
     this.$saveId.val(attachment.get('id'));
     this.$description.val(attachment.get('caption'));
     this.$title.val(attachment.get('title'));
     //KB.Events.trigger('modal.preview');
     this.model.get('ModuleModel').trigger('data.updated');
+  },
+  retrieveImage: function (args, id) {
+    var that = this;
+    jQuery.ajax({
+      url: ajaxurl,
+      data: {
+        action: 'fieldGetImage',
+        args: args,
+        id: id,
+        _ajax_nonce: Config.getNonce('read')
+      },
+      type: 'POST',
+      dataType: 'json',
+      success: function (res) {
+        that.$container.html('<img src="' + res.data.src + '" >');
+      },
+      error: function () {
+
+      }
+    });
   },
   prepareValue: function (attachment) {
     var newValue = {

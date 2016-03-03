@@ -727,7 +727,7 @@ textarea.quicktags {
 }
 
 .kb-hide {
-  display: none;
+  display: none !important;
 }
 
 .onsite-editing .editable, .onsite-editing .editable-image, .onsite-editing .editable-bg-image, .onsite-editing .editable-title {
