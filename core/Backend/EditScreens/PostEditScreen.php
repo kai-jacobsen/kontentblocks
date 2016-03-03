@@ -67,7 +67,7 @@ Class PostEditScreen
      * Callback for 'edit_form_after_editor'
      * @param $post
      */
-    public function renderUserInterface($post_type, $post)
+    public function renderUserInterface($postType, $post)
     {
         $this->environment = Utilities::getPostEnvironment($post->ID);
         add_action(
@@ -141,16 +141,16 @@ Class PostEditScreen
     /**
      * Handles the saving of modules and supplemental data
      *
-     * @param int $post_id The current post id
+     * @param int $postId The current post id
      * @since 0.1.0
      */
-    function save($post_id)
+    function save($postId)
     {
         if (isset($_POST['wp-preview']) && $_POST['wp-preview'] === 'dopreview') {
-            $post_id = get_the_ID();
+            $postId = get_the_ID();
         }
-        if (post_type_supports(get_post_type($post_id),'kontentblocks')){
-            $environment = Utilities::getPostEnvironment($post_id);
+        if (post_type_supports(get_post_type($postId),'kontentblocks')){
+            $environment = Utilities::getPostEnvironment($postId);
             $environment->save();
         }
 
