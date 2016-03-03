@@ -95,7 +95,8 @@ class AjaxCallbackHandler
                 'getPostObjects' => array( 'Kontentblocks\Ajax\Actions\GetPostObjects', 'run' ),
                 'handleClipboard' => array( 'Kontentblocks\Ajax\Actions\HandleClipboard', 'run' ),
                 'getModuleBackendForm' => array( 'Kontentblocks\Ajax\Actions\GetModuleBackendForm', 'run' ),
-                'updateFieldModel' => array( 'Kontentblocks\Ajax\Actions\Frontend\UpdateFieldModel', 'run' )
+                'updateFieldModel' => array( 'Kontentblocks\Ajax\Actions\Frontend\UpdateFieldModel', 'run' ),
+                'cropImage' => array( 'Kontentblocks\Ajax\Actions\CropImage', 'run' )
 
             )
         );

@@ -242,7 +242,7 @@ module.exports = function (grunt) {
 
 
   // Default task(s).
-  grunt.registerTask('default', ['concat', 'browserify', 'uglify:dist', 'sass:dist', 'autoprefixer', 'clean', 'bash', 'exec:removeHash', 'exec:createId']);
+  grunt.registerTask('default', ['concat', 'browserify','uglify:dev', 'uglify:dist', 'sass:dist', 'autoprefixer', 'clean', 'bash', 'exec:removeHash', 'exec:createId']);
   grunt.registerTask('cssdev', ['sass:dev', 'autoprefixer']);
   grunt.registerTask('jsfrontend', ['browserify:frontend']);
   grunt.registerTask('jsclient', ['uglify:dev']);

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2016-01-07 */
+/*! Kontentblocks DevVersion 2016-03-03 */
 !function(a) {
     "use strict";
     function b(a, b) {
@@ -5113,10 +5113,10 @@ Date.patterns = {
         addTitle: false,
         filterAcceptOnEnter: false,
         hideOptgroupCheckboxes: false,
-        selectAllText: "Select all",
-        allSelected: "All selected",
-        countSelected: "# of % selected",
-        noMatchesFound: "No matches found",
+        selectAllText: "alle auswählen",
+        allSelected: "alle ausgewählt",
+        countSelected: "# of % ausgewählt",
+        noMatchesFound: "keine Treffer",
         styler: function() {
             return false;
         },

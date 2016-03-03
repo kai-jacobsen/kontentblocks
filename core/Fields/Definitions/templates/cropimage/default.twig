@@ -1,0 +1,27 @@
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    <div class='kb-field-image-wrapper' data-kbfield="image">
+        <div class='kb-js-add-image kb-field-image-container'>
+            <img src='{{ image.getSize('full') }}'>
+        </div>
+        <div class="kb-field-image-meta {% if Field.getArg('hideMeta') %} kb-hide {% endif %}">
+            <div class="kb-field-image-title">
+                <label>{{ i18n.title }}</label>
+                <input class='kb-js-image-title kb-observe' type="text"
+                       name='{{ Form.getFieldName( 'title') }}'
+                       value='{{ value.title }}' readonly>
+            </div>
+            <div class="kb-field-image-description">
+                <label>{{ i18n.description }}</label>
+        <textarea readonly class='kb-js-image-description kb-observe' type="text"
+                  name='{{ Form.getFieldName( 'caption') }}'>{{ value.caption }}</textarea>
+            </div>
+        </div>
+        <input class='kb-js-image-id' type='hidden' name='{{ Form.getFieldName('id') }}' value='{{ value.id }}'>
+        {#<input class='kb-js-image-alt' type='hidden' name='{{ Form.getFieldName( 'details', 'id' ) }}'#}
+        {#value='{{ value.details.alt }}'>#}
+    </div>
+    <div class="kb-field-image--footer">
+        <a class="button kb-js-reset-image">Reset</a>
+    </div>
+{% endblock %}
