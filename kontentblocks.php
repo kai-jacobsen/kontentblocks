@@ -51,8 +51,8 @@ Class Kontentblocks
     const VERSION = '0.5.1';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.13';
-    const DEBUG = true;
-    const DEBUG_LOG = true;
+    const DEBUG = false;
+    const DEBUG_LOG = false;
     static $instance;
     static $AjaxHandler;
     public $Services;

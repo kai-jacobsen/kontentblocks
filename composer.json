@@ -1,19 +1,21 @@
 {
   "name": "jcbsn/kontentblocks",
-  "description": "Shorten the gap between design constrains, developer efficiency, users flexibility and ease of use to create, edit and control content for both parties.",
+  "description": "WordPress Plugin. Shorten the gap between design constrains, developer efficiency, users flexibility and ease of use to create, edit and control content for both parties.",
   "keywords": [
     "wordpress",
     "plugin",
     "kontenblocks",
-    "content management"
+    "content management",
+    "builder",
+    "framework"
   ],
-  "homepage": "http://kontentblocks.de",
-  "license":  "GPL-3.0",
+  "homepage": "https://github.com/kai-jacobsen/kontentblocks",
+  "license": "GPL-3.0",
   "authors": [
     {
       "name": "Kai Jacobsen",
       "email": "ungestaltbar@gmail.com",
-      "homepage": "http://jcbsn.de"
+      "homepage": "https://github.com/kai-jacobsen/kontentblocks"
     }
   ],
   "autoload": {

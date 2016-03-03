@@ -61,8 +61,6 @@ class ModuleFactory
      */
     public function getModule()
     {
-
-
         $module = apply_filters('kb.modify.module.properties', $this->moduleProperties);
         // new instance
         /** @var \Kontentblocks\Modules\Module $instance */

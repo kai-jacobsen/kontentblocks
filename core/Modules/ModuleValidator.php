@@ -4,7 +4,7 @@ namespace Kontentblocks\Modules;
 
 
 /**
- * Class ModuleGuard
+ * Class ModuleValidator
  * @package Kontentblocks\Modules
  */
 class ModuleValidator
@@ -19,7 +19,7 @@ class ModuleValidator
     /**
      * @param ModuleProperties $properties
      */
-    public function __construct( ModuleProperties $properties )
+    public function __construct(ModuleProperties $properties)
     {
         $this->properties = $properties;
     }
@@ -29,7 +29,7 @@ class ModuleValidator
      */
     public function verify()
     {
-        if ($this->properties->getSetting( 'disabled' ) || $this->properties->getSetting( 'hidden' )) {
+        if ($this->properties->getSetting('disabled') || $this->properties->getSetting('hidden')) {
             return false;
         }
         if (!$this->properties->state['active']) {
@@ -59,7 +59,7 @@ class ModuleValidator
     /**
      * @param boolean $loggedInOnly
      */
-    public function setLoggedInOnly( $loggedInOnly )
+    public function setLoggedInOnly($loggedInOnly)
     {
         $this->loggedInOnly = $loggedInOnly;
     }
@@ -69,7 +69,7 @@ class ModuleValidator
      */
     public function export()
     {
-        $vars = get_object_vars( $this );
+        $vars = get_object_vars($this);
         unset($vars['properties']);
         return $vars;
     }

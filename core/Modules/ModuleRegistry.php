@@ -46,8 +46,7 @@ class ModuleRegistry
     public function add($file)
     {
         include_once $file;
-        // extract class name from file
-//        $classname = str_replace( '.php', '', basename( $file ) );
+        // extract class name from directory
         $classname = basename(dirname($file));
         if (!isset($this->modules[$classname]) && property_exists($classname, 'settings')) {
             // Defaults from the specific Module
