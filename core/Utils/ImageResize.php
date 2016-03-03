@@ -121,7 +121,6 @@ namespace Kontentblocks\Utils {
                     // Use this to check if cropped image already exists, so we can return that instead.
 
                     $suffix = "{$dst_w}x{$dst_h}";
-
                     if (is_array($crop)){
                         $suffix .="x{$crop[0]}x{$crop[1]}";
                     }
@@ -139,27 +138,23 @@ namespace Kontentblocks\Utils {
                         }
                         return $src;
                     }
-                    // Else check if cache exists.
+//                    // Else check if cache exists.
                     elseif ( file_exists( $destfilename ) && getimagesize( $destfilename ) ) {
-
                         $img_url = "{$upload_url}{$dst_rel_path}-{$suffix}.{$ext}";
                     }
                     // Else, we resize the image and return the new resized image url.
                     else {
-
                         $editor = wp_get_image_editor( $img_path );
-
                         if ( is_wp_error( $editor ) || is_wp_error( $editor->resize( $width, $height, $crop ) ) ){
                             return false;
                         }
 
-                        $resized_file = $editor->save();
+                        $resized_file = $editor->save($destfilename);
 
                         if ( ! is_wp_error( $resized_file ) ) {
                             $resized_rel_path = str_replace( $upload_dir, '', $resized_file['path'] );
                             $img_url = $upload_url . $resized_rel_path;
                         } else {
-
                             return false;
                         }
 
@@ -197,20 +192,37 @@ namespace Kontentblocks\Utils {
                 $new_h = $dest_h;
 
                 if ( ! $new_w ) {
-                    $new_w = intval( $new_h * $aspect_ratio );
+                    $new_w = (int) round( $new_h * $aspect_ratio );
                 }
 
                 if ( ! $new_h ) {
-                    $new_h = intval( $new_w / $aspect_ratio );
+                    $new_h = (int) round( $new_w / $aspect_ratio );
                 }
 
-                $size_ratio = max( $new_w / $orig_w, $new_h / $orig_h );
+                $size_ratio = max($new_w / $orig_w, $new_h / $orig_h);
 
-                $crop_w = round( $new_w / $size_ratio );
-                $crop_h = round( $new_h / $size_ratio );
+                $crop_w = round($new_w / $size_ratio);
+                $crop_h = round($new_h / $size_ratio);
 
-                $s_x = floor( ( $orig_w - $crop_w ) / 2 );
-                $s_y = floor( ( $orig_h - $crop_h ) / 2 );
+                if ( ! is_array( $crop ) || count( $crop ) !== 2 ) {
+                    $crop = array( 'center', 'center' );
+                }
+                list( $x, $y ) = $crop;
+                if ( 'left' === $x ) {
+                    $s_x = 0;
+                } elseif ( 'right' === $x ) {
+                    $s_x = $orig_w - $crop_w;
+                } else {
+                    $s_x = floor( ( $orig_w - $crop_w ) / 2 );
+                }
+
+                if ( 'top' === $y ) {
+                    $s_y = 0;
+                } elseif ( 'bottom' === $y ) {
+                    $s_y = $orig_h - $crop_h;
+                } else {
+                    $s_y = floor( ( $orig_h - $crop_h ) / 2 );
+                }
 
                 return array( 0, 0, (int) $s_x, (int) $s_y, (int) $new_w, (int) $new_h, (int) $crop_w, (int) $crop_h );
             }

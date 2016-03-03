@@ -5,6 +5,7 @@ namespace Kontentblocks\Ajax\Actions\Frontend;
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
+use Kontentblocks\Fields\Definitions\Image;
 use Kontentblocks\Utils\ImageResize;
 
 /**
@@ -21,13 +22,21 @@ class FieldGetImage implements AjaxActionInterface
      * @param ValueStorageInterface $request
      * @return AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $request )
+    public static function run(ValueStorageInterface $request)
     {
-        $args = $request->get( 'args' );
-        $width = ( !isset( $args['width'] ) ) ? 150 : $args['width'];
-        $height = ( !isset( $args['height'] ) ) ? null : $args['height'];
-        $upscale = filter_var( $args['upscale'], FILTER_VALIDATE_BOOLEAN );
-        $attachmentid = $request->getFiltered( 'id', FILTER_SANITIZE_NUMBER_INT );
+        $crop = false;
+        $args = $request->get('args');
+        $width = (!isset($args['width'])) ? 150 : $args['width'];
+        $height = (!isset($args['height'])) ? null : $args['height'];
+        $upscale = filter_var($args['upscale'], FILTER_VALIDATE_BOOLEAN);
+        $attachmentid = $request->getFiltered('id', FILTER_SANITIZE_NUMBER_INT);
+
+        if (isset($args['crop'])) {
+            $crop = $args['crop'];
+            if (is_numeric($crop)) {
+                $crop = Image::getCropValue(absint($crop));
+            }
+        }
 
 
         return new AjaxSuccessResponse(
@@ -36,7 +45,7 @@ class FieldGetImage implements AjaxActionInterface
                     $attachmentid,
                     $width,
                     $height,
-                    $args['crop'],
+                    $crop,
                     true,
                     $upscale
                 )

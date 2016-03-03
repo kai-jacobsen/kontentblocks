@@ -4362,7 +4362,16 @@ module.exports = BaseView.extend({
   },
   events: {
     'click .kb-js-add-image': 'openFrame',
-    'click .kb-js-reset-image': 'resetImage'
+    'click .kb-js-reset-image': 'resetImage',
+    'change [data-kbimage-crop]' : 'handleCropChange'
+  },
+  handleCropChange: function(){
+    var cropValue = this.$cropSelect.val();
+    var value = this.model.get('value');
+    value.crop = cropValue;
+    this.model.set('value', value);
+    var args = this.prepareArgs();
+    this.retrieveImage(args, value.id);
   },
   render: function () {
     this.$reset = this.$('.kb-js-reset-image');
@@ -4370,6 +4379,7 @@ module.exports = BaseView.extend({
     this.$saveId = this.$('.kb-js-image-id');
     this.$description = this.$('.kb-js-image-description');
     this.$title = this.$('.kb-js-image-title');
+    this.$cropSelect = this.$('[data-kbimage-crop]');
   },
   editImage: function () {
     this.openFrame(true);
@@ -4427,8 +4437,8 @@ module.exports = BaseView.extend({
           }
 
         }).on('update', function (attachmentObj) { // bind callback to 'update'
-          that.update(attachmentObj);
-        })
+            that.update(attachmentObj);
+          })
           .on('close', function (att) {
             if (that.frame.image && that.frame.image.attachment) {
               that.$description.val(that.frame.image.attachment.get('caption'));
@@ -4459,6 +4469,22 @@ module.exports = BaseView.extend({
     //  this.$caption.html(this.attachment.get('caption'));
     //}
   },
+  getCropValue: function () {
+    var value = this.model.get('value');
+    if (value.crop && value.crop !== '') {
+      return value.crop;
+    }
+    return this.model.get('crop');
+  },
+  prepareArgs: function(){
+    var that = this;
+    return {
+      width: that.model.get('width') || null,
+      height: that.model.get('height') || null,
+      crop: that.getCropValue() || true,
+      upscale: that.model.get('upscale') || false
+    };
+  },
   handleAttachment: function (attachment) {
     var that = this;
     var id = attachment.get('id');
@@ -4467,34 +4493,12 @@ module.exports = BaseView.extend({
     var path = this.model.get('kpath');
     Utilities.setIndex(entityData, path, value);
     this.model.get('ModuleModel').set('entityData', entityData);
-    var args = {
-      width: that.model.get('width') || null,
-      height: that.model.get('height') || null,
-      crop: that.model.get('crop') || true,
-      upscale: that.model.get('upscale') || false
-    };
-
+    var args = that.prepareArgs();
     if (!args.width || !args.height) {
       var src = (attachment.get('sizes').thumbnail) ? attachment.get('sizes').thumbnail.url : attachment.get('sizes').full.url;
       this.$container.html('<img src="' + src + '" >');
     } else {
-      jQuery.ajax({
-        url: ajaxurl,
-        data: {
-          action: 'fieldGetImage',
-          args: args,
-          id: id,
-          _ajax_nonce: Config.getNonce('read')
-        },
-        type: 'POST',
-        dataType: 'json',
-        success: function (res) {
-          that.$container.html('<img src="' + res.data.src + '" >');
-        },
-        error: function () {
-
-        }
-      });
+      that.retrieveImage(args, id);
     }
     this.$saveId.val(attachment.get('id'));
     this.$description.val(attachment.get('caption'));
@@ -4502,13 +4506,37 @@ module.exports = BaseView.extend({
     //KB.Events.trigger('modal.preview');
     this.model.get('ModuleModel').trigger('data.updated');
   },
+  retrieveImage: function(args, id){
+    var that = this;
+    jQuery.ajax({
+      url: ajaxurl,
+      data: {
+        action: 'fieldGetImage',
+        args: args,
+        id: id,
+        _ajax_nonce: Config.getNonce('read')
+      },
+      type: 'POST',
+      dataType: 'json',
+      success: function (res) {
+        that.$container.html('<img src="' + res.data.src + '" >');
+      },
+      error: function () {
+
+      }
+    });
+  },
   prepareValue: function (attachment) {
-    return {
+    var newValue = {
       id: attachment.get('id'),
       title: attachment.get('title'),
       caption: attachment.get('caption'),
       alt: attachment.get('alt')
     };
+
+    var oldValue = this.model.get('value');
+
+    return _.defaults(oldValue, newValue);
   },
   resetImage: function () {
     this.$container.html('');

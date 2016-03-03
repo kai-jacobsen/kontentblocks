@@ -8,6 +8,8 @@ namespace Kontentblocks\Utils;
 class AttachmentHandler
 {
 
+    public $crop = true;
+
     protected $file;
 
     /**
@@ -15,8 +17,6 @@ class AttachmentHandler
      */
     public function __construct($id)
     {
-
-
         if (!is_numeric($id)) {
             return null;
         }
@@ -42,14 +42,18 @@ class AttachmentHandler
             return null;
         }
 
+        if (is_array($this->crop)) {
+            $crop = $this->crop;
+        }
+
         if (is_array($size)) {
             return ImageResize::getInstance()->process(
                 $this->getAttr('id'),
                 $size[0],
                 $size[1],
-                $upscale,
                 $crop,
-                false
+                true,
+                $upscale
             );
         }
 
@@ -75,6 +79,11 @@ class AttachmentHandler
         } else {
             return $default;
         }
+    }
+
+    public function setCropPosition($array)
+    {
+        $this->crop = $array;
     }
 
     public function getCaption()
