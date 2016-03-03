@@ -1,0 +1,8 @@
+<label>
+    Anker für den Zuschnitt
+    <select data-kbimage-crop name="{{ Form.getFieldName('crop') }}">
+        {% for option in cropOptions %}
+            <option value="{{ option.value|esc_attr }}" {{ option.selected }}>{{ option.name }}</option>
+        {% endfor %}
+    </select>
+</label>

@@ -28,20 +28,7 @@
     <div class="kb-field-image--footer">
         <a class="button kb-js-reset-image">Reset</a>
         {% if Field.getArg('showcrop', false) %}
-            <label>
-                Anker für den Zuschnitt
-                <select data-kbimage-crop name="{{ Form.getFieldName('crop') }}">
-                    <option value="1">Links | Oben</option>
-                    <option value="2">Mitte | Oben</option>
-                    <option value="3">Rechts | Oben</option>
-                    <option value="4">Links | Mitte</option>
-                    <option value="5">Mitte | Mitte</option>
-                    <option value="6">Rechts | Mitte</option>
-                    <option value="7">Links | Unten</option>
-                    <option value="8">Mitte | Unten</option>
-                    <option value="9">Rechts | Unten</option>
-                </select>
-            </label>
+            {% include 'image/_cropselect.twig' %}
         {% endif %}
 
 

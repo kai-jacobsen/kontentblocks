@@ -400,7 +400,6 @@ abstract class Field implements Exportable
         $def['fieldkey'] = $this->getKey();
         $def['arrayKey'] = $this->getArg('arrayKey', null);
         $def['kpath'] = $this->createKPath();
-
         return wp_parse_args($args, $def);
     }
 

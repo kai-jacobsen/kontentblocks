@@ -211,7 +211,9 @@ class ImageObject
 
     public function crop($crop)
     {
-        $this->crop = $crop;
+        if ($crop !== true) {
+            $this->crop = $crop;
+        }
 
         return $this;
     }

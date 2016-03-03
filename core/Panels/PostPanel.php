@@ -156,6 +156,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
     public function form()
     {
         $this->beforeForm();
+        $this->preRender();
         echo $this->renderFields();
         $this->afterForm();
         $this->toJSON();

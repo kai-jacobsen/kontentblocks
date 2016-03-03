@@ -65,6 +65,11 @@ abstract class AbstractPanel implements EntityInterface
     }
 
 
+    public function preRender()
+    {
+
+    }
+
     abstract public function init();
 
     /**
@@ -170,13 +175,14 @@ abstract class AbstractPanel implements EntityInterface
     /**
      * @return EntityModel
      */
-    public function setupRawData(){
+    public function setupRawData()
+    {
         $fields = $this->fields->collectAllFields();
-        if (!empty($fields) && is_array($fields)){
+        if (!empty($fields) && is_array($fields)) {
             /** @var Field $field */
             foreach ($fields as $field) {
                 $this->model->set(array(
-                   $field->getKey() => $field->getValue()
+                    $field->getKey() => $field->getValue()
                 ));
             }
         }

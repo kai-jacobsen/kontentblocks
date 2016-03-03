@@ -31,6 +31,8 @@ Class Image extends Field
             $image->setCropPosition(self::getCropValue($int));
         }
 
+        $data['cropOptions'] = $this->getCropSelectNode();
+
         $data['image'] = $image;
         return $data;
     }
@@ -58,6 +60,63 @@ Class Image extends Field
             return $values[$int];
         }
         return $values[5];
+    }
+
+    private function getCropSelectNode()
+    {
+
+        $current = $this->getValue('crop', '');
+
+        $options = array(
+            array(
+                'value' => 1,
+                'name' => 'Left | Top',
+                'selected' => selected('1', $current, false)
+            ),
+            array(
+                'value' => 2,
+                'name' => 'Center | Top',
+                'selected' => selected('2', $current, false)
+            ),
+            array(
+                'value' => 3,
+                'name' => 'Right | Top',
+                'selected' => selected('3', $current, false)
+            ),
+            array(
+                'value' => 4,
+                'name' => 'Left | Center',
+                'selected' => selected('4', $current, false)
+            ),
+            array(
+                'value' => 5,
+                'name' => 'Center | Center',
+                'selected' => selected('5', $current, false)
+            ),
+            array(
+                'value' => 6,
+                'name' => 'Right | Center',
+                'selected' => selected('6', $current, false)
+            ),
+            array(
+                'value' => 7,
+                'name' => 'Left | Bottom',
+                'selected' => selected('7', $current, false)
+            ),
+            array(
+                'value' => 8,
+                'name' => 'Center | Bottom',
+                'selected' => selected('8', $current, false)
+            ),
+            array(
+                'value' => 9,
+                'name' => 'Right | Bottom',
+                'selected' => selected('9', $current, false)
+            ),
+        );
+
+        return $options;
+
     }
 
     /**
