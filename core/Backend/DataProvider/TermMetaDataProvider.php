@@ -66,8 +66,8 @@ class TermMetaDataProvider implements DataProviderInterface
         $meta = get_term_meta($this->termId);
         if (!empty($meta) && is_array($meta)) {
             $this->meta = array_map(
-                function ($a) {
-                    return maybe_unserialize($a[0]);
+                function ($value) {
+                    return maybe_unserialize($value[0]);
                 },
                 $meta
             );
@@ -131,9 +131,9 @@ class TermMetaDataProvider implements DataProviderInterface
     {
         if (!empty($this->meta[$key])) {
             return $this->meta[$key];
-        } else {
-            return null;
         }
+        return null;
+
     }
 
     /**
