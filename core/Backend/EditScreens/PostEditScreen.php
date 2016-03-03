@@ -149,7 +149,6 @@ Class PostEditScreen
         if (isset($_POST['wp-preview']) && $_POST['wp-preview'] === 'dopreview') {
             $post_id = get_the_ID();
         }
-
         if (post_type_supports(get_post_type($post_id),'kontentblocks')){
             $environment = Utilities::getPostEnvironment($post_id);
             $environment->save();

@@ -134,6 +134,7 @@ function renderContext($context, $post_id, $areaSettings = array(), $moduleSetti
     $areas = $Environment->getAreasForContext($context);
     $contextsOrder = $Environment->getDataProvider()->get('_kbcontexts');
 
+
     if (is_array($contextsOrder) && !empty($contextsOrder)) {
         foreach ($contextsOrder as $context => $areaIds) {
             if (is_array($areaIds)) {
@@ -161,6 +162,7 @@ function renderContext($context, $post_id, $areaSettings = array(), $moduleSetti
             } else {
                 $margs = $areaSettings;
             }
+
 
             renderSingleArea($area, $postId, $args, $margs);
         }
