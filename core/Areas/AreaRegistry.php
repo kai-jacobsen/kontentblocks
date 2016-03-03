@@ -235,30 +235,29 @@ class AreaRegistry
     /**
      * Get a template by id
      *
-     * @param string $id
+     * @param string $tplId
      *
      * @return null | array of params
      * @since 0.1.0
      */
-    public function getTemplate($id)
+    public function getTemplate($tplId)
     {
-        if (isset($this->templates[$id])) {
-            return $this->templates[$id];
-        } else {
-            return null;
+        if (isset($this->templates[$tplId])) {
+            return $this->templates[$tplId];
         }
+        return null;
 
     }
 
     /**
      * Check if a template exists by id
-     * @param $id
+     * @param $templateID
      * @return bool
      * @since 0.1.0
      */
-    public function templateExists($id)
+    public function templateExists($templateID)
     {
-        if (isset($this->templates[$id])) {
+        if (isset($this->templates[$templateID])) {
             return true;
         } else {
             return false;
@@ -431,16 +430,16 @@ class AreaRegistry
     /**
      * Returns an area from the registry by id
      *
-     * @param string $id
+     * @param string $areaId
      *
      * @return mixed null if area is not set | area array args if area is set
      * @since 0.1.0
      */
-    public function getArea($id)
+    public function getArea($areaId)
     {
-        if (isset($this->areas[$id])) {
-            array_push($this->reserved, $id);
-            return $this->areas[$id];
+        if (isset($this->areas[$areaId])) {
+            array_push($this->reserved, $areaId);
+            return $this->areas[$areaId];
         } else {
             return null;
         }
@@ -474,12 +473,12 @@ class AreaRegistry
 
     /**
      * Check if area is dynamic
-     * @param $id
+     * @param $areaId
      * @return mixed
      */
-    public function isDynamic($id)
+    public function isDynamic($areaId)
     {
-        $area = $this->getArea($id);
+        $area = $this->getArea($areaId);
 
         if (is_object($area)) {
             return $area->dynamic;
