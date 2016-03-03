@@ -23,7 +23,7 @@ class ImageObject
     protected $attributes = array();
     protected $src;
     protected $upscale;
-    protected $crop;
+    protected $crop = true;
 
     /**
      * @param mixed $att Attachment ID
