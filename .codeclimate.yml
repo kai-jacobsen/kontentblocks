@@ -28,3 +28,5 @@ exclude_paths:
 - tests/
 - js/dev/
 - js/dist/
+- js/src/deprecated/
+- js/src/plugins/
