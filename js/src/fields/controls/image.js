@@ -136,6 +136,7 @@ module.exports = BaseView.extend({
     var that = this;
     var id = attachment.get('id');
     var value = this.prepareValue(attachment);
+    that.model.set('value', value);
     var entityData = _.clone(this.model.get('ModuleModel').get('entityData'));
     var path = this.model.get('kpath');
     Utilities.setIndex(entityData, path, value);
@@ -182,8 +183,7 @@ module.exports = BaseView.extend({
     };
 
     var oldValue = this.model.get('value');
-
-    return _.defaults(oldValue, newValue);
+    return _.extend(oldValue, newValue);
   },
   resetImage: function () {
     this.$container.html('');
