@@ -10,8 +10,6 @@ namespace Kontentblocks\Common\Interfaces;
 interface RendererInterface
 {
 
-
-
     public function render($echo);
 
 }

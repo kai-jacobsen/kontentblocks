@@ -14,6 +14,7 @@ use Reframe\Kontentblocks\Kontentblocks;
 /**
  *
  * Class UpdateFieldModel
+ * Saves data on single field level
  * @package Kontentblocks\Ajax\Frontend
  */
 class UpdateFieldModel implements AjaxActionInterface

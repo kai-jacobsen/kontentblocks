@@ -1,9 +1,21 @@
 #Changelog
 
+####0.6.1
++ new field types: cropimage, twiginclude
++ bugfixes
+
+####0.6.0
++ reduced js file requests
++ improved wpml support
++ refactored classes
++ term panel
++ user panel
++ improved panel handling
+
 ####0.5.1
 + removed legacy fields and scripts
 + all fields are represented by a standard field return object in userland
-+ introduced EntityModel object, foor modules, panels and fields
++ introduced EntityModel object, for modules, panels and fields
 + improved and fixed gallery2 field type, based on native gallery workflow
 + frontend editing improvements
 

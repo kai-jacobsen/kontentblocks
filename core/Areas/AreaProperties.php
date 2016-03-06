@@ -191,11 +191,17 @@ class AreaProperties
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->id;
     }
 
+    /**
+     * @return array
+     */
     public function export(){
         $vars = get_object_vars($this);
         if (is_object($vars['settings'])){

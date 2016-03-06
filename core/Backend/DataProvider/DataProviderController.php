@@ -25,7 +25,7 @@ class DataProviderController implements DataProviderInterface
     /**
      * @param int $postId
      */
-    public function __construct( $postId )
+    public function __construct($postId)
     {
         $this->dataProvider = apply_filters(
             'kb::data.primary.provider',
@@ -33,11 +33,11 @@ class DataProviderController implements DataProviderInterface
         );
 
         // Fallback to wordpress postmeta
-        if (!is_object( $this->dataProvider )) {
-            $this->dataProvider = new PostMetaDataProvider( $postId );
+        if (!is_object($this->dataProvider)) {
+            $this->dataProvider = new PostMetaDataProvider($postId);
         }
 
-        $this->listeners = apply_filters( 'kb::data.listeners', $this->listeners, $postId );
+        $this->listeners = apply_filters('kb::data.listeners', $this->listeners, $postId);
 
     }
 
@@ -46,9 +46,9 @@ class DataProviderController implements DataProviderInterface
      * @param $key
      * @return mixed
      */
-    public function get( $key )
+    public function get($key)
     {
-        return $this->dataProvider->get( $key );
+        return $this->dataProvider->get($key);
     }
 
     /**
@@ -65,12 +65,12 @@ class DataProviderController implements DataProviderInterface
      * @param string $value
      * @return mixed
      */
-    public function update( $key, $value )
+    public function update($key, $value)
     {
         foreach ($this->listeners as $listener) {
-            $listener->update( $key, $value );
+            $listener->update($key, $value);
         }
-        return $this->dataProvider->update( $key, $value );
+        return $this->dataProvider->update($key, $value);
     }
 
     /**
@@ -78,24 +78,24 @@ class DataProviderController implements DataProviderInterface
      * @param string $value
      * @return mixed
      */
-    public function add( $key, $value )
+    public function add($key, $value)
     {
         foreach ($this->listeners as $listener) {
-            $listener->add( $key, $value );
+            $listener->add($key, $value);
         }
-        return $this->dataProvider->add( $key, $value );
+        return $this->dataProvider->add($key, $value);
     }
 
     /**
      * @param string $key
      * @return mixed
      */
-    public function delete( $key )
+    public function delete($key)
     {
         foreach ($this->listeners as $listener) {
-            $listener->delete( $key );
+            $listener->delete($key);
         }
-        return $this->dataProvider->delete( $key );
+        return $this->dataProvider->delete($key);
     }
 
     public function reset()
