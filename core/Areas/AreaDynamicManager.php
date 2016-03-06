@@ -76,7 +76,6 @@ class AreaDynamicManager
      */
     private function maybeCreateAreas()
     {
-
         /** @var AreaProperties $area */
         foreach ($this->newAreas as $area) {
             $post = array(

@@ -12,6 +12,7 @@ use Kontentblocks\Utils\Utilities;
 /**
  *
  * Class UpdateModule
+ * Save module data
  * @package Kontentblocks\Ajax\Frontend
  */
 class UpdateModule implements AjaxActionInterface

@@ -9,7 +9,7 @@ use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
 /**
- * Class TaxonomyPanel
+ * Class UserPanel
  *
  * @package Kontentblocks\Panels
  */
@@ -127,6 +127,7 @@ abstract class UserPanel extends AbstractPanel
         $this->fields->setFieldFormRenderer('\Kontentblocks\Fields\FieldFormRendererWP');
 
         echo "<table class='form-table'><tbody>";
+        $this->preRender();
         echo $this->renderFields();
         echo "</tbody></table>";
     }

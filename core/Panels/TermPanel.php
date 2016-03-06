@@ -165,6 +165,7 @@ abstract class TermPanel extends AbstractPanel
         if (!$this->args['insideTable']) {
             echo $this->beforeForm();
         }
+        $this->preRender();
 
         echo $this->renderFields();
 

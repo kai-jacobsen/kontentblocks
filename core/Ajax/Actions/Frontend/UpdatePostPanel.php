@@ -3,6 +3,7 @@
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
 use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Modules\ModuleWorkshop;
@@ -11,6 +12,7 @@ use Kontentblocks\Utils\Utilities;
 /**
  *
  * Class UpdatePostPanel
+ * save post panel data
  * @package Kontentblocks\Ajax\Frontend
  */
 class UpdatePostPanel implements AjaxActionInterface

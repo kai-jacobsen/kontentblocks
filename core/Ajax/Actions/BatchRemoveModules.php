@@ -12,6 +12,7 @@ use Kontentblocks\Utils\Utilities;
 
 /**
  * Class BatchRemoveModules
+ *
  * @author Kai Jacobsen
  * @package Kontentblocks\Ajax\Actions
  */
@@ -25,10 +26,6 @@ class BatchRemoveModules implements AjaxActionInterface
      */
     public static function run( ValueStorageInterface $request )
     {
-
-        if (!current_user_can( 'edit_kontentblocks' )) {
-            return new AjaxErrorResponse( 'insufficient permissions' );
-        }
 
         $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
         $environment = Utilities::getPostEnvironment( $postId );
