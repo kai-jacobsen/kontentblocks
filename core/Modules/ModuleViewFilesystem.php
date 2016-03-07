@@ -28,18 +28,18 @@ class ModuleViewFilesystem
     /**
      * @param Module $Module
      */
-    public function __construct( Module $Module )
+    public function __construct(Module $Module)
     {
         $this->module = $Module;
         $this->isChildTheme = is_child_theme();
-        $this->views = $this->setupViews( $Module );
+        $this->views = $this->setupViews($Module);
     }
 
     /**
      * @param Module $module
      * @return array
      */
-    private function setupViews( Module $module )
+    private function setupViews(Module $module)
     {
 
 
@@ -49,7 +49,7 @@ class ModuleViewFilesystem
                          ) . 'module-templates' . DIRECTORY_SEPARATOR . $module->properties->getSetting(
                     'slug'
                 ) . DIRECTORY_SEPARATOR;
-            if (is_dir( $childPath )) {
+            if (is_dir($childPath)) {
                 $this->paths[] = $childPath;
             }
         }
@@ -60,11 +60,11 @@ class ModuleViewFilesystem
                 'slug'
             ) . DIRECTORY_SEPARATOR;
 
-        if (is_dir( $parentPath )) {
+        if (is_dir($parentPath)) {
             $this->paths[] = $parentPath;
         }
 
-        $modulePath = trailingslashit( $module->properties->getSetting( 'path' ) );
+        $modulePath = trailingslashit($module->properties->getSetting('path'));
 
         $this->paths[] = $modulePath;
 
@@ -72,23 +72,26 @@ class ModuleViewFilesystem
          * iterate over all paths and convert file structure to md array
          */
         $files = array();
-        foreach (array_reverse( $this->paths ) as $path) {
-            $tmp = $this->fillArrayWithFileNodes( $path, $path );
-            $files = Utilities::arrayMergeRecursive( $tmp, $files );
+        foreach (array_reverse($this->paths) as $path) {
+            $tmp = $this->fillArrayWithFileNodes($path, $path);
+            $files = Utilities::arrayMergeRecursive($tmp, $files);
         }
         return $files;
     }
 
-    public function fillArrayWithFileNodes( $dir, $root )
+    public function fillArrayWithFileNodes($dir, $root)
     {
         $data = array();
-        $dir = new DirectoryIterator( $dir );
+        $dir = new DirectoryIterator($dir);
         foreach ($dir as $node) {
             if ($node->isDir() && !$node->isDot()) {
-                $data[$node->getFilename()] = $this->fillArrayWithFileNodes( $node->getPathname(), $root );
+                $data[$node->getFilename()] = $this->fillArrayWithFileNodes($node->getPathname(), $root);
             } else if ($node->isFile()) {
-                if ($node->getExtension() == 'twig') {
-                    $data[$node->getFilename()] = new ModuleViewFile( $node, $root );
+                $filename = $node->getFilename();
+                if (is_string($filename) && $filename[0] !== '_') {
+                    if ($node->getExtension() == 'twig') {
+                        $data[$node->getFilename()] = new ModuleViewFile($node, $root);
+                    }
                 }
             }
         }
@@ -108,22 +111,22 @@ class ModuleViewFilesystem
      * @param $postType
      * @return array
      */
-    public function getTemplatesforContext( $areaContext, $postType )
+    public function getTemplatesforContext($areaContext, $postType)
     {
 
         $collection = array();
 
         $collection += $this->getSingles($this->views);
 
-        if (array_key_exists($areaContext, $this->views)){
+        if (array_key_exists($areaContext, $this->views)) {
             $collection = array_merge($collection, $this->getSingles($this->views[$areaContext]));
         }
 
-        if (array_key_exists($postType, $this->views)){
+        if (array_key_exists($postType, $this->views)) {
             $ptvs = $this->views[$postType];
             $collection = array_merge($collection, $this->getSingles($ptvs));
 
-            if (array_key_exists($areaContext, $ptvs)){
+            if (array_key_exists($areaContext, $ptvs)) {
                 $collection = array_merge($collection, $ptvs[$areaContext]);
             }
         }
@@ -131,37 +134,36 @@ class ModuleViewFilesystem
 
     }
 
+    private function getSingles($files)
+    {
+
+        if (!is_array($files)) {
+            return $files;
+        }
+
+        return array_filter(
+            $files,
+            function ($file) {
+                return (!is_array($file));
+            }
+        );
+    }
+
     /**
      * @param $filename
      * @return string
      */
-    public function findFile( $filename )
+    public function findFile($filename)
     {
         foreach ($this->paths as $path) {
-            $full = trailingslashit( $path ) . $filename;
-            if (file_exists( $full )) {
+            $full = trailingslashit($path) . $filename;
+            if (file_exists($full)) {
                 return $full;
             }
         }
         return 'peter';
 
     }
-
-    private function getSingles( $files )
-    {
-
-        if (!is_array( $files )) {
-            return $files;
-        }
-
-        return array_filter(
-            $files,
-            function ( $file ) {
-                return ( !is_array( $file ) );
-            }
-        );
-    }
-
 
 
 }
