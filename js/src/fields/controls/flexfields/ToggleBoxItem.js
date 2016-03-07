@@ -15,6 +15,7 @@ module.exports = Backbone.View.extend({
     'click .flexible-fields--js-trash': 'deleteItem'
   },
   toggleItem: function () {
+    console.log(this);
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
       KB.Events.trigger('modal.recalibrate');
     });

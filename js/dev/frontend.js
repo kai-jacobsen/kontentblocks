@@ -260,7 +260,7 @@ module.exports = Backbone.View.extend({
     TinyMCE.restoreEditors();
     this.trigger('open');
     this.reposition();
-    jQuery(window).on('scroll', jQuery.proxy(this.reposition, this));
+    //jQuery(window).on('scroll', jQuery.proxy(this.reposition, this));
   },
   reposition: function(){
     var st = jQuery(window).scrollTop();
@@ -2245,6 +2245,7 @@ module.exports = Backbone.View.extend({
     'click .flexible-fields--js-trash': 'deleteItem'
   },
   toggleItem: function () {
+    console.log(this);
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
       KB.Events.trigger('modal.recalibrate');
     });
