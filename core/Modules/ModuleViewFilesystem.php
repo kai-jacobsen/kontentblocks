@@ -79,6 +79,11 @@ class ModuleViewFilesystem
         return $files;
     }
 
+    /**
+     * @param $dir
+     * @param $root
+     * @return array
+     */
     public function fillArrayWithFileNodes($dir, $root)
     {
         $data = array();
