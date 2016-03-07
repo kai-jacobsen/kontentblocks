@@ -15525,7 +15525,7 @@ define(function (require, exports, module) {
 
 },{"amdefine":190}],190:[function(require,module,exports){
 /** vim: et:ts=4:sw=4:sts=4
- * @license amdefine 0.1.0 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
+ * @license amdefine 1.0.0 Copyright (c) 2011-2015, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/amdefine for details
  */
@@ -15835,7 +15835,7 @@ module.exports = require('./dist/cjs/handlebars.runtime')['default'];
 module.exports = require("handlebars/runtime")["default"];
 
 },{"handlebars/runtime":191}],193:[function(require,module,exports){
-/*! tether 1.1.0 */
+/*! tether 1.2.0 */
 
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -15859,9 +15859,10 @@ if (typeof TetherBase === 'undefined') {
 }
 
 function getScrollParent(el) {
-  var _getComputedStyle = getComputedStyle(el);
-
-  var position = _getComputedStyle.position;
+  // In firefox if the el is inside an iframe with display: none; window.getComputedStyle() will return null;
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=548397
+  var computedStyle = getComputedStyle(el) || {};
+  var position = computedStyle.position;
 
   if (position === 'fixed') {
     return el;
@@ -15878,9 +15879,10 @@ function getScrollParent(el) {
       return parent;
     }
 
-    var overflow = style.overflow;
-    var overflowX = style.overflowX;
-    var overflowY = style.overflowY;
+    var _style = style;
+    var overflow = _style.overflow;
+    var overflowX = _style.overflowX;
+    var overflowY = _style.overflowY;
 
     if (/(auto|scroll)/.test(overflow + overflowY + overflowX)) {
       if (position !== 'absolute' || ['relative', 'absolute', 'fixed'].indexOf(style.position) >= 0) {
@@ -16162,6 +16164,11 @@ var Evented = (function () {
     value: function trigger(event) {
       if (typeof this.bindings !== 'undefined' && this.bindings[event]) {
         var i = 0;
+
+        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          args[_key - 1] = arguments[_key];
+        }
+
         while (i < this.bindings[event].length) {
           var _bindings$event$i = this.bindings[event][i];
           var handler = _bindings$event$i.handler;
@@ -16171,10 +16178,6 @@ var Evented = (function () {
           var context = ctx;
           if (typeof context === 'undefined') {
             context = this;
-          }
-
-          for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            args[_key - 1] = arguments[_key];
           }
 
           handler.apply(context, args);
@@ -16240,6 +16243,9 @@ function within(a, b) {
 }
 
 var transformKey = (function () {
+  if (typeof document === 'undefined') {
+    return '';
+  }
   var el = document.createElement('div');
 
   var transforms = ['transform', 'webkitTransform', 'OTransform', 'MozTransform', 'msTransform'];
@@ -16297,9 +16303,11 @@ function now() {
     lastDuration = now() - lastCall;
   };
 
-  ['resize', 'scroll', 'touchmove'].forEach(function (event) {
-    window.addEventListener(event, tick);
-  });
+  if (typeof window !== 'undefined') {
+    ['resize', 'scroll', 'touchmove'].forEach(function (event) {
+      window.addEventListener(event, tick);
+    });
+  }
 })();
 
 var MIRROR_LR = {
@@ -16894,10 +16902,10 @@ var TetherClass = (function () {
 
       return true;
     }
-  }, {
-    key: 'move',
 
     // THE ISSUE
+  }, {
+    key: 'move',
     value: function move(pos) {
       var _this6 = this;
 
@@ -16956,7 +16964,7 @@ var TetherClass = (function () {
           if (transformKey !== 'msTransform') {
             // The Z transform will keep this in the GPU (faster, and prevents artifacts),
             // but IE9 doesn't support 3d transforms and will choke.
-            css[transformKey] += ' translateZ(0)';
+            css[transformKey] += " translateZ(0)";
           }
         } else {
           if (_same.top) {
@@ -17306,14 +17314,24 @@ TetherBase.modules.push({
       }
 
       if (changeAttachX === 'element' || changeAttachX === 'both') {
-        if (left < bounds[0] && eAttachment.left === 'right') {
-          left += width;
-          eAttachment.left = 'left';
+        if (left < bounds[0]) {
+          if (eAttachment.left === 'right') {
+            left += width;
+            eAttachment.left = 'left';
+          } else if (eAttachment.left === 'center') {
+            left += width / 2;
+            eAttachment.left = 'left';
+          }
         }
 
-        if (left + width > bounds[2] && eAttachment.left === 'left') {
-          left -= width;
-          eAttachment.left = 'right';
+        if (left + width > bounds[2]) {
+          if (eAttachment.left === 'left') {
+            left -= width;
+            eAttachment.left = 'right';
+          } else if (eAttachment.left === 'center') {
+            left -= width / 2;
+            eAttachment.left = 'right';
+          }
         }
       }
 
@@ -17520,10 +17538,12 @@ TetherBase.modules.push({
       shift = shift.split(' ');
       shift[1] = shift[1] || shift[0];
 
-      var _shift = _slicedToArray(shift, 2);
+      var _shift = shift;
 
-      shiftTop = _shift[0];
-      shiftLeft = _shift[1];
+      var _shift2 = _slicedToArray(_shift, 2);
+
+      shiftTop = _shift2[0];
+      shiftLeft = _shift2[1];
 
       shiftTop = parseFloat(shiftTop, 10);
       shiftLeft = parseFloat(shiftLeft, 10);

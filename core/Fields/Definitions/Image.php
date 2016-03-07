@@ -65,7 +65,7 @@ Class Image extends Field
     private function getCropSelectNode()
     {
 
-        $current = $this->getValue('crop', '');
+        $current = $this->getValue('crop', 5);
 
         $options = array(
             array(
