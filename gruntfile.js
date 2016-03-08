@@ -31,7 +31,7 @@ module.exports = function (grunt) {
           //'js/dist/fieldsAPI.min.js': ['<%= browserify.fieldsAPI.dest %>'],
           'js/dist/mediaExt.min.js': ['<%= concat.mediaExt.dest %>'],
           'js/dist/customizer.min.js': ['<%= browserify.customizer.dest %>'],
-          'js/dist/client.min.js' : 'js/dev/client.js'
+          'js/dist/client.min.js': 'js/dev/client.js'
 
         }
       },
@@ -46,7 +46,7 @@ module.exports = function (grunt) {
         files: {
           'js/dev/plugins.js': ['<%= concat.plugins.dest %>'],
           'js/dev/mediaExt.js': ['<%= concat.mediaExt.dest %>'],
-          'js/dev/client.js' : 'js/src/client/CallbackController.js'
+          'js/dev/client.js': 'js/src/client/CallbackController.js'
         }
       }
     },
@@ -151,7 +151,7 @@ module.exports = function (grunt) {
         files: ['js/src/client/**/*.js'],
         tasks: ['jsclient']
       },
-      common:{
+      common: {
         files: ['js/src/common/**/*.js'],
         tasks: ['cc']
       },
@@ -234,7 +234,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-notify');
-  grunt.loadNpmTasks('grunt-rsync-2');
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-browserify');
@@ -242,14 +241,14 @@ module.exports = function (grunt) {
 
 
   // Default task(s).
-  grunt.registerTask('default', ['concat', 'browserify','uglify:dev', 'uglify:dist', 'sass:dist', 'autoprefixer', 'clean', 'bash', 'exec:removeHash', 'exec:createId']);
+  grunt.registerTask('default', ['concat', 'browserify', 'uglify:dev', 'uglify:dist', 'sass:dist', 'autoprefixer', 'clean', 'bash', 'exec:removeHash', 'exec:createId']);
   grunt.registerTask('cssdev', ['sass:dev', 'autoprefixer']);
   grunt.registerTask('jsfrontend', ['browserify:frontend']);
   grunt.registerTask('jsclient', ['uglify:dev']);
   grunt.registerTask('jsbackend', ['browserify:backend']);
   grunt.registerTask('jsextensions', ['browserify:extensions']);
   grunt.registerTask('jsrefields', ['browserify:backend']);
-  grunt.registerTask('jsplugins', ['concat','uglify:dev', 'clean']);
+  grunt.registerTask('jsplugins', ['concat', 'uglify:dev', 'clean']);
   grunt.registerTask('jsfieldsAPI', ['browserify:backend']);
   grunt.registerTask('jsCustomizer', ['browserify:customizer']);
   grunt.registerTask('jshbs', ['cc']);
