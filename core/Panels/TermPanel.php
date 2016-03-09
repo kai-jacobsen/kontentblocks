@@ -113,6 +113,7 @@ abstract class TermPanel extends AbstractPanel
         $args = array(
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
+            'id' => $this->getBaseId(),
             'entityData' => $this->model->getOriginalData(),
             'area' => '_internal',
             'type' => 'term',

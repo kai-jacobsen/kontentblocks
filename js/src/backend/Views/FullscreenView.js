@@ -35,7 +35,7 @@ module.exports = Backbone.View.extend({
     TinyMCE.restoreEditors();
     this.trigger('open');
     this.reposition();
-    jQuery(window).on('scroll', jQuery.proxy(this.reposition, this));
+    //jQuery(window).on('scroll', jQuery.proxy(this.reposition, this));
   },
   reposition: function(){
     var st = jQuery(window).scrollTop();

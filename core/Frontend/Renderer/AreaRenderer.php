@@ -42,6 +42,12 @@ class AreaRenderer implements RendererInterface
      * @var array
      */
     public $areaSettings;
+
+    /**
+     * @var ModuleRenderSettings
+     */
+    public $moduleSettings;
+
     /**
      * @var AreaNode
      */
@@ -69,7 +75,7 @@ class AreaRenderer implements RendererInterface
     private $repeating;
 
     /**
-     * @var
+     * @var SingleModuleRenderer
      */
     private $moduleRenderer;
 
@@ -84,15 +90,14 @@ class AreaRenderer implements RendererInterface
         PostEnvironment $environment,
         AreaRenderSettings $areaSettings,
         ModuleRenderSettings $moduleSettings
-    )
-    {
+    ) {
         $this->areaSettings = $areaSettings;
         $this->moduleSettings = $moduleSettings;
         $this->area = $areaSettings->area;
         $this->areaId = $this->area->id;
         $this->environment = $environment;
-        $modules = $this->environment->getModulesforArea( $this->areaId );
-        $this->modules = new ModuleIterator( $modules, $this->environment );
+        $modules = $this->environment->getModulesforArea($this->areaId);
+        $this->modules = new ModuleIterator($modules, $this->environment);
     }
 
     /**
@@ -100,7 +105,7 @@ class AreaRenderer implements RendererInterface
      * @param $echo
      * @return string
      */
-    public function render( $echo )
+    public function render($echo)
     {
 
         $concater = ConcatContent::getInstance();
@@ -114,7 +119,7 @@ class AreaRenderer implements RendererInterface
             $this->areaSettings
         );
 
-        $this->areaHtmlNode->setModuleCount( count( $this->modules ) );
+        $this->areaHtmlNode->setModuleCount(count($this->modules));
         $output = '';
         // start area output & create opening wrapper
         $output .= $this->areaHtmlNode->openArea();
@@ -124,29 +129,31 @@ class AreaRenderer implements RendererInterface
          */
         // Iterate over modules (ModuleIterator)
         foreach ($this->modules as $module) {
-            $this->moduleRenderer = new SingleModuleRenderer( $module, $this->moduleSettings );
+            $this->moduleRenderer = new SingleModuleRenderer($module, $this->moduleSettings);
 
-            if (!is_a( $module, '\Kontentblocks\Modules\Module' ) || !$module->verifyRender()) {
+            if (!is_a($module, '\Kontentblocks\Modules\Module') || !$module->verifyRender()) {
                 continue;
             }
+
+            $module->context->set(array('renderPosition' => $this->position));
 
 
             $moduleOutput = $module->module();
             $output .= $this->areaHtmlNode->openLayoutWrapper();
-            $output .= $this->beforeModule( $module );
+            $output .= $this->beforeModule($module);
             $output .= $moduleOutput;
-            $output .= $this->afterModule( $module );
+            $output .= $this->afterModule($module);
             $output .= $this->areaHtmlNode->closeLayoutWrapper();
 
 
-            if (current_theme_supports( 'kb.area.concat' ) && filter_input(
+            if (current_theme_supports('kb.area.concat') && filter_input(
                     INPUT_GET,
                     'concat',
                     FILTER_SANITIZE_STRING
                 )
             ) {
-                if ($module->properties->getSetting( 'concat' )) {
-                    $concater->addString( wp_kses_post( $moduleOutput ) );
+                if ($module->properties->getSetting('concat')) {
+                    $concater->addString(wp_kses_post($moduleOutput));
                 }
             }
         }
@@ -182,17 +189,17 @@ class AreaRenderer implements RendererInterface
      * @param Module $module
      * @return string
      */
-    public function beforeModule( Module $module )
+    public function beforeModule(Module $module)
     {
 
-        $this->_beforeModule( $module );
+        $this->_beforeModule($module);
         $layout = $this->areaHtmlNode->getCurrentLayoutClasses();
 
-        if (!empty( $layout )) {
+        if (!empty($layout)) {
             return sprintf(
                 '<div class="kb-wrap %2$s">%1$s',
                 $this->moduleRenderer->beforeModule(),
-                implode( ' ', $layout )
+                implode(' ', $layout)
             );
         } else {
             return $this->moduleRenderer->beforeModule();
@@ -200,53 +207,57 @@ class AreaRenderer implements RendererInterface
 
     }
 
-    public function _beforeModule( Module $module )
+    public function _beforeModule(Module $module)
     {
         $moduleClasses = $this->modules->getCurrentModuleClasses();
-        $additionalClasses = $this->getAdditionalClasses( $module );
+        $additionalClasses = $this->getAdditionalClasses($module);
 
-        $mergedClasses = array_merge( $moduleClasses, $additionalClasses );
-        if (method_exists( $module, 'preRender' )) {
+        $mergedClasses = array_merge($moduleClasses, $additionalClasses);
+        if (method_exists($module, 'preRender')) {
             $module->preRender();
         }
 
-        $this->moduleRenderer->addClasses( $mergedClasses );
+        $this->moduleRenderer->addClasses($mergedClasses);
     }
 
-    public function getAdditionalClasses( Module $module )
+    /**
+     * @param Module $module
+     * @return array
+     */
+    public function getAdditionalClasses(Module $module)
     {
         $classes = array();
-
 
         if ($this->position === 1) {
             $classes[] = 'first-module';
         }
 
-        if ($this->position === count( $this->modules )) {
+        if ($this->position === count($this->modules)) {
             $classes[] = 'last-module';
         }
 
         if (is_user_logged_in()) {
             $classes[] = 'os-edit-container';
 
-            if ($module->properties->getState( 'draft' )) {
+            if ($module->properties->getState('draft')) {
                 $classes[] = 'draft';
             }
         }
 
-        if ($this->previousModule === $module->properties->getSetting( 'hash' )) {
+        if ($this->previousModule === $module->properties->getSetting('hash')) {
             $classes[] = 'repeater';
             $this->repeating = true;
         } else {
             $this->repeating = false;
         }
 
-        if ($this->repeating && $this->areaHtmlNode->getSetting( 'mergeRepeating' )) {
+        if ($this->repeating && $this->areaHtmlNode->getSetting('mergeRepeating')) {
             $classes[] = 'module-merged';
             $classes[] = 'module';
         } else {
             $classes[] = 'module';
         }
+
         return $classes;
 
     }
@@ -255,13 +266,13 @@ class AreaRenderer implements RendererInterface
      * @param $module
      * @return string
      */
-    public function afterModule( Module $module )
+    public function afterModule(Module $module)
     {
 
-        $this->_afterModule( $module );
+        $this->_afterModule($module);
         $layout = $this->areaHtmlNode->getCurrentLayoutClasses();
-        if (!empty( $layout )) {
-            return "</div>" . sprintf( "%s", $this->moduleRenderer->afterModule() );
+        if (!empty($layout)) {
+            return "</div>" . sprintf("%s", $this->moduleRenderer->afterModule());
         } else {
             return $this->moduleRenderer->afterModule();
         }
@@ -270,10 +281,10 @@ class AreaRenderer implements RendererInterface
     /**
      * @param Module $module
      */
-    public function _afterModule( Module $module )
+    public function _afterModule(Module $module)
     {
-        $this->previousModule = $module->properties->getSetting( 'hash' );
-        $this->position ++;
+        $this->previousModule = $module->properties->getSetting('hash');
+        $this->position++;
         $this->areaHtmlNode->nextLayout();
     }
 

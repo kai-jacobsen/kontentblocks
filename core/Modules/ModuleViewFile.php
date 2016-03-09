@@ -9,17 +9,51 @@ namespace Kontentblocks\Modules;
  */
 class ModuleViewFile
 {
+
+    /**
+     * filename
+     * @var string
+     */
     public $filename;
+
+    /**
+     * subdirectory
+     * @var string
+     */
     public $subPath;
+
+    /**
+     * file path and name in dotnotation
+     * @var string
+     */
     public $id;
+
+    /**
+     * @var int
+     */
     public $order;
+
+    /**
+     * @var string
+     */
     public $path;
+
+    /**
+     * userland name
+     * @var string
+     */
+    public $name;
 
     /**
      * @var \DirectoryIterator
      */
     private $node;
 
+    /**
+     * ModuleViewFile constructor.
+     * @param \DirectoryIterator $node
+     * @param $rootPath
+     */
     public function __construct( \DirectoryIterator $node, $rootPath )
     {
         $this->rootPath = $rootPath;
@@ -27,6 +61,9 @@ class ModuleViewFile
         $this->prepareNode();
     }
 
+    /**
+     * Extract information from node
+     */
     private function prepareNode()
     {
         $this->filename = $this->node->getFilename();
@@ -34,10 +71,14 @@ class ModuleViewFile
         $this->path = $this->node->getPath();
         $this->id = $this->normalize( $this->subPath );
         $this->order = $this->stripOrderingNumbers($this->filename);
-        $this->name = ($this->filename) . ' (' . $this->subPath . ')';
+        $this->name = $this->generateName();
     }
 
 
+    /**
+     * @param $subPath
+     * @return string
+     */
     private function normalize( $subPath )
     {
         $relPath = trailingslashit($subPath) . str_replace('.twig','', $this->filename);
@@ -45,6 +86,10 @@ class ModuleViewFile
         return  implode('.', $segments);
     }
 
+    /**
+     * @param $normalized
+     * @return string
+     */
     private function denormalize( $normalized )
     {
         return str_replace( '.', DIRECTORY_SEPARATOR, $normalized ) . '.twig';
@@ -69,8 +114,20 @@ class ModuleViewFile
         }
     }
 
+    /**
+     * @return string
+     */
     public function __toString(){
         return $this->filename;
+    }
+
+    /**
+     * @return string
+     */
+    private function generateName()
+    {
+        $sub = (!empty($this->subPath)) ? '(' . $this->subPath . ')' : '';
+        return ucfirst(str_replace('.twig', '', $this->filename)) . $sub;
     }
 
 }

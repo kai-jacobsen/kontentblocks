@@ -125,6 +125,7 @@ class SlotRenderer
 
 
         if (is_a( $module, '\Kontentblocks\Modules\Module' )) {
+            $module->context->set('renderPosition', $this->position);
             $renderer = new SingleModuleRenderer( $module, $this->moduleSettings );
             $module->toJSON();
             array_push( $this->done, $module->getId() );

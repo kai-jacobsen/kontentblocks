@@ -30,6 +30,8 @@ class Image extends StandardFieldReturn
 
     private $valid = false;
 
+
+
     /**
      * @return int
      */
@@ -185,6 +187,7 @@ class Image extends StandardFieldReturn
         if (!is_array($value)) {
             return $value;
         }
+
 
         if (array_key_exists('id', $value)) {
             $this->attId = $value['id'];

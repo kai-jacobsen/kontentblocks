@@ -87,6 +87,7 @@ class AjaxCallbackHandler
                 'handleClipboard' => array('Kontentblocks\Ajax\Actions\HandleClipboard', 'run'),
                 'getModuleBackendForm' => array('Kontentblocks\Ajax\Actions\GetModuleBackendForm', 'run'),
                 'updateFieldModel' => array('Kontentblocks\Ajax\Actions\Frontend\UpdateFieldModel', 'run'),
+                'getOembed' => array('Kontentblocks\Ajax\Actions\GetOembed', 'run'),
                 'cropImage' => array('Kontentblocks\Ajax\Actions\CropImage', 'run')
 
             )
@@ -138,7 +139,7 @@ class AjaxCallbackHandler
     {
 
         if (!is_user_logged_in()) {
-            return new AjaxErrorResponse('Log in!');
+            return new AjaxErrorResponse('Log in if you can!');
         }
 
         if (!current_user_can('edit_kontentblocks')) {

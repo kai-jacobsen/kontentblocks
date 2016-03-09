@@ -58,9 +58,9 @@ class Gallery
                 $field->setArgs( [ 'index' => $k, 'arrayKey' => $this->field->getKey() . '.images' ] );
 
                 if ($field->getArg( 'editable', false )) {
-                    $return = new EditableImage( $attId, $field );
+                    $return = new EditableImage( array('id' => $attId), $field );
                 } else {
-                    $return = new Image( $attId, $field, null );
+                    $return = new Image( array('id' => $attId), $field, null );
                 }
                 array_push( $this->images, $return );
             }

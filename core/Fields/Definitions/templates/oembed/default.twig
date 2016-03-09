@@ -1,0 +1,15 @@
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    <input
+            type="{{ Field.getArg('type', 'text') }}"
+    {% for attr, value in Field.getArg('attributes', []) %}
+        {{ attr }}="{{ value|esc_attr }}"
+    {% endfor %}
+    id='{{ Form.getInputFieldId() }}'
+    name='{{ Form.getFieldName }}'
+    placeholder='{{ Form.getPlaceholder() }}'
+    value='{{ Field.getValue() }}' />
+    <div class="kb-oembed-preview" data-kb-oembed-preview>
+
+    </div>
+{% endblock %}

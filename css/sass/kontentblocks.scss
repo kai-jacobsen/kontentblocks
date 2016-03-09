@@ -109,6 +109,7 @@
 @import "partials/_refields/_otimes";
 @import "partials/_refields/_plupload";
 @import "partials/_refields/_mlayout";
+@import "partials/_refields/_oembed";
 
 @import "partials/_global-area-edit";
 
@@ -727,7 +728,7 @@ textarea.quicktags {
 }
 
 .kb-hide {
-  display: none !important;
+  display: none;
 }
 
 .onsite-editing .editable, .onsite-editing .editable-image, .onsite-editing .editable-bg-image, .onsite-editing .editable-title {
