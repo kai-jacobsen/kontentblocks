@@ -60,8 +60,10 @@ namespace Kontentblocks\Utils {
              */
             public function process( $attachment, $width = null, $height = null, $crop = null, $single = true, $upscale = false ) {
                 // Validate inputs.
-                if ( ! $attachment || ( ! $width && ! $height ) ) return false;
-                // $attachment may be a url or an id
+                if ( ! $attachment || ( ! $width && ! $height ) ){
+                    return false;
+                    // $attachment may be a url or an id
+                }
 
                 if (is_numeric($attachment)){
                     $url = wp_get_attachment_url(absint($attachment));
@@ -88,7 +90,6 @@ namespace Kontentblocks\Utils {
                 elseif(!strncmp($url,$http_prefix,strlen($http_prefix))){ //if url begins with http:// make $upload_url begin with http:// as well
                     $upload_url = str_replace($https_prefix,$http_prefix,$upload_url);
                 }
-
 
 
                 // Check if $img_url is local.

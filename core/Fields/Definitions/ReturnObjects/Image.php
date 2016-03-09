@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions\ReturnObjects;
 
 
+use Kontentblocks\Fields\Field;
 use Kontentblocks\Utils\ImageResize;
 
 /**
@@ -29,6 +30,18 @@ class Image extends StandardFieldReturn
     public $src;
 
     private $valid = false;
+
+
+    /**
+     * @param $value
+     * @param Field $field
+     * @param $salt
+     */
+    public function __construct($value, Field $field, $salt)
+    {
+        $this->attId = $value;
+        $this->field = $field;
+    }
 
     /**
      * @return int

@@ -363,6 +363,7 @@ abstract class Module implements EntityInterface
             'settings' => $this->properties->settings,
             'state' => $this->properties->state,
             'mid' => $this->getId(),
+            'id' => $this->getId(), // only for backbone compatibility
             'entityData' => apply_filters(
                 'kb.module.modify.data',
                 $this->model->getOriginalData(),

@@ -129,7 +129,6 @@ KB.App = (function () {
           // create new area model
           KB.ObjectProxy.add(KB.Areas.add(area));
         }
-
       }
     });
 
