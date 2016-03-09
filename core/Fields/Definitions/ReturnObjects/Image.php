@@ -3,7 +3,6 @@
 namespace Kontentblocks\Fields\Definitions\ReturnObjects;
 
 
-use Kontentblocks\Fields\Field;
 use Kontentblocks\Utils\ImageResize;
 
 /**
@@ -32,16 +31,6 @@ class Image extends StandardFieldReturn
     private $valid = false;
 
 
-    /**
-     * @param $value
-     * @param Field $field
-     * @param $salt
-     */
-    public function __construct($value, Field $field, $salt)
-    {
-        $this->attId = $value;
-        $this->field = $field;
-    }
 
     /**
      * @return int
@@ -198,6 +187,7 @@ class Image extends StandardFieldReturn
         if (!is_array($value)) {
             return $value;
         }
+
 
         if (array_key_exists('id', $value)) {
             $this->attId = $value['id'];
