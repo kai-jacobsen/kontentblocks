@@ -55,8 +55,6 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
         // adds necessary attributes to enable inline edit
         $this->handleLoggedInUsers();
         $this->prepareSrc(null);
-
-
         $this->toJSON();
         if (!$withsizes) {
             $format = '<%1$s %3$s src="%2$s" >';
@@ -123,6 +121,23 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
 
     }
 
+    /**
+     * @param $size
+     */
+    public function srcSet($size)
+    {
+        $this->image->srcSet($size);
+        return $this;
+    }
+
+    /**
+     * @param $string
+     * @return $this
+     */
+    public function mq($string){
+        $this->image->mq($string);
+        return $this;
+    }
 
     /**
      * Returns just the source url without any further html added

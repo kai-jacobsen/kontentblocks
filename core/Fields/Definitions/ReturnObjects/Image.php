@@ -12,24 +12,60 @@ use Kontentblocks\Utils\ImageResize;
 class Image extends StandardFieldReturn
 {
 
+    /**
+     * @var
+     */
     public $attachment;
 
+    /**
+     * @var
+     */
     public $attId;
 
+    /**
+     * @var string
+     */
     public $title = '';
 
+    /**
+     * @var string
+     */
     public $caption = '';
 
+    /**
+     * @var array
+     */
     public $size = array(150, 150);
 
+    /**
+     * @var bool
+     */
     public $crop = true;
 
+    /**
+     * @var bool
+     */
     public $upscale = false;
 
+    /**
+     * @var
+     */
     public $src;
 
-    private $valid = false;
+    /**
+     * @var array
+     */
+    protected $srcSets = array();
 
+    /**
+     * @var array
+     */
+    protected $mediaQueries = array();
+
+    /**
+     * @var bool
+     */
+    private $valid = false;
 
 
     /**
@@ -78,6 +114,10 @@ class Image extends StandardFieldReturn
         return $this->src;
     }
 
+    /**
+     * @param array $args
+     * @return $this
+     */
     public function resize($args = array())
     {
         $defaults = array(
@@ -114,6 +154,16 @@ class Image extends StandardFieldReturn
 
     }
 
+    /**
+     * @param $size
+     * @return $this
+     */
+    public function srcSet($size)
+    {
+        $this->srcSets[] = $size;
+        return $this;
+    }
+
     public function html($withsizes = false)
     {
         return $this->imageTag($withsizes);
@@ -125,16 +175,60 @@ class Image extends StandardFieldReturn
             $this->resize();
         }
 
+
+        $img = "<img src='{$this->src}' ";
+        $img .= "title='{$this->title}' ";
+
         if ($withsizes) {
-            return sprintf(
-                '<img src="%s" title="%s" width="%d" height="%d" >',
-                $this->src,
-                $this->title,
-                $this->size[0],
-                $this->size[1]
-            );
+            $img .= "width='{$this->size[0]}' ";
+            $img .= "height='{$this->size[1]}' ";
         }
-        return sprintf('<img src="%s" title="%s" >', $this->src, $this->title);
+
+        $sets = array();
+        if (!empty($this->srcSets)) {
+            foreach ($this->srcSets as $srcSet) {
+                $imageUrl = $this->getImageForWidth($srcSet);
+                if ($imageUrl) {
+                    $sets[] = $imageUrl . " {$srcSet}w";
+                }
+            }
+            if (!empty($sets)) {
+                $setString = implode(', ', $sets);
+                $img .= "\nsrcset='{$setString}' ";
+            }
+        }
+
+        if (!empty($this->mediaQueries)) {
+            $mString = implode(', ', $this->mediaQueries);
+            $img .= "\nsizes='{$mString}' ";
+        }
+
+        $img .= ">";
+        return $img;
+    }
+
+    private function getImageForWidth($srcSet)
+    {
+        $resizeargs = array(
+            'width' => $srcSet,
+            'height' => null,
+            'crop' => $this->crop,
+            'upscale' => $this->upscale
+        );
+
+        $processed = ImageResize::getInstance()->process(
+            $this->attId,
+            $resizeargs['width'],
+            $resizeargs['height'],
+            $resizeargs['crop'],
+            false,
+            $resizeargs['upscale']
+        );
+
+        if (is_array($processed) && count($processed) === 3) {
+            return $processed[0];
+        }
+        return false;
     }
 
     /**
@@ -174,6 +268,12 @@ class Image extends StandardFieldReturn
     public function crop($crop = false)
     {
         $this->crop = $crop;
+        return $this;
+    }
+
+    public function mq($string)
+    {
+        $this->mediaQueries[] = $string;
         return $this;
     }
 
