@@ -3446,7 +3446,7 @@ module.exports = BaseView.extend({
           parentController: that,
           library: {
             type: 'image',
-            cache: false,
+            cache: false
           }
         };
 
