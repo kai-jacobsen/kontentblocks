@@ -25,7 +25,7 @@ module.exports = BaseView.extend({
     }
   },
   openFrame: function (editmode) {
-    var that = this, metadata;
+    var that = this, metadata, frameoptions;
     if (this.frame) {
       this.frame.dispose();
     }
@@ -58,7 +58,8 @@ module.exports = BaseView.extend({
         } else {
           metadata = {};
         }
-        that.frame = new wp.media.view.KBCropperFrame({
+
+        frameoptions = {
           cropOptions: {
             maxWidth: that.model.get('width') || 300, //target width
             maxHeight: that.model.get('height') || 300 // target height
@@ -67,10 +68,15 @@ module.exports = BaseView.extend({
           parentController: that,
           library: {
             type: 'image',
-            cache: false,
-            uploadedTo: KB.Environment.postId || 0
+            cache: false
           }
-        }).on('update', function (attachmentObj) { // bind callback to 'update'
+        };
+
+        if (that.model.get('uploadedTo') === true){
+          frameoptions.library.uploadedTo = KB.Environment.postId || 0
+        }
+
+        that.frame = new wp.media.view.KBCropperFrame(frameoptions).on('update', function (attachmentObj) { // bind callback to 'update'
             console.log('update');
             that.update(attachmentObj);
           })
