@@ -252,6 +252,7 @@ class ModuleProperties
     public function export($keepSettings = false)
     {
         $vars = get_object_vars($this);
+        unset($vars['validator']);
         $vars['area'] = $this->area->id;
         $vars['parentObject'] = null;
         $vars['guard'] = $this->validator->export();

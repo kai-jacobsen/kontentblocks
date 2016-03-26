@@ -68,7 +68,7 @@ module.exports = Backbone.View.extend({
      */
     _.each(section.fields, function (fieldTpl) { // field is just a reference object and does nothing on it's own
 
-      var wrap = Handlebars.compile("<div class='kb-field-wrapper kb-js-field-identifier' data-kbfuid='{{ kbfuid }}' id='{{ kbfuid }}'></div>");
+      var wrap = Handlebars.compile("<div class='kb-field-wrapper' data-kbfuid='{{ kbfuid }}' id='{{ kbfuid }}'></div>");
       fieldInstance = fieldTpl.view; // get a view for the field, responsibile for the markup
       data = this.model.get('value'); // if not new item a standard backbone model
       fieldInstance.listenTo(this, 'derender', fieldInstance.derender);

@@ -35,7 +35,7 @@ var Ui = {
 
     // set the global activeField variable dynamically
     // legacy
-    $body.on('mousedown', '.kb_field', function (e) {
+    $body.on('mousedown', '.kb-field', function (e) {
       activeField = this;
     });
 
@@ -80,7 +80,7 @@ var Ui = {
   },
   initTabs: function ($cntxt) {
     var $context = $cntxt || jQuery('body');
-    var selector = $('.kb_fieldtabs', $context);
+    var selector = $('.kb-field--tabs', $context);
     selector.tabs({
       activate: function (e, ui) {
         $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});

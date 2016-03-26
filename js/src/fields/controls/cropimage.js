@@ -72,7 +72,7 @@ module.exports = BaseView.extend({
           }
         };
 
-        if (that.model.get('uploadedTo') === true){
+        if (that.model.get('uploadedTo') === true) {
           frameoptions.library.uploadedTo = KB.Environment.postId || 0
         }
 

@@ -7,7 +7,7 @@ namespace Kontentblocks\Modules;
  * Class ModuleValidator
  * @package Kontentblocks\Modules
  */
-class ModuleValidator
+class ModuleValidator implements \JsonSerializable
 {
 
     public $loggedInOnly = false;
@@ -75,4 +75,11 @@ class ModuleValidator
     }
 
 
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->export();
+    }
 }

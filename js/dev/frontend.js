@@ -912,7 +912,7 @@ var Ui = {
 
     // set the global activeField variable dynamically
     // legacy
-    $body.on('mousedown', '.kb_field', function (e) {
+    $body.on('mousedown', '.kb-field', function (e) {
       activeField = this;
     });
 
@@ -957,7 +957,7 @@ var Ui = {
   },
   initTabs: function ($cntxt) {
     var $context = $cntxt || jQuery('body');
-    var selector = $('.kb_fieldtabs', $context);
+    var selector = $('.kb-field--tabs', $context);
     selector.tabs({
       activate: function (e, ui) {
         $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});
@@ -1787,7 +1787,7 @@ module.exports = BaseView.extend({
           }
         };
 
-        if (that.model.get('uploadedTo') === true){
+        if (that.model.get('uploadedTo') === true) {
           frameoptions.library.uploadedTo = KB.Environment.postId || 0
         }
 
@@ -2306,7 +2306,7 @@ module.exports = Backbone.View.extend({
      */
     _.each(section.fields, function (fieldTpl) { // field is just a reference object and does nothing on it's own
 
-      var wrap = Handlebars.compile("<div class='kb-field-wrapper kb-js-field-identifier' data-kbfuid='{{ kbfuid }}' id='{{ kbfuid }}'></div>");
+      var wrap = Handlebars.compile("<div class='kb-field-wrapper' data-kbfuid='{{ kbfuid }}' id='{{ kbfuid }}'></div>");
       fieldInstance = fieldTpl.view; // get a view for the field, responsibile for the markup
       data = this.model.get('value'); // if not new item a standard backbone model
       fieldInstance.listenTo(this, 'derender', fieldInstance.derender);
@@ -2577,7 +2577,7 @@ module.exports = Backbone.View.extend({
   edit: function () {
     this.$el.wrap('<div class="kb-gallery--item-placeholder kb-gallery--image-wrapper"></div>');
     this._placeholder = this.$el.parent();
-    this.$el.addClass('kb-gallery--active-item kb_field').appendTo('body');
+    this.$el.addClass('kb-gallery--active-item kb-field').appendTo('body');
     jQuery('#wpwrap').addClass('module-browser-open');
     this.handleEditor();
     UI.initTabs();
@@ -2621,7 +2621,7 @@ module.exports = Backbone.View.extend({
 
     tinymce.remove(ed);
     this.$el.appendTo(this._placeholder).unwrap();
-    this.$el.removeClass('kb-gallery--active-item').removeClass('kb_field');
+    this.$el.removeClass('kb-gallery--active-item').removeClass('kb-field');
     jQuery('#wpwrap').removeClass('module-browser-open');
   },
   getEditorContent: function (ed) {
@@ -8633,7 +8633,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + alias3(this.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.title : stack1), depth0))
     + "\" name=\""
     + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
-    + "[_meta][title] \">\n        </h3>\n    </div>\n    <div class=\"kb-field--tabs kb_fieldtabs\">\n        <ul class=\"flexible-field--tab-nav\">\n\n        </ul>\n\n    </div>\n</div>";
+    + "[_meta][title] \">\n        </h3>\n    </div>\n    <div class=\"kb-field--tabs\">\n        <ul class=\"flexible-field--tab-nav\">\n\n        </ul>\n\n    </div>\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":193}],135:[function(require,module,exports){
@@ -8650,7 +8650,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + alias3(this.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.title : stack1), depth0))
     + "\" name=\""
     + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
-    + "[_meta][title] \">\n    </h3>\n</div>\n<div class=\"flexible-fields--toggle-box kb-hide\">\n    <div class=\"kb-field--tabs kb_fieldtabs\">\n        <ul class=\"flexible-field--tab-nav\">\n\n        </ul>\n    </div>\n\n</div>";
+    + "[_meta][title] \">\n    </h3>\n</div>\n<div class=\"flexible-fields--toggle-box kb-hide\">\n    <div class=\"kb-field--tabs\">\n        <ul class=\"flexible-field--tab-nav\">\n\n        </ul>\n    </div>\n\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":193}],136:[function(require,module,exports){
@@ -8670,7 +8670,7 @@ var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1, helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression, alias4=this.lambda;
 
-  return "<div class=\"kb-gallery--header\">\n    <h3>Image Details</h3>\n</div>\n<div class=\"kb-gallery--left-column\">\n    <div class=\"kb-gallery--image-meta\" style=\"display: none;\">\n        <span class=\"genericon genericon-close-alt kb-gallery--js-meta-close\"></span>\n\n        <div class=\"kb_fieldtabs kb-field--tabs\">\n            <ul class=\"kb-gallery--tabs-nav\">\n                <li><a href=\"#tab"
+  return "<div class=\"kb-gallery--header\">\n    <h3>Image Details</h3>\n</div>\n<div class=\"kb-gallery--left-column\">\n    <div class=\"kb-gallery--image-meta\" style=\"display: none;\">\n        <span class=\"genericon genericon-close-alt kb-gallery--js-meta-close\"></span>\n\n        <div class=\"kb-field--tabs\">\n            <ul class=\"kb-gallery--tabs-nav\">\n                <li><a href=\"#tab"
     + alias3(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"uid","hash":{},"data":data}) : helper)))
     + "-1\">Details</a></li>\n                <li><a href=\"#tab"
     + alias3(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"uid","hash":{},"data":data}) : helper)))
@@ -8732,7 +8732,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1, alias1=this.lambda, alias2=this.escapeExpression, alias3=helpers.helperMissing;
 
-  return "<div class=\"kb_field kb-field kb-field--image kb-fieldapi-field\">\n    <div class='kb-field-image-wrapper' data-kbfield=\"image\">\n        <div class='kb-js-add-image kb-field-image-container'>\n"
+  return "<div class=\"kb-field kb-field kb-field--image kb-fieldapi-field\">\n    <div class='kb-field-image-wrapper' data-kbfield=\"image\">\n        <div class='kb-js-add-image kb-field-image-container'>\n"
     + ((stack1 = helpers['if'].call(depth0,((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.url : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "        </div>\n        <div class=\"kb-field-image-meta "
     + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.hideMeta : stack1),{"name":"if","hash":{},"fn":this.program(3, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")

@@ -43,7 +43,7 @@ class StandardFieldController
     /**
      * @var string
      */
-    public $fieldFormRenderer = '\Kontentblocks\Fields\FieldFormRenderer';
+    public $formRenderClass = '\Kontentblocks\Fields\FieldFormRenderer';
 
     /**
      * @var FieldsYamlLoader
@@ -59,7 +59,7 @@ class StandardFieldController
      * Default field renderer
      * @var InterfaceFieldRenderer
      */
-    protected $renderer = 'Kontentblocks\Fields\Renderer\FieldRendererTabs';
+    protected $fieldRenderClass = 'Kontentblocks\Fields\Renderer\FieldRendererTabs';
     /**
      * registered fields in one flat array
      * @var array
@@ -71,12 +71,32 @@ class StandardFieldController
      * AbstractFieldController constructor.
      * @param $baseid
      * @param EntityInterface $entity
+     * @param array $args
      */
-    public function __construct($baseid, EntityInterface $entity)
+    public function __construct($baseid, EntityInterface $entity, $args = array())
     {
         $this->baseId = $baseid;
         $this->entity = $entity;
         $this->model = $entity->getModel();
+        $this->parseArgs($args);
+    }
+
+    /**
+     * @param $args
+     */
+    public function parseArgs($args)
+    {
+        $defaults = array(
+            'fieldRenderClass' => 'Kontentblocks\Fields\Renderer\FieldRendererTabs',
+            'formRenderClass' => '\Kontentblocks\Fields\FieldFormRenderer'
+        );
+
+        $args = wp_parse_args($args, $defaults);
+
+        foreach ($defaults as $key => $value) {
+            $this->$key = $value;
+        }
+
     }
 
 
@@ -251,17 +271,25 @@ class StandardFieldController
     }
 
     /**
+     * @return mixed
+     */
+    public function render()
+    {
+        return $this->getFieldRenderClass()->render();
+    }
+
+    /**
      * @return AbstractFieldRenderer
      */
-    public function getRenderer()
+    public function getFieldRenderClass()
     {
 
-        if (is_null($this->renderer)) {
-            $this->renderer = '\Kontentblocks\Fields\Renderer\FieldRendererTabs';
+        if (is_null($this->fieldRenderClass)) {
+            $this->fieldRenderClass = '\Kontentblocks\Fields\Renderer\FieldRendererTabs';
         }
 
         if (is_null($this->renderEngine)) {
-            $this->renderEngine = new $this->renderer($this);
+            $this->renderEngine = new $this->fieldRenderClass($this);
         }
         return $this->renderEngine;
     }
@@ -269,7 +297,7 @@ class StandardFieldController
     /**
      * @param string $classname
      */
-    public function setRenderer($classname)
+    public function setFieldRenderClass($classname)
     {
         if (is_string($classname) && is_a(
                 $classname,
@@ -277,17 +305,17 @@ class StandardFieldController
                 true
             )
         ) {
-            $this->renderer = $classname;
+            $this->fieldRenderClass = $classname;
         }
     }
 
     /**
      * @param $string
      */
-    public function setFieldFormRenderer($string)
+    public function setFormRenderClass($string)
     {
         if (is_a($string, '\Kontentblocks\Fields\FieldFormRenderer', true)) {
-            $this->fieldFormRenderer = $string;
+            $this->formRenderClass = $string;
         }
     }
 

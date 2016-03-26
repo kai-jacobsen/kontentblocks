@@ -26,17 +26,17 @@ class UserMetaDataProvider implements DataProviderInterface
     /**
      * Class constructor
      *
-     * @param $postId
+     * @param $userId
      *
      * @throws \Exception
      * @since 0.1.0
      */
-    public function __construct($postId)
+    public function __construct($userId)
     {
-        if (!isset($postId) || $postId === 0) {
+        if (!isset($userId) || $userId === 0) {
             throw new \Exception('a valid post id must be provided');
         }
-        $this->userId = $postId;
+        $this->userId = $userId;
         $this->reset();
     }
 

@@ -34,6 +34,11 @@ class FieldFormRenderer
     public $layout = 'base';
 
     /**
+     * @var array
+     */
+    public $classList;
+
+    /**
      * @var \Kontentblocks\Fields\Field
      */
     protected $field;
@@ -45,6 +50,7 @@ class FieldFormRenderer
     {
         $this->field = $field;
         $this->fieldWrapAttributes = $this->setupAttributes();
+        $this->classList = $this->prepareClasslist();
     }
 
     /**
@@ -53,10 +59,37 @@ class FieldFormRenderer
     protected function setupAttributes()
     {
         return array(
-            'class' => "kb_field kb-field kb-field--{$this->field->type} kb-field--reset klearfix"
+            'class' => "kb-field kb-field--{$this->field->type} kb-field--reset klearfix"
         );
     }
 
+    /**
+     * @return array
+     */
+    private function prepareClasslist()
+    {
+        return wp_parse_args($this->setupClasslist(), $this->defaultClasslist());
+    }
+
+    /**
+     * @return array
+     */
+    public function setupClasslist()
+    {
+        return array();
+    }
+
+    /**
+     * @return array
+     */
+    private function defaultClasslist()
+    {
+        return array(
+            'main-wrap' => 'kb-field-wrapper',
+            'type-label' => 'kb-field-type-label',
+            'field-header' => 'kb-field-header',
+        );
+    }
 
     /**
      * Helper to generate a unique id to be used with labels and inputs, basically.
@@ -90,7 +123,6 @@ class FieldFormRenderer
 
         return esc_attr($base . $array . $akey . $multiple);
     }
-
 
     /**
      * @param mixed $param
@@ -140,7 +172,6 @@ class FieldFormRenderer
         return $view->render();
     }
 
-
     /**
      * Helper Method to create a complete label tag
      * @since 0.1.0
@@ -149,6 +180,7 @@ class FieldFormRenderer
     {
         if ($this->labelDone) {
             return null;
+
         }
 
         $view = new FieldView(
@@ -236,6 +268,20 @@ class FieldFormRenderer
     public function getLayout()
     {
         return "_layouts/{$this->skin}/{$this->layout}.twig";
+    }
+
+    /**
+     * @param $classId
+     * @return mixed
+     */
+    public function getClass($classId)
+    {
+
+        if (isset($this->classList[$classId])) {
+            return $this->classList[$classId];
+        }
+
+        return '';
     }
 
 

@@ -191,7 +191,7 @@ body.onsite-editing {
     }
   }
 
-  .kb_fieldtabs {
+  .kb-field--tabs {
     li a {
       font-size: 12px;
       font-family: 'Open Sans', sans-serif;
@@ -366,7 +366,7 @@ body.onsite-editing {
     border-right: 1px solid #ccc;
   }
 
-  .kb_fieldtabs ul.ui-tabs-nav {
+  .kb-field--tabs ul.ui-tabs-nav {
     padding-top: 0;
     background-color: #fff;
     border-radius: 0;
@@ -374,7 +374,7 @@ body.onsite-editing {
     list-style: none;
   }
 
-  .kb_field {
+  .kb-field {
     width: 100%;
     -moz-box-sizing: border-box;
     box-sizing: border-box;

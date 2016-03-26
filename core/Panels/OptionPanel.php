@@ -249,7 +249,7 @@ abstract class OptionPanel extends AbstractPanel
      */
     public function renderFields()
     {
-        $renderer = $this->fields->getRenderer();
+        $renderer = $this->fields->getFieldRenderClass();
         return $renderer->render();
     }
 

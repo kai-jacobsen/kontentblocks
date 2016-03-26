@@ -54,7 +54,7 @@ class DataProviderService
         if (isset(self::$userProviders[$userId])) {
             return self::$userProviders[$userId];
         }
-        return self::$userProviders[$userId] = new TermMetaDataProvider($userId);
+        return self::$userProviders[$userId] = new UserMetaDataProvider($userId);
 
     }
 

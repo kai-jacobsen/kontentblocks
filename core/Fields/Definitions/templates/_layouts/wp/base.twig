@@ -1,4 +1,4 @@
-<tr class="form-field kb-field-wrapper field-renderer-wp  {% if Field.getArg('description') %} field-has-description {% endif %}"
+<tr class="{{ Form.getClass('main-wrap') }}  {% if Field.getArg('description') %} field-has-description {% endif %}"
     data-kbfuid="{{ Field.uniqueId|escape('html_attr') }}"
     data-kbfield="{{ Field.type }}"
     id='{{ Field.uniqueId|escape('html_attr') }}'>

@@ -71,7 +71,7 @@ abstract class AbstractFieldRenderer implements InterfaceFieldRenderer
     public function getFormController($field)
     {
 //        if (is_null($this->fieldController->fieldFormRenderer)) {
-            return new $this->fieldController->fieldFormRenderer($field);
+            return new $this->fieldController->formRenderClass($field);
 //        }
     }
 

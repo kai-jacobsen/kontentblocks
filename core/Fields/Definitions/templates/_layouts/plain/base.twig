@@ -1,0 +1,19 @@
+<div class="kb-field-wrapper-plain {% if Field.getArg('description') %} field-has-description {% endif %}"
+     data-kbfuid="{{ Field.uniqueId|escape('html_attr') }}"
+     id='{{ Field.uniqueId|escape('html_attr') }}'>
+    <div class="kb-field-type-label-plain">{{ Field.getSetting('type') }}</div>
+    <div class="kb-field-header-plain">
+        {% if (Field.getArg('title')) %}
+            <h4>{{ Field.getArg('title')|escape }}</h4>
+        {% endif %}
+    </div>
+    <div {% for attr,value in Form.fieldWrapAttributes %} {{ attr }}='{{ value|esc_attr }}' {% endfor %} >
+        {{ Form.getLabel() }}
+
+        {% block fieldmarkup %}
+            {#goes here#}
+        {% endblock %}
+
+        {{ Form.getDescription() }}
+    </div>
+</div>

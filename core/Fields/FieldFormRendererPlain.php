@@ -8,10 +8,10 @@ namespace Kontentblocks\Fields;
  * Class FieldForm
  * @package Kontentblocks\Fields
  */
-class FieldFormRendererWP extends FieldFormRenderer
+class FieldFormRendererPlain extends FieldFormRenderer
 {
 
-    public $skin = 'wp';
+    public $skin = 'plain';
 
     /**
      * @return array
@@ -19,9 +19,9 @@ class FieldFormRendererWP extends FieldFormRenderer
     public function setupClasslist()
     {
         return array(
-            'main-wrap' => 'form-field kb-field-wrapper field-renderer-wp',
-            'type-label' => 'kb-field-type-label',
-            'field-header' => 'kb-field-header',
+            'main-wrap' => 'kb-plain-field-wrap',
+            'type-label' => 'kb-plain-field-type-label',
+            'field-header' => 'kb-plain-field-header',
         );
     }
 
@@ -31,7 +31,7 @@ class FieldFormRendererWP extends FieldFormRenderer
     protected function setupAttributes()
     {
         return array(
-            'class' => "kb-field--{$this->field->type} kb-field--reset klearfix"
+            'class' => "kb-field--{$this->field->type}-plain kb-field--reset-plain klearfix"
         );
     }
 }

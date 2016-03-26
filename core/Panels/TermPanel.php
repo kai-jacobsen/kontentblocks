@@ -152,15 +152,15 @@ abstract class TermPanel extends AbstractPanel
         }
         Utilities::hiddenEditor();
         if ($this->args['insideTable']) {
-            $this->fields->setRenderer('\Kontentblocks\Fields\Renderer\FieldRendererWP');
+            $this->fields->setFieldRenderClass('\Kontentblocks\Fields\Renderer\FieldRendererWP');
         }
 
 
         if ($this->args['insideTable']) {
-            $this->fields->setFieldFormRenderer('\Kontentblocks\Fields\FieldFormRendererWP');
+            $this->fields->setFormRenderClass('\Kontentblocks\Fields\FieldFormRendererWP');
         }
 
-        $this->renderer = $this->fields->getRenderer();
+        $this->renderer = $this->fields->getFieldRenderClass();
 
 
         if (!$this->args['insideTable']) {

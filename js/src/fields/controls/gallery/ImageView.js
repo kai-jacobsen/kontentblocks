@@ -22,7 +22,7 @@ module.exports = Backbone.View.extend({
   edit: function () {
     this.$el.wrap('<div class="kb-gallery--item-placeholder kb-gallery--image-wrapper"></div>');
     this._placeholder = this.$el.parent();
-    this.$el.addClass('kb-gallery--active-item kb_field').appendTo('body');
+    this.$el.addClass('kb-gallery--active-item kb-field').appendTo('body');
     jQuery('#wpwrap').addClass('module-browser-open');
     this.handleEditor();
     UI.initTabs();
@@ -66,7 +66,7 @@ module.exports = Backbone.View.extend({
 
     tinymce.remove(ed);
     this.$el.appendTo(this._placeholder).unwrap();
-    this.$el.removeClass('kb-gallery--active-item').removeClass('kb_field');
+    this.$el.removeClass('kb-gallery--active-item').removeClass('kb-field');
     jQuery('#wpwrap').removeClass('module-browser-open');
   },
   getEditorContent: function (ed) {
