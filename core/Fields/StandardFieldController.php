@@ -157,6 +157,26 @@ class StandardFieldController
 
     }
 
+
+    public function collectToForms()
+    {
+        $coll = $this->collectAllFields();
+
+        foreach ($coll as $field) {
+            if (is_a($field, '\Kontentblocks\Fields\FieldSubGroup')) {
+                $coll[$field->getKey()] = array();
+                foreach($field->getFields() as $subfield){
+                    $coll[$field->getKey()][$subfield->getKey()] = new FieldFormRenderer($subfield);
+                }
+
+            } else{
+                $coll[$field->getKey()]  = new FieldFormRenderer($field);
+            }
+        }
+
+        return $coll;
+    }
+
     /**
      * @return EntityModel
      */
@@ -313,7 +333,8 @@ class StandardFieldController
      * @param $classname
      * @deprecated
      */
-    public function setRenderer($classname){
+    public function setRenderer($classname)
+    {
         return $this->setFieldRenderClass($classname);
     }
 
@@ -338,5 +359,6 @@ class StandardFieldController
         }
 
     }
+
 
 }

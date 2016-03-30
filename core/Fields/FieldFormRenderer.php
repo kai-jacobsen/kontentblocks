@@ -48,7 +48,7 @@ class FieldFormRenderer
     /**
      * @var \Kontentblocks\Fields\Field
      */
-    protected $field;
+    public $field;
 
     /**
      * @param Field $field

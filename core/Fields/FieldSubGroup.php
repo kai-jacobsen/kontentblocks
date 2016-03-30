@@ -16,25 +16,27 @@ class FieldSubGroup implements Exportable
 {
 
     /**
+     * @var Module
+     * @since 0.1.0
+     */
+    public $module;
+    /**
      * Storage Key
      * @var string
      * @since 0.1.0
      */
     protected $key;
-
     /**
      * Attached fields
      * @var array
      * @since 0.1.0
      */
     protected $fields;
-
     /**
      * @var string base id
      * @since 0.1.0
      */
     protected $baseId;
-
     /**
      * @var Returnobjects\FieldCollection
      * @since 0.1.0
@@ -42,18 +44,12 @@ class FieldSubGroup implements Exportable
     protected $returnObj;
 
     /**
-     * @var Module
-     * @since 0.1.0
-     */
-    public $module;
-
-    /**
      * Class constructor
      * @since 0.1.0
      *
      * @param string $key
      */
-    public function __construct( $key )
+    public function __construct($key)
     {
         $this->key = $key;
     }
@@ -67,9 +63,10 @@ class FieldSubGroup implements Exportable
      * @since 0.1.0
      * @return $this
      */
-    public function addField( $key, $fieldobject )
+    public function addField($key, $fieldobject)
     {
         $this->fields[$key] = $fieldobject;
+        $this->$key = $fieldobject;
         return $this;
     }
 
@@ -79,23 +76,22 @@ class FieldSubGroup implements Exportable
      * @param array $instanceData
      * @since 0.1.0
      */
-    public function setup( $instanceData )
+    public function setup($instanceData)
     {
         /** @var Field $field */
         foreach ($this->fields as $field) {
-            $fielddata = ( !empty( $instanceData[$field->getKey()] ) ) ? $instanceData[$field->getKey(
-            )] : $field->getArg(
+            $fielddata = (!empty($instanceData[$field->getKey()])) ? $instanceData[$field->getKey()] : $field->getArg(
                 'std',
                 ''
             );
-            $field->setData( $fielddata );
+            $field->setData($fielddata);
         }
     }
 
     /**
      * @param Module $module
      */
-    public function setModule( $module )
+    public function setModule($module)
     {
         $this->module = $module;
     }
@@ -109,19 +105,19 @@ class FieldSubGroup implements Exportable
      * @since 0.1.0
      * @return array
      */
-    public function _save( $data, $oldData )
+    public function _save($data, $oldData)
     {
         $collect = array();
         /** @var Field $field */
         foreach ($this->fields as $field) {
-            $old = ( isset( $oldData[$field->getKey()] ) ) ? $oldData[$field->getKey()] : null;
+            $old = (isset($oldData[$field->getKey()])) ? $oldData[$field->getKey()] : null;
 
-            if (isset( $data[$field->getKey()] )) {
-                $collect[$field->getKey()] = $field->_save( $data[$field->getKey()], $old );
+            if (isset($data[$field->getKey()])) {
+                $collect[$field->getKey()] = $field->_save($data[$field->getKey()], $old);
             } else {
-                if ($field->getSetting( 'forceSave' )) {
+                if ($field->getSetting('forceSave')) {
                     // calls save on field if key is not present
-                    $collect[$field->getKey()] = $field->_save( null, $old );
+                    $collect[$field->getKey()] = $field->_save(null, $old);
                 }
             }
 
@@ -147,7 +143,7 @@ class FieldSubGroup implements Exportable
      */
     public function getFrontendValue()
     {
-        $this->returnObj = new FieldCollection( $this->fields );
+        $this->returnObj = new FieldCollection($this->fields);
         return $this->returnObj;
     }
 
@@ -161,11 +157,11 @@ class FieldSubGroup implements Exportable
      *
      * @since 0.1.0
      */
-    public function setBaseId( $baseId )
+    public function setBaseId($baseId)
     {
         /** @var Field $field */
         foreach ($this->fields as $field) {
-            $field->setBaseId( $baseId, $this->key );
+            $field->setBaseId($baseId, $this->key);
         }
     }
 
@@ -177,12 +173,12 @@ class FieldSubGroup implements Exportable
      * @param array $data
      * @since 0.1.0
      */
-    public function setData( $data )
+    public function setData($data)
     {
         /** @var Field $field */
         foreach ($this->fields as $field) {
-            $fielddata = ( !empty( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : $field->getArg( 'std', '' );
-            $field->setData( $fielddata );
+            $fielddata = (!empty($data[$field->getKey()])) ? $data[$field->getKey()] : $field->getArg('std', '');
+            $field->setData($fielddata);
         }
     }
 
@@ -190,7 +186,7 @@ class FieldSubGroup implements Exportable
     /**
      * @throws \Exception
      */
-    public function getArg( $arg, $default = false )
+    public function getArg($arg, $default = false)
     {
         return '';
     }
@@ -204,16 +200,17 @@ class FieldSubGroup implements Exportable
      * @return mixed
      * @since 0.1.0
      */
-    public function getFieldByKey( $key )
+    public function getFieldByKey($key)
     {
-        if (isset( $this->fields[$key] )) {
+        if (isset($this->fields[$key])) {
             return $this->fields[$key];
         }
         return false;
 
     }
 
-    public function getFields(){
+    public function getFields()
+    {
         return $this->fields;
     }
 
@@ -226,7 +223,7 @@ class FieldSubGroup implements Exportable
     {
         $collected = array();
 
-        if (!empty( $this->fields )) {
+        if (!empty($this->fields)) {
             /** @var Field $field */
             foreach ($this->fields as $field) {
                 $collected[$field->getKey()] = $field->getValue();
@@ -249,10 +246,10 @@ class FieldSubGroup implements Exportable
 
     }
 
-    public function export( &$collection )
+    public function export(&$collection)
     {
         foreach ($this->fields as $Field) {
-            $Field->export( $collection );
+            $Field->export($collection);
         }
     }
 }
