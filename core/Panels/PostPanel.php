@@ -71,6 +71,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function __construct($args, PostEnvironment $environment)
     {
+
         $this->environment = $environment;
         $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults($args);

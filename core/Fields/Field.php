@@ -234,7 +234,6 @@ abstract class Field implements Exportable
         if ($this->getCallback('template.data')) {
             $data = call_user_func($this->getCallback('template.data'), $data);
         }
-
         $view = new FieldView(
             $type . '/' . $tpl . '.twig', $data
         );

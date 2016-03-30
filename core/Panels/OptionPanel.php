@@ -33,22 +33,18 @@ abstract class OptionPanel extends AbstractPanel
      * @var bool
      */
     public $customizer;
-
+    /**
+     * @var StandardFieldController
+     */
+    public $fields;
     /**
      * @var array
      */
     protected $menu;
-
     /**
      * @var string
      */
     protected $menuUri;
-
-    /**
-     * @var StandardFieldController
-     */
-    protected $fields;
-
 
     /**
      * Class constructor

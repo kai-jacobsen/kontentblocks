@@ -14,32 +14,28 @@ class FieldView
     protected $path;
     protected $I18n;
 
-    public function __construct( $tpl = false, $data = null )
+    public function __construct($tpl = false, $data = null)
     {
 
         $this->data = $data;
         $this->I18n = I18n::getInstance();
-        $this->tplFile = ( $tpl !== false ) ? $tpl : null;
-        $this->setPath(KB_PLUGIN_PATH . 'core/Fields/Definitions/templates/');
-        $this->setPath(KB_PLUGIN_PATH . 'core/Fields/Customizer/templates/');
-        $this->engine = Kontentblocks::getService( 'templating.twig.fields' );
+        $this->tplFile = ($tpl !== false) ? $tpl : null;
+        $this->engine = Kontentblocks::getService('templating.twig.fields');
 
     }
 
-    public function render( $echo = false )
+    public function setPath($path)
+    {
+        Twig::setPath($path);
+    }
+
+    public function render($echo = false)
     {
         if ($echo) {
-            $this->engine->display( $this->tplFile, $this->data );
+            $this->engine->display($this->tplFile, $this->data);
         } else {
-            return $this->engine->render( $this->tplFile, $this->data );
+            return $this->engine->render($this->tplFile, $this->data);
         }
-
-    }
-
-    public function setPath( $path )
-    {
-        Twig::setPath( $path );
-
     }
 
 }

@@ -16,24 +16,31 @@ class FieldFormRenderer
     public $skin = 'default';
 
     /**
+     * Avoid rendering the description twice
      * @var bool
      */
     public $descriptionDone = false;
 
     /**
+     * Avoid rendering the label twice
      * @var bool
      */
     public $labelDone = false;
 
     /**
+     * List of attributes for each field
      * @var array
      */
     public $fieldWrapAttributes = array();
 
-
+    /**
+     * Base layout file, defaults to base.twig of the chosen skin
+     * @var string
+     */
     public $layout = 'base';
 
     /**
+     * List of css classes, used in the layout
      * @var array
      */
     public $classList;

@@ -136,7 +136,7 @@ class Enqueues
         );
 
         // Extensions
-            wp_register_script(
+        wp_register_script(
             'kb-extensions',
             KB_PLUGIN_URL . 'js/' . $folder . '/extensions' . $suffix . '.js',
             array(),
@@ -248,7 +248,7 @@ class Enqueues
             'dev' => Kontentblocks::DEVMODE,
             'version' => Kontentblocks::VERSION,
             'isMobile' => Kontentblocks::getService('utility.mobileDetect')->isMobile(),
-            'useModuleNav' => apply_filters('kb:config.module-nav', true),
+            'useModuleNav' => apply_filters('kb.config.module-nav', true),
             'initFrontend' => apply_filters('kb.config.initFrontend', true),
             'editAlwaysOn' => apply_filters('kb.config.editAlwaysOn', false)
         );
@@ -344,12 +344,12 @@ class Enqueues
 
     public static function userEnqueue()
     {
+        self::appConfig();
 
         if (!apply_filters('kb.enqueue.frontend.scripts', true)) {
             return false;
         }
 
-        self::appConfig();
         if (is_user_logged_in() && !is_admin()) {
             wp_enqueue_media();
 

@@ -37,7 +37,6 @@ class PanelRegistry
             }
             $args['class'] = $classname;
             $args['baseId'] = $args['id'];
-
             if (!isset($this->panels[$args['baseId']])) {
                 $this->add($args['baseId'], $args);
             }

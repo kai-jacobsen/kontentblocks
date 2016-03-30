@@ -28,6 +28,10 @@ class Twig
         if (is_child_theme() && is_dir( get_stylesheet_directory() . '/module-templates/' )) {
             $paths[] = apply_filters( 'kb_twig_def_path', get_stylesheet_directory() . '/module-templates/' );
         }
+
+        $paths[] = KB_PLUGIN_PATH . 'core/Fields/Definitions/templates/';
+        $paths[] = KB_PLUGIN_PATH . 'core/Fields/Customizer/templates/';
+
         $paths = apply_filters( 'kb.templating.paths', $paths );
         $loader = new \Twig_Loader_Filesystem( $paths );
         return $loader;
@@ -44,7 +48,7 @@ class Twig
     {
 
         $args = array(
-            'cache' => apply_filters( 'kb:twig.cachepath', WP_CONTENT_DIR . '/twigcache/' ),
+            'cache' => apply_filters( 'kb.twig.cachepath', WP_CONTENT_DIR . '/twigcache/' ),
             'auto_reload' => TRUE,
             'debug' => TRUE
         );

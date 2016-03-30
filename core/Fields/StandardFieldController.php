@@ -94,7 +94,7 @@ class StandardFieldController
         $args = wp_parse_args($args, $defaults);
 
         foreach ($defaults as $key => $value) {
-            $this->$key = $value;
+            $this->$key = $args[$key];
         }
 
     }
@@ -307,6 +307,14 @@ class StandardFieldController
         ) {
             $this->fieldRenderClass = $classname;
         }
+    }
+
+    /**
+     * @param $classname
+     * @deprecated
+     */
+    public function setRenderer($classname){
+        return $this->setFieldRenderClass($classname);
     }
 
     /**
