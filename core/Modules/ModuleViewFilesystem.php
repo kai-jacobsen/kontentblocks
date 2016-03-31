@@ -139,6 +139,10 @@ class ModuleViewFilesystem
 
     }
 
+    /**
+     * @param $files
+     * @return array
+     */
     private function getSingles($files)
     {
 
