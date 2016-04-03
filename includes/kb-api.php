@@ -208,8 +208,7 @@ function getPanel($id = null, $post_id = null)
  */
 function getPostPanel($panelId = null, $postId = null)
 {
-
-    if (is_null($postId)) {
+        if (is_null($postId)) {
         $postId = get_the_ID();
     }
 

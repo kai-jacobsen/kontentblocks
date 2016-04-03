@@ -5,12 +5,12 @@ namespace Kontentblocks\Backend\Dynamic;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\EditScreens\ScreenManager;
 use Kontentblocks\Backend\Storage\ModuleStorage;
-use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class GlobalModules
@@ -28,13 +28,13 @@ class GlobalModulesMenu
     public function __construct()
     {
 
-        add_action( 'init', array( $this, 'registerPostType' ) );
-        add_action( 'init', array( $this, 'registerPseudoArea' ) );
-        add_action( 'admin_menu', array( $this, 'addAdminMenu' ), 19 );
-        add_action( 'edit_form_after_title', array( $this, 'addForm' ), 1 );
-        add_action( 'save_post', array( $this, 'save' ), 11, 2 );
-        add_filter( 'wp_insert_post_data', array( $this, 'postData' ), 10, 2 );
-        add_filter( 'post_updated_messages', array( $this, 'postTypeMessages' ) );
+        add_action('init', array($this, 'registerPostType'));
+        add_action('init', array($this, 'registerPseudoArea'));
+        add_action('admin_menu', array($this, 'addAdminMenu'), 19);
+        add_action('edit_form_after_title', array($this, 'addForm'), 1);
+        add_action('save_post', array($this, 'save'), 11, 2);
+        add_filter('wp_insert_post_data', array($this, 'postData'), 10, 2);
+        add_filter('post_updated_messages', array($this, 'postTypeMessages'));
     }
 
 
@@ -47,7 +47,7 @@ class GlobalModulesMenu
     public function addAdminMenu()
     {
         $i18n = I18n::getPackage('Modules');
-        if (!Utilities::adminMenuExists( 'Kontentblocks' )) {
+        if (!Utilities::adminMenuExists('Kontentblocks')) {
             add_menu_page(
                 'kontentblocks',
                 'Kontentblocks',
@@ -80,74 +80,18 @@ class GlobalModulesMenu
     {
         global $post;
 
-        wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename' );
-        wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );
-        $storage = new ModuleStorage( $post->ID );
+        wp_nonce_field('kontentblocks_save_post', 'kb_noncename');
+        wp_nonce_field('kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce');
+        $storage = new ModuleStorage($post->ID);
         // on this screen we always deal with only
         // one module
-        $template = $storage->getModuleDefinition( $post->post_name );
+        $template = $storage->getModuleDefinition($post->post_name);
         // no template yet, create new
-        if (empty( $template )) {
+        if (empty($template)) {
             $this->createForm();
         } else {
-            $this->globalModule( $template, $storage->getDataProvider() );
+            $this->globalModule($template, $storage->getDataProvider());
         }
-
-    }
-
-
-    /**
-     * Display form of the module
-     *
-     * @param $gmodule
-     * @since 0.1.0
-     * @return void
-     */
-    protected function globalModule( $gmodule )
-    {
-        global $post;
-        if (empty( $gmodule )) {
-            wp_die( 'no template arg provided' );
-        }
-        // TODO Include a public context switch
-        // Modules resp. the input form of a module may rely on a certain context
-        // or have different fields configuration
-        // TODO Explanation text for non-developers on page
-        $context = ( isset( $_GET['area-context'] ) ) ? $_GET['area-context'] : 'normal';
-        // infamous hidden editor hack
-        Utilities::hiddenEditor();
-        // need to create a ew module here in order to override areaContext
-        $environment = Utilities::getPostEnvironment( $post->ID );
-        $gmodule['areaContext'] = $context;
-        $workshop = new ModuleWorkshop( $environment, $gmodule );
-        $module = $workshop->getModule();
-        if ($module === false){
-            $formNew = new CoreView( 'global-modules/edit-gmodule-gone.twig', array(
-                'i18n' => I18n::getPackages( 'Common', 'Menus' ),
-            'attachedTo' => $this->prepareAttachedTo()
-
-            ) );
-            return $formNew->render( true );
-        }
-
-        Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $module->toJSON() );
-        // Data for twig
-        $templateData = array(
-            'nonce' => wp_create_nonce( 'update-gmodule' ),
-            'module' => $module,
-            'attachedTo' => $this->prepareAttachedTo(),
-            'contexts' => ScreenManager::getDefaultContextLayout(),
-            'strings' => I18n::getPackages( 'Common', 'Menus' )
-        );
-
-
-        if (isset( $_GET['return'] )) {
-            echo "<input type='hidden' name='kb_return_to_post' value='{$_GET['return']}' >";
-        }
-        // To keep html out of php files as much as possible twig is used
-        $formNew = new CoreView( 'global-modules/edit-gmodule.twig', $templateData );
-        $formNew->render( true );
-
 
     }
 
@@ -172,21 +116,149 @@ class GlobalModulesMenu
          * if this fails for any reason, data is preserved anyway
          * for completeness
          */
-        $postData = ( !empty( $_POST['new-gmodule'] ) ) ? $_POST['new-gmodule'] : array();
+        $postData = (!empty($_POST['new-gmodule'])) ? $_POST['new-gmodule'] : array();
 
         // Data for twig
         $templateData = array(
-            'modules' => $this->prepareModulesforSelectbox( $postData ),
-            'nonce' => wp_create_nonce( 'new-gmodule' ),
+            'modules' => $this->prepareModulesforSelectbox($postData),
+            'nonce' => wp_create_nonce('new-gmodule'),
             'data' => $postData,
             'strings' => I18n::getPackages('Common', 'Modules')
         );
 
         // To keep html out of php files as much as possible twig is used
         // Good thing about twig is it handles unset vars gracefully
-        $formNew = new CoreView( 'global-modules/add-new.twig', $templateData );
-        $formNew->render( true );
+        $formNew = new CoreView('global-modules/add-new.twig', $templateData);
+        $formNew->render(true);
 
+    }
+
+    /**
+     * Gets all available Modules from registry
+     *
+     * @param array $postData potential incomplete form data
+     *
+     * @since 0.1.0
+     * @return array
+     */
+    private function prepareModulesforSelectbox($postData)
+    {
+
+        $type = (isset($postData['type'])) ? $postData['type'] : '';
+        $modules =
+
+        $modules = $this->getGloballyAllowed();
+
+        $collection = array();
+
+        if (!empty($modules)) {
+            foreach ($modules as $module) {
+                $collection[] = array(
+                    'name' => $module['settings']['name'],
+                    'class' => $module['settings']['class'],
+                    'selected' => ($module['settings']['class'] === $type) ? 'selected="selected"' : ''
+                );
+            }
+
+        }
+
+        return $collection;
+
+    }
+
+    /**
+     * Filter all modules which may be created as a template
+     * @since 0.1.0
+     * @return array
+     */
+    public function getGloballyAllowed()
+    {
+        /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
+        $ModuleRegistry = Kontentblocks::getService('registry.modules');
+
+        return array_filter(
+            $ModuleRegistry->getAll(),
+            function ($module) {
+                if (isset($module['settings']['globalModule']) && $module['settings']['globalModule'] == true) {
+                    return true;
+                }
+                return false;
+            }
+        );
+    }
+
+    /**
+     * Display form of the module
+     *
+     * @param $gmodule
+     * @since 0.1.0
+     * @return void
+     */
+    protected function globalModule($gmodule)
+    {
+        global $post;
+        if (empty($gmodule)) {
+            wp_die('no template arg provided');
+        }
+        // TODO Include a public context switch
+        // Modules resp. the input form of a module may rely on a certain context
+        // or have different fields configuration
+        // TODO Explanation text for non-developers on page
+        $context = (isset($_GET['area-context'])) ? $_GET['area-context'] : 'normal';
+        // infamous hidden editor hack
+        Utilities::hiddenEditor();
+        // need to create a ew module here in order to override areaContext
+        $environment = Utilities::getPostEnvironment($post->ID);
+        $gmodule['areaContext'] = $context;
+        $workshop = new ModuleWorkshop($environment, $gmodule);
+        $module = $workshop->getModule();
+        if ($module === false) {
+            $formNew = new CoreView('global-modules/edit-gmodule-gone.twig', array(
+                'i18n' => I18n::getPackages('Common', 'Menus'),
+                'attachedTo' => $this->prepareAttachedTo()
+
+            ));
+            return $formNew->render(true);
+        }
+
+        Kontentblocks::getService('utility.jsontransport')->registerModule($module->toJSON());
+        // Data for twig
+        $templateData = array(
+            'nonce' => wp_create_nonce('update-gmodule'),
+            'module' => $module,
+            'attachedTo' => $this->prepareAttachedTo(),
+            'contexts' => ScreenManager::getDefaultContextLayout(),
+            'strings' => I18n::getPackages('Common', 'Menus')
+        );
+
+
+        if (isset($_GET['return'])) {
+            echo "<input type='hidden' name='kb_return_to_post' value='{$_GET['return']}' >";
+        }
+        // To keep html out of php files as much as possible twig is used
+        $formNew = new CoreView('global-modules/edit-gmodule.twig', $templateData);
+        $formNew->render(true);
+
+
+    }
+
+    /**
+     * @return array
+     * @since 0.2.0
+     */
+    private function prepareAttachedTo()
+    {
+        global $wpdb;
+        $posts = array();
+        $meta = get_post_meta(get_the_ID(), '_kb_attached_to', true);
+        if (!is_array($meta)) {
+            return $posts;
+        }
+        $unique = implode(',', array_values($meta));
+        if (!empty($unique)) {
+            $posts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE ID IN ('$unique') ");
+        }
+        return $posts;
     }
 
     /**
@@ -197,49 +269,89 @@ class GlobalModulesMenu
      * @return bool|void
      * @since 0.1.0
      */
-    public function save( $postId, \WP_POST $postObj )
+    public function save($postId, \WP_POST $postObj)
     {
         // auth request
-        if (!$this->auth( $postId )) {
+        if (!$this->auth($postId)) {
             return false;
         }
 
 
-
-        $value = new ValueStorage( $_POST );
-        $environment = Utilities::getPostEnvironment( $postId );
-        $module = $environment->getModuleById( $postObj->post_name );
+        $value = Request::createFromGlobals();
+        $environment = Utilities::getPostEnvironment($postId);
+        $module = $environment->getModuleById($postObj->post_name);
         // no template yet, create an new one
         if (!$module) {
-            $this->createGlobalModule( $postId, $postObj, $environment );
+            $this->createGlobalModule($postId, $postObj, $environment);
         } else {
-            if (!wp_verify_nonce( $value->getFiltered( '_nonce', FILTER_SANITIZE_STRING ), 'update-gmodule' )) {
-                wp_die( 'Nonce verification failed' );
+            if (!wp_verify_nonce($value->request->filter('_nonce', '', FILTER_SANITIZE_STRING), 'update-gmodule')) {
+                wp_die('Nonce verification failed');
             }
             // update existing
             $old = $module->model->getOriginalData();
-            $data = $value->get( $module->getId() );
-            $new = $module->save( $data, $old );
-            $toSave = Utilities::arrayMergeRecursive( $new, $old );
+            $data = $value->request->get($module->getId());
+            $new = $module->save($data, $old);
+            $toSave = Utilities::arrayMergeRecursive($new, $old);
             // save viewfile if present
-            $module->properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
-            $environment->getStorage()->saveModule( $module->getId(), $toSave );
+            $module->properties->viewfile = (!empty($data['viewfile'])) ? $data['viewfile'] : '';
+            $environment->getStorage()->saveModule($module->getId(), $toSave);
             $environment->getStorage()->reset();
-            $environment->getStorage()->addToIndex( $module->getId(), $module->properties->export() );
+            $environment->getStorage()->addToIndex($module->getId(), $module->properties->export());
 
             // return to original post if the edit request came from outside
-            $redirect = $redirect = $value->getFiltered(
-                'kb_return_to_post',
-                FILTER_SANITIZE_NUMBER_INT,
-                FILTER_NULL_ON_FAILURE
+            $redirect = $redirect = $value->request->getInt(
+                'kb_return_to_post', null
             );
             if ($redirect) {
-                $url = get_edit_post_link( $redirect );
-                wp_redirect( html_entity_decode( $url ) );
+                $url = get_edit_post_link($redirect);
+                wp_redirect(html_entity_decode($url));
                 exit;
             }
         }
 
+    }
+
+    /**
+     * Various checks
+     *
+     * @param $postId
+     *
+     * @since 0.1.0
+     * @return bool
+     */
+    private function auth($postId)
+    {
+        // verify if this is an auto save routine.
+        // If it is our form has not been submitted, so we dont want to do anything
+        if (empty($_POST)) {
+            return false;
+        }
+
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return false;
+        }
+
+        // verify this came from the our screen and with proper authorization,
+        // because save_post can be triggered at other times
+//        if (!wp_verify_nonce($_POST['kb_noncename'], 'kontentblocks_save_post')) {
+//            return false;
+//        }
+
+        // Check permissions
+        if (!current_user_can('edit_post', $postId)) {
+            return false;
+        }
+
+        if (!current_user_can('edit_kontentblocks')) {
+            return false;
+        }
+
+        if (get_post_type($postId) == 'revision' && !isset($_POST['wp-preview'])) {
+            return false;
+        }
+
+        // checks passed
+        return true;
     }
 
     /**
@@ -250,18 +362,18 @@ class GlobalModulesMenu
      * @internal param ModuleStorage $Storage
      * @since 0.1.0
      */
-    public function createGlobalModule( $postId, \WP_Post $post, PostEnvironment $environment )
+    public function createGlobalModule($postId, \WP_Post $post, PostEnvironment $environment)
     {
 
-        $value = new ValueStorage( $_POST );
+        $value = Request::createFromGlobals();
 
-        $gmodule = $value->get( 'new-gmodule' );
-        if (empty( $gmodule )) {
+        $gmodule = $value->get('new-gmodule');
+        if (empty($gmodule)) {
             return;
         }
 
-        if (!wp_verify_nonce( $value->getFiltered( '_nonce', FILTER_SANITIZE_STRING ), 'new-gmodule' )) {
-            wp_die( 'Verification failed.' );
+        if (!wp_verify_nonce($value->request->filter('_nonce', '', FILTER_SANITIZE_STRING), 'new-gmodule')) {
+            wp_die('Verification failed.');
         }
 
         // set defaults
@@ -273,14 +385,14 @@ class GlobalModulesMenu
             'type' => null, // module class
         );
         // parse $_POST data
-        $data = wp_parse_args( $value->get( 'new-gmodule' ), $defaults );
+        $data = wp_parse_args($value->request->get('new-gmodule'), $defaults);
 
         // 2 good reasons to stop
         if (is_null(
-            $value->getFiltered( 'name', FILTER_SANITIZE_STRING, FILTER_NULL_ON_FAILURE ) ||
-            is_null( $value->getFiltered( 'type', FILTER_SANITIZE_STRING, FILTER_NULL_ON_FAILURE ) )
+            $value->request->filter('name', null, FILTER_SANITIZE_STRING) ||
+            is_null($value->request->filter('type', null, FILTER_SANITIZE_STRING))
         )) {
-            wp_die( 'Missing arguments' );
+            wp_die('Missing arguments');
         }
 
         $workshop = new ModuleWorkshop(
@@ -296,12 +408,11 @@ class GlobalModulesMenu
 
         $definition = $workshop->getDefinitionArray();
 
-        do_action( 'kb.create:module', $definition );
+        do_action('kb.create:module', $definition);
 
         // add to post meta kb_kontentblocks
-        $environment->getStorage()->addToIndex( $post->post_name, $definition );
+        $environment->getStorage()->addToIndex($post->post_name, $definition);
     }
-
 
     /**
      *
@@ -314,20 +425,20 @@ class GlobalModulesMenu
      *
      * @since 0.1.0
      */
-    public function postData( $data, $post )
+    public function postData($data, $post)
     {
 
         if ($post['post_type'] !== 'kb-gmd') {
             return $data;
         }
 
-        if (!isset( $_POST['new-gmodule'] )) {
+        if (!isset($_POST['new-gmodule'])) {
             return $data;
         }
 
-        $title = filter_var( $_POST['new-gmodule']['name'], FILTER_SANITIZE_STRING );
+        $title = filter_var($_POST['new-gmodule']['name'], FILTER_SANITIZE_STRING);
         $slug = wp_unique_post_slug(
-            sanitize_title( $title ),
+            sanitize_title($title),
             $post['ID'],
             $post['post_status'],
             $post['post_type'],
@@ -335,7 +446,7 @@ class GlobalModulesMenu
         );
 
         // no template data send
-        if (!isset( $title, $slug )) {
+        if (!isset($title, $slug)) {
             return $data;
         }
 
@@ -355,20 +466,20 @@ class GlobalModulesMenu
     {
 
         $labels = array(
-            'name' => _x( 'Global Module', 'post type general name', 'Kontentblocks' ),
-            'singular_name' => _x( 'Global Module', 'post type singular name', 'Kontentblocks' ),
-            'menu_name' => _x( 'Global Modules', 'admin menu', 'Kontentblocks' ),
-            'name_admin_bar' => _x( 'Global Modules', 'add new on admin bar', 'Kontentblocks' ),
-            'add_new' => _x( 'add New', 'book', 'Kontentblocks' ),
-            'add_new_item' => __( 'add New global module', 'Kontentblocks' ),
-            'new_item' => __( 'new global module', 'Kontentblocks' ),
-            'edit_item' => __( 'edit global module', 'Kontentblocks' ),
-            'view_item' => __( 'view global module', 'Kontentblocks' ),
-            'all_items' => __( 'all global modules', 'Kontentblocks' ),
-            'search_items' => __( 'search global modules', 'Kontentblocks' ),
-            'parent_item_colon' => __( 'parent global modules:', 'Kontentblocks' ),
-            'not_found' => __( 'No global modules found.', 'Kontentblocks' ),
-            'not_found_in_trash' => __( 'No global modules found in Trash.', 'Kontentblocks' ),
+            'name' => _x('Global Module', 'post type general name', 'Kontentblocks'),
+            'singular_name' => _x('Global Module', 'post type singular name', 'Kontentblocks'),
+            'menu_name' => _x('Global Modules', 'admin menu', 'Kontentblocks'),
+            'name_admin_bar' => _x('Global Modules', 'add new on admin bar', 'Kontentblocks'),
+            'add_new' => _x('add New', 'book', 'Kontentblocks'),
+            'add_new_item' => __('add New global module', 'Kontentblocks'),
+            'new_item' => __('new global module', 'Kontentblocks'),
+            'edit_item' => __('edit global module', 'Kontentblocks'),
+            'view_item' => __('view global module', 'Kontentblocks'),
+            'all_items' => __('all global modules', 'Kontentblocks'),
+            'search_items' => __('search global modules', 'Kontentblocks'),
+            'parent_item_colon' => __('parent global modules:', 'Kontentblocks'),
+            'not_found' => __('No global modules found.', 'Kontentblocks'),
+            'not_found_in_trash' => __('No global modules found in Trash.', 'Kontentblocks'),
         );
 
         $args = array(
@@ -385,9 +496,9 @@ class GlobalModulesMenu
             'supports' => null
         );
 
-        register_post_type( 'kb-gmd', $args );
-        remove_post_type_support( 'kb-gmd', 'editor' );
-        remove_post_type_support( 'kb-gmd', 'title' );
+        register_post_type('kb-gmd', $args);
+        remove_post_type_support('kb-gmd', 'editor');
+        remove_post_type_support('kb-gmd', 'title');
     }
 
     /**
@@ -398,134 +509,36 @@ class GlobalModulesMenu
      * @since 0.1.0
      * @return mixed
      */
-    public function postTypeMessages( $messages )
+    public function postTypeMessages($messages)
     {
         $post = get_post();
 
         $messages['kb-gmd'] = array(
             0 => '', // Unused. Messages start at index 1.
-            1 => __( 'global modules updated.', 'Kontentblocks' ),
-            2 => __( 'Custom field updated.', 'Kontentblocks' ), // not used
-            3 => __( 'Custom field deleted.', 'Kontentblocks' ), // not used
-            4 => __( 'global modules updated.', 'Kontentblocks' ),
+            1 => __('global modules updated.', 'Kontentblocks'),
+            2 => __('Custom field updated.', 'Kontentblocks'), // not used
+            3 => __('Custom field deleted.', 'Kontentblocks'), // not used
+            4 => __('global modules updated.', 'Kontentblocks'),
             /* translators: %s: date and time of the revision */
-            5 => isset( $_GET['revision'] ) ? sprintf(
+            5 => isset($_GET['revision']) ? sprintf(
                 __(
                     'global module restored to revision from %s',
                     'Kontentblocks'
                 ),
-                wp_post_revision_title( (int) $_GET['revision'], false )
+                wp_post_revision_title((int)$_GET['revision'], false)
             ) : false,
-            6 => __( 'global module published.', 'Kontentblocks' ),
-            7 => __( 'global module saved.', 'Kontentblocks' ),
-            8 => __( 'global module submitted.', 'Kontentblocks' ),
+            6 => __('global module published.', 'Kontentblocks'),
+            7 => __('global module saved.', 'Kontentblocks'),
+            8 => __('global module submitted.', 'Kontentblocks'),
             9 => sprintf(
-                __( 'global module scheduled for: <strong>%1$s</strong>.', 'Kontentblocks' ),
+                __('global module scheduled for: <strong>%1$s</strong>.', 'Kontentblocks'),
                 // translators: Publish box date format, see http://php.net/date
-                date_i18n( __( 'M j, Y @ G:i', 'Kontentblocks' ), strtotime( $post->post_date ) )
+                date_i18n(__('M j, Y @ G:i', 'Kontentblocks'), strtotime($post->post_date))
             ),
-            10 => __( 'global module draft updated.', 'Kontentblocks' ),
+            10 => __('global module draft updated.', 'Kontentblocks'),
         );
 
         return $messages;
-    }
-
-    /**
-     * Various checks
-     *
-     * @param $postId
-     *
-     * @since 0.1.0
-     * @return bool
-     */
-    private function auth( $postId )
-    {
-        // verify if this is an auto save routine.
-        // If it is our form has not been submitted, so we dont want to do anything
-        if (empty( $_POST )) {
-            return false;
-        }
-
-        if (defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE) {
-            return false;
-        }
-
-        // verify this came from the our screen and with proper authorization,
-        // because save_post can be triggered at other times
-//        if (!wp_verify_nonce($_POST['kb_noncename'], 'kontentblocks_save_post')) {
-//            return false;
-//        }
-
-        // Check permissions
-        if (!current_user_can( 'edit_post', $postId )) {
-            return false;
-        }
-
-        if (!current_user_can( 'edit_kontentblocks' )) {
-            return false;
-        }
-
-        if (get_post_type( $postId ) == 'revision' && !isset( $_POST['wp-preview'] )) {
-            return false;
-        }
-
-        // checks passed
-        return true;
-    }
-
-    /**
-     * Gets all available Modules from registry
-     *
-     * @param array $postData potential incomplete form data
-     *
-     * @since 0.1.0
-     * @return array
-     */
-    private function prepareModulesforSelectbox( $postData )
-    {
-
-        $type = ( isset( $postData['type'] ) ) ? $postData['type'] : '';
-        $modules =
-
-        $modules = $this->getGloballyAllowed();
-
-        $collection = array();
-
-        if (!empty( $modules )) {
-            foreach ($modules as $module) {
-                $collection[] = array(
-                    'name' => $module['settings']['name'],
-                    'class' => $module['settings']['class'],
-                    'selected' => ( $module['settings']['class'] === $type ) ? 'selected="selected"' : ''
-                );
-            }
-
-        }
-
-        return $collection;
-
-    }
-
-
-    /**
-     * Filter all modules which may be created as a template
-     * @since 0.1.0
-     * @return array
-     */
-    public function getGloballyAllowed()
-    {
-        /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
-        $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
-
-        return array_filter(
-            $ModuleRegistry->getAll(),
-            function ( $module ) {
-                if (isset( $module['settings']['globalModule'] ) && $module['settings']['globalModule'] == true) {
-                    return true;
-                }
-                return false;
-            }
-        );
     }
 
     /**
@@ -540,25 +553,6 @@ class GlobalModulesMenu
                 'dynamic' => false
             )
         );
-    }
-
-    /**
-     * @return array
-     * @since 0.2.0
-     */
-    private function prepareAttachedTo()
-    {
-        global $wpdb;
-        $posts = array();
-        $meta = get_post_meta( get_the_ID(), '_kb_attached_to', true );
-        if (!is_array( $meta )) {
-            return $posts;
-        }
-        $unique = implode(',', array_values( $meta ));
-        if (!empty( $unique )) {
-            $posts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE ID IN ('$unique') ");
-        }
-        return $posts;
     }
 
 }

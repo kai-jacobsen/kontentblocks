@@ -156,7 +156,6 @@ class PostEnvironment implements JsonSerializable
         $areas = $this->findAreas();
         /** @var \Kontentblocks\Areas\AreaProperties $area */
         foreach ($areas as $area) {
-
             $area->set('settings', new AreaSettingsModel($area, $this->postObj->ID, $this->getDataProvider()));
         }
         return $areas;

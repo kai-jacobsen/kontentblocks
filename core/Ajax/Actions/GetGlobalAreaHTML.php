@@ -7,8 +7,8 @@ use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Areas\AreaSettingsModel;
 use Kontentblocks\Backend\Renderer\DynamicAreaBackendRenderer;
-use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class GetGlobalAreaHTML
@@ -21,25 +21,25 @@ class GetGlobalAreaHTML implements AjaxActionInterface
     static $nonce = 'kb-update';
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      */
-    public static function run( ValueStorageInterface $request )
+    public static function run(Request $request)
     {
 
-        $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
-        $areaId = $request->getFiltered( 'areaId', FILTER_SANITIZE_STRING );
-        $settings = $request->get( 'settings' );
+        $postId = $request->request->getInt('postId');
+        $areaId = $request->request->filter('areaId', null, FILTER_SANITIZE_STRING);
+        $settings = $request->request->get('settings');
 
-        $environment = Utilities::getPostEnvironment( $postId );
-        $area = $environment->getAreaDefinition( $areaId );
+        $environment = Utilities::getPostEnvironment($postId);
+        $area = $environment->getAreaDefinition($areaId);
 
-        $areaSettings = new AreaSettingsModel( $area, $postId, $environment->getDataProvider() );
-        $areaSettings->import( Utilities::validateBoolRecursive( $settings ) );
+        $areaSettings = new AreaSettingsModel($area, $postId, $environment->getDataProvider());
+        $areaSettings->import(Utilities::validateBoolRecursive($settings));
         $update = $areaSettings->save();
         $html = '';
 
         if ($areaSettings->isAttached()) {
-            $node = new DynamicAreaBackendRenderer( $area, $environment, $area->context );
+            $node = new DynamicAreaBackendRenderer($area, $environment, $area->context);
             ob_start();
             $node->build();
             $html = ob_get_clean();
@@ -53,7 +53,7 @@ class GetGlobalAreaHTML implements AjaxActionInterface
                 )
             );
         } else {
-            new AjaxErrorResponse( 'Area Settings not updated', $areaSettings );
+            new AjaxErrorResponse('Area Settings not updated', $areaSettings);
         }
 
     }

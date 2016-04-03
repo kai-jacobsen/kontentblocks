@@ -9,6 +9,7 @@ use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -61,13 +62,13 @@ class SyncAreaSettingsTest extends \WP_UnitTestCase
             'bar' => 'foo'
         );
 
-        $data = array(
+        $_POST = array(
             'postId' => $post->ID,
             'areaId' => 'dump',
             'settings' => $settings
         );
 
-        $response = SyncAreaSettings::run(new ValueStorage($data));
+        $response = SyncAreaSettings::run(Request::createFromGlobals());
         $this->assertTrue( $response->getStatus() );
 
     }

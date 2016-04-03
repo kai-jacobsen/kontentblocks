@@ -6,8 +6,8 @@ use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
-use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ChangeModuleStatus
@@ -19,14 +19,18 @@ class ChangeModuleStatus implements AjaxActionInterface
 {
     static $nonce = 'kb-update';
 
-    public static function run( ValueStorageInterface $request )
+    /**
+     * @param Request $request
+     * @return AjaxErrorResponse|AjaxSuccessResponse
+     */
+    public static function run(Request $request)
     {
 
-        $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
-        $mid = $request->getFiltered( 'module', FILTER_SANITIZE_STRING );
-        $storage = new ModuleStorage( $postId );
+        $postId = $request->request->getInt('postId');
+        $mid = $request->request->filter('module', null, FILTER_SANITIZE_STRING);
+        $storage = new ModuleStorage($postId);
 
-        $moduleDefinition = $storage->getModuleDefinition( $mid );
+        $moduleDefinition = $storage->getModuleDefinition($mid);
         if ($moduleDefinition) {
 
             // dont ask
@@ -36,8 +40,8 @@ class ChangeModuleStatus implements AjaxActionInterface
                 $moduleDefinition['state']['active'] = false;
             }
 
-            $update = $storage->addToIndex( $mid, $moduleDefinition );
-            Utilities::remoteConcatGet( $postId );
+            $update = $storage->addToIndex($mid, $moduleDefinition);
+            Utilities::remoteConcatGet($postId);
 
             return new AjaxSuccessResponse(
                 'Status changed', array(

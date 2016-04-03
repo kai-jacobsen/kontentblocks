@@ -4,10 +4,10 @@ namespace Kontentblocks\Ajax\Actions;
 
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class GetModuleBackendForm
@@ -22,22 +22,22 @@ class GetModuleBackendForm implements AjaxActionInterface
 
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      */
-    public static function run( ValueStorageInterface $request )
+    public static function run(Request $request)
     {
 
-        if (!defined( 'KB_MODULE_FORM' )) {
-            define( 'KB_MODULE_FORM', true );
+        if (!defined('KB_MODULE_FORM')) {
+            define('KB_MODULE_FORM', true);
         }
 
-        $moduleDef = $request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $environment = Utilities::getPostEnvironment( $moduleDef['parentObjectId'] );
+        $moduleDef = $request->request->filter('module', array(), FILTER_DEFAULT);
+        $environment = Utilities::getPostEnvironment($moduleDef['parentObjectId']);
         $workshop = new ModuleWorkshop($environment, $moduleDef);
         /** @var \Kontentblocks\Modules\Module $module */
         $module = $workshop->getModule();
 //        $module->properties->viewfile = filter_var( $moduleDef['viewfile'], FILTER_SANITIZE_STRING );
-        $module = apply_filters( 'kb.module.before.factory', $module );
+        $module = apply_filters('kb.module.before.factory', $module);
         $module->setupFields();
 
 //        $currentData = wp_unslash( $request->getFiltered( 'entityData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
@@ -49,8 +49,8 @@ class GetModuleBackendForm implements AjaxActionInterface
         $html = $module->renderForm();
         $return = array(
             'html' => $html,
-            'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON()
+            'json' => Kontentblocks::getService('utility.jsontransport')->getJSON()
         );
-        new AjaxSuccessResponse( 'serving backend module form', $return );
+        new AjaxSuccessResponse('serving backend module form', $return);
     }
 }

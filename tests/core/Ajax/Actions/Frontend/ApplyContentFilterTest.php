@@ -4,6 +4,7 @@ namespace Kontentblocks\tests\core\Ajax\Actions\Frontend;
 
 use Kontentblocks\Ajax\Actions\Frontend\ApplyContentFilter;
 use Kontentblocks\Common\Data\ValueStorage;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -15,15 +16,20 @@ class ApplyContentFilterTest extends \WP_UnitTestCase
 
     public static function setUpBeforeClass()
     {
-        ( !defined( 'DOING_AJAX' ) ) ? define( 'DOING_AJAX', TRUE ) : null;
+        (!defined('DOING_AJAX')) ? define('DOING_AJAX', true) : null;
         add_filter(
             'wp_die_ajax_handler',
-            array( __CLASS__, 'dump' ),
+            array(__CLASS__, 'dump'),
             99
         );
 
         \Kontentblocks\Hooks\Capabilities::setup();
 
+    }
+
+    public static function dump()
+    {
+        return '__return_null';
     }
 
     public function setUp()
@@ -35,22 +41,16 @@ class ApplyContentFilterTest extends \WP_UnitTestCase
     public function testRun()
     {
         $post = $this->factory->post->create();
-        $data = array(
+        $_POST = array(
             'content' => 'Hello World',
             'postId' => $post
         );
 
-        $Response = ApplyContentFilter::run( new ValueStorage( $data ) );
-        $this->assertTrue( $Response->getStatus() );
+        $Response = ApplyContentFilter::run(Request::createFromGlobals());
+        $this->assertTrue($Response->getStatus());
 
         $filtered = $Response->getData()['content'];
-        $this->assertContains( '<p>Hello World</p>', $filtered );
-    }
-
-
-    public static function dump()
-    {
-        return '__return_null';
+        $this->assertContains('<p>Hello World</p>', $filtered);
     }
 
     public function tearDown()

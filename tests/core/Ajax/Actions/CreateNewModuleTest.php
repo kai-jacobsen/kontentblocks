@@ -6,6 +6,7 @@ use Kontentblocks\Ajax\Actions\UpdateModuleData;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -57,9 +58,9 @@ class CreateNewModuleTest extends \WP_UnitTestCase
             )
         );
 
-        $requestdata = $workshop->getDefinitionArray();
+        $_POST = $workshop->getDefinitionArray();
 
-        $Response = CreateNewModule::run( new ValueStorage($requestdata));
+        $Response = CreateNewModule::run( Request::createFromGlobals());
         $this->assertTrue($Response->getStatus());
     }
 

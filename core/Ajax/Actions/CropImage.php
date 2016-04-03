@@ -4,9 +4,7 @@ namespace Kontentblocks\Ajax\Actions;
 
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Common\Data\ValueStorageInterface;
-use Kontentblocks\Fields\Definitions\Image;
-use Kontentblocks\Utils\ImageResize;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class FieldGetImage
@@ -19,19 +17,19 @@ class CropImage implements AjaxActionInterface
     static $nonce = 'kb-create';
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run(ValueStorageInterface $request)
+    public static function run(Request $request)
     {
-        check_ajax_referer('image_editor-' . $request->get('id'), 'nonce');
+        check_ajax_referer('image_editor-' . $request->request->getInt('id'), 'nonce');
         if (!current_user_can('edit_posts')) {
             wp_send_json_error();
         }
 
-        $cropDetails = $request->get('cropDetails');
-        $cropOptions = $request->get('cropOptions');
-        $attachmentId = absint($request->get('id'));
+        $cropDetails = $request->request->get('cropDetails');
+        $cropOptions = $request->request->get('cropOptions');
+        $attachmentId = absint($request->request->getInt('id'));
 
         $cropped = wp_crop_image(
             $attachmentId,
@@ -51,39 +49,10 @@ class CropImage implements AjaxActionInterface
         $cropped = apply_filters('wp_create_file_in_uploads', $cropped, $attachmentId); // For replication
 
         $object = self::createAttachmentObject($cropped, $attachmentId);
-
         unset($object['ID']);
-
         $newAttachmentId = self::insertAttachment($object, $cropped);
-
         $pre = wp_prepare_attachment_for_js($newAttachmentId);
-
         wp_send_json_success($pre);
-    }
-
-
-    /**
-     *
-     * Insert an attachment and its metadata.
-     *
-     * @param array $object Attachment object.
-     * @param string $cropped Cropped image URL.
-     *
-     * @return int Attachment ID.
-     */
-    public static function insertAttachment($object, $cropped)
-    {
-        $attachment_id = wp_insert_attachment($object, $cropped);
-        $metadata = wp_generate_attachment_metadata($attachment_id, $cropped);
-        /**
-         * Filter the header image attachment metadata.
-         * @since 3.9.0
-         * @see wp_generate_attachment_metadata()
-         * @param array $metadata Attachment metadata.
-         */
-        $metadata = apply_filters('wp_header_image_attachment_metadata', $metadata);
-        wp_update_attachment_metadata($attachment_id, $metadata);
-        return $attachment_id;
     }
 
     /**
@@ -101,17 +70,41 @@ class CropImage implements AjaxActionInterface
         $url = str_replace(basename($parentUrl), basename($cropped), $parentUrl);
 
         $size = @getimagesize($cropped);
-        $image_type = ($size) ? $size['mime'] : 'image/jpeg';
+        $imageType = ($size) ? $size['mime'] : 'image/jpeg';
 
         $object = array(
             'ID' => $parentAttachmentId,
             'post_title' => basename($cropped),
             'post_content' => $url,
-            'post_mime_type' => $image_type,
+            'post_mime_type' => $imageType,
             'guid' => $url
         );
 
         return $object;
+    }
+
+    /**
+     *
+     * Insert an attachment and its metadata.
+     *
+     * @param array $object Attachment object.
+     * @param string $cropped Cropped image URL.
+     *
+     * @return int Attachment ID.
+     */
+    public static function insertAttachment($object, $cropped)
+    {
+        $attachmentId = wp_insert_attachment($object, $cropped);
+        $metadata = wp_generate_attachment_metadata($attachmentId, $cropped);
+        /**
+         * Filter the header image attachment metadata.
+         * @since 3.9.0
+         * @see wp_generate_attachment_metadata()
+         * @param array $metadata Attachment metadata.
+         */
+        $metadata = apply_filters('wp_header_image_attachment_metadata', $metadata);
+        wp_update_attachment_metadata($attachmentId, $metadata);
+        return $attachmentId;
     }
 }
 

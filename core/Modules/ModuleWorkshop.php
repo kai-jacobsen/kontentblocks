@@ -60,6 +60,8 @@ class ModuleWorkshop
      */
     public function __construct( PostEnvironment $environment, array $attrs = array(), array $oldattrs = array() )
     {
+        $this->start = microtime(true);
+
         $this->environment = $environment;
         $this->moduleattrs = $this->setupModuleattrs( $attrs, $oldattrs );
         $this->valid = $this->validate();
@@ -327,6 +329,7 @@ class ModuleWorkshop
                 $this->environment
             );
             $this->module = $factory->getModule();
+            $time_elapsed_secs = microtime(true) - $this->start;
             return $this->module;
         }
         return false;

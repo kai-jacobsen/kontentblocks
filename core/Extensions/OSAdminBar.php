@@ -1,6 +1,6 @@
 <?php
 
-if ( is_user_logged_in() && !(is_admin()) && current_user_can( 'manage_kontentblocks') ) {
+if ( is_user_logged_in() && !(is_admin()) && current_user_can( 'manage_kontentblocks') &&  apply_filters('kb.config.initFrontend', true) ) {
     add_action( 'admin_bar_menu', 'toolbar_edit_control', 999 );
 }
 

@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Common\Data\ValueStorageInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Interface AjaxActionInterface
@@ -12,5 +12,5 @@ use Kontentblocks\Common\Data\ValueStorageInterface;
  */
 interface AjaxActionInterface
 {
-    public static function run( ValueStorageInterface $Request );
+    public static function run( Request $Request );
 }

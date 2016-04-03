@@ -6,8 +6,8 @@ use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
-use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class UndraftModule
@@ -18,13 +18,15 @@ class UndraftModule implements AjaxActionInterface
 {
     static $nonce = 'kb-update';
 
-    public static function run( ValueStorageInterface $request )
+    /**
+     * @param Request $request
+     * @return AjaxErrorResponse|AjaxSuccessResponse
+     */
+    public static function run( Request $request )
     {
 
-        $module = $request->get( 'module' );
-        $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
-
-        $state = filter_var( $module['state']['draft'], FILTER_VALIDATE_BOOLEAN );
+        $module = $request->request->get( 'module' );
+        $postId = $request->request->getInt( 'postId' );
 
         if (!is_int( absint( $postId ) )) {
             return new AjaxErrorResponse( 'Invalid parameters', array( 'mid' => $module, 'postId' => $postId ) );

@@ -3,6 +3,7 @@ namespace Kontentblocks\tests\core\Ajax\Actions;
 
 use Kontentblocks\Ajax\Actions\UpdateContextAreaOrder;
 use Kontentblocks\Common\Data\ValueStorage;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -50,7 +51,7 @@ class UpdateContextAreaOrderTest extends \WP_UnitTestCase
     public function testRunValid()
     {
 
-        $data = array(
+        $_POST = array(
             'postId' => $this->post->ID,
             'areaId' => 'dump',
             'data' => array(
@@ -59,13 +60,13 @@ class UpdateContextAreaOrderTest extends \WP_UnitTestCase
             )
         );
 
-        $response = UpdateContextAreaOrder::run( new ValueStorage( $data ) );
+        $response = UpdateContextAreaOrder::run( Request::createFromGlobals() );
         $this->assertTrue( $response->getStatus() );
 
     }
 
     public function testRunNoInvalidContext(){
-        $data = array(
+        $_POST = array(
             'postId' => $this->post->ID,
             'areaId' => 'dump',
             'data' => array(
@@ -74,13 +75,13 @@ class UpdateContextAreaOrderTest extends \WP_UnitTestCase
             )
         );
 
-        $failInvalidContext = UpdateContextAreaOrder::run( new ValueStorage( $data ) );
+        $failInvalidContext = UpdateContextAreaOrder::run( Request::createFromGlobals() );
         $this->assertFalse($failInvalidContext->getStatus());
 
     }
 
     public function testRunInvalidArea(){
-        $data = array(
+        $_POST = array(
             'postId' => $this->post->ID,
             'areaId' => 'dump',
             'data' => array(
@@ -89,19 +90,19 @@ class UpdateContextAreaOrderTest extends \WP_UnitTestCase
             )
         );
 
-        $failInvalidContext = UpdateContextAreaOrder::run( new ValueStorage( $data ) );
+        $failInvalidContext = UpdateContextAreaOrder::run( Request::createFromGlobals() );
         $this->assertFalse($failInvalidContext->getStatus());
 
     }
 
     public function testRunNoArray(){
-        $data = array(
+        $_POST = array(
             'postId' => $this->post->ID,
             'areaId' => 'dump',
             'data' => 'string'
         );
 
-        $failNoArray = UpdateContextAreaOrder::run( new ValueStorage( $data ) );
+        $failNoArray = UpdateContextAreaOrder::run( Request::createFromGlobals() );
         $this->assertFalse($failNoArray->getStatus());
 
     }

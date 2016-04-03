@@ -7,10 +7,8 @@ use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Areas\AreaSettingsModel;
 use Kontentblocks\Backend\DataProvider\DataProviderService;
-use Kontentblocks\Backend\Storage\ModuleStorage;
-use Kontentblocks\Common\Data\ValueStorageInterface;
-use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class SyncAreaSettings
@@ -23,27 +21,26 @@ class SyncAreaSettings implements AjaxActionInterface
     static $nonce = 'kb-update';
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $request )
+    public static function run(Request $request)
     {
 
-        $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
-        $areaId = $request->getFiltered( 'areaId', FILTER_SANITIZE_STRING );
-        $settings = $request->get( 'settings' );
+        $postId = $request->request->getInt('postId', null);
+        $areaId = $request->request->filter('areaId', null, FILTER_SANITIZE_STRING);
+        $settings = $request->request->get('settings');
+        $environment = Utilities::getPostEnvironment($postId);
+        $Area = $environment->getAreaDefinition($areaId);
 
-        $environment = Utilities::getPostEnvironment( $postId );
-        $Area = $environment->getAreaDefinition( $areaId );
-
-        $areaSettings = new AreaSettingsModel( $Area, $postId, DataProviderService::getPostProvider($postId) );
-        $areaSettings->import( Utilities::validateBoolRecursive( $settings ) );
+        $areaSettings = new AreaSettingsModel($Area, $postId, DataProviderService::getPostProvider($postId));
+        $areaSettings->import(Utilities::validateBoolRecursive($settings));
         $update = $areaSettings->save();
 
         if ($update) {
-            return new AjaxSuccessResponse( 'Area Settings updated', $areaSettings );
+            return new AjaxSuccessResponse('Area Settings updated', $areaSettings);
         } else {
-            return new AjaxErrorResponse( 'Area Settings not updated', $areaSettings );
+            return new AjaxErrorResponse('Area Settings not updated', $areaSettings);
         }
 
     }

@@ -5,7 +5,7 @@ namespace Kontentblocks\Ajax\Actions;
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Common\Data\ValueStorageInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -22,37 +22,37 @@ class GetSanitizedId implements AjaxActionInterface
     static $nonce = 'kb-read';
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $request )
+    public static function run(Request $request)
     {
         // verify action
-        if (!current_user_can( 'edit_kontentblocks' )) {
-            return new AjaxErrorResponse( 'insufficient permissions' );
+        if (!current_user_can('edit_kontentblocks')) {
+            return new AjaxErrorResponse('insufficient permissions');
         }
 
-        $value = $request->getFiltered( 'inputvalue', FILTER_SANITIZE_STRING );
-        $checkmode = $request->getFiltered( 'checkmode', FILTER_SANITIZE_STRING );
+        $value = $request->request->filter('inputvalue', '', FILTER_SANITIZE_STRING);
+        $checkmode = $request->request->filter('checkmode','',FILTER_SANITIZE_STRING);
         $check = false;
 
         switch ($checkmode) {
             case 'areas':
-                $check = self::checkExistence( trim( $value ), 'kb-dyar', 'kb_da_' );
+                $check = self::checkExistence(trim($value), 'kb-dyar', 'kb_da_');
                 break;
             case 'gmodules':
-                $check = self::checkExistence( trim( $value ), 'kb-gmd', 'kb_gm_' );
+                $check = self::checkExistence(trim($value), 'kb-gmd', 'kb_gm_');
                 break;
         }
 
-        if (is_string( $check )) {
+        if (is_string($check)) {
             return new AjaxSuccessResponse(
                 'ID is valid', array(
                     'id' => $check
                 )
             );
         } else {
-            return new AjaxErrorResponse( 'ID already esists' );
+            return new AjaxErrorResponse('ID already esists');
         }
 
     }
@@ -63,18 +63,18 @@ class GetSanitizedId implements AjaxActionInterface
      * @param string $prefix
      * @return bool|mixed|string
      */
-    private static function checkExistence( $input, $postType, $prefix )
+    private static function checkExistence($input, $postType, $prefix)
     {
 
         global $wpdb;
-        $sane = sanitize_title( $prefix . $input );
-        $sane = str_replace( '-', '_', $sane );
+        $sane = sanitize_title($prefix . $input);
+        $sane = str_replace('-', '_', $sane);
 
         $posts = $wpdb->get_results(
             "SELECT * FROM $wpdb->posts WHERE post_type = '$postType' AND post_name = '$sane' LIMIT 1"
         );
 
-        if (!empty( $posts )) {
+        if (!empty($posts)) {
             return false;
         }
         return $sane;

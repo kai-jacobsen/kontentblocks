@@ -8,6 +8,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -63,7 +64,7 @@ class UpdateModuleDataTest extends \WP_UnitTestCase
 
         $workshop->create();
 
-        $data = array(
+        $_POST = array(
             'postId' => $post->ID,
             'module' => $workshop->getDefinitionArray(),
             'data' => array(
@@ -71,13 +72,13 @@ class UpdateModuleDataTest extends \WP_UnitTestCase
             )
         );
 
-        $Response = UpdateModuleData::run( new ValueStorage( $data ) );
+        $Response = UpdateModuleData::run( Request::createFromGlobals() );
         $this->assertTrue( $Response->getStatus() );
 
         $Environment = new PostEnvironment( $post->ID, $post );
         $module = $Environment->getModuleById( $workshop->getNewId() );
 
-        $this->assertEquals( $data['data']['demotest'], $module->model->get( 'demotest' ) );
+        $this->assertEquals( $_POST['data']['demotest'], $module->model->get( 'demotest' ) );
     }
 
 

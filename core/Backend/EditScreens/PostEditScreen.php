@@ -92,15 +92,15 @@ Class PostEditScreen
     public function userInterface($post)
     {
         // bail if post type doesn't support kontentblocks
-        if (!post_type_supports($this->environment->get('postType'), 'kontentblocks')) {
+        if (!post_type_supports($this->environment->getPostType(), 'kontentblocks')) {
             return null;
         }
-        if (!post_type_supports($this->environment->get('postType'), 'editor')) {
+        if (!post_type_supports($this->environment->getPostType(), 'editor')) {
             Utilities::hiddenEditor();
         }
 
         $hasAreas = true;
-        $areas = $this->environment->get('areas');
+        $areas = $this->environment->getAreas();
         if (!$areas || empty($areas)) {
             $hasAreas = false;
         }

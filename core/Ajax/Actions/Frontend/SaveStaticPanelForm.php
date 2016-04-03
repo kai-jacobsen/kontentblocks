@@ -4,10 +4,8 @@ namespace Kontentblocks\Ajax\Actions\Frontend;
 
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Backend\DataProvider\SerOptionsDataProvider;
-use Kontentblocks\Common\Data\ValueStorageInterface;
-use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class SaveStaticPanelForm
@@ -20,16 +18,16 @@ class SaveStaticPanelForm implements AjaxActionInterface
 
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $request )
+    public static function run( Request $request )
     {
         if (!defined( 'KB_ONSITE_ACTIVE' )) {
             define( 'KB_ONSITE_ACTIVE', true );
         }
-        $panelDef = $request->getFiltered( 'panel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $data = $request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $panelDef = $request->request->filter( 'panel', array(), FILTER_DEFAULT );
+        $data = $request->request->filter( 'data', array(), FILTER_DEFAULT );
         $panId = filter_var( $panelDef['baseId'], FILTER_SANITIZE_STRING );
         $postId = filter_var($panelDef['postId'], FILTER_SANITIZE_NUMBER_INT);
         $panelData = wp_unslash( $data );

@@ -9,6 +9,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -21,10 +22,10 @@ class GetSanitizedIdTest extends \WP_UnitTestCase
 
     public static function setUpBeforeClass()
     {
-        ( !defined( 'DOING_AJAX' ) ) ? define( 'DOING_AJAX', TRUE ) : null;
+        (!defined('DOING_AJAX')) ? define('DOING_AJAX', true) : null;
         add_filter(
             'wp_die_ajax_handler',
-            array( __CLASS__, 'dump' ),
+            array(__CLASS__, 'dump'),
             99
         );
 
@@ -32,27 +33,31 @@ class GetSanitizedIdTest extends \WP_UnitTestCase
 
     }
 
+    public static function dump()
+    {
+        return '__return_null';
+    }
+
     public function setUp()
     {
         parent::setUp();
-        $this->userId = $this->factory->user->create( array( 'role' => 'administrator' ) );
-        wp_set_current_user( $this->userId );
+        $this->userId = $this->factory->user->create(array('role' => 'administrator'));
+        wp_set_current_user($this->userId);
 
     }
 
     public function testRunWithAreas()
     {
 
-        $data = array(
+        $_POST = array(
             'inputvalue' => 'my perky id',
             'checkmode' => 'areas'
         );
 
-        $Request = new ValueStorage( $data );
-        $Response = GetSanitizedId::run( $Request );
+        $Response = GetSanitizedId::run(Request::createFromGlobals());
 
-        $this->assertTrue( $Response->getStatus() );
-        $this->assertEquals( 'kb_da_my_perky_id', $Response->getData()['id'] );
+        $this->assertTrue($Response->getStatus());
+        $this->assertEquals('kb_da_my_perky_id', $Response->getData()['id']);
 
     }
 
@@ -63,15 +68,14 @@ class GetSanitizedIdTest extends \WP_UnitTestCase
             'post_name' => 'kb_da_my_perky_id'
         ));
 
-        $data = array(
+        $_POST = array(
             'inputvalue' => 'my perky id',
             'checkmode' => 'areas'
         );
 
-        $Request = new ValueStorage( $data );
-        $Response = GetSanitizedId::run( $Request );
+        $Response = GetSanitizedId::run(Request::createFromGlobals());
 
-        $this->assertFalse( $Response->getStatus() );
+        $this->assertFalse($Response->getStatus());
     }
 
     /**
@@ -80,16 +84,15 @@ class GetSanitizedIdTest extends \WP_UnitTestCase
     public function testRunWithTemplates()
     {
 
-        $data = array(
+        $_POST = array(
             'inputvalue' => 'my perky id',
             'checkmode' => 'gmodules'
         );
 
-        $Request = new ValueStorage( $data );
-        $Response = GetSanitizedId::run( $Request );
+        $Response = GetSanitizedId::run(Request::createFromGlobals());
 
-        $this->assertTrue( $Response->getStatus() );
-        $this->assertEquals( 'kb_gm_my_perky_id', $Response->getData()['id'] );
+        $this->assertTrue($Response->getStatus());
+        $this->assertEquals('kb_gm_my_perky_id', $Response->getData()['id']);
 
     }
 
@@ -100,27 +103,20 @@ class GetSanitizedIdTest extends \WP_UnitTestCase
             'post_name' => 'kb_tpl_my_perky_id'
         ));
 
-        $data = array(
+        $_POST = array(
             'inputvalue' => 'my perky id',
             'checkmode' => 'templates'
         );
 
-        $Request = new ValueStorage( $data );
-        $Response = GetSanitizedId::run( $Request );
+        $Response = GetSanitizedId::run(Request::createFromGlobals());
 
-        $this->assertFalse( $Response->getStatus() );
-    }
-
-
-    public static function dump()
-    {
-        return '__return_null';
+        $this->assertFalse($Response->getStatus());
     }
 
     public function tearDown()
     {
         parent::tearDown();
-        wp_set_current_user( 0 );
+        wp_set_current_user(0);
     }
 
 

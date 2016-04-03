@@ -4,6 +4,7 @@ namespace Kontentblocks\tests\core\Ajax\Actions;
 
 use Kontentblocks\Ajax\Actions\RemoteGetEditor;
 use Kontentblocks\Common\Data\ValueStorage;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -39,7 +40,7 @@ class RemoteGetEditorTest extends \WP_UnitTestCase
     public function testRun()
     {
 
-        $data = array(
+        $_POST = array(
             'editorId' => 'test_editor',
             'editorName' => 'test_editor_name',
             'editorContent' => 'Hello World!111!',
@@ -48,7 +49,7 @@ class RemoteGetEditorTest extends \WP_UnitTestCase
             )
         );
 
-        $Response = RemoteGetEditor::run( new ValueStorage( $data ) );
+        $Response = RemoteGetEditor::run( Request::createFromGlobals() );
         $this->assertTrue( $Response->getStatus() );
         $this->assertContains( 'Hello World!111!', $Response->getData()['html'] );
     }

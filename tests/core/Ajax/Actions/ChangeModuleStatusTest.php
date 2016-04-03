@@ -8,6 +8,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -52,13 +53,12 @@ class ChangeModuleStatusTest extends \WP_UnitTestCase
         $workshop->create();
         $module = $workshop->getDefinitionArray();
 
-        $data = array(
+        $_POST = array(
             'postId' => $post->ID,
             'module' => $module['mid']
         );
 
-        $Request = new ValueStorage( wp_slash($data) );
-        $Response = ChangeModuleStatus::run( $Request );
+        $Response = ChangeModuleStatus::run( Request::createFromGlobals() );
         $this->assertTrue( $Response->getStatus() );
         $Storage = new ModuleStorage( $post->ID );
         $def = $Storage->getModuleDefinition( $module['mid'] );

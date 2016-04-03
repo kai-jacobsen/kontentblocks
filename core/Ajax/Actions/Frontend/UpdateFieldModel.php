@@ -5,11 +5,9 @@ namespace Kontentblocks\Ajax\Actions\Frontend;
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Common\Data\ValueStorage;
-use Kontentblocks\Common\Data\ValueStorageInterface;
-use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 use Reframe\Kontentblocks\Kontentblocks;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  *
@@ -24,53 +22,52 @@ class UpdateFieldModel implements AjaxActionInterface
 
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $request )
+    public static function run(Request $request)
     {
 
-        $postdata = self::setupPostData( $request );
+        $postdata = self::setupPostData($request);
 
         switch ($postdata->type) {
             case 'module':
                 // prepare
-                $Storage = new ValueStorage(array(
+                $request->request->add(array(
                     'data' => self::prepareModuleData($postdata),
                     'module' => $postdata->module,
                     'editmode' => 'update'
                 ));
 
                 /** @var \Kontentblocks\Ajax\AbstractAjaxResponse $response */
-                $response = UpdateModule::run($Storage, false);
-                if ($response->getStatus()){
+                $response = UpdateModule::run($request, false);
+                if ($response->getStatus()) {
                     return new AjaxSuccessResponse('Field model updated', $response->getData());
                 } else {
                     return new AjaxErrorResponse('Error during update', $response->getData());
                 }
                 break;
             case 'panel':
-                $Storage = new ValueStorage(array(
+                $request->request->add(array(
                     'data' => self::prepareModuleData($postdata),
                     'panel' => $postdata->module
                 ));
-                $response = SaveStaticPanelForm::run($Storage);
+                $response = SaveStaticPanelForm::run($request);
                 break;
         }
-
     }
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      * @return \stdClass
      */
-    private static function setupPostData( ValueStorageInterface $request )
+    private static function setupPostData(Request $request)
     {
         $stdClass = new \stdClass();
-        $stdClass->data = $request->get( 'data' );
-        $stdClass->field = $request->getFiltered( 'field', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $stdClass->module = $request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $stdClass->type = $request->getFiltered( 'type', FILTER_SANITIZE_STRING );
+        $stdClass->data = $request->request->get('data');
+        $stdClass->field = $request->request->filter('field', array(), FILTER_DEFAULT);
+        $stdClass->module = $request->request->filter('module', array(), FILTER_DEFAULT);
+        $stdClass->type = $request->request->filter('type', null, FILTER_SANITIZE_STRING);
         return $stdClass;
     }
 
@@ -78,7 +75,7 @@ class UpdateFieldModel implements AjaxActionInterface
      * @param $postdata
      * @return array
      */
-    private static function prepareModuleData( $postdata )
+    private static function prepareModuleData($postdata)
     {
 
         $data = array();

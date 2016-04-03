@@ -5,8 +5,7 @@ namespace Kontentblocks\Ajax\Actions;
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Backend\Storage\ModuleStorage;
-use Kontentblocks\Common\Data\ValueStorageInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class GetPostObjects
@@ -20,13 +19,13 @@ class GetPostObjects implements AjaxActionInterface
     static $nonce = 'kb-read';
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $request )
+    public static function run( Request $request )
     {
         $posts = array();
-        $ids = array_unique( $request->get( 'postIds' ) );
+        $ids = array_unique( $request->request->filter( 'postIds', array(), FILTER_DEFAULT ) );
         if (!empty( $ids )) {
             $args = array(
                 'include' => $ids,

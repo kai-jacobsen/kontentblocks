@@ -5,19 +5,23 @@ namespace Kontentblocks\Ajax\Actions;
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Common\Data\ValueStorageInterface;
+use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class GetOembed
+ * @package Kontentblocks\Ajax\Actions
+ */
 class GetOembed implements AjaxActionInterface
 {
     static $nonce = 'kb-read';
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run(ValueStorageInterface $request)
+    public static function run(Request $request)
     {
-        $url = $request->getFiltered('embedUrl', FILTER_VALIDATE_URL);
+        $url = $request->request->filter('embedUrl', false ,FILTER_VALIDATE_URL);
 
         if ($url !== false) {
             $embed = wp_oembed_get($url);

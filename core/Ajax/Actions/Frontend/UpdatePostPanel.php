@@ -3,11 +3,9 @@
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
 use Kontentblocks\Ajax\AjaxActionInterface;
-use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Common\Data\ValueStorageInterface;
-use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  *
@@ -22,10 +20,10 @@ class UpdatePostPanel implements AjaxActionInterface
 
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $request )
+    public static function run( Request $request )
     {
         global $post;
 
@@ -64,16 +62,16 @@ class UpdatePostPanel implements AjaxActionInterface
     }
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      * @return \stdClass
      */
-    public static function setupPostData( ValueStorageInterface $request )
+    public static function setupPostData( Request $request )
     {
         $stdClass = new \stdClass();
-        $stdClass->data = $request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $stdClass->panel = $request->getFiltered( 'panel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $stdClass->data = $request->request->filter( 'data', array(), FILTER_DEFAULT );
+        $stdClass->panel = $request->request->filter( 'panel', array(), FILTER_DEFAULT );
         $stdClass->postId = filter_var( $stdClass->panel['postId'], FILTER_VALIDATE_INT );
-        $stdClass->editmode = $request->getFiltered( 'editmode', FILTER_SANITIZE_STRING );
+        $stdClass->editmode = $request->request->filter( 'editmode', '', FILTER_SANITIZE_STRING );
         $stdClass->update = ( isset( $stdClass->editmode ) && $stdClass->editmode === 'update' ) ? true : false;
         return $stdClass;
     }

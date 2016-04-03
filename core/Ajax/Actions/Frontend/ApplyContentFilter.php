@@ -4,7 +4,7 @@ namespace Kontentblocks\Ajax\Actions\Frontend;
 
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Common\Data\ValueStorageInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ApplyContentFilter
@@ -17,14 +17,14 @@ class ApplyContentFilter implements AjaxActionInterface
     static $nonce = 'kb-read';
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run(ValueStorageInterface $request)
+    public static function run(Request $request)
     {
         global $post;
-        $content = wp_unslash($request->get('content'));
-        $postId = $request->getFiltered('postId', FILTER_SANITIZE_NUMBER_INT);
+        $content = wp_unslash($request->request->get('content'));
+        $postId = $request->request->getInt('postId', null);
         $post = get_post($postId);
         setup_postdata($post);
         $html = apply_filters('the_content', $content);

@@ -4,10 +4,9 @@ namespace Kontentblocks\tests\core\Ajax\Actions;
 
 use Kontentblocks\Ajax\Actions\AfterAreaChange;
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Backend\Storage\ModuleStorage;
-use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -55,12 +54,12 @@ class AfterAreaChangeTest extends \WP_UnitTestCase
             )
         );
 
-        $data = array(
+        $_POST = array(
             'postId' => $post->ID,
             'module' => $workshop->getDefinitionArray()
         );
 
-        $Response = AfterAreaChange::run( new ValueStorage( $data ) );
+        $Response = AfterAreaChange::run( Request::createFromGlobals());
         $this->assertTrue( $Response->getStatus() );
     }
 

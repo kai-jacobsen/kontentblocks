@@ -28,8 +28,7 @@ class ModuleRepository
     protected $modules = array();
 
 
-
-    public function __construct( PostEnvironment $environment )
+    public function __construct(PostEnvironment $environment)
     {
         $this->environment = $environment;
         $this->setupModulesFromStorageIndex();
@@ -45,13 +44,13 @@ class ModuleRepository
     {
         $index = $this->environment->getStorage()->getIndex();
         $areas = $this->environment->findAreas();
-        if (is_array( $index )) {
+        if (is_array($index)) {
             foreach ($index as $module) {
-                if (in_array( $module['area'], array_keys( $areas ) )) {
+                if (in_array($module['area'], array_keys($areas))) {
                     if (!is_admin()) {
-                        $module = apply_filters( 'kb.before.frontend.setup', $module );
+                        $module = apply_filters('kb.before.frontend.setup', $module);
                     }
-                    $workshop = new ModuleWorkshop( $this->environment, $module );
+                    $workshop = new ModuleWorkshop($this->environment, $module);
                     if ($workshop->isValid()) {
                         $module = $workshop->getModule();
                         if (!$module->properties->submodule) {
@@ -62,6 +61,23 @@ class ModuleRepository
             }
         }
         return $this;
+    }
+
+    /**
+     * Sorts module definitions to areas
+     * @return array
+     * @since 0.1.0
+     */
+    public function sortedByArea()
+    {
+        $sorted = array();
+        if (is_array($this->modules)) {
+            /** @var \Kontentblocks\Modules\Module $module */
+            foreach ($this->modules as $module) {
+                $sorted[$module->properties->area->id][$module->getId()] = $module;
+            }
+            return $sorted;
+        }
     }
 
     /**
@@ -77,29 +93,12 @@ class ModuleRepository
      * @param $mid
      * @return null|Module
      */
-    public function getModuleObject( $mid )
+    public function getModuleObject($mid)
     {
-        if (isset( $this->modules[$mid] )) {
+        if (isset($this->modules[$mid])) {
             return $this->modules[$mid];
         }
         return null;
-    }
-
-    /**
-     * Sorts module definitions to areas
-     * @return array
-     * @since 0.1.0
-     */
-    public function sortedByArea()
-    {
-        $sorted = array();
-        if (is_array( $this->modules )) {
-            /** @var \Kontentblocks\Modules\Module $module */
-            foreach ($this->modules as $module) {
-                $sorted[$module->properties->area->id][$module->getId()] = $module;
-            }
-            return $sorted;
-        }
     }
 
 }

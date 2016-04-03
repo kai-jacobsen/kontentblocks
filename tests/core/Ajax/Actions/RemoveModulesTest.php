@@ -6,6 +6,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -55,12 +56,12 @@ class RemoveModulesTest extends \WP_UnitTestCase
         $workshop->create();
         $module = $workshop->getDefinitionArray();
 
-        $data = array(
+        $_POST = array(
             'postId' => $post->ID,
             'module' => $module['mid']
         );
 
-        $Response = RemoveModules::run( new ValueStorage( $data ) );
+        $Response = RemoveModules::run( Request::createFromGlobals() );
         $this->assertTrue( $Response->getStatus() );
 
         $Storage = new ModuleStorage($post->ID);

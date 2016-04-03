@@ -8,6 +8,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -19,10 +20,10 @@ class UndraftModuleTest extends \WP_UnitTestCase
 
     public static function setUpBeforeClass()
     {
-        ( !defined( 'DOING_AJAX' ) ) ? define( 'DOING_AJAX', TRUE ) : null;
+        (!defined('DOING_AJAX')) ? define('DOING_AJAX', true) : null;
         add_filter(
             'wp_die_ajax_handler',
-            array( __CLASS__, 'dump' ),
+            array(__CLASS__, 'dump'),
             99
         );
 
@@ -30,11 +31,16 @@ class UndraftModuleTest extends \WP_UnitTestCase
 
     }
 
+    public static function dump()
+    {
+        return '__return_null';
+    }
+
     public function setUp()
     {
         parent::setUp();
-        $this->postId = $this->factory->user->create( array( 'role' => 'administrator' ) );
-        wp_set_current_user( $this->postId );
+        $this->postId = $this->factory->user->create(array('role' => 'administrator'));
+        wp_set_current_user($this->postId);
 
     }
 
@@ -43,7 +49,7 @@ class UndraftModuleTest extends \WP_UnitTestCase
         $post = $this->factory->post->create_and_get();
 
         $workshop = new ModuleWorkshop(
-            new PostEnvironment( $post->ID, $post ), array(
+            new PostEnvironment($post->ID, $post), array(
                 'class' => 'ModuleText'
             )
         );
@@ -51,30 +57,23 @@ class UndraftModuleTest extends \WP_UnitTestCase
         $workshop->create();
         $module = $workshop->getDefinitionArray();
 
-        $data = array(
+        $_POST = array(
             'postId' => $post->ID,
             'mid' => $module['mid'],
             'module' => $module
         );
 
-        $Request = new ValueStorage( $data );
-        $Response = UndraftModule::run( $Request );
-        $this->assertTrue( $Response->getStatus() );
-        $Storage = new ModuleStorage( $post->ID );
-        $def = $Storage->getModuleDefinition( $module['mid'] );
-        $this->assertFalse( $def['state']['draft'] );
-    }
-
-
-    public static function dump()
-    {
-        return '__return_null';
+        $Response = UndraftModule::run(Request::createFromGlobals());
+        $this->assertTrue($Response->getStatus());
+        $Storage = new ModuleStorage($post->ID);
+        $def = $Storage->getModuleDefinition($module['mid']);
+        $this->assertFalse($def['state']['draft']);
     }
 
     public function tearDown()
     {
         parent::tearDown();
-        wp_set_current_user( 0 );
+        wp_set_current_user(0);
     }
 
 

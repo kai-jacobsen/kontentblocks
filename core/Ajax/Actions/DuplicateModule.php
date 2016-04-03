@@ -5,11 +5,11 @@ namespace Kontentblocks\Ajax\Actions;
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class DuplicateModule
@@ -44,20 +44,21 @@ class DuplicateModule implements AjaxActionInterface
     private static $class;
 
     /**
-     *
+     * @param Request $request
+     * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $request )
+    public static function run(Request $request)
     {
 
-        if (!current_user_can( 'create_kontentblocks' )) {
-            return new AjaxErrorResponse( 'insufficient permissions' );
+        if (!current_user_can('create_kontentblocks')) {
+            return new AjaxErrorResponse('insufficient permissions');
         }
 
-        self::$postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
-        self::$instanceId = $request->getFiltered( 'module', FILTER_SANITIZE_STRING );
-        self::$class = $request->getFiltered( 'class', FILTER_SANITIZE_STRING );
+        self::$postId = $request->request->getInt('postId', null);
+        self::$instanceId = $request->request->filter('module', null, FILTER_SANITIZE_STRING);
+        self::$class = $request->request->filter('class', null, FILTER_SANITIZE_STRING);
 
-        self::$environment = Utilities::getPostEnvironment( self::$postId );
+        self::$environment = Utilities::getPostEnvironment(self::$postId);
         return self::duplicate();
     }
 
@@ -68,8 +69,8 @@ class DuplicateModule implements AjaxActionInterface
     private static function duplicate()
     {
         global $post;
-        $post = get_post( self::$postId );
-        setup_postdata( $post );
+        $post = get_post(self::$postId);
+        setup_postdata($post);
 
         // get & setup original
         $stored = self::$environment->getStorage()->getModuleDefinition(
@@ -99,7 +100,7 @@ class DuplicateModule implements AjaxActionInterface
                 )
             );
         } else {
-            return self::doDuplication( $workshop );
+            return self::doDuplication($workshop);
         }
     }
 
@@ -108,27 +109,27 @@ class DuplicateModule implements AjaxActionInterface
      * @param $moduleWorkshop
      * @return AjaxSuccessResponse
      */
-    private static function doDuplication( ModuleWorkshop $moduleWorkshop )
+    private static function doDuplication(ModuleWorkshop $moduleWorkshop)
     {
-        $originalData = self::$environment->getStorage()->getModuleData( self::$instanceId );
-        self::$environment->getStorage()->saveModule( $moduleWorkshop->getPropertiesObject()->mid, $originalData );
+        $originalData = self::$environment->getStorage()->getModuleData(self::$instanceId);
+        self::$environment->getStorage()->saveModule($moduleWorkshop->getPropertiesObject()->mid, $originalData);
 
         self::$environment->getStorage()->reset();
 
         $module = $moduleWorkshop->getModule();
 
-        apply_filters( 'kb.module.before.factory', $module );
+        apply_filters('kb.module.before.factory', $module);
         $html = $module->renderForm();
         $response = array
         (
             'id' => $moduleWorkshop->getPropertiesObject()->mid,
             'module' => $moduleWorkshop->getPropertiesObject(),
-            'name' => $module->properties->getSetting( 'publicName' ),
+            'name' => $module->properties->getSetting('publicName'),
             'html' => $html,
-            'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON(),
+            'json' => Kontentblocks::getService('utility.jsontransport')->getJSON(),
 
         );
-        return new AjaxSuccessResponse( 'Module successfully duplicated', $response );
+        return new AjaxSuccessResponse('Module successfully duplicated', $response);
     }
 
 }

@@ -4,9 +4,9 @@ namespace Kontentblocks\Ajax\Actions\Frontend;
 
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Fields\Definitions\Image;
 use Kontentblocks\Utils\ImageResize;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class FieldGetImage
@@ -19,17 +19,17 @@ class FieldGetImage implements AjaxActionInterface
     static $nonce = 'kb-read';
 
     /**
-     * @param ValueStorageInterface $request
+     * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run(ValueStorageInterface $request)
+    public static function run(Request $request)
     {
         $crop = false;
-        $args = $request->get('args');
-        $width = (!isset($args['width'])) ? 150 : $args['width'];
-        $height = (!isset($args['height'])) ? null : $args['height'];
+        $args = $request->request->get('args');
+        $width = (!isset($args['width'])) ? 150 : absint($args['width']);
+        $height = (!isset($args['height'])) ? null : absint($args['height']);
         $upscale = filter_var($args['upscale'], FILTER_VALIDATE_BOOLEAN);
-        $attachmentid = $request->getFiltered('id', FILTER_SANITIZE_NUMBER_INT);
+        $attachmentid = $request->request->getInt('id');
 
         if (isset($args['crop'])) {
             $crop = $args['crop'];
@@ -37,7 +37,6 @@ class FieldGetImage implements AjaxActionInterface
                 $crop = Image::getCropValue(absint($crop));
             }
         }
-
 
         return new AjaxSuccessResponse(
             'Image resized', array(

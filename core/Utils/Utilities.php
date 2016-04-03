@@ -55,6 +55,7 @@ class Utilities
                 return self::$postEnvironments[$storageId] = new PostEnvironment($storageId, $postObj);
             }
         }
+
         return null;
     }
 
