@@ -184,8 +184,9 @@ function hasModules($area, $postId)
         return false;
     }
 
-    $Environment = Utilities::getPostEnvironment($postId);
-    $areas = $Environment->getModulesForArea($area);
+    $environment = Utilities::getPostEnvironment($postId);
+    $moduleRepository = $environment->getModuleRepository();
+    $areas = $moduleRepository->getModulesForArea($area);
 
     return !empty($areas);
 }
@@ -208,7 +209,7 @@ function getPanel($id = null, $post_id = null)
  */
 function getPostPanel($panelId = null, $postId = null)
 {
-        if (is_null($postId)) {
+    if (is_null($postId)) {
         $postId = get_the_ID();
     }
 

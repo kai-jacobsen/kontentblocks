@@ -80,6 +80,24 @@ class ModuleRepository
         }
     }
 
+
+    /**
+     * returns module definitions filtered by area
+     *
+     * @param string $areaid
+     * @return mixed
+     * @since 0.1.0
+     */
+    public function getModulesForArea($areaid)
+    {
+        $byArea = $this->sortedByArea();
+        if (!empty($byArea[$areaid])) {
+            return $byArea[$areaid];
+        } else {
+            return array();
+        }
+    }
+
     /**
      * @return array
      */

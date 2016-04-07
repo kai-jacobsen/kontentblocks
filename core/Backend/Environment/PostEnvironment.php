@@ -101,14 +101,11 @@ class PostEnvironment implements JsonSerializable
 
         $this->postObj = $postObj;
         $this->storageId = $storageId;
-
         $this->storage = new ModuleStorage($storageId);
         $this->pageTemplate = $this->getPageTemplate();
         $this->postType = $this->getPostType();
         $this->areas = $this->setupAreas();
         $this->areasToContext();
-        $this->moduleRepository = new ModuleRepository($this);
-        $this->modules = $this->setupModules();
         $this->panelRepository = new PostPanelRepository($this);
         $this->panels = $this->panelRepository->getPanelObjects();
     }
@@ -186,15 +183,6 @@ class PostEnvironment implements JsonSerializable
         }
     }
 
-    /**
-     * prepares modules attached to this post
-     * @return array
-     * @since 0.1.0
-     */
-    private function setupModules()
-    {
-        return $this->moduleRepository->getModules();
-    }
 
     public function getPanelObject($id)
     {
@@ -224,20 +212,6 @@ class PostEnvironment implements JsonSerializable
         return $this->postObj;
     }
 
-    /**
-     * get arbitrary property
-     * @param string $param
-     * @return mixed
-     * @since 0.1.0
-     */
-    public function get($param)
-    {
-        if (isset($this->$param)) {
-            return $this->$param;
-        } else {
-            return false;
-        }
-    }
 
     /**
      * returns the DataProvider instance
@@ -259,31 +233,15 @@ class PostEnvironment implements JsonSerializable
         return $this->modules;
     }
 
-    /**
-     * @param $mid
-     * @return \Kontentblocks\Modules\Module
-     * @since 0.1.0
-     */
-    public function getModuleById($mid)
-    {
-        return $this->moduleRepository->getModuleObject($mid);
-    }
 
     /**
-     * returns module definitions filtered by area
-     *
-     * @param string $areaid
-     * @return mixed
-     * @since 0.1.0
+     * @return ModuleRepository
      */
-    public function getModulesForArea($areaid)
-    {
-        $byArea = $this->moduleRepository->sortedByArea();
-        if (!empty($byArea[$areaid])) {
-            return $byArea[$areaid];
-        } else {
-            return array();
+    public function getModuleRepository(){
+        if(is_null($this->moduleRepository)){
+            $this->moduleRepository = new ModuleRepository($this);
         }
+        return $this->moduleRepository;
     }
 
     /**

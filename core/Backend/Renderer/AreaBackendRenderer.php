@@ -69,7 +69,7 @@ class AreaBackendRenderer implements RendererInterface
      *
      * @throws \Exception
      */
-    function __construct( AreaProperties $area, PostEnvironment $environment, $context = 'normal' )
+    function __construct(AreaProperties $area, PostEnvironment $environment, $context = 'normal')
     {
         // context in regards of position on the edit screen
         $this->context = $context;
@@ -81,10 +81,11 @@ class AreaBackendRenderer implements RendererInterface
 
         // batch setting of properties
         //actual stored modules for this area
-        $this->attachedModules = $this->environment->getModulesForArea( $area->id );
+        $moduleRepository = $environment->getModuleRepository();
+        $this->attachedModules = $moduleRepository->getModulesForArea($area->id);
 
         // custom settins for this area
-        $this->settingsMenu = new AreaSettingsMenu( $this->area, $this->environment );
+        $this->settingsMenu = new AreaSettingsMenu($this->area, $this->environment);
 
         $this->cats = Utilities::setupCats();
 
@@ -110,9 +111,9 @@ class AreaBackendRenderer implements RendererInterface
      */
     public function header()
     {
-        $active = $this->area->settings->get( 'active' ) ? 'active' : 'inactive';
+        $active = $this->area->settings->get('active') ? 'active' : 'inactive';
         echo "<div id='{$this->area->id}-container' class='kb-area__wrap klearfix cf kb-area-status-{$active}' >";
-        $headerClass = ( $this->context == 'side' or $this->context == 'normal' ) ? 'minimized reduced' : null;
+        $headerClass = ($this->context == 'side' or $this->context == 'normal') ? 'minimized reduced' : null;
 
         $tpl = new CoreView(
             'edit-screen/area-header.twig',
@@ -122,7 +123,7 @@ class AreaBackendRenderer implements RendererInterface
                 'settingsMenu' => $this->settingsMenu
             )
         );
-        $tpl->render( true );
+        $tpl->render(true);
 
     }
 
@@ -132,17 +133,17 @@ class AreaBackendRenderer implements RendererInterface
      * @param bool $echo
      * @return string
      */
-    public function render( $echo = true )
+    public function render($echo = true)
     {
         $out = "<div class='kb-area--body'>";
         // list items for this area, block limit gets stored here
         $out .= "<ul style='' data-context='{$this->context}' id='{$this->area->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
-        if (!empty( $this->attachedModules )) {
+        if (!empty($this->attachedModules)) {
             /** @var \Kontentblocks\Modules\Module $module */
             foreach ($this->attachedModules as $module) {
-                $module = apply_filters( 'kb.module.before.factory', $module );
+                $module = apply_filters('kb.module.before.factory', $module);
                 $out .= $module->renderForm();
-                Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $module->toJSON() );
+                Kontentblocks::getService('utility.jsontransport')->registerModule($module->toJSON());
             }
         }
         $out .= "</ul>";
@@ -165,8 +166,8 @@ class AreaBackendRenderer implements RendererInterface
      */
     private function menuLink()
     {
-        if (current_user_can( 'create_kontentblocks' )) {
-            if (!empty( $this->area->assignedModules )) {
+        if (current_user_can('create_kontentblocks')) {
+            if (!empty($this->area->assignedModules)) {
                 $out = " <div class='add-modules cantsort'></div>";
                 return $out;
             }
@@ -183,7 +184,7 @@ class AreaBackendRenderer implements RendererInterface
     private function getModuleLimitTag()
     {
         // prepare string
-        $limit = ( $this->area->limit == '0' ) ? null : absint( $this->area->limit );
+        $limit = ($this->area->limit == '0') ? null : absint($this->area->limit);
 
         if (null !== $limit) {
             return "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";

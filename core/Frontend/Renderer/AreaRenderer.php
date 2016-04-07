@@ -96,7 +96,9 @@ class AreaRenderer implements RendererInterface
         $this->area = $areaSettings->area;
         $this->areaId = $this->area->id;
         $this->environment = $environment;
-        $modules = $this->environment->getModulesforArea($this->areaId);
+
+        $moduleRepository = $environment->getModuleRepository();
+        $modules = $moduleRepository->getModulesforArea($this->areaId);
         $this->modules = new ModuleIterator($modules, $this->environment);
     }
 

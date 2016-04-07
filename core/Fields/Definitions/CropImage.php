@@ -17,7 +17,8 @@ Class CropImage extends Field
 {
 
     public static $settings = array(
-        'type' => 'cropimage'
+        'type' => 'cropimage',
+        'returnObj' => 'Image'
     );
 
 

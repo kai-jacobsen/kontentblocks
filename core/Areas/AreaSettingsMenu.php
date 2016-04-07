@@ -69,7 +69,7 @@ class AreaSettingsMenu
      * @param \Kontentblocks\Backend\Environment\PostEnvironment $environment
      * @since 0.1.0
      */
-    public function __construct( AreaProperties $area, PostEnvironment $environment )
+    public function __construct(AreaProperties $area, PostEnvironment $environment)
     {
         $this->defaults = $this->getDefaults();
         $this->id = $area->id;
@@ -78,93 +78,6 @@ class AreaSettingsMenu
         $this->environment = $environment;
 
     }
-
-    /**
-     * Output method
-     * renders the html for the menu
-     * TODO: Could use a twig template
-     * @since 0.1.0
-     */
-    public function render()
-    {
-        $areaTemplates = $this->_getAssignedTemplates();
-        // Markup and fields markup
-        echo "<div class='kb-area-actions'></div>";
-        if (!empty( $areaTemplates )) {
-            $data = $this->environment->getAreaSettings( $this->id );
-
-            echo "
-            <a class='js-area-settings-opener' href='javascript:;'>l</a>    
-			<div class='kb-area-settings-wrapper' style='display:none;'>
-            <div class='kb-area-settings'>
-            <h3>Layouts</h3>
-            <ul class='kb-area-templates'>";
-
-            foreach ($areaTemplates as $tpl) {
-                $this->_areaTemplateItem( $tpl, $data );
-            }
-
-            echo "	
-            </ul>
-            </div></div>";
-        }
-
-    }
-
-
-    /**
-     * Handles a single area template li item
-     * @param string $tpl item
-     * @param string $data saved data
-     * TODO: Twig it!
-     * @since 0.1.0
-     */
-    private function _areaTemplateItem( $tpl, $data )
-    {
-
-//        $imageurl = KB_PLUGIN_URL . 'css/area_tpls/';
-//        $image    = (!empty( $tpl[ 'thumbnail' ] ) ) ? $imageurl . $tpl[ 'thumbnail' ] : $imageurl . 'area-tpl-default.png';
-        $tplid = $this->getSelectedTemplate( $tpl, $data );
-        $checked = checked( $tpl['id'], $tplid, false );
-
-        $forceby = ( !empty( $tpl['force_by'] ) ) ? 'data-force="' . implode( ' ', $tpl['force_by'] ) . '"' : null;
-
-        $html = "<li class='area_template'>";
-
-        $html .= "<div class='area-tpl-item' {$forceby}>
-				<input type='radio' name='{$this->id}[layout]' id='{$tpl['id']}' value='{$tpl['id']}' {$checked} >
-				<label for='{$tpl['id']}'>{$tpl['label']}</label>
-				</div>";
-
-        $html .= "</li>";
-
-        echo $html;
-
-    }
-
-    /**
-     * Get actual Template settings array for registered templates
-     * verifies that a template actually exists
-     * @return array
-     * @since 0.1.0
-     */
-    public function _getAssignedTemplates()
-    {
-        $registeredAreaTemplates = Kontentblocks::getService( 'registry.areas' )->getTemplates();
-        $collect = array();
-        if (!empty( $this->areaTemplates )) {
-            foreach ($this->areaTemplates as $tplid) {
-                if (!empty( $registeredAreaTemplates[$tplid] )) {
-                    $collect[$tplid] = $registeredAreaTemplates[$tplid];
-                }
-            }
-            return $collect;
-        } else {
-            return array();
-        }
-
-    }
-
 
     /**
      * Available settings keys should be set here
@@ -182,6 +95,91 @@ class AreaSettingsMenu
     }
 
     /**
+     * Output method
+     * renders the html for the menu
+     * TODO: Could use a twig template
+     * @since 0.1.0
+     */
+    public function render()
+    {
+        $areaTemplates = $this->_getAssignedTemplates();
+        // Markup and fields markup
+        echo "<div class='kb-area-actions'></div>";
+        if (!empty($areaTemplates)) {
+            $data = $this->environment->getAreaSettings($this->id);
+
+            echo "
+            <a class='js-area-settings-opener' href='javascript:;'>l</a>
+			<div class='kb-area-settings-wrapper' style='display:none;'>
+            <div class='kb-area-settings'>
+            <h3>Layouts</h3>
+            <ul class='kb-area-templates'>";
+
+            foreach ($areaTemplates as $tpl) {
+                $this->_areaTemplateItem($tpl, $data);
+            }
+
+            echo "
+            </ul>
+            </div></div>";
+        }
+
+    }
+
+    /**
+     * Get actual Template settings array for registered templates
+     * verifies that a template actually exists
+     * @return array
+     * @since 0.1.0
+     */
+    public function _getAssignedTemplates()
+    {
+        $registeredAreaTemplates = Kontentblocks::getService('registry.areas')->getTemplates();
+        $collect = array();
+        if (!empty($this->areaTemplates)) {
+            foreach ($this->areaTemplates as $tplid) {
+                if (!empty($registeredAreaTemplates[$tplid])) {
+                    $collect[$tplid] = $registeredAreaTemplates[$tplid];
+                }
+            }
+            return $collect;
+        } else {
+            return array();
+        }
+
+    }
+
+    /**
+     * Handles a single area template li item
+     * @param string $tpl item
+     * @param string $data saved data
+     * TODO: Twig it!
+     * @since 0.1.0
+     */
+    private function _areaTemplateItem($tpl, $data)
+    {
+
+//        $imageurl = KB_PLUGIN_URL . 'css/area_tpls/';
+//        $image    = (!empty( $tpl[ 'thumbnail' ] ) ) ? $imageurl . $tpl[ 'thumbnail' ] : $imageurl . 'area-tpl-default.png';
+        $tplid = $this->getSelectedTemplate($tpl, $data);
+        $checked = checked($tpl['id'], $tplid, false);
+
+        $forceby = (!empty($tpl['force_by'])) ? 'data-force="' . implode(' ', $tpl['force_by']) . '"' : null;
+
+        $html = "<li class='area_template'>";
+
+        $html .= "<div class='area-tpl-item' {$forceby}>
+				<input type='radio' name='{$this->id}[layout]' id='{$tpl['id']}' value='{$tpl['id']}' {$checked} >
+				<label for='{$tpl['id']}'>{$tpl['label']}</label>
+				</div>";
+
+        $html .= "</li>";
+
+        echo $html;
+
+    }
+
+    /**
      * This is actual a filter to make sure that a template is set in any case
      * Checks if a template was already saved
      * if not, and a default template was set for the area it will return
@@ -191,15 +189,15 @@ class AreaSettingsMenu
      * @return string
      * @since 0.1.0
      */
-    public function getSelectedTemplate( $tpl, $data )
+    public function getSelectedTemplate($tpl, $data)
     {
-        if (empty( $data['layout'] )) {
-            $tpl = ( !empty( $this->defaultLayout ) && in_array(
+        if (empty($data['layout'])) {
+            $tpl = (!empty($this->defaultLayout) && in_array(
                     $this->defaultLayout,
                     $this->areaTemplates
-                ) ) ? $this->defaultLayout : 'default';
+                )) ? $this->defaultLayout : 'default';
         } else {
-            $tpl = ( !empty( $data['layout'] ) ) ? $data['layout'] : 'default';
+            $tpl = (!empty($data['layout'])) ? $data['layout'] : 'default';
         }
 
         return $tpl;

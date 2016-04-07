@@ -279,7 +279,8 @@ class GlobalModulesMenu
 
         $value = Request::createFromGlobals();
         $environment = Utilities::getPostEnvironment($postId);
-        $module = $environment->getModuleById($postObj->post_name);
+        $moduleRepository = $environment->getModuleRepository();
+        $module = $moduleRepository->getModuleObject($postObj->post_name);
         // no template yet, create an new one
         if (!$module) {
             $this->createGlobalModule($postId, $postObj, $environment);

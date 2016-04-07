@@ -146,8 +146,8 @@ class SavePost
     private function saveByArea($area)
     {
 
-        /** @var $modules array */
-        $modules = $this->environment->getModulesforArea($area->id);
+        $moduleRepository = $this->environment->getModuleRepository();
+        $modules = $moduleRepository->getModulesforArea($area->id);
         $savedData = null;
 
         if (empty($modules)) {
