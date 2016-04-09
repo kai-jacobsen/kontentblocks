@@ -1,6 +1,8 @@
 var Ajax = require('common/Ajax');
 var Notice = require('common/Notice');
 var Config = require('common/Config');
+var Handlebars = require('hbsfy/runtime');
+var tplSummary = require('templates/backend/extensions/backup-summary.hbs');
 var BackupUi = Backbone.View.extend({
   lastItem: null,
   firstRun: true,
@@ -22,7 +24,7 @@ var BackupUi = Backbone.View.extend({
       if (data.kbHasNewBackups && _.isObject(data.kbHasNewBackups)) {
         that.renderList(data.kbHasNewBackups);
       }
-    })
+    });
     return this;
   },
   update: function () {
@@ -41,20 +43,14 @@ var BackupUi = Backbone.View.extend({
   renderList: function (items) {
     var that = this;
     this.listEl.empty();
-
     _.each(items, function (item, key) {
       that.lastItem = key;
-      that.listEl.append(_.template("\
-                <li>\n\
-                    <details>\n\
-                        <summary>\n\
-                            <%= data.time %>\n\
-                        </summary>\n\
-                    <div class='actions' data-id='<%= key %>'>\n\
-                        <span class='js-restore'>Restore</span>\n\
-                        <p class='description'><b>Comment:</b> <%= item.msg %></p>\n\
-                    </details>\n\
-                </li>", {data: {time: new Date(key*1000).toGMTString() }, item: item, key: key}))
+      var data = {
+        time: new Date(key * 1000).toGMTString(),
+        item: item,
+        key: key
+      };
+      that.listEl.append(tplSummary(data));
     });
     // no notice on first run
     if (!this.firstRun) {
@@ -69,7 +65,7 @@ var BackupUi = Backbone.View.extend({
   },
   restore: function (id) {
     var that = this;
-    var location = window.location.href + '&restore_backup=' + id + '&post_id=' + jQuery('#post_ID').val();
+    var location = window.location.href + '&amp;restore_backup=' + id + '&amp;post_id=' + jQuery('#post_ID').val();
     window.location = location;
   }
 });

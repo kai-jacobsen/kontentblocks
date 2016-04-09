@@ -4640,7 +4640,8 @@ module.exports = BaseView.extend({
           type: 'image',
           library: {
             type: 'image'
-          }
+          },
+          button: 'asd'
 
         }).on('update', function (attachmentObj) { // bind callback to 'update'
             that.update(attachmentObj);

@@ -349,6 +349,8 @@ module.exports = Utilities;
 var Ajax = require('common/Ajax');
 var Notice = require('common/Notice');
 var Config = require('common/Config');
+var Handlebars = require('hbsfy/runtime');
+var tplSummary = require('templates/backend/extensions/backup-summary.hbs');
 var BackupUi = Backbone.View.extend({
   lastItem: null,
   firstRun: true,
@@ -370,7 +372,7 @@ var BackupUi = Backbone.View.extend({
       if (data.kbHasNewBackups && _.isObject(data.kbHasNewBackups)) {
         that.renderList(data.kbHasNewBackups);
       }
-    })
+    });
     return this;
   },
   update: function () {
@@ -389,20 +391,14 @@ var BackupUi = Backbone.View.extend({
   renderList: function (items) {
     var that = this;
     this.listEl.empty();
-
     _.each(items, function (item, key) {
       that.lastItem = key;
-      that.listEl.append(_.template("\
-                <li>\n\
-                    <details>\n\
-                        <summary>\n\
-                            <%= data.time %>\n\
-                        </summary>\n\
-                    <div class='actions' data-id='<%= key %>'>\n\
-                        <span class='js-restore'>Restore</span>\n\
-                        <p class='description'><b>Comment:</b> <%= item.msg %></p>\n\
-                    </details>\n\
-                </li>", {data: {time: new Date(key*1000).toGMTString() }, item: item, key: key}))
+      var data = {
+        time: new Date(key * 1000).toGMTString(),
+        item: item,
+        key: key
+      };
+      that.listEl.append(tplSummary(data));
     });
     // no notice on first run
     if (!this.firstRun) {
@@ -417,14 +413,14 @@ var BackupUi = Backbone.View.extend({
   },
   restore: function (id) {
     var that = this;
-    var location = window.location.href + '&restore_backup=' + id + '&post_id=' + jQuery('#post_ID').val();
+    var location = window.location.href + '&amp;restore_backup=' + id + '&amp;post_id=' + jQuery('#post_ID').val();
     window.location = location;
   }
 });
 module.exports = new BackupUi({
   el: '#kb-backup-inspect .inside'
 });
-},{"common/Ajax":2,"common/Config":4,"common/Notice":8}],11:[function(require,module,exports){
+},{"common/Ajax":2,"common/Config":4,"common/Notice":8,"hbsfy/runtime":36,"templates/backend/extensions/backup-summary.hbs":25}],11:[function(require,module,exports){
 var ClipboardController = require('extensions/clipboard/ClipboardController');
 module.exports = {
 
@@ -1031,7 +1027,7 @@ module.exports = Backbone.View.extend({
   }
 
 });
-},{"templates/backend/modulebrowser/module-list-item.hbs":25,"templates/backend/modulebrowser/module-template-list-item.hbs":26}],24:[function(require,module,exports){
+},{"templates/backend/modulebrowser/module-list-item.hbs":26,"templates/backend/modulebrowser/module-template-list-item.hbs":27}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -1046,7 +1042,22 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "<br>\n</p>\n<div class=\"kb-js-duplicate-clipboard kb-clipboard-action\">duplicate</div>\n<div class=\"kb-js-move-clipboard kb-clipboard-action\">move</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":35}],25:[function(require,module,exports){
+},{"hbsfy/runtime":36}],25:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var HandlebarsCompiler = require('hbsfy/runtime');
+module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    var stack1, helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
+
+  return "<li>\n    <details>\n        <summary>\n            "
+    + alias3(((helper = (helper = helpers.time || (depth0 != null ? depth0.time : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"time","hash":{},"data":data}) : helper)))
+    + "\n        </summary>\n        <div class='actions' data-id='"
+    + alias3(((helper = (helper = helpers.key || (depth0 != null ? depth0.key : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"key","hash":{},"data":data}) : helper)))
+    + "'>\n            <span class='js-restore'>Restore</span>\n            <p class='description'><b>Comment:</b> "
+    + alias3(this.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.msg : stack1), depth0))
+    + "</p>\n        </div>\n    </details>\n</li>";
+},"useData":true});
+
+},{"hbsfy/runtime":36}],26:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -1059,7 +1070,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</p>";
 },"useData":true});
 
-},{"hbsfy/runtime":35}],26:[function(require,module,exports){
+},{"hbsfy/runtime":36}],27:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -1070,7 +1081,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</h4>";
 },"useData":true});
 
-},{"hbsfy/runtime":35}],27:[function(require,module,exports){
+},{"hbsfy/runtime":36}],28:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -1131,7 +1142,7 @@ inst['default'] = inst;
 
 exports['default'] = inst;
 module.exports = exports['default'];
-},{"./handlebars/base":28,"./handlebars/exception":29,"./handlebars/no-conflict":30,"./handlebars/runtime":31,"./handlebars/safe-string":32,"./handlebars/utils":33}],28:[function(require,module,exports){
+},{"./handlebars/base":29,"./handlebars/exception":30,"./handlebars/no-conflict":31,"./handlebars/runtime":32,"./handlebars/safe-string":33,"./handlebars/utils":34}],29:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -1405,7 +1416,7 @@ function createFrame(object) {
 }
 
 /* [args, ]options */
-},{"./exception":29,"./utils":33}],29:[function(require,module,exports){
+},{"./exception":30,"./utils":34}],30:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1444,7 +1455,7 @@ Exception.prototype = new Error();
 
 exports['default'] = Exception;
 module.exports = exports['default'];
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1463,7 +1474,7 @@ exports['default'] = function (Handlebars) {
 };
 
 module.exports = exports['default'];
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -1696,7 +1707,7 @@ function initData(context, data) {
   }
   return data;
 }
-},{"./base":28,"./exception":29,"./utils":33}],32:[function(require,module,exports){
+},{"./base":29,"./exception":30,"./utils":34}],33:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1711,7 +1722,7 @@ SafeString.prototype.toString = SafeString.prototype.toHTML = function () {
 
 exports['default'] = SafeString;
 module.exports = exports['default'];
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1826,12 +1837,12 @@ function blockParams(params, ids) {
 function appendContextPath(contextPath, id) {
   return (contextPath ? contextPath + '.' : '') + id;
 }
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime')['default'];
 
-},{"./dist/cjs/handlebars.runtime":27}],35:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":28}],36:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":34}]},{},[12]);
+},{"handlebars/runtime":35}]},{},[12]);
