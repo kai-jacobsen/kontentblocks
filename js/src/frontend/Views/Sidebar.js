@@ -39,6 +39,7 @@ module.exports = Backbone.View.extend({
       minWidth: 340,
       handles: 'e'
     });
+
   },
   events: {
     'click .kb-js-sidebar-nav-back': 'rootView', // back to level 0
@@ -73,6 +74,7 @@ module.exports = Backbone.View.extend({
       this.toggleSidebar();
       this.detectActivity();
     }
+    this.delegateEvents();
   },
   bindHandlers: function () {
     var that = this;
@@ -119,6 +121,7 @@ module.exports = Backbone.View.extend({
       this.setView(prev);
     }
   },
+
   rootView: function () {
     this.viewStack = []; // empty stack
     this.setView(this.states['AreaList']); // set level 0 view

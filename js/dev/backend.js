@@ -2036,7 +2036,7 @@ module.exports = {
 }
 },{"common/Config":44}],44:[function(require,module,exports){
 var Config = (function ($) {
-  var config = KB.appData.config;
+  var config = KB.appData.config || {};
   return {
     /**
      * General getter

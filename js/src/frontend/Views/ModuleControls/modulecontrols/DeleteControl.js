@@ -15,8 +15,6 @@ module.exports = ModuleMenuItem.extend({
     'click': 'confirmRemoval'
   },
   confirmRemoval: function () {
-
-
     Notice.confirm('Remove', KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, this.cancelRemoval, this);
   },
   removeModule: function () {

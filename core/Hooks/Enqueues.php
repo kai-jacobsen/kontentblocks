@@ -234,11 +234,12 @@ class Enqueues
 
     public static function appConfig()
     {
-        global $post;
+        global $post, $wp_version;
         $screen = (function_exists('get_current_screen')) ? get_current_screen() : null;
         $data = array(
             'frontend' => !is_admin(),
             'preview' => is_preview(),
+            'wpVersion' => str_replace('.','-',substr($wp_version,0,3)),
             'loggedIn' => is_user_logged_in(),
             'user' => (is_admin()) ? wp_get_current_user() : false,
             'ajax_url' => (is_user_logged_in()) ? admin_url('admin-ajax.php') : null,

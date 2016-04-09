@@ -390,7 +390,7 @@ module.exports = {
 }
 },{"common/Config":11}],11:[function(require,module,exports){
 var Config = (function ($) {
-  var config = KB.appData.config;
+  var config = KB.appData.config || {};
   return {
     /**
      * General getter
@@ -4000,7 +4000,7 @@ module.exports = Backbone.Collection.extend({
     this.listenTo(model, 'remove', this.removeModel);
   },
   removeModel: function(model){
-    this.remove(model);
+    this.remove(model,{silent:true});
   }
 
 });
@@ -4035,6 +4035,7 @@ var ChangeObserver = require('shared/ChangeObserver');
 var Tether = require('tether');
 var AdminBar = require('frontend/AdminBar');
 var Checks = require('common/Checks');
+var Config = require('common/Config');
 var Refields = require('fields/RefieldsController');
 var FieldsAPI = require('fieldsAPI/FieldsAPIController');
 
@@ -4102,9 +4103,12 @@ KB.App = function () {
    called on jquery.ready
    */
   function init() {
-    if (!KB.appData.config.initFrontend) {
+    if (!Config.get('initFrontend')) {
       return;
     }
+
+    jQuery('body').addClass('wordpress-' + Config.get('wpVersion'));
+
 
     // create Sidebar singleton
     if (KB.appData.config.useModuleNav && Checks.userCan('edit_kontentblocks')) {
@@ -4303,7 +4307,7 @@ jQuery(document).ready(function () {
 
 });
 
-},{"./GlobalEvents":73,"./InlineSetup":82,"./Views/AreaView":88,"./Views/ModuleView":98,"./Views/PanelView":99,"common/Checks":10,"common/Logger":13,"common/Payload":15,"common/UI":19,"fields/FieldControlsCollection":24,"fields/RefieldsController":26,"fieldsAPI/FieldsAPIController":60,"frontend/AdminBar":68,"frontend/Collections/ModuleCollection":70,"frontend/Collections/ObjectProxyCollection":71,"frontend/Models/AreaModel":83,"frontend/Models/ModuleModel":84,"frontend/Models/PanelModel":85,"frontend/Views/EditModalModules":90,"frontend/Views/Sidebar":100,"shared/ChangeObserver":114,"shared/ViewsCollection":123,"tether":194}],73:[function(require,module,exports){
+},{"./GlobalEvents":73,"./InlineSetup":82,"./Views/AreaView":88,"./Views/ModuleView":98,"./Views/PanelView":99,"common/Checks":10,"common/Config":11,"common/Logger":13,"common/Payload":15,"common/UI":19,"fields/FieldControlsCollection":24,"fields/RefieldsController":26,"fieldsAPI/FieldsAPIController":60,"frontend/AdminBar":68,"frontend/Collections/ModuleCollection":70,"frontend/Collections/ObjectProxyCollection":71,"frontend/Models/AreaModel":83,"frontend/Models/ModuleModel":84,"frontend/Models/PanelModel":85,"frontend/Views/EditModalModules":90,"frontend/Views/Sidebar":100,"shared/ChangeObserver":114,"shared/ViewsCollection":123,"tether":194}],73:[function(require,module,exports){
 var Logger = require('common/Logger');
 KB.Events.on('module.before.sync panel.before.sync', function(Model){
   if (window.tinymce){
@@ -6678,8 +6682,6 @@ module.exports = ModuleMenuItem.extend({
     'click': 'confirmRemoval'
   },
   confirmRemoval: function () {
-
-
     Notice.confirm('Remove', KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, this.cancelRemoval, this);
   },
   removeModule: function () {
@@ -6997,6 +6999,7 @@ module.exports = Backbone.View.extend({
       minWidth: 340,
       handles: 'e'
     });
+
   },
   events: {
     'click .kb-js-sidebar-nav-back': 'rootView', // back to level 0
@@ -7031,6 +7034,7 @@ module.exports = Backbone.View.extend({
       this.toggleSidebar();
       this.detectActivity();
     }
+    this.delegateEvents();
   },
   bindHandlers: function () {
     var that = this;
@@ -7077,6 +7081,7 @@ module.exports = Backbone.View.extend({
       this.setView(prev);
     }
   },
+
   rootView: function () {
     this.viewStack = []; // empty stack
     this.setView(this.states['AreaList']); // set level 0 view

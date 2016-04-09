@@ -28,6 +28,7 @@ var ChangeObserver = require('shared/ChangeObserver');
 var Tether = require('tether');
 var AdminBar = require('frontend/AdminBar');
 var Checks = require('common/Checks');
+var Config = require('common/Config');
 var Refields = require('fields/RefieldsController');
 var FieldsAPI = require('fieldsAPI/FieldsAPIController');
 
@@ -95,9 +96,12 @@ KB.App = function () {
    called on jquery.ready
    */
   function init() {
-    if (!KB.appData.config.initFrontend) {
+    if (!Config.get('initFrontend')) {
       return;
     }
+
+    jQuery('body').addClass('wordpress-' + Config.get('wpVersion'));
+
 
     // create Sidebar singleton
     if (KB.appData.config.useModuleNav && Checks.userCan('edit_kontentblocks')) {

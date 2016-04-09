@@ -7,7 +7,7 @@ module.exports = Backbone.Collection.extend({
     this.listenTo(model, 'remove', this.removeModel);
   },
   removeModel: function(model){
-    this.remove(model);
+    this.remove(model,{silent:true});
   }
 
 });
