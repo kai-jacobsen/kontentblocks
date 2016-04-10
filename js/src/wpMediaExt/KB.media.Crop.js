@@ -212,6 +212,8 @@
       this.cropperView.remove();
     },
     createCropToolbar: function () {
+
+
       var canSkipCrop, toolbarOptions;
       canSkipCrop = this.get('canSkipCrop') || false;
       toolbarOptions = {
@@ -230,11 +232,11 @@
                 cropDetails: this.controller.state().imgSelect.getSelection(),
                 cropOptions: this.controller.state().frame.options.cropOptions
               });
-
               this.$el.text(l10n.cropping);
               this.$el.attr('disabled', true);
               this.controller.state().doCrop(selection).done(function (croppedImage) {
-                self.controller.trigger('cropped', croppedImage);
+
+                self.controller.handleCroppedImage(croppedImage);
                 //self.controller.close();
                 self.controller.setState('library');
                 self.controller.toolbar.mode('select');
@@ -269,6 +271,7 @@
     },
 
     doCrop: function (attachment) {
+
       return wp.ajax.post('cropImage', {
         nonce: attachment.get('nonces').edit,
         _ajax_nonce: KB.appData.config.nonces.create,
@@ -308,8 +311,6 @@
       this.createSelection();
       this.createStates();
       this.bindHandlers();
-
-      this.listenTo(this, 'cropped', this.handleCroppedImage);
 
       this.states.get('library').get('selection').on('add', function (model) {
         var that = this;

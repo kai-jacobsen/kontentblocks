@@ -77,7 +77,6 @@ module.exports = BaseView.extend({
         }
 
         that.frame = new wp.media.view.KBCropperFrame(frameoptions).on('update', function (attachmentObj) { // bind callback to 'update'
-            console.log('update');
             that.update(attachmentObj);
           })
           .on('close', function (att) {
@@ -89,11 +88,12 @@ module.exports = BaseView.extend({
           .on('ready', function () {
             that.ready();
           }).on('replace', function () {
-            console.log('replace');
+            //console.log('replace');
             //that.replace(that.frame.image.attachment);
           }).on('select', function (what) {
-            console.log('select');
+            //console.log('select', what);
             //var attachment = this.get('library').get('selection').first();
+            //console.log(attachment);
             //that.replace(attachment);
           }).open();
 

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2016-04-09 */
+/*! Kontentblocks DevVersion 2016-04-10 */
 (function(wp, $) {
     if (!wp || !wp.media) {
         return;
@@ -132,7 +132,7 @@
                             this.$el.text(l10n.cropping);
                             this.$el.attr("disabled", true);
                             this.controller.state().doCrop(selection).done(function(croppedImage) {
-                                self.controller.trigger("cropped", croppedImage);
+                                self.controller.handleCroppedImage(croppedImage);
                                 self.controller.setState("library");
                                 self.controller.toolbar.mode("select");
                                 self.controller.createSelection();
@@ -202,7 +202,6 @@
             this.createSelection();
             this.createStates();
             this.bindHandlers();
-            this.listenTo(this, "cropped", this.handleCroppedImage);
             this.states.get("library").get("selection").on("add", function(model) {
                 var that = this;
                 model.on("change:uploading", function() {
