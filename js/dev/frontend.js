@@ -1810,7 +1810,10 @@ module.exports = BaseView.extend({
             //var attachment = this.get('library').get('selection').first();
             //console.log(attachment);
             //that.replace(attachment);
-          }).open();
+          })
+          .on('cropped', function(croppedImage){
+          })
+          .open();
 
 
         // create a frame, bind 'update' callback and open in one step

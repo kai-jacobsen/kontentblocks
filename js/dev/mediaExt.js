@@ -132,6 +132,7 @@
                             this.$el.text(l10n.cropping);
                             this.$el.attr("disabled", true);
                             this.controller.state().doCrop(selection).done(function(croppedImage) {
+                                self.controller.trigger("cropped", croppedImage);
                                 self.controller.handleCroppedImage(croppedImage);
                                 self.controller.setState("library");
                                 self.controller.toolbar.mode("select");
