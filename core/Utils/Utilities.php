@@ -52,7 +52,10 @@ class Utilities
             } else {
                 $realId = (is_null($actualPostId)) ? $storageId : $actualPostId;
                 $postObj = get_post($realId);
-                return self::$postEnvironments[$storageId] = new PostEnvironment($storageId, $postObj);
+                if (!is_null($postObj)){
+                    return self::$postEnvironments[$storageId] = new PostEnvironment($storageId, $postObj);
+                }
+                return null;
             }
         }
 
@@ -429,9 +432,10 @@ class Utilities
      * @param null $postId
      * @param bool $blocking
      * @param null $host
+     * @param array $args
      * @return null|void
      */
-    public static function remoteConcatGet($postId = null, $blocking = false, $host = null)
+    public static function remoteConcatGet($postId = null, $blocking = false, $host = null, $args = array())
     {
         if (apply_filters('kb.remote.concat.get', false)) {
             return null;
@@ -449,7 +453,10 @@ class Utilities
 
         $url = add_query_arg('concat', 'true', $base);
         if ($url !== false) {
-            $response = wp_remote_get($url, array('timeout' => 2, 'blocking' => $blocking));
+
+            $args = wp_parse_args($args, array('timeout' => 2, 'blocking' => $blocking));
+            $args = apply_filters('kb.remote.concat.args', $args, $url);
+            $response = wp_remote_get($url, $args);
             return $response;
         }
     }
