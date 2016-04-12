@@ -146,8 +146,6 @@ class AreaRenderer implements RendererInterface
             $output .= $moduleOutput;
             $output .= $this->afterModule($module);
             $output .= $this->areaHtmlNode->closeLayoutWrapper();
-
-
             if (current_theme_supports('kb.area.concat') && filter_input(
                     INPUT_GET,
                     'concat',

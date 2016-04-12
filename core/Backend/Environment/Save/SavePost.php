@@ -232,7 +232,7 @@ class SavePost
 
     public function concat()
     {
-        Utilities::remoteConcatGet($this->postid);
+        Utilities::remoteConcatGet($this->postid, true);
     }
 
     private function saveAreaContextMap()

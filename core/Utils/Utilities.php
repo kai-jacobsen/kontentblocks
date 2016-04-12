@@ -442,16 +442,15 @@ class Utilities
         }
 
         $base = get_permalink($postId);
-
         if (!is_null($host)) {
             $parsed = parse_url($base);
             $base = str_replace($parsed['host'], $host, $base);
         }
 
         $url = add_query_arg('concat', 'true', $base);
-
         if ($url !== false) {
-            return wp_remote_get($url, array('timeout' => 2, 'blocking' => $blocking));
+            $response = wp_remote_get($url, array('timeout' => 2, 'blocking' => $blocking));
+            return $response;
         }
     }
 
