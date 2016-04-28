@@ -139,6 +139,8 @@ class StandardFieldSection implements Exportable
                     }
                     $args['arrayKey'] = $subkey = $out[1];
                 }
+            } else if (isset($args['arrayKey'])){
+                $subkey = $args['arrayKey'];
             }
 
 
@@ -164,6 +166,7 @@ class StandardFieldSection implements Exportable
                 } else {
                     $this->fields[$key] = $newField = $field;
                 }
+
 
                 $data = $this->getEntityModel();
                 if (!is_a($newField, '\Kontentblocks\Fields\FieldSubGroup')) {
@@ -339,6 +342,7 @@ class StandardFieldSection implements Exportable
                 }
             }
         }
+
         return $collect;
     }
 

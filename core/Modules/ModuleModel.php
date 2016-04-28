@@ -36,7 +36,7 @@ class ModuleModel extends EntityModel
     /**
      * @param bool $addslashes
      * @return bool
-     * @ince 0.2.0
+     * @since 0.2.0
      */
     public function sync( $addslashes = false )
     {

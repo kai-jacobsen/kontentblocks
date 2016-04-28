@@ -282,6 +282,7 @@ abstract class Field implements Exportable
      */
     public function setValue($data)
     {
+        $this->value = $data;
         return $data;
     }
 

@@ -12,7 +12,9 @@ Class Multiselect extends Field
 {
 
     public static $settings = array(
-        'type' => 'multiselect'
+        'type' => 'multiselect',
+        'forceSave' => true
+
     );
 
 
@@ -23,11 +25,18 @@ Class Multiselect extends Field
      */
     public function prepareFormValue($val)
     {
+        if (is_null( $val )) {
+            return null;
+        }
         return $val;
     }
 
     public function save($new, $old)
     {
+        if (!$new) {
+            return array();
+        }
+
         return $new;
     }
 

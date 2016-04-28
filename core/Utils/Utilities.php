@@ -230,13 +230,11 @@ class Utilities
 
         if (is_array($old)) {
             foreach ($old as $key => $val) {
-
                 if (is_array($old[$key])) {
                     if (array_key_exists($key, $merged) && isset($merged[$key]) && $merged[$key] !== null) {
                         // key exists and is not null, dig further into the array until actual values are reached
                         $merged[$key] = self::arrayMergeRecursive($merged[$key], $old[$key]);
                     } elseif (array_key_exists($key, $merged) && $merged[$key] === null) {
-                        // explicit set the new value to NULL
                         unset($merged[$key]);
                     } else {
                         // preserve the old value
@@ -246,8 +244,8 @@ class Utilities
                     if (array_key_exists($key, $merged) && $merged[$key] === null) {
                         // key was set to null on purpose, and gets removed finally
                         unset($merged[$key]);
-
                     } elseif (!isset($merged[$key])) {
+
                         // there is something missing in current(new) data, add it
                         $merged[$key] = $val;
                     }
@@ -437,6 +435,7 @@ class Utilities
      */
     public static function remoteConcatGet($postId = null, $blocking = false, $host = null, $args = array())
     {
+
         if (apply_filters('kb.remote.concat.get', false)) {
             return null;
         }

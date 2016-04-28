@@ -48,7 +48,7 @@ class UpdateModuleData implements AjaxActionInterface
         $overrides = $moduleArgs['overrides'];
         $module->properties->parseOverrides($overrides);
 
-        // gather data
+         // gather data
         $old = $module->model->export();
         $new = $module->save($data, $old);
         $mergedData = Utilities::arrayMergeRecursive($new, $old);
