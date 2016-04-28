@@ -259,6 +259,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function save(ValueStorage $postData, $postId)
     {
+
         $old = $this->model->export();
         $new = $this->fields->save($postData->get($this->baseId), $old);
         $merged = Utilities::arrayMergeRecursive($new, $old);

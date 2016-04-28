@@ -12,6 +12,7 @@ Class Multiselect extends Field
 {
 
     public static $settings = array(
+        'renderHidden' => true,
         'type' => 'multiselect',
         'forceSave' => true
 
@@ -25,7 +26,7 @@ Class Multiselect extends Field
      */
     public function prepareFormValue($val)
     {
-        if (is_null( $val )) {
+        if (is_null($val)) {
             return null;
         }
         return $val;
@@ -33,8 +34,22 @@ Class Multiselect extends Field
 
     public function save($new, $old)
     {
+        if (!is_array($new)){
+            $new = array();
+        }
+
+        if (is_array($old)) {
+            foreach ($old as $index => $val) {
+                if (!isset($new[$index])){
+                    $old[$index] = null;
+                }
+            }
+        return $old;
+        }
+
+
         if (!$new) {
-            return array();
+            return null;
         }
 
         return $new;
