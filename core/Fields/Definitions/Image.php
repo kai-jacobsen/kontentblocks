@@ -32,7 +32,6 @@ Class Image extends Field
         }
 
         $data['cropOptions'] = $this->getCropSelectNode();
-
         $data['image'] = $image;
         return $data;
     }
@@ -66,6 +65,7 @@ Class Image extends Field
     {
 
         $current = $this->getValue('crop', 5);
+
 
         $options = array(
             array(
@@ -131,7 +131,7 @@ Class Image extends Field
                 'id' => null,
                 'caption' => '',
                 'title' => '',
-                'crop' => array('center', 'center')
+                'crop' => 5
             );
         }
 

@@ -226,6 +226,7 @@ abstract class Field implements Exportable
             'i18n' => I18n::getPackages('Refields.common', "Refields.{$type}")
         );
 
+
         /**
          * Field may alter the injected data array
          */
