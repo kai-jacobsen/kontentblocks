@@ -41,10 +41,10 @@ Class Multiselect extends Field
         if (is_array($old)) {
             foreach ($old as $index => $val) {
                 if (!isset($new[$index])){
-                    $old[$index] = null;
+                    $new[$index] = null;
                 }
             }
-        return $old;
+        return $new;
         }
 
 
