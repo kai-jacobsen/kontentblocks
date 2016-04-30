@@ -7,6 +7,7 @@ use Kontentblocks\Fields\FormInterface;
 use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class PostPanel
@@ -245,25 +246,29 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function saveCallback($postId)
     {
-        $data = isset($_POST[$this->baseId]) ? $_POST[$this->baseId] : null;
+        $postData = Request::createFromGlobals();
+        $data = $postData->request->filter($this->baseId, null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (empty($data)) {
             return;
         }
-        $this->save(new ValueStorage($_POST), $postId);
+
+        $this->model->reset()->set($postData->get($this->baseId));
+        $this->save($postData, $postId);
     }
 
     /**
-     * @param ValueStorage $postData
+     * @param Request $postData
      * @param $postId
      * @return mixed|void
      */
-    public function save(ValueStorage $postData, $postId)
+    public function save(Request $postData, $postId)
     {
-        $old = $this->model->export();
-        $new = $this->fields->save($postData->get($this->baseId), $old);
+        $old = $this->dataProvider->get($this->baseId);
+        $new = $this->fields->save($postData->request->get($this->baseId), $old);
         $merged = Utilities::arrayMergeRecursive($new, $old);
         $dataProvider = $this->dataProvider;
         $this->model->set($merged)->sync();
+
         if ($this->saveAsSingle) {
             foreach ($new as $k => $v) {
                 if (empty($v)) {
@@ -273,22 +278,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
                 }
             }
         }
-    }
-
-    /**
-     * Get specific key value from data
-     * Setup data, if not already done
-     * @param null $key
-     * @param null $default
-     * @return mixed
-     */
-    public function getKey($key = null, $default = null)
-    {
-        if (isset($data[$key])) {
-            return $data[$key];
-        }
-
-        return $default;
     }
 
     /**
@@ -313,7 +302,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function metaBox($postObj)
     {
-
         if (!post_type_supports($postObj->post_type, 'editor')) {
             add_action(
                 'admin_footer',

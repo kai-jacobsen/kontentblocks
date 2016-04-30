@@ -31,7 +31,7 @@ class SaveOptionPanelForm implements AjaxActionInterface
         $data = $request->request->filter('data', array(), FILTER_DEFAULT);
         $baseId = $panelDef['baseId'];
         $panelData = wp_unslash($data[$baseId]);
-
+        //@TODO rewrite, this is old
         $panel = \Kontentblocks\getPanel($baseId);
         $old = $panel->getData();
         $new = $panel->fields($panel->fieldController)->save($panelData, $old);

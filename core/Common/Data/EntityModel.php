@@ -59,7 +59,6 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      */
     public function get($offset, $default = '', $group = null)
     {
-
         if (!is_null($group)) {
             if (property_exists($this, $group)) {
                 if (!empty($this->$group[$offset])) {

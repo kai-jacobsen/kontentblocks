@@ -87,15 +87,6 @@ abstract class AbstractPanel implements EntityInterface
     }
 
     /**
-     * Get specific key value from data
-     * Setup data, if not already done
-     * @param null $key
-     * @param null $default
-     * @return mixed
-     */
-    abstract public function getKey($key = null, $default = null);
-
-    /**
      * @return string
      */
     public function getBaseId()

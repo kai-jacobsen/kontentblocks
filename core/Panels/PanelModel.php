@@ -39,8 +39,17 @@ class PanelModel extends EntityModel
     public function sync()
     {
         $provider = $this->entity->getDataProvider();
-
         return $provider->update($this->entity->getId(), $this->export());
+    }
+
+    public function reset()
+    {
+        $keys = array_keys($this->export());
+        foreach ($keys as $key) {
+            unset($this->$key);
+        }
+        $this->_originalData = array();
+        return $this;
     }
 
     /**
