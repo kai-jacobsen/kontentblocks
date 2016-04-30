@@ -10,9 +10,9 @@ module.exports = BaseView.extend({
   events: {
     'click .kb-js-add-image': 'openFrame',
     'click .kb-js-reset-image': 'resetImage',
-    'change [data-kbimage-crop]' : 'handleCropChange'
+    'change [data-kbimage-crop]': 'handleCropChange'
   },
-  handleCropChange: function(){
+  handleCropChange: function () {
     var cropValue = this.$cropSelect.val();
     var value = this.model.get('value');
     value.crop = cropValue;
@@ -124,7 +124,7 @@ module.exports = BaseView.extend({
     }
     return this.model.get('crop');
   },
-  prepareArgs: function(){
+  prepareArgs: function () {
     var that = this;
     return {
       width: that.model.get('width') || null,
@@ -156,7 +156,7 @@ module.exports = BaseView.extend({
     //KB.Events.trigger('modal.preview');
     this.model.get('ModuleModel').trigger('data.updated');
   },
-  retrieveImage: function(args, id){
+  retrieveImage: function (args, id) {
     var that = this;
     jQuery.ajax({
       url: ajaxurl,
@@ -186,7 +186,7 @@ module.exports = BaseView.extend({
 
     var oldValue = this.model.get('value');
 
-    if (!_.isObject(oldValue)){
+    if (!_.isObject(oldValue)) {
       oldValue = {};
     }
 
@@ -200,6 +200,21 @@ module.exports = BaseView.extend({
     this.$title.val('');
   },
   toString: function () {
+    var that = this;
+    if (!this.attachment && !_.isEmpty(this.model.get('value').id)) {
+      var query = wp.media.query({post__in: [this.model.get('value').id]});
+      var promise = query.more();
+      promise.done(function (res) {
+        that.attachment = query.first();
+
+        if (window.YoastSEO){
+          YoastSEO.app.refresh();
+        }
+
+      })
+    }
+
+
     if (this.attachment) {
       var size = (this.attachment.get('sizes').thumbnail) ? this.attachment.get('sizes').thumbnail : this.attachment.get('sizes').full;
       return "<img src='" + size.url + "'>";

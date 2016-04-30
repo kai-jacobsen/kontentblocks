@@ -1,17 +1,15 @@
 {% extends Form.getLayout() %}
 {% block fieldmarkup %}
     {% for o in Field.getArg('options') %}
-
-        {% if (o.key and o.label and o.value) %}
-
+        {% if (o.key and o.name and o.value) %}
             <div class='kb-checkboxset-item'>
                 <label>
-                    <input type='checkbox' id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName(o.key) }}'
+                    <input type='checkbox' id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName(false, o.key) }}'
                            value='{{ o.value }}'
-                            {% if o.value == value[o.key] %} checked="checked" {% endif %}/>{{ o.label }}</label></div>
+                            {% if o.value == value[o.key] %} checked="checked" {% endif %}/>{{ o.name }}</label></div>
 
         {% else %}
-            <p>Invalid option. Key,label or value missing.</p>
+            <p>Invalid option. Key,name or value missing.</p>
         {% endif %}
 
 

@@ -43,18 +43,18 @@ Class CheckboxGroup extends Field
     /**
      * Custom save filter
      *
-     * @param array $fielddata from $_POST
+     * @param array $new from $_POST
      * @param array $old as saved
      *
      * @return array
      */
-    public function save( $fielddata, $old )
+    public function save( $new, $old )
     {
 
-        if (is_null( $fielddata )) {
+        if (is_null( $new )) {
             return null;
         }
-        return $fielddata;
+        return $new;
     }
 
     /**

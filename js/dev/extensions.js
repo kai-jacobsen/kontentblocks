@@ -161,7 +161,7 @@ module.exports = {
     this.getFields();
     _.each(this.fields, function(field){
       if (field.FieldControlView){
-        this.strings.push(field.FieldControlView.toString());
+        this.strings.push(field.FieldControlView.toString()); 
       }
     }, this);
   },

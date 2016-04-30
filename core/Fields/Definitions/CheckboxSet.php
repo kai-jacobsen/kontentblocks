@@ -31,26 +31,23 @@ Class CheckboxSet extends Field
      * Important to note that you must not define a value as FALSE in the options array,
      * in that case you'll have a hard time.
      *
-     * @param array $fielddata - from $_POST
+     * @param array $new - from $_POST
      * @param array $old - as saved
      *
      * @return array
      */
-    public function save( $fielddata, $old )
+    public function save( $new, $old )
     {
         $collect = array();
         $options = $this->getArg( 'options' );
 
         foreach ($options as $k => $v) {
-
-            if (!isset( $fielddata[$v['key']] )) {
-                $fielddata[$v['key']] = false;
+            if (!isset( $new[$v['key']] )) {
+                $new[$v['key']] = false;
             }
         }
-
-        if (is_array( $fielddata ) && !empty( $fielddata )) {
-            foreach ($fielddata as $k => $v) {
-
+        if (is_array( $new ) && !empty( $new )) {
+            foreach ($new as $k => $v) {
                 if ($this->getArg( 'filter', true )) {
                     $filtered = filter_var( $v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
                 } else {
@@ -64,7 +61,6 @@ Class CheckboxSet extends Field
                 }
             }
         }
-
         return $collect;
 
     }
@@ -123,7 +119,7 @@ Class CheckboxSet extends Field
 
     private function validateItem( $item )
     {
-        return isset( $item['key'], $item['label'], $item['value'] );
+        return isset( $item['key'], $item['name'], $item['value'] );
 
     }
 }

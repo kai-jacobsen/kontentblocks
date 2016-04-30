@@ -141,7 +141,7 @@ class FieldFormRenderer
             return '[]';
         }
 
-        if (is_string($param)) {
+        if (is_string($param) || is_int($param)) {
             return "[$param]";
         }
 
