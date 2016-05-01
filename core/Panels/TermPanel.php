@@ -5,11 +5,10 @@ namespace Kontentblocks\Panels;
 use Kontentblocks\Backend\DataProvider\DataProviderService;
 use Kontentblocks\Backend\DataProvider\TermMetaDataProvider;
 use Kontentblocks\Backend\Environment\TermEnvironment;
-use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class TaxonomyPanel
@@ -37,6 +36,11 @@ abstract class TermPanel extends AbstractPanel
      * @var StandardFieldController
      */
     public $fields;
+
+    /**
+     * @var false
+     */
+    public $saveAsSingle;
     /**
      * @var
      */
@@ -69,7 +73,8 @@ abstract class TermPanel extends AbstractPanel
     {
         $defaults = array(
             'taxonomy' => 'category',
-            'insideTable' => true
+            'insideTable' => true,
+            'saveAsSingle' => false
         );
 
         return wp_parse_args($args, $defaults);
@@ -97,7 +102,7 @@ abstract class TermPanel extends AbstractPanel
     public function init()
     {
         if (is_admin()) {
-            add_action("edited_{$this->args['taxonomy']}", array($this, 'save'));
+            add_action("edited_{$this->args['taxonomy']}", array($this, 'saveCallback'));
             if ($this->args['insideTable']) {
                 add_action("{$this->args['taxonomy']}_edit_form_fields", array($this, 'form'));
             } else {
@@ -122,19 +127,59 @@ abstract class TermPanel extends AbstractPanel
         Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
     }
 
+
     /**
-     * Post Id not needed in this context
-     * @param $termId
+     * Callback handler
+     * @param $postId
+     */
+    public function saveCallback($postId)
+    {
+        $postData = Request::createFromGlobals();
+        $data = $postData->request->filter($this->baseId, null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        if (empty($data)) {
+            return;
+        }
+        $this->model->reset()->set($postData->get($this->baseId));
+        $this->save($postData, $postId);
+    }
+
+    /**
+     * @param Request $postData
+     * @param $postId
      * @return mixed|void
      */
-    public function save($termId)
+    public function save(Request $postData, $postId)
     {
-        $this->dataProvider = DataProviderService::getTermProvider($termId);
-        $old = $this->model->export();
-        $new = $this->fields->save($_POST[$this->baseId], $old);
+        $old = $this->dataProvider->get($this->baseId);
+        $new = $this->fields->save($postData->request->get($this->baseId), $old);
         $merged = Utilities::arrayMergeRecursive($new, $old);
+        $dataProvider = $this->dataProvider;
         $this->model->set($merged)->sync();
+
+        if ($this->saveAsSingle) {
+            foreach ($new as $k => $v) {
+                if (empty($v)) {
+                    $dataProvider->delete($this->baseId . '_' . $k);
+                } else {
+                    $dataProvider->update($this->baseId . '_' . $k, $v);
+                }
+            }
+        }
     }
+
+//    /**
+//     * Post Id not needed in this context
+//     * @param $termId
+//     * @return mixed|void
+//     */
+//    public function save($termId)
+//    {
+//        $this->dataProvider = DataProviderService::getTermProvider($termId);
+//        $old = $this->model->export();
+//        $new = $this->fields->save($_POST[$this->baseId], $old);
+//        $merged = Utilities::arrayMergeRecursive($new, $old);
+//        $this->model->set($merged)->sync();
+//    }
 
     /**
      * @param $termId

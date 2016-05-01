@@ -200,11 +200,30 @@ abstract class Field implements Exportable
         return $bool;
     }
 
+    /**
+     * @param $data
+     */
     public function setData($data)
     {
         $data = $this->setValue($data);
         $this->value = $data;
+    }
 
+    /**
+     * Set field data
+     * Data from _POST[{baseid}[$this->key]]
+     * Runs each time when data is set to the field
+     * Frontend/Backend
+     *
+     * @param mixed $data
+     *
+     * @since 0.1.0
+     * @return mixed
+     */
+    public function setValue($data)
+    {
+        $this->value = $data;
+        return $data;
     }
 
     /**
@@ -270,22 +289,6 @@ abstract class Field implements Exportable
         return $this->getArg('std', $return);
     }
 
-    /**
-     * Set field data
-     * Data from _POST[{baseid}[$this->key]]
-     * Runs each time when data is set to the field
-     * Frontend/Backend
-     *
-     * @param mixed $data
-     *
-     * @since 0.1.0
-     * @return mixed
-     */
-    public function setValue($data)
-    {
-        $this->value = $data;
-        return $data;
-    }
 
     /**
      * Get callback from callbacks arg
