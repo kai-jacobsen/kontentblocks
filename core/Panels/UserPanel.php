@@ -54,8 +54,8 @@ abstract class UserPanel extends AbstractPanel
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
         $this->user = $environment->userObj;
-        $this->fields = new StandardFieldController($args['baseId'], $this);
-        $this->model = new PanelModel($this->dataProvider->get($args['baseId']), $this);
+        $this->fields = new StandardFieldController($this->getBaseId(), $this);
+        $this->model = new PanelModel($this->dataProvider->get($this->getBaseId(), $this));
         $this->data = $this->model->export();
         $this->fields();
 
@@ -80,8 +80,8 @@ abstract class UserPanel extends AbstractPanel
 
     public function init()
     {
-        add_action("edit_user_profile_update", array($this, 'save'), 20);
-        add_action("personal_options_update", array($this, 'save'), 20);
+        add_action("edit_user_profile_update", array($this, 'saveCallback'), 20);
+        add_action("personal_options_update", array($this, 'saveCallback'), 20);
         add_action("edit_user_profile", array($this, 'form'), 20);
         add_action("show_user_profile", array($this, 'form'), 20);
         add_action('admin_footer', array($this, 'toJSON'), 5);
@@ -101,16 +101,6 @@ abstract class UserPanel extends AbstractPanel
         Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
     }
 
-    /**
-     *
-     */
-    public function save()
-    {
-        $old = $this->model->export();
-        $new = $this->fields->save($_POST[$this->baseId], $old);
-        $merged = Utilities::arrayMergeRecursive($new, $old);
-        $this->model->set($merged)->sync();
-    }
 
     /**
      * @return bool

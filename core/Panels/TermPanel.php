@@ -80,22 +80,6 @@ abstract class TermPanel extends AbstractPanel
         return wp_parse_args($args, $defaults);
     }
 
-    /**
-     * Auto setup args to class properties
-     * and look for optional method for each arg
-     * @param $args
-     */
-    public function setupArgs($args)
-    {
-        foreach ($args as $k => $v) {
-            if (method_exists($this, "set" . strtoupper($k))) {
-                $method = "set" . strtoupper($k);
-                $this->$method($v);
-            } else {
-                $this->$k = $v;
-            }
-        }
-    }
 
     abstract public function fields();
 
@@ -127,59 +111,6 @@ abstract class TermPanel extends AbstractPanel
         Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
     }
 
-
-    /**
-     * Callback handler
-     * @param $postId
-     */
-    public function saveCallback($postId)
-    {
-        $postData = Request::createFromGlobals();
-        $data = $postData->request->filter($this->baseId, null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        if (empty($data)) {
-            return;
-        }
-        $this->model->reset()->set($postData->get($this->baseId));
-        $this->save($postData, $postId);
-    }
-
-    /**
-     * @param Request $postData
-     * @param $postId
-     * @return mixed|void
-     */
-    public function save(Request $postData, $postId)
-    {
-        $old = $this->dataProvider->get($this->baseId);
-        $new = $this->fields->save($postData->request->get($this->baseId), $old);
-        $merged = Utilities::arrayMergeRecursive($new, $old);
-        $dataProvider = $this->dataProvider;
-        $this->model->set($merged)->sync();
-
-        if ($this->saveAsSingle) {
-            foreach ($new as $k => $v) {
-                if (empty($v)) {
-                    $dataProvider->delete($this->baseId . '_' . $k);
-                } else {
-                    $dataProvider->update($this->baseId . '_' . $k, $v);
-                }
-            }
-        }
-    }
-
-//    /**
-//     * Post Id not needed in this context
-//     * @param $termId
-//     * @return mixed|void
-//     */
-//    public function save($termId)
-//    {
-//        $this->dataProvider = DataProviderService::getTermProvider($termId);
-//        $old = $this->model->export();
-//        $new = $this->fields->save($_POST[$this->baseId], $old);
-//        $merged = Utilities::arrayMergeRecursive($new, $old);
-//        $this->model->set($merged)->sync();
-//    }
 
     /**
      * @param $termId

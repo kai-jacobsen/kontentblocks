@@ -9,6 +9,8 @@ use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Fields\StandardFieldController;
+use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class AbstractPanel
@@ -18,27 +20,26 @@ abstract class AbstractPanel implements EntityInterface
 {
 
     /**
-     * @var DataProviderInterface
-     */
-    protected $dataProvider;
-
-    /**
      * Form data
      * @var array
      */
     public $data = null;
-
     /**
      * @var string
      */
     public $type;
-
     /**
      * @var EntityModel
      */
     public $model;
-
-
+    /**
+     * @var StandardFieldController
+     */
+    public $fields;
+    /**
+     * @var DataProviderInterface
+     */
+    protected $dataProvider;
     /**
      * @var array
      */
@@ -49,12 +50,6 @@ abstract class AbstractPanel implements EntityInterface
      * @var string
      */
     protected $baseId;
-
-    /**
-     * @var StandardFieldController
-     */
-    public $fields;
-
 
     /**
      * @param $args
@@ -106,6 +101,43 @@ abstract class AbstractPanel implements EntityInterface
     public function getProperties()
     {
         // TODO: Implement getProperties() method.
+    }
+
+    /**
+     * Callback handler
+     */
+    public function saveCallback()
+    {
+        $postData = Request::createFromGlobals();
+        $data = $postData->request->filter($this->baseId, null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        if (empty($data)) {
+            return;
+        }
+        $this->model->reset()->set($postData->get($this->baseId));
+        $this->save($postData);
+    }
+
+    /**
+     * @param Request $postData
+     * @return mixed|void
+     */
+    public function save(Request $postData)
+    {
+        $old = $this->dataProvider->get($this->baseId);
+        $new = $this->fields->save($postData->request->get($this->baseId), $old);
+        $merged = Utilities::arrayMergeRecursive($new, $old);
+        $dataProvider = $this->dataProvider;
+        $this->model->set($merged)->sync();
+
+        if ($this->saveAsSingle) {
+            foreach ($new as $k => $v) {
+                if (empty($v)) {
+                    $dataProvider->delete($this->baseId . '_' . $k);
+                } else {
+                    $dataProvider->update($this->baseId . '_' . $k, $v);
+                }
+            }
+        }
     }
 
     /**

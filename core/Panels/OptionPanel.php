@@ -7,6 +7,7 @@ use Kontentblocks\Customizer\CustomizerIntegration;
 use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class OptionsPanel
@@ -80,22 +81,6 @@ abstract class OptionPanel extends AbstractPanel
         return wp_parse_args($args, $defaults);
     }
 
-    /**
-     * Auto setup args to class properties
-     * and look for optional method for each arg
-     * @param $args
-     */
-    public function setupArgs($args)
-    {
-        foreach ($args as $k => $v) {
-            if (method_exists($this, "set" . strtoupper($k))) {
-                $method = "set" . strtoupper($k);
-                $this->$method($v);
-            } else {
-                $this->$k = $v;
-            }
-        }
-    }
 
     abstract public function fields();
 
@@ -165,21 +150,20 @@ abstract class OptionPanel extends AbstractPanel
     public function observeSaveRequest()
     {
 
-        if (isset($_POST[$this->menu['slug'] . '_save']) && filter_var(
-                $_POST[$this->menu['slug'] . '_save'],
-                FILTER_VALIDATE_BOOLEAN
-            )
-        ) {
-            $this->save();
+        $postData = Request::createFromGlobals();
+        $data = $postData->request->filter($this->menu['slug'] . '_save', false, FILTER_VALIDATE_BOOLEAN);
+        if ($data) {
+            $this->save($postData);
         }
 
     }
 
     /**
      * Post Id not needed in this context
+     * @param Request $postData
      * @return mixed|void
      */
-    public function save()
+    public function save(Request $postData)
     {
         $old = $this->model->export();
         $new = $this->fields->save($_POST[$this->baseId], $old);
