@@ -219,7 +219,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
             'postId' => get_the_ID(),
             'parentObjectId' => get_the_ID(),
         );
-
         Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
     }
 
