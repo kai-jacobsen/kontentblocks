@@ -1,5 +1,4 @@
 //KB.Backbone.AreaView
-var AreaLayout = require('frontend/Views/AreaLayout');
 var ModuleBrowser = require('frontend/ModuleBrowser/ModuleBrowserExt');
 var Config = require('common/Config');
 var Notice = require('common/Notice');
@@ -29,11 +28,6 @@ module.exports = Backbone.View.extend({
     this.$('.kb-area__empty-placeholder').remove();
   },
   setupUi: function () {
-    this.Layout = new AreaLayout({
-      model: new Backbone.Model(this.renderSettings),
-      AreaView: this
-    });
-
     // Sortable
     if (this.model.get('sortable')) {
       this.setupSortables();
@@ -67,109 +61,41 @@ module.exports = Backbone.View.extend({
   },
   setupSortables: function () {
     var that = this;
-    if (this.Layout.hasLayout) {
-      this.$el.sortable(
-        {
-          handle: ".kb-module-control--move",
-          items: ".kb-wrap",
-          helper: "clone",
-          opacity: 0.5,
-          forcePlaceholderSize: true,
-          delay: 150,
-          placeholder: "kb-front-sortable-placeholder",
-          start: function (e, ui) {
-            //ui.placeholder.width('100%');
-            that.isSorting = true;
-
-            if (ui.helper.hasClass('ui-draggable-dragging')) {
-              ui.helper.addClass('kb-wrap');
-            }
-            ui.placeholder.attr('class', ui.helper.attr('class'));
-            ui.placeholder.addClass('kb-front-sortable-placeholder');
-            ui.placeholder.append("<div class='module kb-dummy'></div>");
-            jQuery('.module', ui.helper).addClass('ignore');
-            ui.helper.addClass('ignore');
-            that.Layout.applyClasses();
-            that.Layout.render(ui);
-          },
-          receive: function (e, ui) {
-            // model is set in the sidebar areaList single module item
-            var module = ui.item.data('module');
-            // callback is handled by that view object
+    this.$el.sortable(
+      {
+        handle: ".kb-module-control--move",
+        items: ".module",
+        helper: "clone",
+        cursorAt: {
+          top: 5,
+          left: 5
+        },
+        delay: 150,
+        forceHelperSize: true,
+        forcePlaceholderSize: true,
+        placeholder: "kb-front-sortable-placeholder",
+        start: function (e, ui) {
+          that.isSorting = true;
+        },
+        receive: function (e, ui) {
+          // model is set in the sidebar areaList single module item
+          var module = ui.item.data('module');
+          // callback is handled by that view object
+          that.isSorting = false;
+          module.create(ui);
+        },
+        stop: function () {
+          if (that.isSorting) {
             that.isSorting = false;
-            module.create(ui);
-          },
-          beforeStop: function (e, ui) {
-            that.Layout.applyClasses();
-            jQuery('.ignore', ui.helper).removeClass('ignore');
-          },
-          stop: function (e, ui) {
-            var serializedData = {};
-            that.isSorting = false;
-            serializedData[that.model.get('id')] = that.$el.sortable('serialize', {
-              attribute: 'rel'
-            });
-            return Ajax.send({
-              action: 'resortModules',
-              data: serializedData,
-              _ajax_nonce: Config.getNonce('update')
-            }, function () {
-              Notice.notice('Order was updated successfully', 'success');
-              that.Layout.render(ui);
-            }, that);
-          },
-          change: function (e, ui) {
-            that.Layout.applyClasses();
-            that.Layout.render(ui);
-          },
-          over: function (ui) {
-            that.Layout.applyClasses();
-            that.Layout.render(ui);
+            that.resort(that.model)
+            KB.Events.trigger('content.change');
           }
-        });
-    } else {
-      this.$el.sortable(
-        {
-          handle: ".kb-module-control--move",
-          items: ".module",
-          helper: "clone",
-          cursorAt: {
-            top: 5,
-            left: 5
-          },
-          delay: 150,
-          forceHelperSize: true,
-          forcePlaceholderSize: true,
-          placeholder: "kb-front-sortable-placeholder",
-          start: function (e, ui) {
-            that.isSorting = true;
-          },
-          receive: function (e, ui) {
-            // model is set in the sidebar areaList single module item
-            var module = ui.item.data('module');
-            // callback is handled by that view object
-            that.isSorting = false;
-            module.create(ui);
-          },
-          stop: function () {
-            if (that.isSorting) {
-              that.isSorting = false;
-              that.resort(that.model)
-              KB.Events.trigger('content.change');
-            }
-          },
-          change: function () {
-            that.Layout.applyClasses();
-          }
-        });
-    }
+        },
+        change: function () {
+          that.applyClasses();
+        }
+      });
   },
-  changeLayout: function (l) {
-    this.Layout.model.set('layout', l);
-    this.$el.sortable('destroy');
-    this.setupSortables();
-  }
-  ,
   removeModule: function (ModuleView) {
     var id = ModuleView.model.get('mid');
     if (this.attachedModuleViews[id]) {
@@ -195,6 +121,42 @@ module.exports = Backbone.View.extend({
       Notice.notice('Order was updated successfully', 'success');
       area.trigger('area.resorted');
     }, null);
+  },
+  applyClasses: function () {
+    var $parent, prev;
+    var $modules = this.AreaView.$el.find('.module');
+    $modules.removeClass('first-module last-module repeater');
+    for (var i = 0; i < $modules.length; i++) {
+      var View = jQuery($modules[i]).data('ModuleView');
+      if (_.isUndefined(View)) {
+        continue;
+      }
+
+      if (i === 0) {
+        View.$el.addClass('first-module');
+      }
+
+      if (i === $modules.length - 1) {
+        View.$el.addClass('last-module');
+      }
+
+      // add repeater class if current module equals previous one in type
+      if (prev && View.model.get('settings').id === prev) {
+        View.$el.addClass('repeater');
+      }
+
+      // cache for next iteration for comparison
+      prev = View.model.get('settings').id;
+
+      /**
+       * copy rel attribute to wrapper, which is the actual sortable element
+       */
+      $parent = View.$el.parent();
+      if ($parent.hasClass('kb-wrap')) {
+        $parent.attr('rel', View.$el.attr('rel'));
+      }
+
+    }
   }
 
 
