@@ -3,7 +3,6 @@
 namespace Kontentblocks\Backend\Renderer;
 
 use Kontentblocks\Areas\AreaProperties;
-use Kontentblocks\Areas\AreaSettingsMenu;
 use Kontentblocks\Common\Interfaces\RendererInterface;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
@@ -47,11 +46,7 @@ class AreaBackendRenderer implements RendererInterface
      */
     protected $attachedModules;
 
-    /**
-     * Settings menu object
-     * @var \Kontentblocks\Areas\AreaSettingsMenu
-     */
-    protected $settingsMenu;
+  
 
     /**
      * Categories
@@ -83,9 +78,6 @@ class AreaBackendRenderer implements RendererInterface
         //actual stored modules for this area
         $moduleRepository = $environment->getModuleRepository();
         $this->attachedModules = $moduleRepository->getModulesForArea($area->id);
-
-        // custom settins for this area
-        $this->settingsMenu = new AreaSettingsMenu($this->area, $this->environment);
 
         $this->cats = Utilities::setupCats();
 
@@ -119,8 +111,7 @@ class AreaBackendRenderer implements RendererInterface
             'edit-screen/area-header.twig',
             array(
                 'area' => $this->area,
-                'headerClass' => $headerClass,
-                'settingsMenu' => $this->settingsMenu
+                'headerClass' => $headerClass
             )
         );
         $tpl->render(true);
