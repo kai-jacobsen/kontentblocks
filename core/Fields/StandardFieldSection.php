@@ -78,6 +78,11 @@ class StandardFieldSection implements Exportable
      */
     private $priorityCount = 10;
 
+    /**
+     * @var string
+     */
+    public $uid;
+
 
     /**
      * Constructor
@@ -92,8 +97,10 @@ class StandardFieldSection implements Exportable
         $this->args = $this->prepareArgs($args);
         $this->controller = $controller;
         $this->baseId = $controller->getId();
+        $this->uid = $this->prepareUid();
         //shorthand
         $this->entity = $controller->getEntity();
+        
     }
 
     /**
@@ -104,6 +111,13 @@ class StandardFieldSection implements Exportable
     {
         return Utilities::arrayMergeRecursive($args, self::$defaults);
 
+    }
+
+    private function prepareUid()
+    {
+        $args = $this->args;
+        $args['salt'] = $this->baseId;
+        return 'kbsec-' . md5(json_encode($args));
     }
 
     /**
@@ -121,8 +135,8 @@ class StandardFieldSection implements Exportable
         $subkey = null;
 
 
-        if (isset($args['adminOnly']) && ($args['adminOnly'] === true) ){
-            if (!is_admin()){
+        if (isset($args['adminOnly']) && ($args['adminOnly'] === true)) {
+            if (!is_admin()) {
                 return $this;
             }
         }
@@ -139,7 +153,7 @@ class StandardFieldSection implements Exportable
                     }
                     $args['arrayKey'] = $subkey = $out[1];
                 }
-            } else if (isset($args['arrayKey'])){
+            } else if (isset($args['arrayKey'])) {
                 $subkey = $args['arrayKey'];
             }
 

@@ -13,8 +13,6 @@ module.exports = Backbone.View.extend({
         that.$el.tabs("option", "active", $tabItems.index($item));
         that.$('.kb-module-ui__sortable').sortable("refresh");
       }
-
     });
-
   }
 });

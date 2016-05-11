@@ -2256,7 +2256,6 @@ module.exports = Backbone.View.extend({
     'click .flexible-fields--js-trash': 'deleteItem'
   },
   toggleItem: function () {
-    console.log(this);
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
       KB.Events.trigger('modal.recalibrate');
     });
@@ -3036,7 +3035,6 @@ module.exports = BaseView.extend({
     var that = this;
     var id = attachment.get('id');
     var value = this.prepareValue(attachment);
-    console.log(value);
     that.model.set('value', value);
     var entityData = _.clone(this.model.get('ModuleModel').get('entityData'));
     var path = this.model.get('kpath');
@@ -3838,7 +3836,6 @@ module.exports = BaseView.extend({
     });
   },
   postRender: function () {
-    console.log(this.model);
     var name = this.model.get('baseId') + '[' + this.model.get('index') + ']' + '[' + this.model.get('primeKey') + ']';
     var edId = this.model.get('fieldId') + '_' + this.model.get('key') + '_editor_' + this.model.get('index');
     this.$editorWrap = jQuery('.kb-ff-editor-wrapper-' + this.model.get('index') + '-' + this.model.get('key'), this.$el);
@@ -6745,7 +6742,6 @@ module.exports = Backbone.View.extend({
   getClean: function () {
     this.$el.removeClass('isDirty');
     this.trigger('view.became.clean', this);
-    console.log('view clean');
   },
   modelChange: function () {
     this.getDirty();

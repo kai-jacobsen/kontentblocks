@@ -137,7 +137,6 @@ module.exports = BaseView.extend({
     var that = this;
     var id = attachment.get('id');
     var value = this.prepareValue(attachment);
-    console.log(value);
     that.model.set('value', value);
     var entityData = _.clone(this.model.get('ModuleModel').get('entityData'));
     var path = this.model.get('kpath');

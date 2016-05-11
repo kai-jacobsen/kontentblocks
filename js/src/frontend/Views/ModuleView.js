@@ -127,7 +127,6 @@ module.exports = Backbone.View.extend({
   getClean: function () {
     this.$el.removeClass('isDirty');
     this.trigger('view.became.clean', this);
-    console.log('view clean');
   },
   modelChange: function () {
     this.getDirty();

@@ -16,4 +16,24 @@
     margin-bottom: 20px;
   }
 
+  .kb-field-section-actions{
+    display: inline-block;
+    cursor: pointer;
+
+    .kb-toggle{
+      vertical-align: middle;
+      position: relative;
+      top:5px;
+    }
+
+  }
+
+  .kb-field-section h2{
+    display: inline-block;
+  }
+
+  .kb-field-section{
+    cursor: pointer;
+  }
+
 }

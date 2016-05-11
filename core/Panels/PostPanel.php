@@ -154,7 +154,8 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
     {
         $class = (is_array($this->metaBox)) ? 'kb-postbox' : '';
         $elementId = 'kbp-' . $this->getBaseId() . '-container';
-        echo "<div id='{$elementId}' data-kbpuid='{$this->uid}' class='postbox {$class} {$this->fields->getFieldRenderClass()->getIdString()}'>
+        $renderId = $this->fields->getFieldRenderClass()->getIdString();
+        echo "<div id='{$elementId}' data-kbpuid='{$this->uid}' class='postbox {$class} {$renderId}' data-kb-field-renderer='{$renderId}'>
                 <div class='kb-custom-wrapper'>
                 <div class='inside'>";
     }
@@ -217,7 +218,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
             'type' => 'static',
             'settings' => $this->args,
             'postId' => get_the_ID(),
-            'parentObjectId' => get_the_ID(),
+            'parentObjectId' => get_the_ID()
         );
         Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
     }
