@@ -3167,10 +3167,11 @@ module.exports = BaseView.extend({
     // Build HTML
     href = attrs.href;
     // Clear textarea
-    jQuery(textarea).empty();
+    // jQuery(textarea).empty();
+    window._kbLink.$input.empty();
 
     //Append the Url to the textarea
-    textarea.value = href;
+    window._kbLink.$input.val(href);
 
     window._kbLink.trigger('update', title, href);
     window._kbLink.$text.val(title);
