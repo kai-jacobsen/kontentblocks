@@ -231,7 +231,6 @@ class ModuleGlobalModuleProxy extends Module
                 $moduleProperties->setId($moduleProperties->parentObject->post_name);
             }
         }
-
     }
 
 
@@ -252,7 +251,6 @@ class ModuleGlobalModuleProxy extends Module
      */
     public function form()
     {
-
         $masterId = $this->properties->parentObjectId;
         $translated = false;
         $icl = get_post_meta(get_the_ID(), '_icl_lang_duplicate_of', true);
@@ -292,7 +290,6 @@ class ModuleGlobalModuleProxy extends Module
      */
     public function render()
     {
-
     }
 
     /**
