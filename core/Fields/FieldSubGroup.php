@@ -49,9 +49,10 @@ class FieldSubGroup implements Exportable
      *
      * @param string $key
      */
-    public function __construct($key)
+    public function __construct($key, $args = array())
     {
         $this->key = $key;
+        $this->args = $args;
     }
 
     /**
@@ -188,6 +189,11 @@ class FieldSubGroup implements Exportable
      */
     public function getArg($arg, $default = false)
     {
+
+        if (isset($this->args[$arg])){
+            return $this->args[$arg];
+        }
+
         return '';
     }
 

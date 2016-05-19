@@ -1,0 +1,36 @@
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    {% if (Field.getArg('options')) %}
+
+    {% else %}
+        <p>Please set options to show</p>
+    {% endif %}
+
+    <select data-kftype="imageselect" id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName() }}'>
+        {% if (Field.getArg('empty', true)) %}
+            <option value='' name=''>Bitte wählen</option>
+        {% endif %}
+
+        {% for o in Field.getArg('options') %}
+            <option data-img-src="{{ o.image }}" {% if (Field.getValue == o.value) %} selected="selected" {% endif %}
+                    value='{{ o.value|escape('html_attr') }}'>{{ o.name }}</option>
+        {% endfor %}
+    </select>
+
+    <style>
+
+        #{{ Field.uniqueId }}
+        li {
+            max-width: {{ Field.getArg('width', 100) }}px;
+            max-height: {{ Field.getArg('height', 100) }}px;
+        }
+
+
+        #{{ Field.uniqueId }}
+        img {
+            max-width: 100%;
+        }
+
+    </style>
+
+{% endblock %}

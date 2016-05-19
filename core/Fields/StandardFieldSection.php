@@ -51,38 +51,31 @@ class StandardFieldSection implements Exportable
      * @var EntityInterface
      */
     public $entity;
-
-
+    /**
+     * @var string
+     */
+    public $uid;
     /**
      * Array of registered fields for this section
      * @var array
      */
     protected $fields;
-
     /**
      * Counter for actual fields to render
      * @var int
      */
     protected $numberOfVisibleFields = 0;
-
     /**
      * Counter for total number of added fields in this section
      * @var int
      */
 
     protected $numberOfFields = 0;
-
     /**
      * ordering index
      * @var int
      */
     private $priorityCount = 10;
-
-    /**
-     * @var string
-     */
-    public $uid;
-
 
     /**
      * Constructor
@@ -100,7 +93,7 @@ class StandardFieldSection implements Exportable
         $this->uid = $this->prepareUid();
         //shorthand
         $this->entity = $controller->getEntity();
-        
+
     }
 
     /**
@@ -155,12 +148,11 @@ class StandardFieldSection implements Exportable
                 }
             } else if (isset($args['arrayKey'])) {
                 $subkey = $args['arrayKey'];
+
             }
 
-
             if (!isset($args['priority'])) {
-                $args['priority'] = $this->priorityCount;
-                $this->priorityCount += 5;
+                $args['priority'] = $this->getPriorityCount();
             }
 
             /** @var \Kontentblocks\Fields\FieldRegistry $registry */
@@ -214,6 +206,14 @@ class StandardFieldSection implements Exportable
         return isset($this->fields[$key]);
     }
 
+    private function getPriorityCount()
+    {
+        $prio = $this->priorityCount;
+        $this->priorityCount += 5;
+        return $prio;
+
+    }
+
     /**
      * Set visibility of field based on environment vars given by the Panel
      * Panels have no envVars yet so all fields are visible
@@ -239,7 +239,7 @@ class StandardFieldSection implements Exportable
     {
         if (!$this->fieldExists($args['arrayKey'])) {
             /** @var FieldSubGroup $fieldArray */
-            $fieldArray = $this->fields[$args['arrayKey']] = new FieldSubGroup($args['arrayKey']);
+            $fieldArray = $this->fields[$args['arrayKey']] = new FieldSubGroup($args['arrayKey'], $args);
         } else {
             $fieldArray = $this->fields[$args['arrayKey']];
         }
@@ -284,6 +284,26 @@ class StandardFieldSection implements Exportable
         uasort($this->fields, create_function('$a,$b', $code));
 
     }
+//
+//    /**
+//     * @param $key
+//     * @param array $args
+//     * @return FieldSubGroup|mixed
+//     */
+//    public function addGroup($key, $args = array())
+//    {
+//
+//        if (!isset($args['priority']) || is_numeric($args['priority'])) {
+//            $args['priority'] = $this->getPriorityCount();
+//        }
+//
+//        if (!$this->fieldExists($key)) {
+//            /** @var FieldSubGroup $fieldArray */
+//            return $this->fields[$key] = new FieldSubGroup($key, $args);
+//        } else if (is_a($this->fields[$key], '\Kontentblocks\Fields\FieldSubGroup')) {
+//            return $this->fields[$key];
+//        }
+//    }
 
     /**
      * Wrapper method
