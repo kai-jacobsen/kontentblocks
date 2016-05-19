@@ -102,7 +102,7 @@ class ModuleWorkshop
             $attrs['parentObjectId']
         ) : null;
 
-
+        
         return $this->clean( $attrs );
     }
 
