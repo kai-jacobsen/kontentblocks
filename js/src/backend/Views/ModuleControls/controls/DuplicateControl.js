@@ -36,20 +36,27 @@ module.exports = BaseView.extend({
     }
   },
   success: function (res) {
-    var m;
+    var module;
     var that = this;
     if (!res.success) {
       Notice.notice('Request Error', 'error');
       return false;
     }
     this.model.Area.View.modulesList.append(res.data.html);
-    var ModuleModel = KB.ObjectProxy.add(KB.Modules.add(res.data.module));
+
+    module = res.data.module;
+
+    if (module.mid) {
+      module.id = module.mid; // blame Backbone
+    }
+
+    var ModuleModel = KB.ObjectProxy.add(KB.Modules.add(module));
     //var ModuleView = KB.Views.Modules.get(res.data.id);
     this.model.Area.View.attachModuleView(ModuleModel);
     // update the reference counter, used as base number
     // for new modules
     Notice.notice('Module Duplicated', 'success');
-    _.defer(function(){
+    _.defer(function () {
       that.parseAdditionalJSON(res.data.json);
       UI.repaint('#' + res.data.module.mid);
     })

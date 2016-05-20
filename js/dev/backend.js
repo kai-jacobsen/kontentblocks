@@ -1273,20 +1273,27 @@ module.exports = BaseView.extend({
     }
   },
   success: function (res) {
-    var m;
+    var module;
     var that = this;
     if (!res.success) {
       Notice.notice('Request Error', 'error');
       return false;
     }
     this.model.Area.View.modulesList.append(res.data.html);
-    var ModuleModel = KB.ObjectProxy.add(KB.Modules.add(res.data.module));
+
+    module = res.data.module;
+
+    if (module.mid) {
+      module.id = module.mid; // blame Backbone
+    }
+
+    var ModuleModel = KB.ObjectProxy.add(KB.Modules.add(module));
     //var ModuleView = KB.Views.Modules.get(res.data.id);
     this.model.Area.View.attachModuleView(ModuleModel);
     // update the reference counter, used as base number
     // for new modules
     Notice.notice('Module Duplicated', 'success');
-    _.defer(function(){
+    _.defer(function () {
       that.parseAdditionalJSON(res.data.json);
       UI.repaint('#' + res.data.module.mid);
     })
@@ -3320,7 +3327,6 @@ module.exports = Backbone.Collection.extend({
   },
   model: FieldControlModel,
   addToModules: function (model) {
-
     if (model.ModuleModel) {
       var cid = model.ModuleModel.id;
       if (!this._byModule[cid]) {
@@ -6800,7 +6806,7 @@ var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
-  return "\n    <div class='kb-field--link-meta'><label for='"
+  return "    <div class='kb-field--link-meta'><label for='"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1), depth0))
     + "-linktext'>"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.linktext : stack1), depth0))
@@ -6837,7 +6843,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "[link]\"\n           value=\""
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.link : stack1), depth0))
     + "\">\n    <a class='button kb-js-add-link'>Add Link</a>\n"
-    + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.linktitle : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.linktext : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "\n"
     + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.linktitle : stack1),{"name":"if","hash":{},"fn":this.program(3, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "    <p class=\"description\">"

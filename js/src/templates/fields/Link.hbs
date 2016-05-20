@@ -6,8 +6,7 @@
            name="{{ fieldName model.baseId model.index model.primeKey }}[link]"
            value="{{ model.value.link }}">
     <a class='button kb-js-add-link'>Add Link</a>
-    {{#if model.linktitle }}
-
+    {{#if model.linktext }}
     <div class='kb-field--link-meta'><label for='{{ model.index }}-linktext'>{{ i18n.linktext }}</label><br>
         <input
                 type='text' data-kbf-link-linktext
