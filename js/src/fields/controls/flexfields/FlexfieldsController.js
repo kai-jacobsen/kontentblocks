@@ -37,7 +37,6 @@ module.exports = Backbone.View.extend({
           return;
         }
 
-
         var item = this.factory.factorNewItem(data[dataobj['_meta'].uid], dataobj['_meta'].uid, dataobj['_meta'].title);
         var view = new this.Renderer({
           controller: this,
@@ -81,7 +80,6 @@ module.exports = Backbone.View.extend({
   },
   addItem: function () {
     var item = this.factory.factorNewItem();
-
     var view = new this.Renderer({
       controller: this,
       model: new Backbone.Model(item)

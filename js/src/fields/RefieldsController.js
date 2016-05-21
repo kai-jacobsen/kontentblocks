@@ -11,6 +11,7 @@ Fields.registerObject('cropimage', require('./controls/cropimage'));
 Fields.registerObject('link', require('./controls/link'));
 Fields.registerObject('textarea', require('./controls/textarea'));
 Fields.registerObject('text', require('./controls/text'));
+Fields.registerObject('text-multiple', require('./controls/text-multiple'));
 Fields.registerObject('tagsinput', require('./controls/tagsinput'));
 Fields.registerObject('multiselect', require('./controls/multiselect'));
 Fields.registerObject('editor', require('./controls/editor'));

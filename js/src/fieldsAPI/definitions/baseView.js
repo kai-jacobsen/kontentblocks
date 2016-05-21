@@ -44,6 +44,7 @@ module.exports = Backbone.View.extend({
     return concat.join('.');
   },
   kbfuid: function () {
-    return this.model.get('index') + this.model.get('fieldId') + this.model.get('primeKey') + this.model.get('type');
+    var index = this.model.get('index') || '';
+    return index + this.model.get('fieldId') + this.model.get('primeKey') + this.model.get('type');
   }
 });
