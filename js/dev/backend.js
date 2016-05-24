@@ -5491,10 +5491,6 @@ module.exports = Backbone.View.extend({
     this.bindHandlers();
     this.initialSetup();
   },
-
-  deleteItem: function (e) {
-    console.log(e.currentTarget);
-  },
   initialSetup: function () {
     var data = this.model.get('value');
     if (!_.isArray(data)) {
@@ -5507,6 +5503,7 @@ module.exports = Backbone.View.extend({
   },
   createElement: function (value) {
     var val = value || '';
+    var that = this;
     var itemData = _.extend(this.model.toJSON(), {
       value: val,
       arrayKey: this.model.get('arrayKey'),
@@ -5517,10 +5514,14 @@ module.exports = Backbone.View.extend({
     });
     var view = KB.FieldsAPI.getRefByType('text-multiple', itemData);
     this.$list.append(view.render());
+    view.$('input').focus();
     view.$el.on('click', '[data-kbfaction="delete"]', function () {
       view.$el.off();
       view.remove();
-    })
+      that.handleLimit();
+    });
+    this.handleLimit();
+
   },
   setupElements: function () {
     this.$list = this.$('[data-kfel="list"]');
@@ -5532,6 +5533,19 @@ module.exports = Backbone.View.extend({
     this.$button.on('click', function () {
       that.createElement();
     });
+  },
+  handleLimit: function () {
+    var limit = this.model.get('limit');
+    if (limit) {
+      var items = jQuery('.kb-field--text-multiple-item', this.$list).length;
+
+      if (items >= limit) {
+        this.$button.hide();
+      } else {
+        this.$button.show();
+      }
+
+    }
   }
 });
 },{}],96:[function(require,module,exports){

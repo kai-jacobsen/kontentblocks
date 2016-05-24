@@ -88,6 +88,8 @@ class FieldRegistry
         if (isset( $this->fields[$type] )) {
             return new $this->fields[$type]( $baseId, $subkey, $key, $args );
         }
+        
+        
         return null;
     }
 

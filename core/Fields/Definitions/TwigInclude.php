@@ -47,7 +47,6 @@ Class TwigInclude extends Field
             $file = $this->getArg('twigfile');
             $basedir = dirname($file);
             $basename = basename($file);
-
             Twig::setPath($basedir);
             $this->setArgs(array('twigfile' => $basename));
         }
