@@ -30,9 +30,9 @@
             {% endif %}
 
             {% for o in Field.getArg('options') %}
-                <option {% if o.value in (Field.getValue()) %} selected="selected" {% endif %}
+                <option {% if o.value in (Field.getValue()) %}  selected="selected" {% endif %}
                         {% if (o.disabled) %} disabled="disabled" {% endif %}
-                        value='{{ o.value|escape('html_attr') }}'>{{ o.name }}</option>
+                        value='{{ o.value|escape('html_attr') }}' class="{{ o.class }}">{{ o.name }}</option>
             {% endfor %}
         </select>
     {% endif %}

@@ -4890,7 +4890,7 @@ Date.patterns = {
             if ($elm.is("option")) {
                 var value = $elm.val(), text = that.options.textTemplate($elm), selected = $elm.prop("selected"), style = sprintf('style="%s"', this.options.styler(value)), $el;
                 disabled = groupDisabled || $elm.prop("disabled");
-                $el = $([ sprintf('<li class="%s %s" %s %s>', multiple, classes, title, style), sprintf('<label class="%s">', disabled ? "disabled" : ""), sprintf('<input type="%s" %s%s%s%s>', type, this.selectItemName, selected ? ' checked="checked"' : "", disabled ? ' disabled="disabled"' : "", sprintf(' data-group="%s"', group)), text, "</label>", "</li>" ].join(""));
+                $el = $([ sprintf('<li class="%s %s" %s %s>', multiple, classes, title, style), sprintf('<label class="%s">', disabled ? "disabled" : ""), sprintf('<input type="%s" %s%s%s%s>', type, this.selectItemName, selected ? ' checked="checked"' : "", disabled ? ' disabled="disabled"' : "", sprintf(' data-group="%s"', group)), sprintf("<span>%s</span>", text), "</label>", "</li>" ].join(""));
                 $el.find("input").val(value);
                 return $el;
             }
@@ -5239,10 +5239,10 @@ Date.patterns = {
         addTitle: false,
         filterAcceptOnEnter: false,
         hideOptgroupCheckboxes: false,
-        selectAllText: "alle auswählen",
-        allSelected: "alle ausgewählt",
-        countSelected: "# of % ausgewählt",
-        noMatchesFound: "keine Treffer",
+        selectAllText: "Select all",
+        allSelected: "All selected",
+        countSelected: "# of % selected",
+        noMatchesFound: "No matches found",
         styler: function() {
             return false;
         },

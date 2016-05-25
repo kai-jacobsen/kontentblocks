@@ -253,6 +253,7 @@
         disabled,
         type = this.options.single ? 'radio' : 'checkbox';
 
+
       if ($elm.is('option')) {
         var value = $elm.val(),
           text = that.options.textTemplate($elm),
@@ -270,7 +271,7 @@
             selected ? ' checked="checked"' : '',
             disabled ? ' disabled="disabled"' : '',
             sprintf(' data-group="%s"', group)),
-          text,
+          sprintf('<span>%s</span>', text),
           '</label>',
           '</li>'
         ].join(''));
@@ -736,10 +737,10 @@
     filterAcceptOnEnter: false,
     hideOptgroupCheckboxes: false,
 
-    selectAllText: 'alle auswählen',
-    allSelected: 'alle ausgewählt',
-    countSelected: '# of % ausgewählt',
-    noMatchesFound: 'keine Treffer',
+    selectAllText: 'Select all',
+    allSelected: 'All selected',
+    countSelected: '# of % selected',
+    noMatchesFound: 'No matches found',
 
     styler: function () {
       return false;

@@ -3808,7 +3808,6 @@ module.exports = Backbone.View.extend({
       } else {
         this.$button.show();
       }
-
     }
   }
 });
