@@ -2,6 +2,7 @@
 var Notice = require('common/Notice');
 var tplSingleToggleBox = require('templates/fields/FlexibleFields/single-toggle-box.hbs');
 var Handlebars = require('handlebars');
+var TinyMCE = require('common/TinyMCE');
 module.exports = Backbone.View.extend({
   tagName: 'li',
   className: 'kb-flexible-fields--item-wrapper',
@@ -16,6 +17,14 @@ module.exports = Backbone.View.extend({
   },
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
+      jQuery(this).toggleClass('kb-togglebox-open');
+
+      if (jQuery(this).hasClass('kb-togglebox-open')){
+        TinyMCE.removeEditors(jQuery(this));
+        TinyMCE.restoreEditors(jQuery(this));
+
+      }
+
       KB.Events.trigger('modal.recalibrate');
     });
   },

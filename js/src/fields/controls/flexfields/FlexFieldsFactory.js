@@ -6,7 +6,8 @@ module.exports = Backbone.View.extend({
   },
   factorNewItem: function (data, uid, title) {
     var itemId = uid || _.uniqueId('ff2');
-    title = title || prompt("Enter a title : ", itemId);
+    var text = this.model.get('newitemtext') || 'Enter a title : ';
+    title = title || prompt(text, '');
 
     var sections = _.clone(this.sections);
     _.each(sections, function (section) {

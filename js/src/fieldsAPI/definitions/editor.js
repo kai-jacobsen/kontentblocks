@@ -15,7 +15,7 @@ module.exports = BaseView.extend({
     this.index = index;
     return this.template({
       config: this.config,
-      baseId: this.baseId,
+      baseId: this.baseId,  
       index: index,
       model: this.model.toJSON()
     });

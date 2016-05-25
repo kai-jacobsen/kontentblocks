@@ -811,15 +811,15 @@ module.exports =
           KB.Events.trigger('KB::tinymce.new-editor', ed);
         });
         ed.on('change', function () {
-          var $module, moduleView;
-          if (!ed.module) {
-            $module = jQuery(ed.editorContainer).closest('.kb-module');
-            ed.module = KB.Views.Modules.get($module.attr('id'));
-          }
-
-          if (ed.module) {
-            ed.module.$el.trigger('tinymce.change');
-          }
+          // var $module, moduleView;
+          // if (!ed.module) {
+          //   $module = jQuery(ed.editorContainer).closest('.kb-module');
+          //   ed.module = KB.Views.Modules.get($module.attr('id'));
+          // }
+          //
+          // if (ed.module) {
+          //   ed.module.$el.trigger('tinymce.change');
+          // }
 
         });
       };
@@ -2097,7 +2097,8 @@ module.exports = Backbone.View.extend({
   },
   factorNewItem: function (data, uid, title) {
     var itemId = uid || _.uniqueId('ff2');
-    title = title || prompt("Enter a title : ", itemId);
+    var text = this.model.get('newitemtext') || 'Enter a title : ';
+    title = title || prompt(text, '');
 
     var sections = _.clone(this.sections);
     _.each(sections, function (section) {
@@ -2240,6 +2241,7 @@ module.exports = ToggleBoxItem.extend({
 var Notice = require('common/Notice');
 var tplSingleToggleBox = require('templates/fields/FlexibleFields/single-toggle-box.hbs');
 var Handlebars = require('handlebars');
+var TinyMCE = require('common/TinyMCE');
 module.exports = Backbone.View.extend({
   tagName: 'li',
   className: 'kb-flexible-fields--item-wrapper',
@@ -2254,6 +2256,14 @@ module.exports = Backbone.View.extend({
   },
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
+      jQuery(this).toggleClass('kb-togglebox-open');
+
+      if (jQuery(this).hasClass('kb-togglebox-open')){
+        TinyMCE.removeEditors(jQuery(this));
+        TinyMCE.restoreEditors(jQuery(this));
+
+      }
+
       KB.Events.trigger('modal.recalibrate');
     });
   },
@@ -2351,7 +2361,7 @@ module.exports = Backbone.View.extend({
     });
   }
 });
-},{"common/Notice":14,"handlebars":182,"templates/fields/FlexibleFields/single-toggle-box.hbs":137}],38:[function(require,module,exports){
+},{"common/Notice":14,"common/TinyMCE":18,"handlebars":182,"templates/fields/FlexibleFields/single-toggle-box.hbs":137}],38:[function(require,module,exports){
 var BaseView = require('fields/FieldControlBaseView');
 var GalleryController = require('./gallery/GalleryController');
 module.exports = BaseView.extend({
@@ -3944,7 +3954,7 @@ module.exports = BaseView.extend({
     this.index = index;
     return this.template({
       config: this.config,
-      baseId: this.baseId,
+      baseId: this.baseId,  
       index: index,
       model: this.model.toJSON()
     });

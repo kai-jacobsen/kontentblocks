@@ -79,15 +79,15 @@ module.exports =
           KB.Events.trigger('KB::tinymce.new-editor', ed);
         });
         ed.on('change', function () {
-          var $module, moduleView;
-          if (!ed.module) {
-            $module = jQuery(ed.editorContainer).closest('.kb-module');
-            ed.module = KB.Views.Modules.get($module.attr('id'));
-          }
-
-          if (ed.module) {
-            ed.module.$el.trigger('tinymce.change');
-          }
+          // var $module, moduleView;
+          // if (!ed.module) {
+          //   $module = jQuery(ed.editorContainer).closest('.kb-module');
+          //   ed.module = KB.Views.Modules.get($module.attr('id'));
+          // }
+          //
+          // if (ed.module) {
+          //   ed.module.$el.trigger('tinymce.change');
+          // }
 
         });
       };
