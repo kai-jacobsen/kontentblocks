@@ -29,7 +29,7 @@ module.exports = Backbone.View.extend({
     });
     var view = KB.FieldsAPI.getRefByType('text-multiple', itemData);
     this.$list.append(view.render());
-    view.$('input').focus();
+    // view.$('input').focus();
     view.$el.on('click', '[data-kbfaction="delete"]', function () {
       view.$el.off();
       view.remove();
