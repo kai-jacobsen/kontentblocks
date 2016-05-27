@@ -1,5 +1,13 @@
 #Changelog
 
+####0.7.0
++ new field types: oembed, text-multiple, multiselect
++ improved module template loader
++ standard save method for all panel types
++ ui improvements and WP 4.5 fixes
++ removed old, unused code/feature
++ minor bugfixes
+
 ####0.6.1
 + new field types: cropimage, twiginclude
 + bugfixes
