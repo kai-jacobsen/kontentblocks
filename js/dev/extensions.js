@@ -640,7 +640,7 @@ KBFieldContent = function () {
   YoastSEO.app.registerModification('content', this.contentModification, 'kbfieldcontent', 5);
   if (KB.ChangeObserver) {
     KB.ChangeObserver.on('change', function () {
-      YoastSEO.app.refresh();
+      // YoastSEO.app.refresh();
     });
   }
 

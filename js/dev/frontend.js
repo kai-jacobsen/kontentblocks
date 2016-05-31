@@ -2988,8 +2988,8 @@ module.exports = BaseView.extend({
             type: 'image'
           }
         }).on('update', function (attachmentObj) { // bind callback to 'update'
-            that.update(attachmentObj);
-          })
+          that.update(attachmentObj);
+        })
           .on('close', function (att) {
             if (that.frame.image && that.frame.image.attachment) {
               that.$description.val(that.frame.image.attachment.get('caption'));
@@ -3108,19 +3108,17 @@ module.exports = BaseView.extend({
       var promise = query.more();
       promise.done(function (res) {
         that.attachment = query.first();
-
-        if (window.YoastSEO){
-          YoastSEO.app.refresh();
-        }
-
+        // if (window.YoastSEO) {
+        //   YoastSEO.app.refresh();
+        // }
       })
     }
-
 
     if (this.attachment) {
       var size = (this.attachment.get('sizes').thumbnail) ? this.attachment.get('sizes').thumbnail : this.attachment.get('sizes').full;
       return "<img src='" + size.url + "'>";
     }
+    
     return '';
 
   }

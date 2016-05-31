@@ -97,6 +97,7 @@ class FlexibleFieldsReturn
                 $field->setArgs(array('index' => $index, 'arrayKey' => $this->key));
                 $field->setArgs($conf);
                 $item[$key] = $field->getFrontendValue($this->salt);
+                $item['index'] = $index;
 
             }
             $items[$index] = $item;
