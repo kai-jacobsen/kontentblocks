@@ -12,6 +12,8 @@ use Kontentblocks\Fields\Definitions\FlexibleFields;
 class FlexibleFieldsReturn
 {
 
+    public $value;
+
     public $items = array();
     /**
      * @var \Kontentblocks\Fields\Definitions\FlexibleFields
@@ -54,6 +56,7 @@ class FlexibleFieldsReturn
         $this->sections = $field->getArg('fields');
         $this->items = $this->setupItems();
         $this->salt = $salt;
+        $this->value = $value;
     }
 
     /**
