@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2016-05-27 */
+/*! Kontentblocks DevVersion 2016-06-02 */
 (function(wp, $) {
     if (!wp || !wp.media) {
         return;

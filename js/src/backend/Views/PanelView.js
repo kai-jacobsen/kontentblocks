@@ -14,9 +14,9 @@ module.exports = Backbone.View.extend({
   },
   setupRenderer: function () {
     var data = this.$el.data();
-    if (data.kbFieldRenderer && data.kbFieldRenderer === 'fields-renderer-sections') {
+    if (data && data.kbFieldRenderer && data.kbFieldRenderer === 'fields-renderer-sections') {
       new FieldsRendererSections({
-        el: this.el
+        el: this.el 
       })
     }
   }
