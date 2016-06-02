@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Frontend;
 
+use Kontentblocks\Modules\Module;
+
 
 /**
  * Class ModuleIterator
@@ -62,10 +64,148 @@ class ModuleIterator implements \Iterator, \Countable
      *
      * @since 0.1.0
      */
-    public function __construct( $modules, $environment )
+    public function __construct($modules, $environment)
     {
-        $this->modules = $this->setupModules( $modules );
+        $this->modules = $this->setupModules($modules);
         $this->environment = $environment;
+    }
+
+    /**
+     * Startup filter to sort any invalid modules out
+     *
+     * @param $modules
+     *
+     * @return array
+     * @filter kb_render_setup_module
+     * @since 0.1.0
+     */
+    private function setupModules($modules)
+    {
+        $collect = array();
+        if (empty($modules)) {
+            return $collect;
+        }
+
+        foreach ($modules as $id => $module) {
+            /*
+             * Master modules only
+             * --------------------
+             */
+            // @TODO handle non existing templates better
+
+            // last call to change module args before the instance is instantiated
+            // MasterCoreModule will change this to rewrite properties to the original template module
+            $collect[$id] = $module;
+        }
+
+        return $collect;
+    }
+
+    /**
+     * Get wrapperclasses for the module wrapper container div
+     * @return array
+     * @since 0.1.0
+     * @TODO: probably not supposed to be here
+     */
+    public function getCurrentModuleClasses()
+    {
+        $settings = $this->currentModuleObject->properties->settings;
+        if (is_array($settings['wrapperClasses'])) {
+            return $settings['wrapperClasses'];
+        } else {
+            return explode(' ', $settings['wrapperClasses']);
+        }
+
+    }
+
+    /**
+     * Implementation of countable interface
+     *
+     * @return int
+     * @since 0.1.0
+     */
+    public function count()
+    {
+        return count($this->modules);
+    }
+
+    /**
+     * @param $index
+     * @return Module|null
+     */
+    public function getPosition($index)
+    {
+        if (isset($this->modules[$index])) {
+            return $this->modules[$index];
+        }
+        return null;
+    }
+
+    /**
+     * Set the pointer to a specific position and get the module
+     *
+     * @param $pos
+     *
+     * @return \Kontentblocks\Modules\Module
+     * @since 0.1.0
+     * @TODO 'get' would be more appropriate
+     */
+    public function setPosition($pos)
+    {
+        $this->rewind();
+        for ($i = 1; $i < $pos; $i++) {
+            $this->next();
+        }
+
+        if ($this->valid()) {
+            return $this->current();
+        }
+
+    }
+
+    /**
+     * Reset iterator pointer
+     *
+     * @since 0.1.0
+     */
+    public function rewind()
+    {
+        return reset($this->modules);
+
+    }
+
+    /**
+     * Advance to next item in array
+     *
+     * @since 0.1.0
+     */
+    public function next()
+    {
+        return next($this->modules);
+
+    }
+
+    /**
+     * Test if key exists
+     *
+     * @return bool
+     * @since 0.1.0
+     */
+    public function valid()
+    {
+        return isset($this->modules[$this->key()]);
+
+    }
+
+    /**
+     * Gets the current positions key
+     * @return string
+     * @since 0.1.0
+     */
+    public function key()
+    {
+        return key($this->modules);
+
     }
 
     /**
@@ -89,136 +229,9 @@ class ModuleIterator implements \Iterator, \Countable
      * @return \Kontentblocks\Modules\Module
      * @since 0.1.0
      */
-    protected function getModule()
+    public function getModule()
     {
         return $this->modules[$this->key()];
-    }
-
-    /**
-     * Gets the current positions key
-     * @return string
-     * @since 0.1.0
-     */
-    public function key()
-    {
-        return key( $this->modules );
-
-    }
-
-    /**
-     * Advance to next item in array
-     *
-     * @since 0.1.0
-     */
-    public function next()
-    {
-       return next( $this->modules );
-
-    }
-
-    /**
-     * Reset iterator pointer
-     *
-     * @since 0.1.0
-     */
-    public function rewind()
-    {
-       return reset( $this->modules );
-
-    }
-
-    /**
-     * Test if key exists
-     *
-     * @return bool
-     * @since 0.1.0
-     */
-    public function valid()
-    {
-        return isset( $this->modules[$this->key()] );
-
-    }
-
-    /**
-     * Get wrapperclasses for the module wrapper container div
-     * @return array
-     * @since 0.1.0
-     * @TODO: probably not supposed to be here
-     */
-    public function getCurrentModuleClasses()
-    {
-        $settings = $this->currentModuleObject->properties->settings;
-        if (is_array( $settings['wrapperClasses'] )) {
-            return $settings['wrapperClasses'];
-        } else {
-            return explode( ' ', $settings['wrapperClasses'] );
-        }
-
-    }
-
-    /**
-     * Implementation of countable interface
-     *
-     * @return int
-     * @since 0.1.0
-     */
-    public function count()
-    {
-        return count( $this->modules );
-    }
-
-
-    /**
-     * Set the pointer to a specific position and get the module
-     *
-     * @param $pos
-     *
-     * @return \Kontentblocks\Modules\Module
-     * @since 0.1.0
-     * @TODO 'get' would be more appropriate
-     */
-    public function setPosition( $pos )
-    {
-        $this->rewind();
-        for ($i = 1; $i < $pos; $i ++) {
-            $this->next();
-        }
-
-        if ($this->valid()) {
-            return $this->current();
-        }
-
-    }
-
-    /**
-     * Startup filter to sort any invalid modules out
-     *
-     * @param $modules
-     *
-     * @return array
-     * @filter kb_render_setup_module
-     * @since 0.1.0
-     */
-    private function setupModules( $modules )
-    {
-        $collect = array();
-        if (empty( $modules )) {
-            return $collect;
-        }
-
-        foreach ($modules as $id => $module) {
-            /*
-             * Master modules only
-             * --------------------
-             */
-            // @TODO handle non existing templates better
-
-            // last call to change module args before the instance is instantiated
-            // MasterCoreModule will change this to rewrite properties to the original template module
-            $collect[$id] = $module;
-        }
-
-        return $collect;
     }
 
 }

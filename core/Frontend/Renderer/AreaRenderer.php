@@ -68,6 +68,8 @@ class AreaRenderer implements RendererInterface
      */
     private $previousModule;
 
+    private $nextModule;
+
     /**
      * Flag if prev. module type equals current
      * @var bool
@@ -109,7 +111,6 @@ class AreaRenderer implements RendererInterface
      */
     public function render($echo)
     {
-
         $concater = ConcatContent::getInstance();
 
         if (!$this->validate()) {
@@ -246,12 +247,15 @@ class AreaRenderer implements RendererInterface
             }
         }
 
+
         if ($this->previousModule === $module->properties->getSetting('hash')) {
             $classes[] = 'repeater';
             $this->repeating = true;
         } else {
             $this->repeating = false;
         }
+
+
 
         if ($this->repeating && $this->areaHtmlNode->getSetting('mergeRepeating')) {
             $classes[] = 'module-merged';
@@ -289,6 +293,7 @@ class AreaRenderer implements RendererInterface
         $this->position++;
         $this->areaHtmlNode->nextLayout();
     }
+
 
 
 }
