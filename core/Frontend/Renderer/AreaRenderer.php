@@ -236,6 +236,8 @@ class AreaRenderer implements RendererInterface
             $classes[] = 'last-module';
         }
 
+        $classes[] = 'module-pos-' . $this->position;
+
         if (is_user_logged_in()) {
             $classes[] = 'os-edit-container';
 
