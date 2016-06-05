@@ -106,6 +106,10 @@ class StandardFieldSection implements Exportable
 
     }
 
+    /**
+     * Unique section id
+     * @return string
+     */
     private function prepareUid()
     {
         $args = $this->args;
@@ -125,9 +129,7 @@ class StandardFieldSection implements Exportable
      */
     public function addField($type, $key, $args = array())
     {
-        $subkey = null;
-
-
+        // don't init admin-only fields
         if (isset($args['adminOnly']) && ($args['adminOnly'] === true)) {
             if (!is_admin()) {
                 return $this;
@@ -135,58 +137,30 @@ class StandardFieldSection implements Exportable
         }
 
         if (!$this->fieldExists($key)) {
-            //check for special key syntax
-            if (preg_match("/^(.*?)::/i", $key, $out)) {
-                if (is_array($out) && count($out) == 2) {
-                    $key = str_replace($out[0], '', $key);
-                    if (isset($args['arrayKey']) && $args['arrayKey'] !== $out[1]) {
-                        throw new Exception(
-                            'ArrayKey mismatch. Field key has :: syntax and arrayKey arg is set, but differs'
-                        );
-                    }
-                    $args['arrayKey'] = $subkey = $out[1];
-                }
-            } else if (isset($args['arrayKey'])) {
-                $subkey = $args['arrayKey'];
-
-            }
-
+            $groupkey = $this->evaluateGroupKey($args, $key);
             if (!isset($args['priority'])) {
-                $args['priority'] = $this->getPriorityCount();
+                $args['priority'] = $this->getPriorityIndex();
             }
 
             /** @var \Kontentblocks\Fields\FieldRegistry $registry */
             $registry = Kontentblocks::getService('registry.fields');
-            $field = $registry->getField($type, $this->baseId, $subkey, $key, $args);
+            $field = $registry->getField($type, $this->baseId, $groupkey, $key, $args);
             $field->setController($this->controller);
             if (!$field) {
                 throw new Exception("Field of type: $type does not exist");
             } else {
-                $field->section = $this;
-                // conditional check of field visibility
+                $field->setSection($this);
                 $this->markVisibility($field);
-
+                // conditional check of field visibility
                 // Fields with same arrayKey gets grouped into own collection
-                if (isset($args['arrayKey'])) {
-                    $newField = $this->addArrayField($field, $key, $args);
+                if (!is_null($groupkey)) {
+                    $field = $this->attachGroupField($groupkey, $field, $key, $args);
                 } else {
-                    $this->fields[$key] = $newField = $field;
+                    $this->fields[$key] = $field;
                 }
 
 
-                $data = $this->getEntityModel();
-                if (!is_a($newField, '\Kontentblocks\Fields\FieldSubGroup')) {
-                    if (isset($data[$newField->getKey()])) {
-                        $fielddata = (is_object($data) && !is_null(
-                                $data[$newField->getKey()]
-                            )) ? $data[$newField->getKey()] : $this->getFieldStd($newField);
-                    } else {
-                        $fielddata = $this->getFieldStd($newField);
-                    }
-                } else {
-                    $fielddata = (isset($data[$newField->getKey()])) ? $data[$newField->getKey()] : array();
-                }
-                $newField->setData($fielddata);
+                $field->setData($this->getFielddata($field));
                 $this->increaseVisibleFields();
                 $this->orderFields();
             }
@@ -206,7 +180,37 @@ class StandardFieldSection implements Exportable
         return isset($this->fields[$key]);
     }
 
-    private function getPriorityCount()
+    /**
+     * @param $args
+     * @param $key
+     * @return null
+     * @throws Exception
+     */
+    private function evaluateGroupKey($args, &$key)
+    {
+        //check for special key syntax like group::key
+        if (preg_match("/^(.*?)::/i", $key, $out)) {
+            if (is_array($out) && count($out) == 2) {
+                if (isset($args['arrayKey']) && $args['arrayKey'] !== $out[1]) {
+                    throw new Exception(
+                        'ArrayKey mismatch. Field key has :: syntax and arrayKey arg is set, but differs'
+                    );
+                }
+                $key = str_replace($out[0], '', $key);
+                $args['arrayKey'] = $out[1];
+                return $args['arrayKey'];
+            }
+        } else if (isset($args['arrayKey'])) {
+            return $args['arrayKey'];
+        }
+
+        return null;
+    }
+
+    /**
+     * @return int
+     */
+    private function getPriorityIndex()
     {
         $prio = $this->priorityCount;
         $this->priorityCount += 5;
@@ -224,27 +228,56 @@ class StandardFieldSection implements Exportable
      */
     public function markVisibility(Field $field)
     {
-        $field->setDisplay(true);
+        $field->setVisibility(true);
     }
 
     /**
      * Handle special array notation
      *
+     * @param $groupkey
      * @param Field $field
      * @param string $key
      * @param array $args
      * @return FieldSubGroup
      */
-    public function addArrayField($field, $key, $args)
+    public function attachGroupField($groupkey, $field, $key, $args)
     {
-        if (!$this->fieldExists($args['arrayKey'])) {
-            /** @var FieldSubGroup $fieldArray */
-            $fieldArray = $this->fields[$args['arrayKey']] = new FieldSubGroup($args['arrayKey'], $args);
-        } else {
-            $fieldArray = $this->fields[$args['arrayKey']];
+        $group = $this->addGroup($groupkey, $args);
+        $group->addField($key, $field);
+        return $group;
+    }
+
+    /**
+     * @param $groupkey
+     * @param array $args
+     * @return FieldSubGroup|mixed
+     */
+    public function addGroup($groupkey, $args = array())
+    {
+        if (!isset($args['priority']) || is_numeric($args['priority'])) {
+            $args['priority'] = $this->getPriorityIndex();
         }
-        $fieldArray->addField($key, $field);
-        return $fieldArray;
+
+        if (!$this->fieldExists($groupkey)) {
+            /** @var FieldSubGroup $fieldArray */
+            return $this->fields[$groupkey] = new FieldSubGroup($groupkey, $args, $this);
+        } else if (is_a($this->fields[$groupkey], '\Kontentblocks\Fields\FieldSubGroup')) {
+            return $this->fields[$groupkey];
+        }
+    }
+    
+
+    private function getFielddata($field)
+    {
+        $data = $this->getEntityModel();
+        if (isset($data[$field->getKey()])) {
+            return (is_object($data) && !is_null(
+                    $data[$field->getKey()]
+                )) ? $data[$field->getKey()] : $field->getDefaultValue();
+        }
+
+        return $field->getDefaultValue();
+
     }
 
     /**
@@ -253,19 +286,6 @@ class StandardFieldSection implements Exportable
     public function getEntityModel()
     {
         return $this->entity->getModel();
-    }
-
-    /**
-     * Get field default value
-     *
-     * @param $field
-     *
-     * @return mixed defaults to empty string
-     */
-    private function getFieldStd(Field $field)
-    {
-        return $field->getArg('std', '');
-
     }
 
     /**
@@ -284,26 +304,6 @@ class StandardFieldSection implements Exportable
         uasort($this->fields, create_function('$a,$b', $code));
 
     }
-//
-//    /**
-//     * @param $key
-//     * @param array $args
-//     * @return FieldSubGroup|mixed
-//     */
-//    public function addGroup($key, $args = array())
-//    {
-//
-//        if (!isset($args['priority']) || is_numeric($args['priority'])) {
-//            $args['priority'] = $this->getPriorityCount();
-//        }
-//
-//        if (!$this->fieldExists($key)) {
-//            /** @var FieldSubGroup $fieldArray */
-//            return $this->fields[$key] = new FieldSubGroup($key, $args);
-//        } else if (is_a($this->fields[$key], '\Kontentblocks\Fields\FieldSubGroup')) {
-//            return $this->fields[$key];
-//        }
-//    }
 
     /**
      * Wrapper method
@@ -428,6 +428,7 @@ class StandardFieldSection implements Exportable
 
     /**
      * @param $collection
+     * @return array
      */
     public function export(&$collection)
     {

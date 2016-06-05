@@ -39,7 +39,7 @@ class ModuleFieldSection extends StandardFieldSection
     public function markVisibility(Field $field)
     {
 
-        $field->setDisplay(true);
+        $field->setVisibility(true);
         $areaContext = $this->entity->context->get('areaContext');
         $postType = $this->entity->context->get('postType');
         $pageTemplate = $this->entity->context->get('pageTemplate');
@@ -50,7 +50,7 @@ class ModuleFieldSection extends StandardFieldSection
                     (array)$field->getCondition('viewfile')
                 )
             ) {
-                $field->setDisplay(false);
+                $field->setVisibility(false);
                 $this->decreaseVisibleFields();
 
                 return;
@@ -58,7 +58,7 @@ class ModuleFieldSection extends StandardFieldSection
         }
 
         if ($field->getCondition('postType') && !in_array($postType, (array)$field->getCondition('postType'))) {
-            $field->setDisplay(false);
+            $field->setVisibility(false);
             $this->decreaseVisibleFields();
 
             return;
@@ -69,17 +69,17 @@ class ModuleFieldSection extends StandardFieldSection
                 (array)$field->getCondition('pageTemplate')
             )
         ) {
-            $field->setDisplay(false);
+            $field->setVisibility(false);
             $this->decreaseVisibleFields();
 
             return;
         }
 
         if (!isset($areaContext) || $areaContext === false || ($field->getCondition('areaContext') === false)) {
-            $field->setDisplay(true);
+            $field->setVisibility(true);
             return;
         } else if (!in_array($areaContext, $field->getCondition('areaContext'))) {
-            $field->setDisplay(false);
+            $field->setVisibility(false);
             return;
         }
 

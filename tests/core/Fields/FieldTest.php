@@ -178,13 +178,13 @@ class FieldTest extends \WP_UnitTestCase
 
     public function testGetDisplay()
     {
-        $this->assertTrue( $this->TestField->getDisplay() );
+        $this->assertTrue( $this->TestField->isVisible() );
     }
 
     public function testSetDisplay()
     {
-        $this->TestField->setDisplay( 'false' );
-        $this->assertFalse( $this->TestField->getDisplay() );
+        $this->TestField->setVisibility( 'false' );
+        $this->assertFalse( $this->TestField->isVisible() );
 
     }
 

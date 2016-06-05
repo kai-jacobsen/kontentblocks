@@ -25,7 +25,7 @@ Class Link extends Field
      *
      * @return array
      */
-    public function prepareFormValue( $val )
+    public function prepareFormValue($val)
     {
         $defaults = array(
             'link' => '',
@@ -33,26 +33,35 @@ Class Link extends Field
             'linktitle' => ''
         );
 
-        $data = wp_parse_args( $val, $defaults );
+        $data = wp_parse_args($val, $defaults);
 
-        $data['link'] = esc_url( $data['link'] );
-        $data['linktext'] = esc_html( $data['linktext'] );
-        $data['linktitle'] = esc_html( $data['linktitle'] );
+        $data['link'] = esc_url($data['link']);
+        $data['linktext'] = esc_html($data['linktext']);
+        $data['linktitle'] = esc_html($data['linktitle']);
 
         return $data;
+    }
+
+    public function getDefaultValue()
+    {
+        return array(
+            'link' => '',
+            'linktext' => '',
+            'linktitle' => ''
+        );
     }
 
     /**
      * @param \WP_Customize_Manager $customizeManager
      * @return null
      */
-    public function addCustomizerControl( \WP_Customize_Manager $customizeManager, CustomizerIntegration $integration )
+    public function addCustomizerControl(\WP_Customize_Manager $customizeManager, CustomizerIntegration $integration)
     {
         $customizeManager->add_control(
-            new LinkControl($customizeManager, $integration->getSettingName( $this ),
+            new LinkControl($customizeManager, $integration->getSettingName($this),
                 array(
-                    'label' => $this->getArg( 'label' ),
-                    'description' => $this->getArg( 'description' ),
+                    'label' => $this->getArg('label'),
+                    'description' => $this->getArg('description'),
                     'section' => $this->section->getSectionId(),
                     'type' => 'kbLink',
                     'input_attrs' => array(

@@ -33,27 +33,24 @@ class FieldRegistry
      * @return $this
      * @since 0.1.0
      */
-    public function add( $file )
+    public function add($file)
     {
-        include_once( $file );
-        $classname = '\Kontentblocks\Fields\Definitions\\' . str_replace( '.php', '', basename( $file ) );
+        include_once($file);
+        $classname = '\Kontentblocks\Fields\Definitions\\' . str_replace('.php', '', basename($file));
 
-        if (!is_subclass_of( $classname, '\Kontentblocks\Fields\Field' )) {
-            throw new \Exception( 'Field MUST extend Kontentblocks Field Class' );
+        if (!is_subclass_of($classname, '\Kontentblocks\Fields\Field')) {
+            throw new \Exception('Field MUST extend Kontentblocks Field Class');
         }
 
-
-        if (!isset( $this->fields['classname'] ) && property_exists( $classname, 'settings' )) {
+        if (!isset($this->fields['classname']) && property_exists($classname, 'settings')) {
             // Defaults from the field
             $args = $classname::$settings;
-            if (!empty( $args['type'] ) && !isset( $this->fields[$args['type']] )) {
-                $this->registerField( $args['type'], $classname );
-
+            if (!empty($args['type']) && !isset($this->fields[$args['type']])) {
+                $this->registerField($args['type'], $classname);
                 // call static init method, if present
-                if (method_exists( $classname, 'init' )) {
+                if (method_exists($classname, 'init')) {
                     $classname::init();
                 }
-
             }
         }
         return $this;
@@ -66,7 +63,7 @@ class FieldRegistry
      * @return $this
      * @since 0.1.0
      */
-    public function registerField( $id, $class )
+    public function registerField($id, $class)
     {
         $this->fields[$id] = $class;
         return $this;
@@ -83,17 +80,18 @@ class FieldRegistry
      * @return bool|Field
      * @since 0.1.0
      */
-    public function getField( $type, $baseId, $subkey, $key, $args = array() )
+    public function getField($type, $baseId, $subkey, $key, $args = array())
     {
-        if (isset( $this->fields[$type] )) {
-            return new $this->fields[$type]( $baseId, $subkey, $key, $args );
+        if (isset($this->fields[$type])) {
+            return new $this->fields[$type]($baseId, $subkey, $key, $args);
         }
-        
-        
+
+
         return null;
     }
 
-    public function validType($type){
+    public function validType($type)
+    {
         return isset($this->fields[$type]);
     }
 

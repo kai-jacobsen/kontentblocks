@@ -5504,8 +5504,12 @@ module.exports = Backbone.View.extend({
     if (!_.isArray(data)) {
       this.createElement();
     } else {
-      _.each(data, function (val) {
-        this.createElement(val);
+      _.each(data, function (val, i) {
+
+        var limit = this.model.get('limit');
+        if (limit && (i+1) <= limit){
+          this.createElement(val);
+        }
       }, this)
     }
   },

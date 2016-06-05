@@ -56,20 +56,20 @@ class MLayout extends Field
     /**
      * Fields saving method
      *
-     * @param mixed $keydata
-     * @param mixed $oldKeyData
+     * @param mixed $new
+     * @param mixed $old
      *
      * @return mixed
      */
-    public function save($keydata, $oldKeyData)
+    public function save($new, $old)
     {
         $repository = new MLayoutRepository($this);
         $repository->saveModules();
-        if (isset($keydata['slots']) && is_array($keydata['slots'])) {
-            return array('slots' => $keydata['slots']);
+        if (isset($new['slots']) && is_array($new['slots'])) {
+            return array('slots' => $new['slots']);
         }
 
-        return $keydata;
+        return $new;
     }
 
     /**

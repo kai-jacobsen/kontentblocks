@@ -4,7 +4,6 @@ namespace Kontentblocks\Fields;
 
 use Kontentblocks\Common\Exportable;
 use Kontentblocks\Fields\Definitions\ReturnObjects\FieldCollection;
-use Kontentblocks\Modules\Module;
 
 /**
  * Class FieldSubGroup
@@ -16,10 +15,10 @@ class FieldSubGroup implements Exportable
 {
 
     /**
-     * @var Module
-     * @since 0.1.0
+     * Field Args
+     * @var array
      */
-    public $module;
+    public $args;
     /**
      * Storage Key
      * @var string
@@ -44,30 +43,38 @@ class FieldSubGroup implements Exportable
     protected $returnObj;
 
     /**
+     * @var StandardFieldSection
+     */
+    protected $section;
+
+    /**
      * Class constructor
      * @since 0.1.0
      *
      * @param string $key
+     * @param array $args
+     * @param StandardFieldSection $section
      */
-    public function __construct($key, $args = array())
+    public function __construct($key, $args = array(), StandardFieldSection $section)
     {
         $this->key = $key;
         $this->args = $args;
+        $this->section = $section;
     }
 
     /**
      * Add field
      *
      * @param string $key
-     * @param object $fieldobject
+     * @param Field $field
+     * @return $this
      *
      * @since 0.1.0
-     * @return $this
      */
-    public function addField($key, $fieldobject)
+    public function addField($key, Field $field)
     {
-        $this->fields[$key] = $fieldobject;
-        $this->$key = $fieldobject;
+        $this->fields[$key] = $field;
+        $this->$key = $field;
         return $this;
     }
 
@@ -89,13 +96,6 @@ class FieldSubGroup implements Exportable
         }
     }
 
-    /**
-     * @param Module $module
-     */
-    public function setModule($module)
-    {
-        $this->module = $module;
-    }
 
     /**
      * Pass through _save() method to each field
@@ -183,38 +183,38 @@ class FieldSubGroup implements Exportable
         }
     }
 
+    /**
+     * @return array
+     */
+    public function getDefaultValue()
+    {
+        $collect = array();
+        foreach ($this->fields as $field) {
+            $collect[$field->getKey()] = $field->getDefaultValue();
+        }
+        return $collect;
+    }
+
 
     /**
-     * @throws \Exception
+     * @param $arg
+     * @param string $default
+     * @return mixed|string
      */
-    public function getArg($arg, $default = false)
+    public function getArg($arg, $default = '')
     {
 
-        if (isset($this->args[$arg])){
+        if (isset($this->args[$arg])) {
             return $this->args[$arg];
         }
 
-        return '';
+        return $default;
     }
+
 
     /**
-     * Get a field object by key
-     * returns the object on success
-     * or false if key does not exist
-     *
-     * @param string $key
-     * @return mixed
-     * @since 0.1.0
+     * @return array
      */
-    public function getFieldByKey($key)
-    {
-        if (isset($this->fields[$key])) {
-            return $this->fields[$key];
-        }
-        return false;
-
-    }
-
     public function getFields()
     {
         return $this->fields;
@@ -252,10 +252,13 @@ class FieldSubGroup implements Exportable
 
     }
 
+    /**
+     * @param $collection
+     */
     public function export(&$collection)
     {
-        foreach ($this->fields as $Field) {
-            $Field->export($collection);
+        foreach ($this->fields as $field) {
+            $field->export($collection);
         }
     }
 }

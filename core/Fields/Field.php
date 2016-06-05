@@ -182,10 +182,17 @@ abstract class Field implements Exportable
      * Mainly used internally to specifiy the fields visibility
      * @return bool
      */
-    public function getDisplay()
+    public function isVisible()
     {
         return filter_var($this->getArg('display', true), FILTER_VALIDATE_BOOLEAN);
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getDefaultValue()
+    {
+        return $this->getArg('std', '');
     }
 
     /**
@@ -194,7 +201,7 @@ abstract class Field implements Exportable
      * @param $bool
      * @return bool
      */
-    public function setDisplay($bool)
+    public function setVisibility($bool)
     {
         $this->setArgs(array('display' => filter_var($bool, FILTER_VALIDATE_BOOLEAN)));
         return $bool;
@@ -207,23 +214,6 @@ abstract class Field implements Exportable
     {
         $data = $this->setValue($data);
         $this->value = $data;
-    }
-
-    /**
-     * Set field data
-     * Data from _POST[{baseid}[$this->key]]
-     * Runs each time when data is set to the field
-     * Frontend/Backend
-     *
-     * @param mixed $data
-     *
-     * @since 0.1.0
-     * @return mixed
-     */
-    public function setValue($data)
-    {
-        $this->value = $data;
-        return $data;
     }
 
     /**
@@ -289,6 +279,22 @@ abstract class Field implements Exportable
         return $this->getArg('std', $return);
     }
 
+    /**
+     * Set field data
+     * Data from _POST[{baseid}[$this->key]]
+     * Runs each time when data is set to the field
+     * Frontend/Backend
+     *
+     * @param mixed $data
+     *
+     * @since 0.1.0
+     * @return mixed
+     */
+    public function setValue($data)
+    {
+        $this->value = $data;
+        return $data;
+    }
 
     /**
      * Get callback from callbacks arg
@@ -465,19 +471,24 @@ abstract class Field implements Exportable
         return $path;
     }
 
+    public function setSection($section)
+    {
+        $this->section = $section;
+    }
+
     /**
      * Wrapper to the actual save method
      *
-     * @param mixed $keydata
-     * @param mixed|null $oldKeyData
-     *
+     * @param $new
+     * @param null $old
      * @return mixed
+     *
      */
-    public function _save($keydata, $oldKeyData = null)
+    public function _save($new, $old = null)
     {
-        $data = $this->save($keydata, $oldKeyData);
+        $data = $this->save($new, $old);
         if ($this->getCallback('save.value')) {
-            $data = call_user_func($this->getCallback('save.value'), $keydata, $oldKeyData, $data);
+            $data = call_user_func($this->getCallback('save.value'), $new, $old, $data);
         }
 
         return $data;
@@ -487,17 +498,17 @@ abstract class Field implements Exportable
     /**
      * Fields saving method
      *
-     * @param mixed $keydata
-     * @param mixed $oldKeyData
+     * @param mixed $new
+     * @param mixed $old
      *
      * @return mixed
      */
-    public function save($keydata, $oldKeyData)
+    public function save($new, $old)
     {
-        if (is_null($keydata)) {
+        if (is_null($new)) {
             return null;
         } else {
-            return $keydata;
+            return $new;
         }
 
     }
