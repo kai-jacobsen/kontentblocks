@@ -119,7 +119,7 @@ class SerOptionsDataProvider implements DataProviderInterface
      */
     public function save()
     {
-        update_option( $this->storageId, $this->data );
+        update_option( $this->storageId, wp_unslash($this->data) );
         return $this;
     }
 
