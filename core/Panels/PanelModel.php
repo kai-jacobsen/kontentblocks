@@ -5,6 +5,7 @@ namespace Kontentblocks\Panels;
 
 use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Interfaces\EntityInterface;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class PanelModel
@@ -39,17 +40,13 @@ class PanelModel extends EntityModel
     public function sync()
     {
         $provider = $this->entity->getDataProvider();
-        return $provider->update($this->entity->getId(), $this->export());
-    }
+        $key = (Utilities::isPreview()) ? '_preview_' . $this->entity->getId() : $this->entity->getId();
 
-    public function reset()
-    {
-        $keys = array_keys($this->export());
-        foreach ($keys as $key) {
-            unset($this->$key);
+        if (!Utilities::isPreview()) {
+            $provider->delete('_preview_' . $this->entity->getId());
         }
-        $this->_originalData = array();
-        return $this;
+
+        return $provider->update($key, $this->export());
     }
 
     /**
@@ -78,5 +75,15 @@ class PanelModel extends EntityModel
         unset($vars['_originalData']);
         unset($vars['entity']);
         return $vars;
+    }
+
+    public function reset()
+    {
+        $keys = array_keys($this->export());
+        foreach ($keys as $key) {
+            unset($this->$key);
+        }
+        $this->_originalData = array();
+        return $this;
     }
 }

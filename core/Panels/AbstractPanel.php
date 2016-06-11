@@ -113,7 +113,7 @@ abstract class AbstractPanel implements EntityInterface
         if (empty($data)) {
             return;
         }
-        $this->model->reset()->set($postData->get($this->baseId));
+        $this->model->reset()->set($postData->request->get($this->baseId));
         $this->save($postData);
     }
 

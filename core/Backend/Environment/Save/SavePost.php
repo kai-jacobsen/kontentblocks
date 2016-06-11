@@ -197,8 +197,7 @@ class SavePost
             }
             // if this is a preview, save temporary data for previews
             if (!is_null($savedData)) {
-
-                if ($this->postdata->request->get('wp-preview') && $this->postdata->request->get('wp-preview') === 'dopreview') {
+                if (Utilities::isPreview()) {
                     $this->environment->getDataProvider()->update('_preview_' . $module->getId(), $savedData);
                 } // save real data
                 else {

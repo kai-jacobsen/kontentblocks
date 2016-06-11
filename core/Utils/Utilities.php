@@ -7,6 +7,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\TermEnvironment;
 use Kontentblocks\Backend\Environment\UserEnvironment;
 use Kontentblocks\Kontentblocks;
+use Symfony\Component\HttpFoundation\Request;
 use XHProfRuns_Default;
 
 
@@ -52,7 +53,7 @@ class Utilities
             } else {
                 $realId = (is_null($actualPostId)) ? $storageId : $actualPostId;
                 $postObj = get_post($realId);
-                if (!is_null($postObj)){
+                if (!is_null($postObj)) {
                     return self::$postEnvironments[$storageId] = new PostEnvironment($storageId, $postObj);
                 }
                 return null;
@@ -535,6 +536,15 @@ class Utilities
         }
 
         $arr = $value;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isPreview()
+    {
+        $request = Request::createFromGlobals();
+        return ($request->request->get('wp-preview', '') === 'dopreview');
     }
 
 
