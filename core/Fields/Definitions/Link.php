@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Customizer\Controls\LinkControl;
+use Kontentblocks\Fields\Definitions\ReturnObjects\LinkFieldReturn;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Customizer\CustomizerIntegration;
 
@@ -22,19 +23,12 @@ Class Link extends Field
 
     /**
      * @param array $val
-     *
      * @return array
      */
     public function prepareFormValue($val)
     {
-        $defaults = array(
-            'link' => '',
-            'linktext' => '',
-            'linktitle' => ''
-        );
 
-        $data = wp_parse_args($val, $defaults);
-
+        $data = wp_parse_args($val, $this->getDefaultValue());
         $data['link'] = esc_url($data['link']);
         $data['linktext'] = esc_html($data['linktext']);
         $data['linktitle'] = esc_html($data['linktitle']);
@@ -42,6 +36,9 @@ Class Link extends Field
         return $data;
     }
 
+    /**
+     * @return array
+     */
     public function getDefaultValue()
     {
         return array(
@@ -70,6 +67,16 @@ Class Link extends Field
                 )
             )
         );
+    }
+
+    /**
+     * @param $value
+     * @param $salt
+     * @return LinkFieldReturn
+     */
+    protected function getStandardReturnObject($value, $salt)
+    {
+        return new LinkFieldReturn($value, $this, $salt);
     }
 
 }

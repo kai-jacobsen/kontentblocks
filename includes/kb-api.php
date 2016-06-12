@@ -7,6 +7,7 @@ use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
+use Kontentblocks\Panels\PanelModel;
 use Kontentblocks\Panels\TermPanel;
 use Kontentblocks\Utils\CommonTwig\SimpleView;
 use Kontentblocks\Utils\JSONTransport;
@@ -133,7 +134,6 @@ function renderContext($context, $post_id, $areaSettings = array(), $moduleSetti
     $Environment = Utilities::getPostEnvironment($postId);
     $areas = $Environment->getAreasForContext($context);
     $contextsOrder = $Environment->getDataProvider()->get('_kbcontexts');
-
 
 
     if (is_array($contextsOrder) && !empty($contextsOrder)) {
@@ -327,4 +327,29 @@ function JSONTransport()
 function fieldRegistry()
 {
     return Kontentblocks()->getService('registry.fields');
+}
+
+
+/**
+ * @param $panelId
+ * @param $key
+ * @param string $default
+ * @param null $postId
+ * @return string
+ */
+function getFromPostPanel($panelId, $key, $default = '', $postId = null)
+{
+    if (is_null($postId)) {
+        $postId = get_the_ID();
+    }
+
+    /** @var PanelModel $panelModel */
+    $panelModel = getPostPanelModel($panelId, $postId);
+    if (is_null($panelModel)) {
+        return $default;
+    }
+
+    return $panelModel->get($key, $default);
+
+
 }

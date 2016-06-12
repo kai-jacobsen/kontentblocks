@@ -586,7 +586,7 @@ abstract class Field implements Exportable
             $this->userValue = $this->returnObj;
             return $this->userValue;
         } else {
-            $this->returnObj = new StandardFieldReturn($value, $this, $salt);
+            $this->returnObj = $this->getStandardReturnObject($value, $salt);
             $this->userValue = $this->returnObj;
             return $this->userValue;
         }
@@ -660,6 +660,11 @@ abstract class Field implements Exportable
         } else {
             return null;
         }
+    }
+
+    protected function getStandardReturnObject($value, $salt)
+    {
+        return new StandardFieldReturn($value, $this, $salt);
     }
 
     /**
