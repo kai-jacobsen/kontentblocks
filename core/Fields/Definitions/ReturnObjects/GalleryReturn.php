@@ -10,7 +10,7 @@ use Kontentblocks\Kontentblocks;
  * Class Gallery
  * @package Kontentblocks\Fields\Returnobjects
  */
-class Gallery
+class GalleryReturn
 {
 
     public $images = array();
@@ -60,7 +60,7 @@ class Gallery
                 if ($field->getArg( 'editable', false )) {
                     $return = new EditableImage( array('id' => $attId), $field );
                 } else {
-                    $return = new Image( array('id' => $attId), $field, null );
+                    $return = new ImageReturn( array('id' => $attId), $field, null );
                 }
                 array_push( $this->images, $return );
             }

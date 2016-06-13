@@ -3,7 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Customizer\Controls\LinkControl;
-use Kontentblocks\Fields\Definitions\ReturnObjects\LinkFieldReturn;
+use Kontentblocks\Fields\Definitions\ReturnObjects\LinkReturn;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Customizer\CustomizerIntegration;
 
@@ -17,7 +17,9 @@ Class Link extends Field
 
     // Defaults
     public static $settings = array(
-        'type' => 'link'
+        'type' => 'link',
+        'returnObj' => 'LinkReturn'
+
     );
 
 
@@ -72,11 +74,11 @@ Class Link extends Field
     /**
      * @param $value
      * @param $salt
-     * @return LinkFieldReturn
+     * @return Link
      */
     protected function getStandardReturnObject($value, $salt)
     {
-        return new LinkFieldReturn($value, $this, $salt);
+        return new Link($value, $this, $salt);
     }
 
 }

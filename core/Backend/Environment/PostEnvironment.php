@@ -4,8 +4,8 @@ namespace Kontentblocks\Backend\Environment;
 
 use JsonSerializable;
 use Kontentblocks\Areas\AreaSettingsModel;
+use Kontentblocks\Backend\DataProvider\DataProvider;
 use Kontentblocks\Backend\Storage\ModuleStorage;
-use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Environment\Save\SavePost;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleRepository;
@@ -24,7 +24,7 @@ class PostEnvironment implements JsonSerializable
 
     /**
      * generic low-level data handler
-     * @var \Kontentblocks\Backend\DataProvider\DataProviderController
+     * @var DataProvider
      */
     protected $dataProvider;
 
@@ -215,7 +215,7 @@ class PostEnvironment implements JsonSerializable
 
     /**
      * returns the DataProvider instance
-     * @return DataProviderController
+     * @return DataProvider
      * @since 0.1.0
      */
     public function getDataProvider()

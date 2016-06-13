@@ -3,6 +3,7 @@
 namespace Kontentblocks\Backend\Environment;
 
 
+use Kontentblocks\Backend\DataProvider\DataProvider;
 use Kontentblocks\Backend\DataProvider\DataProviderService;
 use Kontentblocks\Backend\DataProvider\TermMetaDataProvider;
 use Kontentblocks\Backend\DataProvider\UserMetaDataProvider;
@@ -40,7 +41,7 @@ class UserEnvironment implements \JsonSerializable
     {
         $this->userId = $userId;
         $this->userObj = $userObj;
-        $this->dataProvider = DataProviderService::getUserProvider($userId);
+        $this->dataProvider = new DataProvider($userId, 'user');
         $this->userPanels = new UserPanelRepository($this);
         add_action('admin_footer', array($this, 'toJSON'));
     }

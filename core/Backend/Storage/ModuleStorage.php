@@ -1,8 +1,7 @@
 <?php
 namespace Kontentblocks\Backend\Storage;
 
-use Kontentblocks\Backend\DataProvider\DataProviderController;
-use Kontentblocks\Backend\DataProvider\DataProviderService;
+use Kontentblocks\Backend\DataProvider\DataProvider;
 
 /**
  * Class ModuleStorage
@@ -27,7 +26,7 @@ class ModuleStorage implements \Countable
 
     /**
      * Data Handler
-     * @var \Kontentblocks\Backend\DataProvider\DataProviderController
+     * @var \Kontentblocks\Backend\DataProvider\DataProvider
      */
     protected $dataProvider;
 
@@ -42,18 +41,18 @@ class ModuleStorage implements \Countable
      * Class constructor
      *
      * @param $postId
-     * @param \Kontentblocks\Backend\DataProvider\DataProviderController
+     * @param \Kontentblocks\Backend\DataProvider\DataProvider
      * @throws \Exception
      */
-    public function __construct( $postId, DataProviderController $dataProvider = null )
+    public function __construct($postId, DataProvider $dataProvider = null)
     {
-        if (!isset( $postId ) || $postId === 0) {
-            throw new \Exception( 'a valid post id must be provided' );
+        if (!isset($postId) || $postId === 0) {
+            throw new \Exception('a valid post id must be provided');
         }
         $this->storageId = $postId;
         // Late init data handler if not provided
-        if (is_null( $dataProvider )) {
-            $this->dataProvider = DataProviderService::getPostProvider($postId);
+        if (is_null($dataProvider)) {
+            $this->dataProvider = new DataProvider($postId, 'post');
         } else {
             $this->dataProvider = $dataProvider;
         }
@@ -67,9 +66,9 @@ class ModuleStorage implements \Countable
      */
     private function setup()
     {
-        $this->index = $this->dataProvider->get( 'kb_kontentblocks' );
+        $this->index = $this->dataProvider->get('kb_kontentblocks');
 
-        if (empty( $this->index )) {
+        if (empty($this->index)) {
             return false;
         }
         $this->modules = $this->setupModuleData();
@@ -88,9 +87,9 @@ class ModuleStorage implements \Countable
     {
         $collection = array();
         $meta = $this->dataProvider->getAll();
-        foreach (array_keys( $this->index ) as $id) {
-            $collection['_' . $id] = ( !empty( $meta['_' . $id] ) ) ? $meta['_' . $id] : '';
-            $collection['_preview_' . $id] = ( !empty( $meta['_preview_' . $id] ) ) ? $meta['_preview_' . $id] : null;
+        foreach (array_keys($this->index) as $id) {
+            $collection['_' . $id] = (!empty($meta['_' . $id])) ? $meta['_' . $id] : '';
+            $collection['_preview_' . $id] = (!empty($meta['_preview_' . $id])) ? $meta['_preview_' . $id] : null;
         }
         return $collection;
 
@@ -114,13 +113,13 @@ class ModuleStorage implements \Countable
      *
      * @return mixed boolean
      */
-    public function addToIndex( $id, $args )
+    public function addToIndex($id, $args)
     {
         $this->index[$id] = $args;
-        if (!$this->getModuleData( $id )) {
-            $this->saveModule( $id, '' );
+        if (!$this->getModuleData($id)) {
+            $this->saveModule($id, '');
         }
-        return $this->saveIndex( $this->index );
+        return $this->saveIndex($this->index);
 
     }
 
@@ -132,21 +131,21 @@ class ModuleStorage implements \Countable
      *
      * @return array|string|null
      */
-    public function getModuleData( $mid )
+    public function getModuleData($mid)
     {
-        $mid = $this->underscorePrefix( $mid );
+        $mid = $this->underscorePrefix($mid);
 
 
         if (is_preview()) {
             $pmid = '_preview' . $mid;
-            if (isset( $this->modules[$pmid] )) {
+            if (isset($this->modules[$pmid])) {
                 return $this->modules[$pmid];
-            } elseif (isset( $this->modules[$mid] )) {
+            } elseif (isset($this->modules[$mid])) {
                 return $this->modules[$mid];
             }
         }
 
-        if (isset( $this->modules[$mid] )) {
+        if (isset($this->modules[$mid])) {
             return $this->modules[$mid];
         }
         return null;
@@ -158,7 +157,7 @@ class ModuleStorage implements \Countable
      * @param $string
      * @return string
      */
-    private function underscorePrefix( $string )
+    private function underscorePrefix($string)
     {
         if ($string[0] !== '_') {
             $string = '_' . $string;
@@ -176,12 +175,12 @@ class ModuleStorage implements \Countable
      * @param bool $addslashes
      * @return bool
      */
-    public function saveModule( $id, $data = '', $addslashes = false )
+    public function saveModule($id, $data = '', $addslashes = false)
     {
         if ($addslashes && $this->dataProvider->addSlashes()) {
-            $data = wp_slash( $data );
+            $data = wp_slash($data);
         }
-        return $this->dataProvider->update( '_' . $id, $data );
+        return $this->dataProvider->update('_' . $id, $data);
     }
 
     /**
@@ -189,10 +188,10 @@ class ModuleStorage implements \Countable
      * @param array $index
      * @return bool
      */
-    public function saveIndex( $index )
+    public function saveIndex($index)
     {
         $index = apply_filters('kb.index.update', $index);
-        return $this->dataProvider->update( 'kb_kontentblocks', $index, false );
+        return $this->dataProvider->update('kb_kontentblocks', $index, false);
 
     }
 
@@ -203,12 +202,12 @@ class ModuleStorage implements \Countable
      * @param $mid string
      * @return bool
      */
-    public function removeFromIndex( $mid )
+    public function removeFromIndex($mid)
     {
-        if (isset( $this->index[$mid] )) {
-            unset( $this->index[$mid] );
-            if ($this->saveIndex( $this->index ) !== false) {
-                return $this->dataProvider->delete( '_' . $mid );
+        if (isset($this->index[$mid])) {
+            unset($this->index[$mid]);
+            if ($this->saveIndex($this->index) !== false) {
+                return $this->dataProvider->delete('_' . $mid);
             }
         }
 
@@ -220,9 +219,9 @@ class ModuleStorage implements \Countable
      * @param string $id
      * @return array|boolean
      */
-    public function getModuleDefinition( $id )
+    public function getModuleDefinition($id)
     {
-        if (isset( $this->index[$id] )) {
+        if (isset($this->index[$id])) {
             return $this->index[$id];
         } else {
             return false;
@@ -243,8 +242,8 @@ class ModuleStorage implements \Countable
     }
 
     /**
-     * Getter for DataProviderController
-     * @return DataProviderController
+     * Getter for DataProvider
+     * @return DataProvider
      */
     public function getDataProvider()
     {
@@ -259,10 +258,10 @@ class ModuleStorage implements \Countable
      *
      * @since 0.1.0
      */
-    public function saveModules( $modules )
+    public function saveModules($modules)
     {
-        foreach (( array ) $modules as $id => $module) {
-            $this->saveModule( $id, $module );
+        foreach (( array )$modules as $id => $module) {
+            $this->saveModule($id, $module);
         }
 
     }
@@ -273,7 +272,7 @@ class ModuleStorage implements \Countable
      */
     public function _updateIndex()
     {
-        return $this->dataProvider->update( 'kb_kontentblocks', $this->index );
+        return $this->dataProvider->update('kb_kontentblocks', $this->index);
     }
 
     /**
@@ -282,9 +281,9 @@ class ModuleStorage implements \Countable
      * @param string $area
      * @return boolean
      */
-    public function hasModules( $area )
+    public function hasModules($area)
     {
-        if (!empty( $this->index )) {
+        if (!empty($this->index)) {
             foreach ($this->index as $module) {
                 if ($module->area->id === $area && $module['draft'] !== 'true' && $module['active'] !== false) {
                     return true;
@@ -327,12 +326,12 @@ class ModuleStorage implements \Countable
     {
         $cleaned = array();
 
-        if (empty( $this->index )) {
+        if (empty($this->index)) {
             return $cleaned;
         }
 
         foreach ($this->index as $def) {
-            if (isset( $def['class'] )) {
+            if (isset($def['class'])) {
                 $cleaned[$def['mid']] = $def;
             } else {
                 // TODO remove from index;
@@ -360,19 +359,19 @@ class ModuleStorage implements \Countable
     public function deleteAll()
     {
         foreach ($this->getIndex() as $k => $module) {
-            $this->dataProvider->delete( '_' . $k );
+            $this->dataProvider->delete('_' . $k);
         }
 
-        return $this->dataProvider->delete( 'kb_kontentblocks' );
+        return $this->dataProvider->delete('kb_kontentblocks');
     }
 
     /**
      * Handle data restore
      * @param $data
      */
-    public function restoreBackup( $data )
+    public function restoreBackup($data)
     {
-        if (is_null( $data )) {
+        if (is_null($data)) {
             return;
         }
 
@@ -380,21 +379,21 @@ class ModuleStorage implements \Countable
         $modules = $data['modules'];
 
         // delete old data
-        if (!empty( $modules )) {
+        if (!empty($modules)) {
             foreach ($modules as $k => $value) {
-                $this->dataProvider->delete( $k );
+                $this->dataProvider->delete($k);
 
             }
         }
-        $this->dataProvider->delete( 'kb_kontentblocks' );
+        $this->dataProvider->delete('kb_kontentblocks');
 
         //set new old data from backup;
-        $this->dataProvider->update( 'kb_kontentblocks', $index );
+        $this->dataProvider->update('kb_kontentblocks', $index);
 
 
-        if (!empty( $modules )) {
+        if (!empty($modules)) {
             foreach ($modules as $k => $value) {
-                $this->dataProvider->update( $k, $value );
+                $this->dataProvider->update($k, $value);
             }
         }
     }
@@ -410,8 +409,8 @@ class ModuleStorage implements \Countable
      */
     public function count()
     {
-        if (is_array( $this->index )) {
-            return count( $this->index );
+        if (is_array($this->index)) {
+            return count($this->index);
         }
 
         return 0;

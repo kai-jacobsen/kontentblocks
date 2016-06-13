@@ -4,6 +4,7 @@ namespace Kontentblocks\Templating;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\ImageResize;
 use Pimple\Container;
+use Twig_Extension_StringLoader;
 use Twig_SimpleFunction;
 
 /**
@@ -64,6 +65,7 @@ class Twig
         );
 
         $environment->addExtension( new \Twig_Extension_Debug() );
+        $environment->addExtension(new Twig_Extension_StringLoader());
         $environment->enableDebug();
 
         $environment->registerUndefinedFunctionCallback( array( __CLASS__, 'undefinedFunctions' ) );

@@ -3,12 +3,10 @@ namespace Kontentblocks\Backend\DataProvider;
 
 /**
  * Interface DataProviderInterface
- * @package Kontentblocks\Backend\DataProviderController
+ * @package Kontentblocks\Backend\DataProvider
  */
 interface DataProviderInterface
 {
-
-    public function __construct( $postId );
 
     public function get( $key );
 

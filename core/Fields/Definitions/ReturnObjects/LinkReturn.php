@@ -2,7 +2,7 @@
 namespace Kontentblocks\Fields\Definitions\ReturnObjects;
 
 
-class LinkFieldReturn extends StandardFieldReturn
+class LinkReturn extends StandardFieldReturn
 {
 
     /**

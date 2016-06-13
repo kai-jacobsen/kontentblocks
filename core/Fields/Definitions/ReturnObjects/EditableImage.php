@@ -21,7 +21,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
     public $helptext = 'Click to chose a different image';
 
     /**
-     * @var Image
+     * @var ImageReturn
      */
     public $image;
     /**
@@ -275,7 +275,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      */
     public function prepare()
     {
-        $this->image = new Image($this->value, $this->field, $this->salt);
+        $this->image = new ImageReturn($this->value, $this->field, $this->salt);
         return $this;
     }
 

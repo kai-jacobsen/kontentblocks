@@ -2,9 +2,11 @@
 
 namespace Kontentblocks\tests\core\Modules;
 
+use Kontentblocks\Backend\DataProvider\DataProvider;
 use Kontentblocks\Backend\DataProvider\DataProviderService;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
+use Kontentblocks\Hooks\Capabilities;
 use Kontentblocks\Modules\ModuleWorkshop;
 
 
@@ -19,7 +21,7 @@ class PostMetaDataProviderTest extends \WP_UnitTestCase
 
     public static function setUpBeforeClass()
     {
-        \Kontentblocks\Hooks\Capabilities::setup();
+        Capabilities::setup();
     }
 
 
@@ -31,7 +33,7 @@ class PostMetaDataProviderTest extends \WP_UnitTestCase
 
     public function testSetGet()
     {
-        $provider = DataProviderService::getPostProvider($this->post);
+        $provider = new DataProvider($this->post, 'post');
 
         $provider->update('teststring1', 'test');
         $this->assertEquals('test', get_post_meta($this->post, 'teststring1', true));
@@ -45,7 +47,7 @@ class PostMetaDataProviderTest extends \WP_UnitTestCase
 
     public function testDelete()
     {
-        $provider = DataProviderService::getPostProvider($this->post);
+        $provider = new DataProvider($this->post, 'post');
         $provider->update('teststring1', 'test');
         $this->assertEquals('test', get_post_meta($this->post, 'teststring1', true));
         $this->assertEquals('test', $provider->get('teststring1'));

@@ -166,7 +166,7 @@ abstract class OptionPanel extends AbstractPanel
     public function save(Request $postData)
     {
         $old = $this->model->export();
-        $new = $this->fields->save($_POST[$this->baseId], $old);
+        $new = $this->fields->save($postData->request->get($this->baseId), $old);
         $merged = Utilities::arrayMergeRecursive($new, $old);
         $this->dataProvider->set($merged)->save();
         $location = add_query_arg(array('message' => '1'));

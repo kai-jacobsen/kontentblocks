@@ -9,7 +9,7 @@ use Kontentblocks\Utils\ImageResize;
  * Class Image
  * @package Kontentblocks\Fields\Definitions\Returnobjects
  */
-class Image extends StandardFieldReturn
+class ImageReturn extends StandardFieldReturn
 {
 
     /**

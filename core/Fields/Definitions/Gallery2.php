@@ -8,8 +8,6 @@ use Kontentblocks\Kontentblocks;
 /**
  * Simple text input field
  * Additional args are:
- * type - specific html5 input type e.g. number, email... .
- *
  */
 Class Gallery2 extends Field
 {
@@ -17,7 +15,7 @@ Class Gallery2 extends Field
     // Defaults
     public static $settings = array(
         'type' => 'gallery2',
-        'returnObj' => 'Gallery'
+        'returnObj' => 'GalleryReturn'
     );
 
 
@@ -26,42 +24,42 @@ Class Gallery2 extends Field
      * @param $data
      * @return mixed
      */
-    public function setValue( $data )
+    public function setValue($data)
     {
 
         $forJSON = null;
-        if (!empty( $data['images'] ) && is_array( $data['images'] )) {
+        if (!empty($data['images']) && is_array($data['images'])) {
             foreach ($data['images'] as &$image) {
-                if (isset( $image['id'] )) {
-                    $image['file'] = wp_prepare_attachment_for_js( $image['id'] );
+                if (isset($image['id'])) {
+                    $image['file'] = wp_prepare_attachment_for_js($image['id']);
                 }
             }
             $forJSON = $data;
         }
-        $jsonTransport = Kontentblocks::getService( 'utility.jsontransport' );
+        $jsonTransport = Kontentblocks::getService('utility.jsontransport');
         $jsonTransport->registerFieldData(
             $this->getFieldId(),
             $this->type,
             $forJSON,
             $this->getKey(),
-            $this->getArg( 'arrayKey' )
+            $this->getArg('arrayKey')
         );
         return $data;
     }
 
-    public function save( $data, $old )
+    public function save($data, $old)
     {
-        if (is_null( $data )) {
+        if (is_null($data)) {
             return $old;
         }
 
-        if (!isset( $data['images'] ) || !is_array( $data['images'] )) {
+        if (!isset($data['images']) || !is_array($data['images'])) {
             return $old;
         }
 
         $data['images'] = array_map(
-            function ( $imageId ) {
-                return absint( $imageId );
+            function ($imageId) {
+                return absint($imageId);
             },
             $data['images']
         );
@@ -73,7 +71,7 @@ Class Gallery2 extends Field
      *
      * @return mixed
      */
-    public function prepareFormValue( $val )
+    public function prepareFormValue($val)
     {
         return $val;
     }

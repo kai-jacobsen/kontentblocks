@@ -18,7 +18,7 @@ class DataProviderService
 
     /**
      * @param $postId
-     * @return DataProviderController
+     * @return PostMetaDataProvider
      */
     public static function getPostProvider($postId)
     {
@@ -26,7 +26,7 @@ class DataProviderService
         if (isset(self::$postProviders[$postId])) {
             return self::$postProviders[$postId];
         }
-        return self::$postProviders[$postId] = new DataProviderController($postId);
+        return self::$postProviders[$postId] = new PostMetaDataProvider($postId);
 
     }
 
@@ -55,7 +55,6 @@ class DataProviderService
             return self::$userProviders[$userId];
         }
         return self::$userProviders[$userId] = new UserMetaDataProvider($userId);
-
     }
 
 }

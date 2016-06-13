@@ -4,10 +4,10 @@ namespace Kontentblocks\Backend\DataProvider;
 
 
 /**
- * Class DataProviderController
+ * Class DataProvider
  * @package Kontentblocks\Backend\DataProvider
  */
-class DataProviderController implements DataProviderInterface
+class DataProvider implements DataProviderInterface
 {
 
     /**
@@ -23,22 +23,53 @@ class DataProviderController implements DataProviderInterface
     protected $listeners = array();
 
     /**
-     * @param int $postId
+     * @var string
      */
-    public function __construct($postId)
+    protected $type;
+
+    protected $objectId;
+
+    /**
+     * @param int $objectId
+     * @param $type
+     */
+    public function __construct($objectId, $type)
     {
+        $this->objectId = $objectId;
+        $this->type = $type;
+
         $this->dataProvider = apply_filters(
-            'kb::data.primary.provider',
-            $postId
+            "kb.{$type}.data.primary.provider",
+            $objectId
         );
 
-        // Fallback to wordpress postmeta
         if (!is_object($this->dataProvider)) {
-            $this->dataProvider = new PostMetaDataProvider($postId);
+            $this->dataProvider = $this->setupProvider();
         }
 
-        $this->listeners = apply_filters('kb::data.listeners', $this->listeners, $postId);
+        $this->listeners = apply_filters("kb.data.listeners", $this->listeners, $this);
 
+    }
+
+    /**
+     * @return DataProviderInterface
+     */
+    private function setupProvider()
+    {
+        switch ($this->type) {
+            case 'post':
+                return DataProviderService::getPostProvider($this->objectId);
+                break;
+            case 'term':
+                return DataProviderService::getTermProvider($this->objectId);
+                break;
+            case 'user':
+                return DataProviderService::getUserProvider($this->objectId);
+                break;
+            case 'options':
+                return new SerOptionsDataProvider($this->objectId);
+                break;
+        }
     }
 
     /**
@@ -105,7 +136,6 @@ class DataProviderController implements DataProviderInterface
         }
         return $this->dataProvider->reset();
     }
-
 
     public function addSlashes()
     {

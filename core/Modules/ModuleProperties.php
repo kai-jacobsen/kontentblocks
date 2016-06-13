@@ -5,6 +5,7 @@ namespace Kontentblocks\Modules;
 
 use AdamBrett\ShellWrapper\Command\Value;
 use Kontentblocks\Areas\AreaSettingsModel;
+use Kontentblocks\Backend\DataProvider\DataProvider;
 use Kontentblocks\Backend\DataProvider\DataProviderService;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
@@ -299,7 +300,7 @@ class ModuleProperties
 
         if (is_null($area->settings)) {
             $area->set('settings',
-                new AreaSettingsModel($area, $this->postId, DataProviderService::getPostProvider($this->postId)));
+                new AreaSettingsModel($area, $this->postId, new DataProvider($this->postId, 'post')));
         }
 
         /**

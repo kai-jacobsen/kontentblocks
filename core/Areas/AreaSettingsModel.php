@@ -2,8 +2,8 @@
 
 namespace Kontentblocks\Areas;
 
-use Kontentblocks\Backend\DataProvider\DataProviderController;
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\DataProvider\DataProvider;
+use Kontentblocks\Backend\DataProvider\DataProviderInterface;
 
 
 /**
@@ -29,7 +29,7 @@ class AreaSettingsModel implements \JsonSerializable
     protected $settings = array();
 
     /**
-     * @var DataProviderController
+     * @var DataProvider
      */
     private $dataProvider;
 
@@ -42,9 +42,9 @@ class AreaSettingsModel implements \JsonSerializable
      *
      * @param AreaProperties $area
      * @param $postId
-     * @param DataProviderController $dataProvider
+     * @param DataProviderInterface $dataProvider
      */
-    public function __construct( AreaProperties $area, $postId,  DataProviderController $dataProvider )
+    public function __construct( AreaProperties $area, $postId,  DataProviderInterface $dataProvider )
     {
         $this->postId = $postId;
         $this->dataProvider = $dataProvider;

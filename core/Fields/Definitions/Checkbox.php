@@ -18,7 +18,8 @@ Class Checkbox extends Field
     public static $settings = array(
         'type' => 'checkbox',
         'renderHidden' => true,
-        'forceSave' => true
+        'forceSave' => true,
+        'returnObj' => 'BoolReturn'
     );
 
 

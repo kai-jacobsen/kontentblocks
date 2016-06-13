@@ -3,6 +3,7 @@
 namespace Kontentblocks\Backend\Environment;
 
 
+use Kontentblocks\Backend\DataProvider\DataProvider;
 use Kontentblocks\Backend\DataProvider\DataProviderService;
 use Kontentblocks\Backend\DataProvider\TermMetaDataProvider;
 use Kontentblocks\Panels\TermPanelRepository;
@@ -38,7 +39,7 @@ class TermEnvironment implements \JsonSerializable
     {
         $this->termId = $termId;
         $this->termObj = $termObj;
-        $this->dataProvider = DataProviderService::getTermProvider($termId);
+        $this->dataProvider = new DataProvider($termId, 'term');
         $this->termPanels = new TermPanelRepository($this);
         add_action('admin_footer', array($this, 'toJSON'));
 
