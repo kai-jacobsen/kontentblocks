@@ -1569,12 +1569,6 @@ module.exports = Backbone.View.extend({
           that.moduleView.model.get('overrides')[key] = val;
           break;
       }
-
-      switch (key) {
-        case 'name':
-          that.moduleView.$('.kb-module-name').val(val);
-          break;
-      }
       that.moduleView.trigger('kb::module.input.changed');
       that.model.trigger('override:' + key);
     });
@@ -6755,14 +6749,10 @@ var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
     return "                       checked=\"checked\"\n";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+    var stack1;
 
-  return "<div class=\"kb-status-settings-header\">\n    <span class=\"kb-modal-title\">Individual Module Settings</span>\n\n    <div class=\"kb-modal-close dashicons dashicons-no-alt\"></div>\n</div>\n<div class=\"kb-status-settings-inner\">\n    <div class=\"kbms-field-wrap\">\n        <label>Name\n            <input type=\"text\" data-kbms-key=\"name\" name=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.mid : stack1), depth0))
-    + "[overrides][name]\" value=\""
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0))
-    + "\">\n        </label>\n    </div>\n    <div class=\"kbms-field-wrap\">\n        <label>Visible for logged-in users only\n            <input type=\"checkbox\" data-kbms-key=\"loggedinonly\" name=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.mid : stack1), depth0))
+  return "<div class=\"kb-status-settings-header\">\n    <span class=\"kb-modal-title\">Individual Module Settings</span>\n\n    <div class=\"kb-modal-close dashicons dashicons-no-alt\"></div>\n</div>\n<div class=\"kb-status-settings-inner\">\n    <div class=\"kbms-field-wrap\">\n        <label>Visible for logged-in users only\n            <input type=\"checkbox\" data-kbms-key=\"loggedinonly\" name=\""
+    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.mid : stack1), depth0))
     + "[overrides][loggedinonly]\"\n"
     + ((stack1 = helpers['if'].call(depth0,((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.guard : stack1)) != null ? stack1.loggedInOnly : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "                   value=\"true\">\n        </label>\n    </div>\n\n</div>";

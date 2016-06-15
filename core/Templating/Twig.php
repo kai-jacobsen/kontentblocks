@@ -23,18 +23,18 @@ class Twig
     public static function setupLoader()
     {
         $paths = array();
-        if (is_dir( get_template_directory() . '/module-templates/' )) {
-            $paths[] = apply_filters( 'kb_twig_def_path', get_template_directory() . '/module-templates/' );
+        if (is_dir(get_template_directory() . '/module-templates/')) {
+            $paths[] = apply_filters('kb_twig_def_path', get_template_directory() . '/module-templates/');
         }
-        if (is_child_theme() && is_dir( get_stylesheet_directory() . '/module-templates/' )) {
-            $paths[] = apply_filters( 'kb_twig_def_path', get_stylesheet_directory() . '/module-templates/' );
+        if (is_child_theme() && is_dir(get_stylesheet_directory() . '/module-templates/')) {
+            $paths[] = apply_filters('kb_twig_def_path', get_stylesheet_directory() . '/module-templates/');
         }
 
         $paths[] = KB_PLUGIN_PATH . 'core/Fields/Definitions/templates/';
         $paths[] = KB_PLUGIN_PATH . 'core/Fields/Customizer/templates/';
 
-        $paths = apply_filters( 'kb.templating.paths', $paths );
-        $loader = new \Twig_Loader_Filesystem( $paths );
+        $paths = apply_filters('kb.templating.paths', $paths);
+        $loader = new \Twig_Loader_Filesystem($paths);
         return $loader;
 
     }
@@ -45,17 +45,17 @@ class Twig
      * @param bool $public
      * @return \Twig_Environment
      */
-    public static function setupEnvironment( Container $services, $public = true )
+    public static function setupEnvironment(Container $services, $public = true)
     {
 
         $args = array(
-            'cache' => apply_filters( 'kb.twig.cachepath', WP_CONTENT_DIR . '/twigcache/' ),
-            'auto_reload' => TRUE,
-            'debug' => TRUE
+            'cache' => apply_filters('kb.twig.cachepath', WP_CONTENT_DIR . '/twigcache/'),
+            'auto_reload' => true,
+            'debug' => true
         );
 
         if (!$public) {
-            $args['cache'] = trailingslashit( KB_PLUGIN_PATH ) . 'cache/';
+            $args['cache'] = trailingslashit(KB_PLUGIN_PATH) . 'cache/';
             $args['autoescape'] = false;
         }
 
@@ -64,16 +64,30 @@ class Twig
             $args
         );
 
-        $environment->addExtension( new \Twig_Extension_Debug() );
+        $environment->addExtension(new \Twig_Extension_Debug());
         $environment->addExtension(new Twig_Extension_StringLoader());
         $environment->enableDebug();
 
-        $environment->registerUndefinedFunctionCallback( array( __CLASS__, 'undefinedFunctions' ) );
-        $environment->registerUndefinedFilterCallback( array( __CLASS__, 'undefinedFilters' ) );
+        $environment->registerUndefinedFunctionCallback(array(__CLASS__, 'undefinedFunctions'));
+        $environment->registerUndefinedFilterCallback(array(__CLASS__, 'undefinedFilters'));
 
-        self::addCustomFunctions( $environment );
+        self::addCustomFunctions($environment);
 
         return $environment;
+    }
+
+    /**
+     * @param \Twig_Environment $environment
+     */
+    private static function addCustomFunctions(\Twig_Environment $environment)
+    {
+        $getImage = new Twig_SimpleFunction(
+            'getImage',
+            function ($id, $width = null, $height = null, $crop = true, $single = true, $upscale = true) {
+                return ImageResize::getInstance()->process($id, $width, $height, $crop, $single, $upscale);
+            }
+        );
+        $environment->addFunction($getImage);
     }
 
     /**
@@ -81,18 +95,18 @@ class Twig
      * @param $func
      * @return bool|\Twig_SimpleFunction
      */
-    public static function undefinedFunctions( $func )
+    public static function undefinedFunctions($func)
     {
-        if (function_exists( $func )) {
+        if (function_exists($func)) {
             return new \Twig_SimpleFunction(
                 $func,
-                function () use ( $func ) {
+                function () use ($func) {
                     ob_start();
-                    $return = call_user_func_array( $func, func_get_args() );
+                    $return = call_user_func_array($func, func_get_args());
                     $echo = ob_get_clean();
-                    return empty( $echo ) ? $return : $echo;
+                    return empty($echo) ? $return : $echo;
                 },
-                array( 'is_safe' => array( 'all' ) )
+                array('is_safe' => array('all'))
             );
         }
 
@@ -104,38 +118,24 @@ class Twig
      * @param $filter
      * @return \Twig_SimpleFilter
      */
-    public static function undefinedFilters( $filter )
+    public static function undefinedFilters($filter)
     {
         return new \Twig_SimpleFilter(
             $filter,
-            function () use ( $filter ) {
+            function () use ($filter) {
 
-                return apply_filters( $filter, func_get_arg( 0 ) );
+                return apply_filters($filter, func_get_arg(0));
             },
-            array( 'is_safe' => array( 'all' ) )
+            array('is_safe' => array('all'))
         );
-    }
-
-    /**
-     * @param \Twig_Environment $environment
-     */
-    private static function addCustomFunctions( \Twig_Environment $environment )
-    {
-        $getImage = new Twig_SimpleFunction(
-            'getImage',
-            function ( $id, $width = null, $height = null, $crop = true, $single = true, $upscale = true ) {
-                return ImageResize::getInstance()->process( $id, $width, $height, $crop, $single, $upscale );
-            }
-        );
-        $environment->addFunction( $getImage );
     }
 
     /**
      * Will prepend the path to the Loaders paths
      * @param $path
      */
-    public static function setPath( $path )
+    public static function setPath($path)
     {
-        Kontentblocks::getService( 'templating.twig.loader' )->prependPath( $path );
+        Kontentblocks::getService('templating.twig.loader')->prependPath($path);
     }
 }

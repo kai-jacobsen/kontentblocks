@@ -168,7 +168,7 @@ class ModuleNode
         $html .= "<div rel='{$this->module->getId()}' class='kb-module__header klearfix edit kb-title'>";
         $html .= "<div class='ui-wrap'></div>";
         // name
-        $html .= "<div class='kb-name'><input class='block-title kb-module-name' type='text' name='{$this->module->getId(
+        $html .= "<div class='kb-name'><input class='kb-module-name' type='text' name='{$this->module->getId(
             )}[overrides][name]' value='" . esc_attr(
                 $this->module->properties->getSetting( 'name' )
             ) . "' /></div>";

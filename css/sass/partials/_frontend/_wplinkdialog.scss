@@ -29,10 +29,10 @@ body.kontentblocks-ready{
     -webkit-box-shadow: 0 3px 6px rgba( 0, 0, 0, 0.3 );
     box-shadow: 0 3px 6px rgba( 0, 0, 0, 0.3 );
     width: 500px;
-    height: 270px;
+    height: 500px;
     overflow: hidden;
     margin-left: -250px;
-    margin-top: -125px;
+    margin-top: -250px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -197,7 +197,7 @@ body.kontentblocks-ready{
     width: 250px;
     max-width: 70%;
     font-size: 13px !important;
-    padding: 5px !important;
+    padding: 0px !important;
   }
 
   #wp-link .link-search-wrapper {
@@ -298,7 +298,7 @@ body.kontentblocks-ready{
 
   #wp-link #search-results,
   #wp-link #search-panel {
-    display: none;
+    //display: none;
   }
 
   #wp-link-wrap.search-panel-visible #search-panel {

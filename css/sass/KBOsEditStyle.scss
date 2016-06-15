@@ -243,6 +243,11 @@ body.onsite-editing {
 //  @include box-sizing(border-box);
 //}
 
+.kb-template-selector--wrapper select{
+  background: #fff !important;
+  color: $grey-900;
+}
+
 #onsite-modal a:hover {
   text-decoration: none;
 }
@@ -403,6 +408,7 @@ body.onsite-editing {
     input[type="radio"]:focus,
     select:focus {
       border-color: #999;
+      border-width: 0;
       font-family: 'Open Sans', sans-serif;
       font-size: 12px;
     }
@@ -418,7 +424,7 @@ body.onsite-editing {
     select {
       background-color: #fff;
       color: #333;
-      border-color: #efefef;
+      border:1px solid #efefef !important;
       font-family: 'Open Sans', sans-serif;
       font-size: 12px;
       margin-bottom: 0;

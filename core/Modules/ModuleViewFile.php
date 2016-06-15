@@ -54,7 +54,7 @@ class ModuleViewFile
      * @param \DirectoryIterator $node
      * @param $rootPath
      */
-    public function __construct( \DirectoryIterator $node, $rootPath )
+    public function __construct(\DirectoryIterator $node, $rootPath)
     {
         $this->rootPath = $rootPath;
         $this->node = $node;
@@ -67,9 +67,9 @@ class ModuleViewFile
     private function prepareNode()
     {
         $this->filename = $this->node->getFilename();
-        $this->subPath = str_replace( $this->rootPath, '', trailingslashit($this->node->getPath()) );
+        $this->subPath = str_replace($this->rootPath, '', trailingslashit($this->node->getPath()));
         $this->path = $this->node->getPath();
-        $this->id = $this->normalize( $this->subPath );
+        $this->id = $this->normalize($this->subPath);
         $this->order = $this->stripOrderingNumbers($this->filename);
         $this->name = $this->generateName();
     }
@@ -79,20 +79,11 @@ class ModuleViewFile
      * @param $subPath
      * @return string
      */
-    private function normalize( $subPath )
+    private function normalize($subPath)
     {
-        $relPath = trailingslashit($subPath) . str_replace('.twig','', $this->filename);
+        $relPath = trailingslashit($subPath) . str_replace('.twig', '', $this->filename);
         $segments = explode(DIRECTORY_SEPARATOR, $relPath);
-        return  implode('.', $segments);
-    }
-
-    /**
-     * @param $normalized
-     * @return string
-     */
-    private function denormalize( $normalized )
-    {
-        return str_replace( '.', DIRECTORY_SEPARATOR, $normalized ) . '.twig';
+        return implode('.', $segments);
     }
 
     /**
@@ -104,21 +95,14 @@ class ModuleViewFile
      *
      * @return mixed
      */
-    private function stripOrderingNumbers( $file )
+    private function stripOrderingNumbers($file)
     {
-        $parts = explode( '-', $file);
-        if (is_numeric( $parts[0] )) {
-            return absint( $parts[0] );
+        $parts = explode('-', $file);
+        if (is_numeric($parts[0])) {
+            return absint($parts[0]);
         } else {
             return 0;
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString(){
-        return $this->filename;
     }
 
     /**
@@ -128,6 +112,23 @@ class ModuleViewFile
     {
         $sub = (!empty($this->subPath)) ? '(' . $this->subPath . ')' : '';
         return ucfirst(str_replace('.twig', '', $this->filename)) . $sub;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->filename;
+    }
+
+    /**
+     * @param $normalized
+     * @return string
+     */
+    private function denormalize($normalized)
+    {
+        return str_replace('.', DIRECTORY_SEPARATOR, $normalized) . '.twig';
     }
 
 }

@@ -5,11 +5,6 @@
 </div>
 <div class="kb-status-settings-inner">
     <div class="kbms-field-wrap">
-        <label>Name
-            <input type="text" data-kbms-key="name" name="{{ model.mid }}[overrides][name]" value="{{ model.settings.name }}">
-        </label>
-    </div>
-    <div class="kbms-field-wrap">
         <label>Visible for logged-in users only
             <input type="checkbox" data-kbms-key="loggedinonly" name="{{ model.mid }}[overrides][loggedinonly]"
                    {{#if model.guard.loggedInOnly }}

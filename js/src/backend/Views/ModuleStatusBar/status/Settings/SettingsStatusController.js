@@ -57,12 +57,6 @@ module.exports = Backbone.View.extend({
           that.moduleView.model.get('overrides')[key] = val;
           break;
       }
-
-      switch (key) {
-        case 'name':
-          that.moduleView.$('.kb-module-name').val(val);
-          break;
-      }
       that.moduleView.trigger('kb::module.input.changed');
       that.model.trigger('override:' + key);
     });
