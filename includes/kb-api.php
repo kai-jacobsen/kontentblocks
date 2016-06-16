@@ -8,10 +8,12 @@ use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
 use Kontentblocks\Panels\PanelModel;
+use Kontentblocks\Panels\PostPanel;
 use Kontentblocks\Panels\TermPanel;
 use Kontentblocks\Utils\CommonTwig\SimpleView;
 use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
+use Law\Post\EntityModel;
 
 /**
  * Register Area
@@ -261,7 +263,7 @@ function getTermPanelModel($panelId, $termId, $taxonomy = null)
 /**
  * @param null $panelId
  * @param null $postId
- * @return mixed
+ * @return EntityModel
  */
 function getPostPanelModel($panelId = null, $postId = null)
 {
