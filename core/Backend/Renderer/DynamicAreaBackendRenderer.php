@@ -23,7 +23,7 @@ class DynamicAreaBackendRenderer extends AreaBackendRenderer
      * @param bool $echo
      * @return string
      */
-    public function render( $echo = false )
+    public function render( $echo = true )
     {
         $out = "<div class='kb-area--body'>";
 

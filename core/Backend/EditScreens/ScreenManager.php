@@ -151,7 +151,7 @@ class ScreenManager
             return array();
         }
 
-        // @TODO 157 159 was commented out
+        // @TODO 157 159 was commented out, and that was right
         foreach ($this->areas as $area) {
 //            if (!$area->dynamic || ($area->dynamic && $area->settings->isAttached())) {
                 $areas[$area->context][$area->id] = $area;

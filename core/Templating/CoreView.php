@@ -61,7 +61,7 @@ class CoreView
     /**
      *
      * @param bool $echo
-     * @return bool
+     * @return bool|string
      */
     public function render( $echo = false )
     {

@@ -565,11 +565,10 @@ module.exports = Backbone.View.extend({
     this.listenTo(this, 'module:attached', this.ui);
 
 
-    this.AreaControls = new AreaControls({
+      this.AreaControls = new AreaControls({
       el: this.$el,
       parent: this
     });
-
     this.setupDefaultMenuItems();
     this.render();
   },
@@ -713,15 +712,22 @@ module.exports = Backbone.View.extend({
   tagName: 'li',
   initialize: function (options) {
     this.Browser = options.Browser;
+    this.listenTo(this.model, 'change:settings',this.visibility)
   },
   events: {
     'click': 'add'
   },
+  visibility: function(){
+      if (this.model.get('settings').attached){
+        this.$el.hide();
+      } else {
+        this.$el.show();
+      }
+  },
   render: function () {
-    if (this.model.get('settings').attached) {
-      return false;
-    }
-    return this.$el.append(tplGlobalAreaItem(this.model.toJSON()));
+    this.$el.append(tplGlobalAreaItem(this.model.toJSON()));
+    this.$el.appendTo(this.Browser.$list);
+    this.visibility();
   },
   add: function () {
     var settings = _.clone(this.model.get('settings'));

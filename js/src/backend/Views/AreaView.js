@@ -21,11 +21,10 @@ module.exports = Backbone.View.extend({
     this.listenTo(this, 'module:attached', this.ui);
 
 
-    this.AreaControls = new AreaControls({
+      this.AreaControls = new AreaControls({
       el: this.$el,
       parent: this
     });
-
     this.setupDefaultMenuItems();
     this.render();
   },

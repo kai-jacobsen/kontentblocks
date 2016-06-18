@@ -79,7 +79,6 @@ class GlobalModulesMenu
     public function addForm()
     {
         global $post;
-
         wp_nonce_field('kontentblocks_save_post', 'kb_noncename');
         wp_nonce_field('kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce');
         $storage = new ModuleStorage($post->ID);
@@ -90,7 +89,7 @@ class GlobalModulesMenu
         if (empty($template)) {
             $this->createForm();
         } else {
-            $this->globalModule($template, $storage->getDataProvider());
+            $this->globalModule($template);
         }
 
     }
@@ -105,7 +104,7 @@ class GlobalModulesMenu
     {
 
         $screen = get_current_screen();
-
+        $request = Request::createFromGlobals();
         if ($screen->post_type !== 'kb-gmd') {
             return;
         }
@@ -116,7 +115,7 @@ class GlobalModulesMenu
          * if this fails for any reason, data is preserved anyway
          * for completeness
          */
-        $postData = (!empty($_POST['new-gmodule'])) ? $_POST['new-gmodule'] : array();
+        $postData = $request->request->get('new-module', array());
 
         // Data for twig
         $templateData = array(
@@ -146,7 +145,6 @@ class GlobalModulesMenu
 
         $type = (isset($postData['type'])) ? $postData['type'] : '';
         $modules =
-
         $modules = $this->getGloballyAllowed();
 
         $collection = array();
@@ -173,11 +171,11 @@ class GlobalModulesMenu
      */
     public function getGloballyAllowed()
     {
-        /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
-        $ModuleRegistry = Kontentblocks::getService('registry.modules');
+        /** @var \Kontentblocks\Modules\ModuleRegistry $registry */
+        $registry = Kontentblocks::getService('registry.modules');
 
         return array_filter(
-            $ModuleRegistry->getAll(),
+            $registry->getAll(),
             function ($module) {
                 if (isset($module['settings']['globalModule']) && $module['settings']['globalModule'] == true) {
                     return true;
@@ -192,7 +190,7 @@ class GlobalModulesMenu
      *
      * @param $gmodule
      * @since 0.1.0
-     * @return void
+     * @return void|string
      */
     protected function globalModule($gmodule)
     {
@@ -232,14 +230,13 @@ class GlobalModulesMenu
         );
 
 
-        if (isset($_GET['return'])) {
-            echo "<input type='hidden' name='kb_return_to_post' value='{$_GET['return']}' >";
+        $return = filter_input(INPUT_GET, 'return', FILTER_VALIDATE_INT);
+        if (is_numeric($return)) {
+            echo "<input type='hidden' name='kb_return_to_post' value='{$return}' >";
         }
         // To keep html out of php files as much as possible twig is used
         $formNew = new CoreView('global-modules/edit-gmodule.twig', $templateData);
         $formNew->render(true);
-
-
     }
 
     /**
@@ -269,7 +266,7 @@ class GlobalModulesMenu
      * @return bool|void
      * @since 0.1.0
      */
-    public function save($postId, \WP_POST $postObj)
+    public function save($postId, \WP_Post $postObj)
     {
         // auth request
         if (!$this->auth($postId)) {
@@ -347,7 +344,7 @@ class GlobalModulesMenu
             return false;
         }
 
-        if (get_post_type($postId) == 'revision' && !isset($_POST['wp-preview'])) {
+        if (get_post_type($postId) == 'revision' && !Utilities::isPreview()) {
             return false;
         }
 
@@ -429,15 +426,20 @@ class GlobalModulesMenu
     public function postData($data, $post)
     {
 
+        $request = Request::createFromGlobals();
         if ($post['post_type'] !== 'kb-gmd') {
             return $data;
         }
 
-        if (!isset($_POST['new-gmodule'])) {
+        if ($request->request->get('new-gmodule', false)) {
             return $data;
         }
 
-        $title = filter_var($_POST['new-gmodule']['name'], FILTER_SANITIZE_STRING);
+        $reqData = $request->request->get('new-gmodule', array());
+        if (empty($reqData)){
+            return $data;
+        }
+        $title = filter_var($reqData['name'], FILTER_SANITIZE_STRING);
         $slug = wp_unique_post_slug(
             sanitize_title($title),
             $post['ID'],
@@ -453,7 +455,6 @@ class GlobalModulesMenu
 
         $data['post_title'] = $title;
         $data['post_name'] = $slug;
-
         return $data;
     }
 
@@ -499,7 +500,7 @@ class GlobalModulesMenu
 
         register_post_type('kb-gmd', $args);
         remove_post_type_support('kb-gmd', 'editor');
-        remove_post_type_support('kb-gmd', 'title');
+//        remove_post_type_support('kb-gmd', 'title');
     }
 
     /**

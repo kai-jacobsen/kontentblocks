@@ -61,7 +61,6 @@ class PostPanelRepository extends StandardPanelRepository
             }
             $postTypes = !empty($panel['postTypes']) ? $panel['postTypes'] : [];
             $pageTemplates = !empty($panel['pageTemplates']) ? $panel['pageTemplates'] : [];
-
             if (is_array($pageTemplates) && !empty($pageTemplates)) {
                 if (!in_array($environment->getPageTemplate(), $pageTemplates)) {
                     continue;

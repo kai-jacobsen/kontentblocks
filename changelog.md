@@ -1,5 +1,8 @@
 #Changelog
 
+####0.8.0
++ data providers consistency improved 
+
 ####0.7.0
 + new field types: oembed, text-multiple, multiselect
 + improved module template loader

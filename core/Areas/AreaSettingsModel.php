@@ -112,7 +112,8 @@ class AreaSettingsModel implements \JsonSerializable
         return array(
             'active' => true,
             'layout' => 'default',
-            'attached' => ( !$this->area->dynamic ) ? false : true
+//            'attached' => ( !$this->area->dynamic ) ? false : true
+            'attached' => false
         );
     }
 

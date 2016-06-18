@@ -136,7 +136,6 @@ class DynamicAreas
 
         echo Utilities::getBaseIdField($environment->getStorage()->getIndex());
         echo "<input type='hidden' name='blog_id' value='{$blogId}' >";
-
         $areaHTML = new AreaBackendRenderer($areaDef, $environment);
         $areaHTML->build();
 
