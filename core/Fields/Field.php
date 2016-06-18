@@ -400,6 +400,10 @@ abstract class Field implements Exportable
         }
     }
 
+    /**
+     * @param $args
+     * @return array
+     */
     public function augmentArgs($args)
     {
         $def = array();
@@ -427,17 +431,17 @@ abstract class Field implements Exportable
      * like: module_x_n['$key']
      * optional as array
      *
-     * @param $id
+     * @param $baseId
      * @param string $subkey
      *
      * @since 0.1.0
      */
-    public function setBaseId($id, $subkey = null)
+    public function setBaseId($baseId, $subkey = null)
     {
         if (!$subkey) {
-            $this->baseId = $id;
+            $this->baseId = $baseId;
         } else {
-            $this->baseId = $id . '[' . $subkey . ']';
+            $this->baseId = $baseId . '[' . $subkey . ']';
         }
     }
 

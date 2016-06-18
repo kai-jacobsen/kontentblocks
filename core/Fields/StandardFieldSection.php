@@ -138,6 +138,7 @@ class StandardFieldSection implements Exportable
 
         if (!$this->fieldExists($key)) {
             $groupkey = $this->evaluateGroupKey($args, $key);
+            $args['arrayKey'] = $groupkey;
             if (!isset($args['priority'])) {
                 $args['priority'] = $this->getPriorityIndex();
             }

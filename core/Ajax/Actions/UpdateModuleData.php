@@ -45,7 +45,7 @@ class UpdateModuleData implements AjaxActionInterface
         $workshop = new ModuleWorkshop($environment, $moduleArgs);
         $module = $workshop->getModule();
 
-        $overrides = $data['overrides'];
+        $overrides = $request->request->get('overrides',array());
         $module->properties->parseOverrides($overrides);
 
          // gather data
