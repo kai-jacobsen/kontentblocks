@@ -88,6 +88,11 @@ class FieldSubGroup implements Exportable
     {
         /** @var Field $field */
         foreach ($this->fields as $field) {
+
+            if (!is_object($field)){
+                continue;
+            }
+
             $fielddata = (!empty($instanceData[$field->getKey()])) ? $instanceData[$field->getKey()] : $field->getArg(
                 'std',
                 ''
