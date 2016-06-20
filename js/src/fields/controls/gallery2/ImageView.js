@@ -24,10 +24,10 @@ module.exports = Backbone.View.extend({
     return this.createBaseId() + '[' + this.Controller.model.get('fieldkey') + ']' + '[images]' + '[]';
   },
   createBaseId: function () {
-    if (!_.isEmpty(this.Controller.model.get('arrayKey'))) {
-      return this.Controller.model.get('baseId') + '[' + this.Controller.model.get('arrayKey') + ']';
-    } else {
+    // if (!_.isEmpty(this.Controller.model.get('arrayKey'))) {
+    //   return this.Controller.model.get('baseId') + '[' + this.Controller.model.get('arrayKey') + ']';
+    // } else {
       return this.Controller.model.get('baseId');
-    }
+    // }
   }
 });
