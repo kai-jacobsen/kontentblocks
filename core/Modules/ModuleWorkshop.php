@@ -150,7 +150,9 @@ class ModuleWorkshop
             // generic
             'class' => '',
             'overrides' => array(
-                'name' => null
+                'name' => null,
+                'loggedinonly' => false,
+                'wrapperclasses' => ''
             ),
             // environmental
             'post_id' => null,

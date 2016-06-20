@@ -152,12 +152,17 @@ class ModuleProperties
      */
     public function parseOverrides($overrides)
     {
-        $whitelist = array('name', 'loggedinonly');
+        $whitelist = array('name', 'loggedinonly', 'wrapperclasses');
 
         foreach ($overrides as $key => $value) {
             if (!is_null($value) && in_array($key, $whitelist)) {
                 switch ($key) {
                     case 'name':
+                        if (!empty($value)) {
+                            $this->settings[$key] = $value = filter_var($value, FILTER_SANITIZE_STRING);
+                        }
+                        break;
+                    case 'wrapperclasses':
                         if (!empty($value)) {
                             $this->settings[$key] = $value = filter_var($value, FILTER_SANITIZE_STRING);
                         }

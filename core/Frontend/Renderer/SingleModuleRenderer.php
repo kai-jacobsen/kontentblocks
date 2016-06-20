@@ -86,6 +86,7 @@ class SingleModuleRenderer implements RendererInterface
                 'module',
                 'single-module',
                 $this->module->properties->getSetting('slug'),
+                $this->wrapperClassesFromOVerrides(),
                 'view-' . str_replace('.twig', '', $this->module->properties->viewfile)
             );
 
@@ -157,6 +158,18 @@ class SingleModuleRenderer implements RendererInterface
     {
         $this->classes = array_merge($this->classes, $classes);
         return $this;
+    }
+
+    /**
+     * @return string|void
+     */
+    private function wrapperClassesFromOVerrides()
+    {
+        $overrides = $this->module->properties->overrides;
+        if (isset($overrides['wrapperclasses'])){
+            return esc_attr($overrides['wrapperclasses']);
+        }
+        return '';
     }
 
 }

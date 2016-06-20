@@ -1,0 +1,7 @@
+  <label>Visible for logged-in users only
+    <input type="checkbox" data-kbms-key="loggedinonly" name="{{ model.mid }}[overrides][loggedinonly]"
+      {{#if model.validator.loggedInOnly }}
+           checked="checked"
+      {{/if}}
+           value="true">
+  </label>

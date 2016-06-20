@@ -1,17 +1,10 @@
 <div class="kb-status-settings-header">
     <span class="kb-modal-title">Individual Module Settings</span>
-
     <div class="kb-modal-close dashicons dashicons-no-alt"></div>
 </div>
 <div class="kb-status-settings-inner">
-    <div class="kbms-field-wrap">
-        <label>Visible for logged-in users only
-            <input type="checkbox" data-kbms-key="loggedinonly" name="{{ model.mid }}[overrides][loggedinonly]"
-                   {{#if model.guard.loggedInOnly }}
-                       checked="checked"
-                   {{/if}}
-                   value="true">
-        </label>
+    <div class="kb-status-settings--tab-nav">
+        <ul class="kb-status-settings--tab-nav-list"></ul>
     </div>
-
 </div>
+

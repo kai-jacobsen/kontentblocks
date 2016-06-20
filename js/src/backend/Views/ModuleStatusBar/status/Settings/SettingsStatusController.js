@@ -1,5 +1,7 @@
 var tplSettingsModal = require('templates/backend/status/settings/modal-inner.hbs');
-
+var SettingsTabController = require('./SettingsTabsController');
+var LoggedInOnly = require('./controls/LoggedInOnly');
+var WrapperClasses = require('./controls/WrapperClasses');
 module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-status-settings-modal kb-hide',
@@ -10,18 +12,40 @@ module.exports = Backbone.View.extend({
   initialize: function (options) {
     this.listenTo(this.model, 'remove', this.dispose);
     this.moduleView = options.moduleView;
-    this.$el.append(tplSettingsModal({model: this.model.toJSON()}));
     this.$el.attr('id', this.model.get('mid') + '-settings-modal');
+    this.$el.append(tplSettingsModal({model: this.model.toJSON()}));
+    this.tabController = new SettingsTabController({
+      controller: this,
+      model: this.model,
+      el: this.$('.kb-status-settings--tab-nav')
+    });
+    this.setupTabItems();
+  },
+  setupTabItems: function () {
+    this.tabController.addItem({id: 'visibility', 'label': 'Visibility'}, new LoggedInOnly({
+      model: this.model,
+      controller: this,
+      bindId: 'loggedinonly'
+    }));
+
+    this.tabController.addItem({id: 'details', 'label': 'Details'}, new WrapperClasses({
+      model: this.model,
+      controller: this,
+      bindId: 'wrapperclasses'
+    }));
+
   },
   open: function () {
     if (!this.rendered) {
       this.$el.appendTo('body').removeClass('kb-hide');
       this.rendered = true;
       this.bindHandlers();
+      this.tabController.$el.tabs();
     } else {
       this.$el.detach();
       this.$el.appendTo('body');
       this.$el.removeClass('kb-hide');
+      this.tabController.$el.tabs('enable');
     }
     jQuery('#wpwrap').addClass('module-browser-open');
 
@@ -32,6 +56,8 @@ module.exports = Backbone.View.extend({
     this.$el.appendTo(this.moduleView.$el);
     this.$el.addClass('kb-hide');
     jQuery('#wpwrap').removeClass('module-browser-open');
+    this.tabController.$el.tabs('disable');
+
     return this;
   },
   dispose: function () {

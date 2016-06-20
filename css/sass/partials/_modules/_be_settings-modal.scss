@@ -35,7 +35,7 @@
   position: fixed;
   width: 50%;
   height: 50%;
-  background-color: #f9f9f9;
+  background-color: #fff;
   @extend .base-box-border;
   @extend .base-box-shadow;
   top: 50%;
@@ -48,8 +48,7 @@
   height: 32px;
   line-height: 32px;
   padding: 0 $fullpadding;
-  background-color: #f2f2f2;
-  border-bottom: 1px solid #ccc;
+  background-color: #fff;
   position: relative;
 
   span {
@@ -66,9 +65,34 @@
 }
 
 .kb-status-settings-inner {
-  background-color: #f9f9f9;
+
 }
 
 .kbms-field-wrap{
-  padding: $halfpadding $fullpadding;
+  padding:  $halfpadding $fullpadding;
+  background: #f9f9f9;
+}
+
+.kb-status-settings--tab-nav-list{
+  padding:  0 $fullpadding;
+  list-style: none !important;
+
+  li{
+    display: inline-block;
+    margin-right: 12px;
+
+    a{
+      text-decoration: none !important;
+      border-bottom: none !important;
+      color: $grey-500;
+      outline: none !important;
+    }
+
+    &.ui-tabs-active{
+      a{
+        color: $lightblue;
+      }
+    }
+  }
+
 }
