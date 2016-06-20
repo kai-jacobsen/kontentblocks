@@ -195,6 +195,9 @@ class FieldSubGroup implements Exportable
     {
         $collect = array();
         foreach ($this->fields as $field) {
+            if (!is_object($field)){
+                continue;
+            }
             $collect[$field->getKey()] = $field->getDefaultValue();
         }
         return $collect;
