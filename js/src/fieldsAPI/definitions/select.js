@@ -4,7 +4,6 @@ module.exports = BaseView.extend({
   template: require('templates/fields/Select.hbs'),
   type: 'select',
   render: function () {
-    console.log(this.model.toJSON());
     return this.template({
       model: this.model.toJSON()
     });

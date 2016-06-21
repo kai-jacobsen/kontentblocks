@@ -5,7 +5,7 @@
             <option value="">Auswählen</option>
         {{/if}}
         {{#each model.options}}
-            <option {{#ifCond this.value model.value }}selected="selected"{{/ifCond}}    value="{{ this.value }}">{{this.name}}</option>
+            <option {{#ifCond this.value '==' ../model.value }}selected="selected"{{/ifCond}}    value="{{ this.value }}">{{this.name}}</option>
         {{/each}}
     </select>
     <p class="description">{{ model.description }}</p>

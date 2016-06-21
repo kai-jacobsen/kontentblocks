@@ -5765,7 +5765,6 @@ module.exports = BaseView.extend({
   template: require('templates/fields/Select.hbs'),
   type: 'select',
   render: function () {
-    console.log(this.model.toJSON());
     return this.template({
       model: this.model.toJSON()
     });
@@ -5842,11 +5841,28 @@ Handlebars.registerHelper("fieldName", function (base, index, key) {
   return base + "[" + index + "][" + key + "]";
 });
 
-Handlebars.registerHelper('ifCond', function(v1, v2, options) {
-  if(v1 === v2) {
-    return options.fn(this);
+Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+
+  switch (operator) {
+    case '==':
+      return (v1 == v2) ? options.fn(this) : options.inverse(this);
+    case '===':
+      return (v1 === v2) ? options.fn(this) : options.inverse(this);
+    case '<':
+      return (v1 < v2) ? options.fn(this) : options.inverse(this);
+    case '<=':
+      return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+    case '>':
+      return (v1 > v2) ? options.fn(this) : options.inverse(this);
+    case '>=':
+      return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+    case '&&':
+      return (v1 && v2) ? options.fn(this) : options.inverse(this);
+    case '||':
+      return (v1 || v2) ? options.fn(this) : options.inverse(this);
+    default:
+      return options.inverse(this);
   }
-  return options.inverse(this);
 });
 
 Handlebars.registerHelper('trimString', function(passedString, length) {
@@ -7000,11 +7016,11 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
     return "            <option value=\"\">Auswählen</option>\n";
-},"3":function(depth0,helpers,partials,data) {
+},"3":function(depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
   return "            <option "
-    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || helpers.helperMissing).call(depth0,(depth0 != null ? depth0.value : depth0),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1),{"name":"ifCond","hash":{},"fn":this.program(4, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || helpers.helperMissing).call(depth0,(depth0 != null ? depth0.value : depth0),"==",((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.value : stack1),{"name":"ifCond","hash":{},"fn":this.program(4, data, 0, blockParams, depths),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "    value=\""
     + alias2(alias1((depth0 != null ? depth0.value : depth0), depth0))
     + "\">"
@@ -7012,7 +7028,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "</option>\n";
 },"4":function(depth0,helpers,partials,data) {
     return "selected=\"selected\"";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
   return "<div class=\"kb-field kb-js-field field-api-text kb-field--select\">\n    <label class=\"heading\">"
@@ -7020,12 +7036,12 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "</label>\n    <select name=\""
     + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
     + "\">\n"
-    + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.showempty : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers.each.call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.options : stack1),{"name":"each","hash":{},"fn":this.program(3, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.showempty : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0, blockParams, depths),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.options : stack1),{"name":"each","hash":{},"fn":this.program(3, data, 0, blockParams, depths),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "    </select>\n    <p class=\"description\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
     + "</p>\n</div>";
-},"useData":true});
+},"useData":true,"useDepths":true});
 
 },{"hbsfy/runtime":188}],151:[function(require,module,exports){
 // hbsfy compiled Handlebars template
