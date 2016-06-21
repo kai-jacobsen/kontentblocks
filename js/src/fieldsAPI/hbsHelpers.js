@@ -14,6 +14,13 @@ Handlebars.registerHelper("fieldName", function (base, index, key) {
   return base + "[" + index + "][" + key + "]";
 });
 
+Handlebars.registerHelper('ifCond', function(v1, v2, options) {
+  if(v1 === v2) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+
 Handlebars.registerHelper('trimString', function(passedString, length) {
   length = length || 50;
   var overlength = passedString.length > length;
