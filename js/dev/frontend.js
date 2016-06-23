@@ -2058,6 +2058,7 @@ module.exports = BaseView.extend({
   initialize: function () {
     this.createController();
     this.render();
+    console.log('init');
   },
   render: function () {
     var that = this;
@@ -2144,6 +2145,7 @@ module.exports = Backbone.View.extend({
     // setup the flexfield configuration as set in the parent object
     // finally this.Tabs holds an array of all tabs with setup fields reference objects
     this.parentView = options.parentView;
+    this.active = false;
     this.Renderer = (this.model.get('renderer') == 'sections') ? SectionBoxItem : ToggleBoxItem;
     this.Fields = new FlexFieldsCollection();
     this.subviews = [];
@@ -2191,16 +2193,20 @@ module.exports = Backbone.View.extend({
     this._initialized = true; // flag init state
   },
   render: function () {
+    if (this.active){
+      return null;
+    }
     this.$el.append(tplSkeleton({
       i18n: I18n.getString('Refields.flexfields')
     }));
     this.setupElements();
     this.initialSetup();
-
+    this.active = true;
   },
   derender: function () {
     this.trigger('derender'); // subviews mights listen
     this.subviews = [];
+    this.active = false;
   },
   setupElements: function () {
     this.$list = this.$('.flexible-fields--item-list');

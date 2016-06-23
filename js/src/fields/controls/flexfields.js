@@ -4,6 +4,7 @@ module.exports = BaseView.extend({
   initialize: function () {
     this.createController();
     this.render();
+    console.log('init');
   },
   render: function () {
     var that = this;
