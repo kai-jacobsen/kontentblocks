@@ -45,7 +45,7 @@ class ModuleViewLoader
         $this->viewFilesystem = $filesystem;
         $this->module = $module;
         $this->views = $this->viewFilesystem->getTemplatesforContext($module->context->areaContext,
-            $module->context->postType);
+            $module->context->postType, $module->context->pageTemplate);
         if (count($this->views) > 1) {
             $this->hasViews = true;
         }

@@ -137,7 +137,7 @@ class PostEnvironment implements JsonSerializable
      */
     public function getPostType()
     {
-        if (!$this->postType){
+        if (!$this->postType) {
             return $this->postType = get_post_type($this->storageId);
         }
         return $this->postType;
@@ -172,6 +172,16 @@ class PostEnvironment implements JsonSerializable
     }
 
     /**
+     * returns the DataProvider instance
+     * @return DataProvider
+     * @since 0.1.0
+     */
+    public function getDataProvider()
+    {
+        return $this->storage->getDataProvider();
+    }
+
+    /**
      * @since 0.3.0
      */
     private function areasToContext()
@@ -182,7 +192,6 @@ class PostEnvironment implements JsonSerializable
             }
         }
     }
-
 
     public function getPanelObject($id)
     {
@@ -212,17 +221,6 @@ class PostEnvironment implements JsonSerializable
         return $this->postObj;
     }
 
-
-    /**
-     * returns the DataProvider instance
-     * @return DataProvider
-     * @since 0.1.0
-     */
-    public function getDataProvider()
-    {
-        return $this->storage->getDataProvider();
-    }
-
     /**
      * Returns all modules set to this post
      * @return array
@@ -237,8 +235,9 @@ class PostEnvironment implements JsonSerializable
     /**
      * @return ModuleRepository
      */
-    public function getModuleRepository(){
-        if(is_null($this->moduleRepository)){
+    public function getModuleRepository()
+    {
+        if (is_null($this->moduleRepository)) {
             $this->moduleRepository = new ModuleRepository($this);
         }
         return $this->moduleRepository;
@@ -331,8 +330,8 @@ class PostEnvironment implements JsonSerializable
      */
     public function save()
     {
-            $saveHandler = new SavePost($this);
-            $saveHandler->save();
+        $saveHandler = new SavePost($this);
+        $saveHandler->save();
     }
 
     /**

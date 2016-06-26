@@ -4628,6 +4628,8 @@ module.exports = Backbone.View.extend({
   render: function () {
     var inputName = this.createInputName(this.uid);
     var item = this.model.toJSON();
+    console.log(item);
+    item.previewUrl = (item.sizes.thumbnail) ? item.sizes.thumbnail.url : item.url;
     var tpl = jQuery(tplSingleImage({
       image: item,
       id: item.id,
@@ -6921,7 +6923,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     var stack1, helper, alias1=this.lambda, alias2=this.escapeExpression;
 
   return "<div class=\"kb-gallery--right-column\">\n    <div class=\"kb-gallery--image-holder\">\n        <img src=\""
-    + alias2(alias1(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.sizes : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.url : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.previewUrl : stack1), depth0))
     + "\">\n        <input type=\"hidden\" name=\""
     + alias2(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
     + "\" value=\""

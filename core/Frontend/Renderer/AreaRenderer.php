@@ -4,6 +4,7 @@ namespace Kontentblocks\Frontend\Renderer;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
+use Kontentblocks\Common\Interfaces\ModuleLookAheadInterface;
 use Kontentblocks\Common\Interfaces\RendererInterface;
 use Kontentblocks\Frontend\AreaNode;
 use Kontentblocks\Frontend\ModuleIterator;
@@ -21,7 +22,7 @@ use Kontentblocks\Modules\Module;
  *                  $Render->render($echo);
  * @package Kontentblocks\Render
  */
-class AreaRenderer implements RendererInterface
+class AreaRenderer implements RendererInterface, ModuleLookAheadInterface
 {
 
     /**
@@ -68,8 +69,6 @@ class AreaRenderer implements RendererInterface
      */
     private $previousModule;
 
-    private $nextModule;
-
     /**
      * Flag if prev. module type equals current
      * @var bool
@@ -101,7 +100,7 @@ class AreaRenderer implements RendererInterface
 
         $moduleRepository = $environment->getModuleRepository();
         $modules = $moduleRepository->getModulesforArea($this->areaId);
-        $this->modules = new ModuleIterator($modules, $this->environment);
+        $this->modules = new ModuleIterator($modules);
     }
 
     /**
@@ -137,10 +136,8 @@ class AreaRenderer implements RendererInterface
             if (!is_a($module, '\Kontentblocks\Modules\Module') || !$module->verifyRender()) {
                 continue;
             }
-
+            $module->renderer = $this;
             $module->context->set(array('renderPosition' => $this->position));
-
-
             $moduleOutput = $module->module();
             $output .= $this->areaHtmlNode->openLayoutWrapper();
             $output .= $this->beforeModule($module);
@@ -208,6 +205,9 @@ class AreaRenderer implements RendererInterface
 
     }
 
+    /**
+     * @param Module $module
+     */
     public function _beforeModule(Module $module)
     {
         $moduleClasses = $this->modules->getCurrentModuleClasses();
@@ -256,7 +256,6 @@ class AreaRenderer implements RendererInterface
         }
 
 
-
         if ($this->repeating && $this->areaHtmlNode->getSetting('mergeRepeating')) {
             $classes[] = 'module-merged';
             $classes[] = 'module';
@@ -294,6 +293,11 @@ class AreaRenderer implements RendererInterface
         $this->areaHtmlNode->nextLayout();
     }
 
-
+    public function getNextModule()
+    {
+        $next = $this->modules->next();
+        $this->modules->prev();
+        return $next;
+    }
 
 }

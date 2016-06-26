@@ -48,26 +48,17 @@ class ModuleIterator implements \Iterator, \Countable
     protected $currentModuleObject;
 
 
-    /**
-     * Environment object
-     *
-     * @var \Kontentblocks\Backend\Environment\PostEnvironment
-     * @since 0.1.0
-     */
-    protected $environment;
-
+    
     /**
      * Class constructor
      *
      * @param $modules
-     * @param $environment
      *
      * @since 0.1.0
      */
-    public function __construct($modules, $environment)
+    public function __construct($modules)
     {
         $this->modules = $this->setupModules($modules);
-        $this->environment = $environment;
     }
 
     /**
@@ -183,6 +174,13 @@ class ModuleIterator implements \Iterator, \Countable
     {
         return next($this->modules);
 
+    }
+
+    /**
+     * @return mixed
+     */
+    public function prev(){
+        return prev($this->modules);
     }
 
     /**
