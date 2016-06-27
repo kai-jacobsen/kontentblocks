@@ -4,7 +4,6 @@ module.exports = BaseView.extend({
   initialize: function () {
     this.createController();
     this.render();
-    console.log('init');
   },
   render: function () {
     var that = this;
@@ -15,7 +14,7 @@ module.exports = BaseView.extend({
     });
   },
   derender: function () {
-    this.FlexFieldsController.derender();
+    this.FlexFieldsController.derender(); 
   },
   rerender: function () {
     this.render();

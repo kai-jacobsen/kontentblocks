@@ -25,7 +25,7 @@ class ModuleNode
      * Constructor
      * @param Module $module
      */
-    public function __construct( Module $module )
+    public function __construct(Module $module)
     {
         $this->module = $module;
     }
@@ -45,16 +45,14 @@ class ModuleNode
         $concat .= $this->header();
 
 
-
         // inner block open
         $concat .= $this->openModuleBody();
         $concat .= $this->statusBar();
         $concat .= "<div class='kb-module__controls-inner-form'>";
 
 
-
         // if disabled don't output, just show disabled message
-        if ($this->module->properties->getSetting( 'disabled' )) {
+        if ($this->module->properties->getSetting('disabled')) {
             $concat .= "<p class='notice'>Dieses Modul ist deaktiviert und kann nicht bearbeitet werden.</p>";
         } else {
             $concat .= $this->module->form();
@@ -66,13 +64,13 @@ class ModuleNode
             $concat,
             $this->module
         );
-        $concat = apply_filters( 'kb.module.footer', $concat, $this->module );
+        $concat = apply_filters('kb.module.footer', $concat, $this->module);
 
         $concat .= $this->closeModuleBody();
 
         $concat .= $this->closeListItem();
 
-        if (method_exists( $this->module, 'adminEnqueue' )) {
+        if (method_exists($this->module, 'adminEnqueue')) {
             $this->module->adminEnqueue();
         }
 
@@ -87,16 +85,16 @@ class ModuleNode
     private function openListItem()
     {
         // extract the block id number
-        $count = strrchr( $this->module->getId(), "_" );
+        $count = strrchr($this->module->getId(), "_");
 
         // classname
         $hash = $this->module->properties->getSetting('hash');
         // additional classes to set for the item
-        $disabledclass = ( $this->module->properties->getSetting( 'disabled' ) ) ? 'disabled' : null;
-        $uidisabled = ( $this->module->properties->getSetting( 'disabled' ) ) ? 'ui-state-disabled' : null;
+        $disabledclass = ($this->module->properties->getSetting('disabled')) ? 'disabled' : null;
+        $uidisabled = ($this->module->properties->getSetting('disabled')) ? 'ui-state-disabled' : null;
 
         //$predefined = (isset($this->settings['predefined']) and $this->settings['predefined'] == '1') ? $this->settings['predefined'] : null;
-        $unsortable = ( ( isset( $this->unsortable ) and $this->unsortable ) == '1' ) ? 'cantsort' : null;
+        $unsortable = ((isset($this->unsortable) and $this->unsortable) == '1') ? 'cantsort' : null;
 
         // Block List Item
         return "<li id='{$this->module->getId()}' rel='{$this->module->getId(
@@ -109,52 +107,19 @@ class ModuleNode
 
     }
 
-
     /**
-     * The closing li tag
+     * Returns a string indicator for the current status
+     * @since 0.1.0
      * @return string
      */
-    private function closeListItem()
+    public function getStatusClass()
     {
-        return "</li>";
-
-    }
-
-    /**
-     * Outputs everything inside the module
-     * @TODO clean up module header from legacy code
-     */
-
-    private function openModuleBody()
-    {
-        $lockedmsg = ( !current_user_can( 'lock_kontentblocks' ) ) ? 'Content is locked' : null;
-        // markup for each block
-        $out = "<div style='display:none;' class='kb_inner kb-module__body'>";
-        if ($lockedmsg && KONTENTLOCK) {
-            $out = $lockedmsg;
+        if ($this->module->properties->state['active']) {
+            return 'activated';
         } else {
-            $out .= "<div class='kb-module__controls-inner'>";
+            return 'deactivated';
         }
 
-        return $out;
-
-    }
-
-
-    /**
-     * Lost in outer div space
-     * @return string
-     */
-    private function closeModuleBody()
-    {
-        return "</div></div></div>";
-    }
-
-
-    private function statusBar()
-    {
-        // content moved to client side code
-        return "<div class='kb-module--status-bar'></div>";
     }
 
     /**
@@ -170,7 +135,7 @@ class ModuleNode
         // name
         $html .= "<div class='kb-name'><input class='kb-module-name' type='text' name='{$this->module->getId(
             )}[overrides][name]' value='" . esc_attr(
-                $this->module->properties->getSetting( 'name' )
+                $this->module->properties->getSetting('name')
             ) . "' /></div>";
         $html .= "</div>";
         // Open the drop down menu
@@ -181,19 +146,48 @@ class ModuleNode
 
     }
 
+    /**
+     * Outputs everything inside the module
+     * @TODO clean up module header from legacy code
+     */
+
+    private function openModuleBody()
+    {
+        $lockedmsg = (!current_user_can('lock_kontentblocks')) ? 'Content is locked' : null;
+        // markup for each block
+        $out = "<div style='display:none;' class='kb_inner kb-module__body'>";
+        if ($lockedmsg && KONTENTLOCK) {
+            $out = $lockedmsg;
+        } else {
+            $out .= "<div class='kb-module__controls-inner'>";
+        }
+
+        return $out;
+
+    }
+
+    private function statusBar()
+    {
+        // content moved to client side code
+        return "<div class='kb-module--status-bar'></div>";
+    }
 
     /**
-     * Returns a string indicator for the current status
-     * @since 0.1.0
+     * Lost in outer div space
      * @return string
      */
-    public function getStatusClass()
+    private function closeModuleBody()
     {
-        if ($this->module->properties->state['active']) {
-            return 'activated';
-        } else {
-            return 'deactivated';
-        }
+        return "</div></div></div>";
+    }
+
+    /**
+     * The closing li tag
+     * @return string
+     */
+    private function closeListItem()
+    {
+        return "</li>";
 
     }
 } 

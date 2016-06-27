@@ -3799,7 +3799,6 @@ module.exports = BaseView.extend({
   initialize: function () {
     this.createController();
     this.render();
-    console.log('init');
   },
   render: function () {
     var that = this;
@@ -3810,7 +3809,7 @@ module.exports = BaseView.extend({
     });
   },
   derender: function () {
-    this.FlexFieldsController.derender();
+    this.FlexFieldsController.derender(); 
   },
   rerender: function () {
     this.render();
@@ -4629,7 +4628,6 @@ module.exports = Backbone.View.extend({
   render: function () {
     var inputName = this.createInputName(this.uid);
     var item = this.model.toJSON();
-    console.log(item);
     item.previewUrl = (item.sizes.thumbnail) ? item.sizes.thumbnail.url : item.url;
     var tpl = jQuery(tplSingleImage({
       image: item,
