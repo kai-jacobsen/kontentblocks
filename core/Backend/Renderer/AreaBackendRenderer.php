@@ -4,7 +4,9 @@ namespace Kontentblocks\Backend\Renderer;
 
 use Kontentblocks\Areas\AreaProperties;
 use Kontentblocks\Areas\AreaSettingsMenu;
+use Kontentblocks\Common\Interfaces\ModuleLookAheadInterface;
 use Kontentblocks\Common\Interfaces\RendererInterface;
+use Kontentblocks\Frontend\ModuleIterator;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Backend\Environment\PostEnvironment;
@@ -18,7 +20,7 @@ use Kontentblocks\Utils\Utilities;
  * @author Kai Jacobsen
  * @since 0.1.0
  */
-class AreaBackendRenderer implements RendererInterface
+class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
 {
 
     /**
@@ -43,7 +45,7 @@ class AreaBackendRenderer implements RendererInterface
 
     /**
      * Modules which were saved on this area
-     * @var array array of module settings from database
+     * @var ModuleIterator array of module settings from database
      */
     protected $attachedModules;
 
@@ -82,11 +84,11 @@ class AreaBackendRenderer implements RendererInterface
         // batch setting of properties
         //actual stored modules for this area
         $moduleRepository = $environment->getModuleRepository();
-        $this->attachedModules = $moduleRepository->getModulesForArea($area->id);
 
         // custom settins for this area
         $this->settingsMenu = new AreaSettingsMenu($this->area, $this->environment);
 
+        $this->attachedModules = new ModuleIterator($moduleRepository->getModulesForArea($area->id));
         $this->cats = Utilities::setupCats();
 
     }
@@ -142,6 +144,7 @@ class AreaBackendRenderer implements RendererInterface
             /** @var \Kontentblocks\Modules\Module $module */
             foreach ($this->attachedModules as $module) {
                 $module = apply_filters('kb.module.before.factory', $module);
+                $module->renderer = $this;
                 $out .= $module->renderForm();
                 Kontentblocks::getService('utility.jsontransport')->registerModule($module->toJSON());
             }
@@ -199,5 +202,15 @@ class AreaBackendRenderer implements RendererInterface
     public function footer()
     {
         echo "</div><!-- close area wrap -->";
+    }
+
+    /**
+     * @return mixed|void
+     */
+    public function getNextModule()
+    {
+        $next = $this->attachedModules->next();
+        $this->attachedModules->prev();
+        return $next;
     }
 }

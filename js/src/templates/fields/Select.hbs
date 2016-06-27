@@ -1,0 +1,12 @@
+<div class="kb-field kb-js-field field-api-text kb-field--select">
+    <label class="heading">{{ model.label }}</label>
+    <select name="{{ fieldName model.baseId model.index model.primeKey }}">
+        {{#if model.showempty}}
+            <option value="">Auswählen</option>
+        {{/if}}
+        {{#each model.options}}
+            <option {{#ifCond this.value '==' ../model.value }}selected="selected"{{/ifCond}}    value="{{ this.value }}">{{this.name}}</option>
+        {{/each}}
+    </select>
+    <p class="description">{{ model.description }}</p>
+</div>

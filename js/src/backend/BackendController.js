@@ -6,7 +6,7 @@ _.extend(KB.Events, Backbone.Events);
 KB.currentModule = {};
 KB.currentArea = {};
 
-// requires
+// requires 
 
 var ViewsCollection = require('shared/ViewsCollection');
 var FieldControlsCollection = require('fields/FieldControlsCollection');

@@ -56,6 +56,9 @@ abstract class Module implements EntityInterface
      * @var ModuleContext
      */
     public $context;
+    
+    
+    public $renderer;
 
 
     /**

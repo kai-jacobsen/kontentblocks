@@ -65,7 +65,7 @@ class Twig
         );
 
         $environment->addExtension(new \Twig_Extension_Debug());
-        $environment->addExtension(new Twig_Extension_StringLoader());
+        $environment->addExtension(new Twig_Extension_StringLoader());      
         $environment->enableDebug();
 
         $environment->registerUndefinedFunctionCallback(array(__CLASS__, 'undefinedFunctions'));

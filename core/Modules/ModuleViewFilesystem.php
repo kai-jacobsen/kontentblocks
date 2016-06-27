@@ -75,6 +75,7 @@ class ModuleViewFilesystem
         foreach (array_reverse($this->paths) as $path) {
             $tmp = $this->fillArrayWithFileNodes($path, $path);
             $files = Utilities::arrayMergeRecursive($tmp, $files);
+            d($files);
         }
         return $files;
     }
@@ -116,7 +117,7 @@ class ModuleViewFilesystem
      * @param $postType
      * @return array
      */
-    public function getTemplatesforContext($areaContext, $postType)
+    public function getTemplatesforContext($areaContext, $postType, $pageTemplate)
     {
 
         $collection = array();
@@ -127,6 +128,13 @@ class ModuleViewFilesystem
             $collection = array_merge($collection, $this->getSingles($this->views[$areaContext]));
         }
 
+        if ($postType === 'page' && !is_null($pageTemplate && !empty($pageTemplate))){
+            if (array_key_exists($pageTemplate, $this->views)) {
+                $ptvs = $this->views[$pageTemplate];
+                $collection = array_merge($collection, $this->getSingles($ptvs));
+            }
+        }
+        
         if (array_key_exists($postType, $this->views)) {
             $ptvs = $this->views[$postType];
             $collection = array_merge($collection, $this->getSingles($ptvs));

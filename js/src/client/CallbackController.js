@@ -27,7 +27,7 @@ window.KBF = {
       })
     }
   }
-};
+}; 
 
 
 jQuery(window).on('kb.refresh', function (event) {

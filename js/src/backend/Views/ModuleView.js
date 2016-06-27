@@ -53,6 +53,7 @@ module.exports = Backbone.View.extend({
     this.$head = jQuery('.kb-module__header', this.$el);
     this.$body = jQuery('.kb-module__body', this.$el);
     this.$inner = jQuery('.kb-module__controls-inner', this.$el);
+    this.$innerForm = jQuery('.kb-module__controls-inner-form', this.$el);
     this.attachedFields = {};
     this.instanceId = this.model.get('mid');
     // create new module actions menu
@@ -118,9 +119,9 @@ module.exports = Backbone.View.extend({
   },
   insertNewUpdateForm: function (response) {
     if (response.success) {
-      this.$inner.html(response.data.html);
+      this.$innerForm.html(response.data.html);
     } else {
-      this.$inner.html('empty');
+      this.$innerForm.html('empty');
     }
     if (response.data.json.Fields) {
       KB.payload.Fields = _.extend(Payload.getPayload('Fields'), response.data.json.Fields);

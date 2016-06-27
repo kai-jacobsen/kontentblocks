@@ -14,7 +14,7 @@ module.exports = BaseView.extend({
     });
   },
   derender: function () {
-    this.FlexFieldsController.derender();
+    this.FlexFieldsController.derender(); 
   },
   rerender: function () {
     this.render();

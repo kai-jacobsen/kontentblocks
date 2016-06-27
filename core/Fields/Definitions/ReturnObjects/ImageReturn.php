@@ -309,4 +309,9 @@ class ImageReturn extends StandardFieldReturn
 
         return $value;
     }
+
+    public function reset(){
+        $this->src = null;
+        return $this;
+    }
 }

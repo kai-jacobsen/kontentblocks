@@ -4,13 +4,12 @@ namespace Kontentblocks\Common\Interfaces;
 
 
 /**
- * Interface RendererInterface
+ * Interface ModuleLookAheadInterface
  * @package Kontentblocks\Common\Interfaces
  */
-interface RendererInterface
+interface ModuleLookAheadInterface
 {
 
-    public function render($echo);
+    public function getNextModule();
     
-
 }
