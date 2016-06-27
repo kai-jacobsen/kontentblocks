@@ -48,8 +48,8 @@ class ModuleNode
 
         // inner block open
         $concat .= $this->openModuleBody();
-
         $concat .= $this->statusBar();
+        $concat .= "<div class='kb-module__controls-inner-form'>";
 
 
 
@@ -147,7 +147,7 @@ class ModuleNode
      */
     private function closeModuleBody()
     {
-        return "</div></div>";
+        return "</div></div></div>";
     }
 
 
