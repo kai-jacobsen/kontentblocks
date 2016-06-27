@@ -23,6 +23,8 @@ class ModuleContext implements \JsonSerializable
     public $areaContext;
 
     public $renderPosition;
+    
+    public $renderer;
 
     public function __construct( PostEnvironment $environment, Module $module )
     {

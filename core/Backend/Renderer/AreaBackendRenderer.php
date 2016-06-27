@@ -144,7 +144,7 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
             /** @var \Kontentblocks\Modules\Module $module */
             foreach ($this->attachedModules as $module) {
                 $module = apply_filters('kb.module.before.factory', $module);
-                $module->renderer = $this;
+                $module->context->renderer = $this;
                 $out .= $module->renderForm();
                 Kontentblocks::getService('utility.jsontransport')->registerModule($module->toJSON());
             }

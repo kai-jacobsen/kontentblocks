@@ -136,7 +136,7 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface
             if (!is_a($module, '\Kontentblocks\Modules\Module') || !$module->verifyRender()) {
                 continue;
             }
-            $module->renderer = $this;
+            $module->context->renderer = $this;
             $module->context->set(array('renderPosition' => $this->position));
             $moduleOutput = $module->module();
             $output .= $this->areaHtmlNode->openLayoutWrapper();
