@@ -43,7 +43,10 @@ class ModuleViewFile
      * @var string
      */
     public $name;
-
+    /**
+     * @var ModuleViewsMeta
+     */
+    public $meta;
     /**
      * @var \DirectoryIterator
      */
@@ -54,10 +57,11 @@ class ModuleViewFile
      * @param \DirectoryIterator $node
      * @param $rootPath
      */
-    public function __construct(\DirectoryIterator $node, $rootPath)
+    public function __construct(\DirectoryIterator $node, $rootPath, ModuleViewsMeta $meta)
     {
         $this->rootPath = $rootPath;
         $this->node = $node;
+        $this->meta = $meta;
         $this->prepareNode();
     }
 
@@ -111,6 +115,11 @@ class ModuleViewFile
     private function generateName()
     {
         $sub = (!empty($this->subPath)) ? '(' . $this->subPath . ')' : '';
+        $path = (!empty($this->subPath)) ? trailingslashit($this->subPath) : '';
+        $metaName = $this->meta->getNameForFile($path . $this->filename);
+        if (!is_null($metaName)) {
+            return $metaName;
+        }
         return ucfirst(str_replace('.twig', '', $this->filename)) . $sub;
     }
 

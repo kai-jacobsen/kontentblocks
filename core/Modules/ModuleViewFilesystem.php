@@ -2,7 +2,6 @@
 namespace Kontentblocks\Modules;
 
 use DirectoryIterator;
-use Kontentblocks\Backend\EditScreens\ScreenManager;
 use Kontentblocks\Utils\Utilities;
 
 
@@ -19,20 +18,21 @@ class ModuleViewFilesystem
     public $isChildTheme;
     protected $views = array();
     protected $paths = array();
-
+    protected $viewsMeta;
     /**
      * @var Module
      */
     private $module;
 
     /**
-     * @param Module $Module
+     * @param Module $module
      */
-    public function __construct(Module $Module)
+    public function __construct(Module $module)
     {
-        $this->module = $Module;
+        $this->module = $module;
         $this->isChildTheme = is_child_theme();
-        $this->views = $this->setupViews($Module);
+        $this->viewsMeta = new ModuleViewsMeta($module->properties->getSetting('path'));
+        $this->views = $this->setupViews($module);
     }
 
     /**
@@ -41,7 +41,6 @@ class ModuleViewFilesystem
      */
     private function setupViews(Module $module)
     {
-
 
         if ($this->isChildTheme) {
             $childPath = trailingslashit(
@@ -75,7 +74,6 @@ class ModuleViewFilesystem
         foreach (array_reverse($this->paths) as $path) {
             $tmp = $this->fillArrayWithFileNodes($path, $path);
             $files = Utilities::arrayMergeRecursive($tmp, $files);
-            d($files);
         }
         return $files;
     }
@@ -96,13 +94,14 @@ class ModuleViewFilesystem
                 $filename = $node->getFilename();
                 if (is_string($filename) && $filename[0] !== '_') {
                     if ($node->getExtension() == 'twig') {
-                        $data[$node->getFilename()] = new ModuleViewFile($node, $root);
+                        $data[$node->getFilename()] = new ModuleViewFile($node, $root, $this->viewsMeta);
                     }
                 }
             }
         }
         return $data;
     }
+
 
     /**
      * @return array
@@ -128,13 +127,13 @@ class ModuleViewFilesystem
             $collection = array_merge($collection, $this->getSingles($this->views[$areaContext]));
         }
 
-        if ($postType === 'page' && !is_null($pageTemplate && !empty($pageTemplate))){
+        if ($postType === 'page' && !is_null($pageTemplate && !empty($pageTemplate))) {
             if (array_key_exists($pageTemplate, $this->views)) {
                 $ptvs = $this->views[$pageTemplate];
                 $collection = array_merge($collection, $this->getSingles($ptvs));
             }
         }
-        
+
         if (array_key_exists($postType, $this->views)) {
             $ptvs = $this->views[$postType];
             $collection = array_merge($collection, $this->getSingles($ptvs));
