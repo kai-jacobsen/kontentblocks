@@ -43,7 +43,7 @@ class ModuleViewsMeta
     }
 
     public function getNameForFile($filename){
-        if (isset($this->meta[$filename])){
+        if (is_array($this->meta) && isset($this->meta[$filename])){
             return $this->meta[$filename]['name'];
         }
         return null;
