@@ -91,11 +91,8 @@ KB.App = (function () {
     KB.Contexts.on('add', createContextViews);
     // Create views
     addViews();
-    /*
-     * payload.Fields collection
-     */
-    KB.FieldControls = new FieldControlsCollection();
-    KB.FieldControls.add(_.toArray(Payload.getPayload('Fields')));
+
+
     KB.Menus = require('backend/Menus');
     KB.Window = require('common/Window').init();
     // get the UI on track
@@ -146,6 +143,14 @@ KB.App = (function () {
     _.each(Payload.getPayload('Contexts'), function (context) {
       KB.ObjectProxy.add(KB.Contexts.add(context));
     });
+
+    /*
+     * payload.Fields collection
+     */
+    KB.FieldControls = new FieldControlsCollection();
+    KB.FieldControls.add(_.toArray(Payload.getPayload('Fields')));
+
+
   }
 
 

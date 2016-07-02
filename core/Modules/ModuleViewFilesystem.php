@@ -31,7 +31,7 @@ class ModuleViewFilesystem
     {
         $this->module = $module;
         $this->isChildTheme = is_child_theme();
-        $this->viewsMeta = new ModuleViewsMeta($module->properties->getSetting('path'));
+        $this->viewsMeta = new ModuleViewsMeta(trailingslashit($module->properties->getSetting('path')) . 'templates.yml');
         $this->views = $this->setupViews($module);
     }
 
