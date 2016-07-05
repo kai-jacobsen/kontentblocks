@@ -43,6 +43,12 @@ class ModuleViewFile
      * @var string
      */
     public $name;
+
+    /**
+     * @var
+     */
+    public $description;
+    
     /**
      * @var ModuleViewsMeta
      */
@@ -76,6 +82,7 @@ class ModuleViewFile
         $this->id = $this->normalize($this->subPath);
         $this->order = $this->stripOrderingNumbers($this->filename);
         $this->name = $this->generateName();
+        $this->description = $this->meta->getDescriptionForFile($this->filename);
     }
 
 

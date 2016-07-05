@@ -39,6 +39,7 @@ class ModuleViewLoader
      * Class constructor
      *
      * @param Module $module
+     * @param ModuleViewFilesystem $filesystem
      */
     public function __construct(Module $module, ModuleViewFilesystem $filesystem)
     {
@@ -102,12 +103,11 @@ class ModuleViewLoader
             $selected = $this->findDefaultTemplate();
         }
 
-
+        
         foreach ($this->views as $item) {
             $item->selected = ($item->filename === $selected) ? "selected='selected'" : '';
             $prepared[] = $item;
         }
-
 
         return $prepared;
     }

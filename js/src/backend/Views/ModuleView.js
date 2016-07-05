@@ -85,6 +85,20 @@ module.exports = Backbone.View.extend({
         view.$el.remove();
       });
     });
+
+    this.$('.kb-template-select').select2({
+      templateResult: function (state) {
+        console.log(state);
+        if (!state.id) {
+          return state.text;
+        }
+        var desc = state.element.dataset.tpldesc;
+        var $state = jQuery(
+          '<span>' + state.text + '<br><span class="kb-tpl-desc">' + desc + '</span></span>'
+        );
+        return $state;
+      }
+    });
   },
   // setup default actions for modules
   // duplicate | delete | change active status

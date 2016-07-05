@@ -123,8 +123,9 @@ abstract class Module implements EntityInterface
             'hidden' => false,
             'globalModule' => true,
             'category' => 'standard',
-            'views' => false,
+            'views' => true,
             'concat' => true,
+            'templates' => array(),
             'fieldRenderer' => 'Kontentblocks\Fields\Renderer\FieldRendererTabs'
         );
 

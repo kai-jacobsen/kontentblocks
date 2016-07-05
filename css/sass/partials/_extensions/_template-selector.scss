@@ -2,10 +2,10 @@
   padding: 0px 0px;
 //  background: #fafafa;
 //  border-bottom: 1px solid #ccc;
-  overflow: hidden;
+//  overflow: hidden;
   position: absolute;
   right: 4px;
-  top: 4px;
+  top: 9px;
   z-index: 101;
   font-family: 'Open Sans';
 
@@ -14,6 +14,7 @@
     padding: 0;
     background: transparent;
     border-left: 0;
+    min-width: 300px;
     label{
       color: #ccc;
       font-size: 11px;
@@ -26,7 +27,7 @@
 
   select{
     font-size: 12px !important;
-    width:150px;
+    width:100%;
     height: 30px !important;
     line-height: 100% !important;
     font-family: 'Open Sans' !important;

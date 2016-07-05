@@ -37,6 +37,10 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
         $this->field = $field;
     }
 
+    /**
+     * @param $value
+     * @return mixed
+     */
     protected function prepareValue( $value )
     {
         return $value;
