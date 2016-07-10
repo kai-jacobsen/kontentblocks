@@ -6,7 +6,7 @@
         <p>Please set options to show</p>
     {% endif %}
 
-    <select id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName() }}'>
+    <select id='{{ Form.getInputFieldId() }}' {% if Field.getArg('select2', false) %} data-kbselect2="true" {% endif %} {% if Field.getArg('multiple', false) %} multiple="multiple" {% endif %} name='{{ Form.getFieldName() }}'>
         {% if (Field.getArg('empty', true)) %}
             <option value='' name=''>Bitte wählen</option>
         {% endif %}

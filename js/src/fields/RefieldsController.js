@@ -14,6 +14,7 @@ Fields.registerObject('text', require('./controls/text'));
 Fields.registerObject('text-multiple', require('./controls/text-multiple'));
 Fields.registerObject('tagsinput', require('./controls/tagsinput'));
 Fields.registerObject('multiselect', require('./controls/multiselect'));
+Fields.registerObject('select', require('./controls/select'));
 Fields.registerObject('editor', require('./controls/editor'));
 Fields.registerObject('otimes', require('./controls/otimes'));
 Fields.registerObject('oembed', require('./controls/oembed'));
