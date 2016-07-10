@@ -29,6 +29,6 @@ Class Select extends Field
             return filter_var( $val, FILTER_SANITIZE_STRING );
         }
 
-        return null;
+        return $val;
     }
 }
