@@ -97,7 +97,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
             'priority' => 10,
             'postTypes' => array(),
             'frontend' => true,
-            'pageTemplates' => array('default')
+            'pageTemplates' => array('default'),
         );
 
         return wp_parse_args($args, $defaults);
