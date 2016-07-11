@@ -59,6 +59,8 @@ module.exports = BaseView.extend({
     _.defer(function () {
       that.parseAdditionalJSON(res.data.json);
       UI.repaint('#' + res.data.module.mid);
+      KB.Fields.trigger('update');
+
     })
   },
   parseAdditionalJSON: function (json) {

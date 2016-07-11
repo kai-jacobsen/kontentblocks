@@ -1,0 +1,8 @@
+publicName: 'Master Module Proxy'
+slug: 'core-master-module'
+description: 'Handles reference to master templates'
+master: true
+hidden: true
+category: 'core'
+globalModule: false
+views: false

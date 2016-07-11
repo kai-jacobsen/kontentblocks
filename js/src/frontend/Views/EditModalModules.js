@@ -330,7 +330,21 @@ module.exports = Backbone.View.extend({
           that.$el.show();
           that.recalibrate();
           that.LoadingAnimation.hide();
+
+          that.$('.kb-template-select').select2({
+            templateResult: function (state) {
+              if (!state.id) {
+                return state.text;
+              }
+              var desc = state.element.dataset.tpldesc;
+              var $state = jQuery(
+                '<span>' + state.text + '<br><span class="kb-tpl-desc">' + desc + '</span></span>'
+              );
+              return $state;
+            }
+          });
         }, 550);
+
 
       },
       error: function () {

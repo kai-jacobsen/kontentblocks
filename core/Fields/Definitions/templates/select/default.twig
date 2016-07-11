@@ -5,15 +5,31 @@
     {% else %}
         <p>Please set options to show</p>
     {% endif %}
-
-    <select id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName() }}'>
+    <select id='{{ Form.getInputFieldId() }}'
+            {% if Field.getArg('select2', false) %} data-kbselect2="true" {% endif %}
+            {% if Field.getArg('multiple', false) %} multiple="multiple" {% endif %}
+            {% if Field.getArg('multiple') %}
+                name='{{ Form.getFieldName(true) }}'
+            {% else %}
+                name='{{ Form.getFieldName() }}'
+            {% endif %}
+            style="width: {{ Field.getArg('width', '280px') }}">
         {% if (Field.getArg('empty', true)) %}
             <option value='' name=''>Bitte wählen</option>
         {% endif %}
 
-        {% for o in Field.getArg('options') %}
-            <option {% if (Field.getValue == o.value) %} selected="selected" {% endif %}
-                    value='{{ o.value|escape('html_attr') }}'>{{ o.name }}</option>
-        {% endfor %}
+        {% if Field.getArg('multiple') %}
+            {% for o in Field.getArg('options') %}
+                <option {% if ( o.value in Field.getValue()) %} selected="selected" {% endif %}
+                        value='{{ o.value|escape('html_attr') }}'>{{ o.name }}</option>
+            {% endfor %}
+        {% else %}
+            {% for o in Field.getArg('options') %}
+                <option {% if (Field.getValue == o.value) %} selected="selected" {% endif %}
+                        value='{{ o.value|escape('html_attr') }}'>{{ o.name }}</option>
+            {% endfor %}
+        {% endif %}
+
+
     </select>
 {% endblock %}

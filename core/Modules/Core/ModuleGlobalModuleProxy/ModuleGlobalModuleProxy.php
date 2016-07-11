@@ -15,16 +15,6 @@ use Kontentblocks\Templating\CoreView;
 class ModuleGlobalModuleProxy extends Module
 {
 
-    public static $settings = array(
-        'publicName' => 'Master Module',
-        'slug' => 'core-master-module',
-        'description' => 'Handles reference to master templates',
-        'globalModule' => false,
-        'master' => true,
-        'hidden' => true,
-        'category' => 'core'
-    );
-
     public static function init()
     {
         // runs only once on module creation and sets the original class reference to this class

@@ -331,7 +331,6 @@ class ModuleWorkshop
                 $this->environment
             );
             $this->module = $factory->getModule();
-            $time_elapsed_secs = microtime(true) - $this->start;
             return $this->module;
         }
         return false;

@@ -407,10 +407,9 @@ body.onsite-editing {
     input[type="checkbox"]:focus,
     input[type="radio"]:focus,
     select:focus {
-      border-color: #999;
-      border-width: 0;
-      font-family: 'Open Sans', sans-serif;
-      font-size: 12px;
+      border-color: #999 !important;
+      font-family: 'Open Sans', sans-serif !important;
+      font-size: 12px !important;
     }
 
     textarea,
@@ -428,6 +427,8 @@ body.onsite-editing {
       font-family: 'Open Sans', sans-serif;
       font-size: 12px;
       margin-bottom: 0;
+      padding-left: 8px !important;
+
     }
 
     select[disabled] {

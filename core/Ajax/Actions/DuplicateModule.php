@@ -123,7 +123,7 @@ class DuplicateModule implements AjaxActionInterface
         $response = array
         (
             'id' => $moduleWorkshop->getPropertiesObject()->mid,
-            'module' => $moduleWorkshop->getPropertiesObject(),
+            'module' => $module->toJSON(),
             'name' => $module->properties->getSetting('publicName'),
             'html' => $html,
             'json' => Kontentblocks::getService('utility.jsontransport')->getJSON(),

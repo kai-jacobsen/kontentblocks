@@ -140,7 +140,7 @@ class EditableElement extends AbstractEditableFieldReturn
         $text = array( 'div', 'p', 'span', 'article', 'section', 'blockquote' );
 
         if (in_array( $this->el, $titles )) {
-            $this->tinymce['toolbar'] = "kbcancleinline | undo redo | bold forecolor italic | alignleft aligncenter alignright alignjustify | wplink link";
+            $this->tinymce['toolbar'] = "kbcancleinline | undo redo | bold italic | alignleft aligncenter alig  nright alignjustify | wplink link";
             return 'editable';
         }
 

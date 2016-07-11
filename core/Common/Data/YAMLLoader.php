@@ -51,6 +51,13 @@ class YAMLLoader
             return new \WP_Error('yamlLoader', 'Yaml file not loaded');
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function isValid(){
+        return !is_wp_error($this->data);
+    }
     
     
 

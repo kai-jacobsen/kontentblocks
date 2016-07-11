@@ -1,0 +1,7 @@
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    <div id='{{ Form.getInputFieldId() }}' data-fieldkey='{{ Field.getKey() }}'
+         data-arraykey='{{ Field.getArg('arrayKey') }}' data-module='{{ Field.getFieldId() }}'
+         class='kb-postselect2__stage'>
+    </div>
+{% endblock %}

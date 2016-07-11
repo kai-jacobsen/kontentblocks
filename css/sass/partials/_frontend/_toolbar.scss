@@ -17,6 +17,7 @@ body.wp-admin .kb-change-observer{
   visibility: hidden;
   transition: all .5s ease-in;
   border: 1px solid #ccc;
+  font-size: 12px !important;
 
   &.show{
     visibility: visible;
