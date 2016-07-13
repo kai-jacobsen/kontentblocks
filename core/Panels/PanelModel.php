@@ -49,18 +49,6 @@ class PanelModel extends EntityModel
         return $provider->update($key, $this->export());
     }
 
-    public function saveAsSingle()
-    {
-        $dataProvider = $this->entity->getDataProvider();
-        foreach ($this->export() as $k => $v) {
-            if (empty($v)) {
-                $dataProvider->delete($this->entity->getId() . '_' . $k);
-            } else {
-                $dataProvider->update($this->entity->getId() . '_' . $k, $v);
-            }
-        }
-    }
-
     /**
      * @return mixed
      */
@@ -87,6 +75,18 @@ class PanelModel extends EntityModel
         unset($vars['_originalData']);
         unset($vars['entity']);
         return $vars;
+    }
+
+    public function saveAsSingle()
+    {
+        $dataProvider = $this->entity->getDataProvider();
+        foreach ($this->export() as $k => $v) {
+            if (empty($v)) {
+                $dataProvider->delete($this->entity->getId() . '_' . $k);
+            } else {
+                $dataProvider->update($this->entity->getId() . '_' . $k, $v);
+            }
+        }
     }
 
     public function reset()

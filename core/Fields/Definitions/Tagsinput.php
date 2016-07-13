@@ -47,11 +47,13 @@ Class Tagsinput extends Field
 
         $post = get_post(get_the_ID());
         $args = array(
-            'taxonomy' => $data['Field']->getArg('taxonomy', 'post_tag')
+            'taxonomy' => $this->getArg('taxonomy', 'post_tag')
         );
-
+        $box = array(
+            'args' => $args
+        );
         ob_start();
-        post_tags_meta_box($post, $args);
+        post_tags_meta_box($post, $box);
         $data['form'] = ob_get_clean();
 
         return $data;
