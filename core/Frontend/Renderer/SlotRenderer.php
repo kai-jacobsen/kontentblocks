@@ -57,11 +57,25 @@ class SlotRenderer
         ModuleIterator $iterator,
         AreaRenderSettings $areaSettings,
         ModuleRenderSettings $moduleSettings
-    )
-    {
+    ) {
         $this->areaSettings = $areaSettings;
         $this->moduleSettings = $moduleSettings;
         $this->iterator = $iterator;
+    }
+
+    /**
+     * @param int $number
+     * @param array $args
+     * @return array
+     */
+    public function getBatch($number = 1, $args = array())
+    {
+        $collect = array();
+        for ($i=0; $i < $number; $i++){
+            $collect[] = $this->slot($this->position,true, $args);
+            $this->next();
+        }
+        return $collect;
     }
 
     /**
@@ -69,7 +83,7 @@ class SlotRenderer
      */
     public function prev()
     {
-        $this->position --;
+        $this->position--;
         return $this;
     }
 
@@ -78,8 +92,8 @@ class SlotRenderer
      */
     public function forward()
     {
-        $count = count( $this->iterator );
-        $this->position = ( $count > 0 ) ? $count - 1 : 0;
+        $count = count($this->iterator);
+        $this->position = ($count > 0) ? $count - 1 : 0;
         return $this;
 
     }
@@ -107,28 +121,32 @@ class SlotRenderer
     /**
      * Actual method to handle the stuff
      * @param $pos
-     * @since 0.1.0
+     * @param bool $returnModule
+     * @param array $args
      * @return bool|string
+     * @since 0.1.0
      */
-    public function slot( $pos = null )
+    public function slot($pos = null, $returnModule = false, $args = array())
     {
-        if (is_null( $pos )) {
+        if (is_null($pos)) {
             $pos = $this->position;
         }
-
-
-        $module = $this->iterator->setPosition( $pos );
-
-        if (in_array( $module->getId(), $this->done )) {
-            return null;
-        }
-
-
-        if (is_a( $module, '\Kontentblocks\Modules\Module' )) {
-            $module->context->set('renderPosition', $this->position);
-            $renderer = new SingleModuleRenderer( $module, $this->moduleSettings );
+        $module = $this->iterator->setPosition($pos);
+        if (is_a($module, '\Kontentblocks\Modules\Module')) {
+            if (in_array($module->getId(), $this->done)) {
+                return null;
+            }
+            $this->moduleSettings->import($args);
+            $module->context->set(array('renderPosition' => $this->position));
+            $module->context->set(array('renderSettings' => $this->moduleSettings));
+            $renderer = new SingleModuleRenderer($module, $this->moduleSettings);
             $module->toJSON();
-            array_push( $this->done, $module->getId() );
+            array_push($this->done, $module->getId());
+
+            if ($returnModule){
+                return $renderer;
+            }
+
             if ($out = $renderer->render()) {
                 return $out;
             }
@@ -141,14 +159,14 @@ class SlotRenderer
      */
     public function next()
     {
-        $this->position ++;
+        $this->position++;
         return $this;
 
     }
 
     public function hasModule()
     {
-        return ( $this->iterator->next() !== false ) ? true : false;
+        return ($this->iterator->next() !== false) ? true : false;
     }
 
 

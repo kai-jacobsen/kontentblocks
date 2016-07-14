@@ -3,6 +3,7 @@
 namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Frontend\ModuleRenderSettings;
 
 
 /**
@@ -25,6 +26,11 @@ class ModuleContext implements \JsonSerializable
     public $renderPosition;
     
     public $renderer;
+
+    /**
+     * @var ModuleRenderSettings
+     */
+    public $renderSettings;
 
     public function __construct( PostEnvironment $environment, Module $module )
     {

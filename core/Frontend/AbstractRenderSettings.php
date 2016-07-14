@@ -48,9 +48,7 @@ abstract class AbstractRenderSettings implements \ArrayAccess, \JsonSerializable
      */
     public function offsetSet( $offset, $value )
     {
-        if (property_exists( $this, $offset )) {
             $this->$offset = $value;
-        }
     }
 
     /**

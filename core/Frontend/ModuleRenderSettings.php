@@ -37,9 +37,7 @@ class ModuleRenderSettings extends AbstractRenderSettings
         $parsed = wp_parse_args( $args, $defaults );
 
         foreach ($parsed as $key => $value) {
-            if (property_exists( $this, $key )) {
                 $this->$key = $value;
-            }
         }
     }
 

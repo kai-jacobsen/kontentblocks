@@ -74,7 +74,8 @@ abstract class TermPanel extends AbstractPanel
         $defaults = array(
             'taxonomy' => 'category',
             'insideTable' => true,
-            'saveAsSingle' => false
+            'saveAsSingle' => false,
+            'hideDescription' => true
         );
 
         return wp_parse_args($args, $defaults);
@@ -94,6 +95,14 @@ abstract class TermPanel extends AbstractPanel
 
             }
             add_action('admin_footer', array($this, 'toJSON'), 5);
+//            add_action('admin_footer', array($this, 'changeUi'), 5);
+        }
+    }
+
+    public function changeUi()
+    {
+        if ($this->args['hideDescription']){
+            echo "<style>.term-description-wrap {display: none !important;}</style";
         }
     }
 

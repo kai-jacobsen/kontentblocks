@@ -66,6 +66,7 @@ class ModuleView implements \JsonSerializable
 
     public function render( $echo = false )
     {
+
         if (empty( $this->tplFile )) {
             return false; //@TODO template missing
         }
