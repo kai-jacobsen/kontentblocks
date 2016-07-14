@@ -75,7 +75,7 @@ abstract class TermPanel extends AbstractPanel
             'taxonomy' => 'category',
             'insideTable' => true,
             'saveAsSingle' => false,
-            'hideDescription' => true
+            'hideDescription' => false
         );
 
         return wp_parse_args($args, $defaults);
@@ -95,7 +95,7 @@ abstract class TermPanel extends AbstractPanel
 
             }
             add_action('admin_footer', array($this, 'toJSON'), 5);
-//            add_action('admin_footer', array($this, 'changeUi'), 5);
+            add_action('admin_footer', array($this, 'changeUi'), 5);
         }
     }
 
