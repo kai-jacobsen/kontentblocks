@@ -102,7 +102,7 @@ abstract class TermPanel extends AbstractPanel
     public function changeUi()
     {
         if ($this->args['hideDescription']){
-            echo "<style>.term-description-wrap {display: none !important;}</style";
+            echo "<style>.term-description-wrap {display: none !important;}</style>";
         }
     }
 
