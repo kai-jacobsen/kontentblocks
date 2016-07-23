@@ -90,12 +90,12 @@ abstract class AbstractRenderSettings implements \ArrayAccess, \JsonSerializable
      * @param $property
      * @return mixed| null
      */
-    public function get( $property )
+    public function get( $property, $default = null )
     {
         if (property_exists( $this, $property )) {
             return $this->$property;
         }
-        return null;
+        return $default;
     }
 
 
