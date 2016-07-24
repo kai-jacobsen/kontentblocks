@@ -30,6 +30,25 @@ Class Select extends Field
             return filter_var($val, FILTER_SANITIZE_STRING);
         }
 
+        if ($this->getArg('select2', false) && is_array($val)) {
+            $collect = array();
+            $options = $this->getArg('options', array());
+            $toValue = $this->sortToValue($options);
+
+            foreach ($val as $someValue){
+                if (isset($toValue[$someValue])){
+                    $collect[$someValue] = $toValue[$someValue];
+                    unset($toValue[$someValue]);
+                }
+            }
+
+            foreach (array_reverse($collect) as $item) {
+                array_unshift($toValue, $item);
+            }
+
+            $this->setArgs(array('options' => $toValue));
+        }
+
         return $val;
     }
 
@@ -63,5 +82,14 @@ Class Select extends Field
         }
 
         return $new;
+    }
+
+    private function sortToValue($options)
+    {
+        $collect = array();
+        foreach ($options as $option) {
+            $collect[$option['value']] = $option;
+        }
+        return $collect;
     }
 }
