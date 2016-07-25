@@ -239,13 +239,12 @@ class GlobalModulesMenu
      */
     public function postData($data, $post)
     {
-
         $request = Request::createFromGlobals();
         if ($post['post_type'] !== 'kb-gmd') {
             return $data;
         }
 
-        if ($request->request->get('new-gmodule', false)) {
+        if (!$request->request->get('new-gmodule', false)) {
             return $data;
         }
 
@@ -261,6 +260,7 @@ class GlobalModulesMenu
             $post['post_type'],
             0
         );
+
 
         // no template data send
         if (!isset($title, $slug)) {
