@@ -2,6 +2,6 @@
 {% block fieldmarkup %}
     <div class="kbf-field--text-multiple-stage" data-kftype="text-multiple">
         <div data-kfel="list"></div>
-        <a class="button button-secondary" data-kfui="add-entry">add entry</a>
+        <a class="button button-secondary" data-kfui="add-entry">{{ Field.getArg('buttonlabel')|default('add entry') }}</a>
     </div>
 {% endblock %}

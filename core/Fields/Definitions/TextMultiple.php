@@ -17,7 +17,6 @@ Class TextMultiple extends Field
     // Defaults
     public static $settings = array(
         'type' => 'text-multiple',
-        'forceSave' => true
     );
 
     public function save($new, $old)

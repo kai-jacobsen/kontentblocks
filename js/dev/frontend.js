@@ -3754,6 +3754,7 @@ module.exports = Backbone.View.extend({
       view.$el.off();
       view.remove();
       that.handleLimit();
+      that.handleEmptyList();
     });
     this.handleLimit();
 
@@ -3773,12 +3774,17 @@ module.exports = Backbone.View.extend({
     var limit = this.model.get('limit');
     if (limit) {
       var items = jQuery('.kb-field--text-multiple-item', this.$list).length;
-
       if (items >= limit) {
         this.$button.hide();
       } else {
         this.$button.show();
       }
+    }
+  },
+  handleEmptyList: function(){
+    var items = jQuery('.kb-field--text-multiple-item', this.$list).length;
+    if (items == 0){
+      this.createElement('');
     }
   }
 });
