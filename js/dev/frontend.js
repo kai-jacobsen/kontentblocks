@@ -3729,6 +3729,8 @@ module.exports = Backbone.View.extend({
         var limit = this.model.get('limit');
         if (limit && (i + 1) <= limit) {
           this.createElement(val);
+        } else {
+          this.createElement(val);
         }
       }, this)
       this.handleLimit();
