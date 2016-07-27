@@ -2806,6 +2806,11 @@ module.exports = Backbone.View.extend({
   render: function () {
     var inputName = this.createInputName(this.uid);
     var item = this.model.toJSON();
+
+    if (!item.sizes){
+      return;
+    }
+
     item.previewUrl = (item.sizes.thumbnail) ? item.sizes.thumbnail.url : item.url;
     var tpl = jQuery(tplSingleImage({
       image: item,
