@@ -26,7 +26,6 @@ Class Gallery2 extends Field
      */
     public function setValue($data)
     {
-
         $forJSON = null;
         if (!empty($data['images']) && is_array($data['images'])) {
             foreach ($data['images'] as &$image) {
