@@ -46,7 +46,7 @@ class DataProviderService
 
     /**
      * @param $userId
-     * @return TermMetaDataProvider
+     * @return UserMetaDataProvider
      */
     public static function getUserProvider($userId)
     {

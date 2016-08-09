@@ -111,7 +111,6 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface
     public function render($echo)
     {
         $concater = ConcatContent::getInstance();
-
         if (!$this->validate()) {
             return false;
         }

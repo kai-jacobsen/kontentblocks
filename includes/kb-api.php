@@ -98,7 +98,6 @@ function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $mo
     } else {
         $renderer = new AreaRenderer($environment, $areaRenderSettings, $moduleRenderSettings);
     }
-
     $renderer->render(true);
 }
 
@@ -132,11 +131,9 @@ function renderContext($context, $post_id, $areaSettings = array(), $moduleSetti
 {
     global $post;
     $postId = (null === $post_id) ? $post->ID : $post_id;
-
     $Environment = Utilities::getPostEnvironment($postId);
     $areas = $Environment->getAreasForContext($context);
     $contextsOrder = $Environment->getDataProvider()->get('_kbcontexts');
-
 
     if (is_array($contextsOrder) && !empty($contextsOrder)) {
         foreach ($contextsOrder as $context => $areaIds) {
@@ -165,7 +162,6 @@ function renderContext($context, $post_id, $areaSettings = array(), $moduleSetti
             } else {
                 $margs = $areaSettings;
             }
-
             renderSingleArea($area, $postId, $args, $margs);
         }
     }

@@ -5,6 +5,7 @@ namespace Kontentblocks\Backend\Environment;
 use JsonSerializable;
 use Kontentblocks\Areas\AreaSettingsModel;
 use Kontentblocks\Backend\DataProvider\DataProvider;
+use Kontentblocks\Backend\DataProvider\DataProviderService;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Backend\Environment\Save\SavePost;
 use Kontentblocks\Kontentblocks;
@@ -98,7 +99,6 @@ class PostEnvironment implements JsonSerializable
      */
     public function __construct($storageId, \WP_Post $postObj)
     {
-
         $this->postObj = $postObj;
         $this->storageId = $storageId;
         $this->storage = new ModuleStorage($storageId);
@@ -153,7 +153,7 @@ class PostEnvironment implements JsonSerializable
         $areas = $this->findAreas();
         /** @var \Kontentblocks\Areas\AreaProperties $area */
         foreach ($areas as $area) {
-            $area->set('settings', new AreaSettingsModel($area, $this->postObj->ID, $this->getDataProvider()));
+            $area->set('settings', new AreaSettingsModel($area, $this->postObj->ID, DataProviderService::getPostProvider($this->postObj->ID)));
         }
         return $areas;
 
