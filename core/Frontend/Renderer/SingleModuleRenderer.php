@@ -94,6 +94,18 @@ class SingleModuleRenderer implements RendererInterface
     }
 
     /**
+     * @return string|void
+     */
+    private function wrapperClassesFromOVerrides()
+    {
+        $overrides = $this->module->properties->overrides;
+        if (isset($overrides['wrapperclasses'])) {
+            return esc_attr($overrides['wrapperclasses']);
+        }
+        return '';
+    }
+
+    /**
      * @param bool $echo
      * @return bool|string
      */
@@ -121,10 +133,11 @@ class SingleModuleRenderer implements RendererInterface
     public function beforeModule()
     {
         return sprintf(
-            '<%3$s id="%1$s" class="%2$s">',
+            '<%3$s id="%1$s" class="%2$s" %4$s>',
             $this->module->getId(),
             $this->getModuleClasses(),
-            $this->renderSettings['element']
+            $this->renderSettings['element'],
+            $this->renderAttributes()
         );
     }
 
@@ -134,6 +147,15 @@ class SingleModuleRenderer implements RendererInterface
     private function getModuleClasses()
     {
         return implode(' ', array_unique($this->classes));
+    }
+
+    private function renderAttributes()
+    {
+        $attr = $this->renderSettings->get('attributes');
+        if (is_array($attr)) {
+            return implode(' ', $attr);
+        }
+        return '';
     }
 
     /**
@@ -159,18 +181,6 @@ class SingleModuleRenderer implements RendererInterface
     {
         $this->classes = array_merge($this->classes, $classes);
         return $this;
-    }
-
-    /**
-     * @return string|void
-     */
-    private function wrapperClassesFromOVerrides()
-    {
-        $overrides = $this->module->properties->overrides;
-        if (isset($overrides['wrapperclasses'])){
-            return esc_attr($overrides['wrapperclasses']);
-        }
-        return '';
     }
 
 }

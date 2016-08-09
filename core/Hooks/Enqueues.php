@@ -240,7 +240,7 @@ class Enqueues
             'user' => (is_admin()) ? wp_get_current_user() : false,
             'ajax_url' => (is_user_logged_in()) ? admin_url('admin-ajax.php') : null,
             'url' => (is_user_logged_in()) ? KB_PLUGIN_URL : '',
-            'post' => ($post && is_user_logged_in()) ? $post : array(),
+            'post' => ($post && is_user_logged_in()) ? array() : array(),
             'screen' => $screen,
             'dev' => Kontentblocks::DEVMODE,
             'version' => Kontentblocks::VERSION,

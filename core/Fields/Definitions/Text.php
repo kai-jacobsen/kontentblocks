@@ -25,9 +25,9 @@ Class Text extends Field
      *
      * @return string
      */
-    public function prepareFrontendValue( $val )
+    public function prepareFrontendValue($val)
     {
-        return wp_kses_post( $val );
+        return wp_kses_post($val);
     }
 
 
@@ -36,9 +36,9 @@ Class Text extends Field
      *
      * @return mixed
      */
-    public function prepareFormValue( $val )
+    public function prepareFormValue($val)
     {
-        return esc_html( $val );
+        return esc_html($val);
     }
 
 
