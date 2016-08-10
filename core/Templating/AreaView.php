@@ -42,8 +42,7 @@ class AreaView implements RendererInterface
         $this->data = $data;
         $this->areaFileRenderer = $areaFileRenderer;
         $this->engine = Kontentblocks::getService( 'templating.twig.public' );
-
-        $this->extendTwigEnvironment();
+//        $this->extendTwigEnvironment();
 
 
     }
@@ -88,34 +87,34 @@ class AreaView implements RendererInterface
 
     private function extendTwigEnvironment()
     {
-        $this->engine->addFunction(new \Twig_SimpleFunction('openArea', function(){
-            echo $this->areaFileRenderer->areaNode->openArea();
-        }));
-
-        $this->engine->addFunction(new \Twig_SimpleFunction('closeArea', function(){
-            echo $this->areaFileRenderer->areaNode->closeArea();
-        }));
-
-        // wrapper to SlotRenderer->module()
-        $this->engine->addFunction(new \Twig_SimpleFunction('module', function(){
-            echo $this->areaFileRenderer->slotRenderer->module();
-        }));
-
-        $this->engine->addFunction(new \Twig_SimpleFunction('position', function($position){
-            echo $this->areaFileRenderer->slotRenderer->slot($position);
-        }));
-
-        $this->engine->addFunction(new \Twig_SimpleFunction('modulesCount', function(){
-            return $this->areaFileRenderer->moduleIterator->count();
-        }));
-
-        $this->engine->addFunction(new \Twig_SimpleFunction('modulesLeft', function(){
-            return (($this->areaFileRenderer->moduleIterator->count() - count($this->areaFileRenderer->slotRenderer->done)) > 0);
-        }));
-
-        $this->engine->addFunction(new \Twig_SimpleFunction('numberLeft', function(){
-            return $this->areaFileRenderer->moduleIterator->count() - count($this->areaFileRenderer->slotRenderer->done);
-        }));
+//        $this->engine->addFunction(new \Twig_SimpleFunction('openArea', function(){
+//            echo $this->areaFileRenderer->areaNode->openArea();
+//        }));
+//
+//        $this->engine->addFunction(new \Twig_SimpleFunction('closeArea', function(){
+//            echo $this->areaFileRenderer->areaNode->closeArea();
+//        }));
+//
+//        // wrapper to SlotRenderer->module()
+//        $this->engine->addFunction(new \Twig_SimpleFunction('module', function(){
+//            echo $this->areaFileRenderer->slotRenderer->module();
+//        }));
+//
+//        $this->engine->addFunction(new \Twig_SimpleFunction('position', function($position){
+//            echo $this->areaFileRenderer->slotRenderer->slot($position);
+//        }));
+//
+//        $this->engine->addFunction(new \Twig_SimpleFunction('modulesCount', function(){
+//            return $this->areaFileRenderer->moduleIterator->count();
+//        }));
+//
+//        $this->engine->addFunction(new \Twig_SimpleFunction('modulesLeft', function(){
+//            return (($this->areaFileRenderer->moduleIterator->count() - count($this->areaFileRenderer->slotRenderer->done)) > 0);
+//        }));
+//
+//        $this->engine->addFunction(new \Twig_SimpleFunction('numberLeft', function(){
+//            return $this->areaFileRenderer->moduleIterator->count() - count($this->areaFileRenderer->slotRenderer->done);
+//        }));
 
 
     }
