@@ -48,7 +48,6 @@ class ModuleIterator implements \Iterator, \Countable
     protected $currentModuleObject;
 
 
-    
     /**
      * Class constructor
      *
@@ -86,7 +85,10 @@ class ModuleIterator implements \Iterator, \Countable
 
             // last call to change module args before the instance is instantiated
             // MasterCoreModule will change this to rewrite properties to the original template module
-            $collect[$id] = $module;
+            if (!is_admin() && !$module->verifyRender()){
+                continue;
+            }
+                $collect[$id] = $module;
         }
 
         return $collect;
@@ -177,13 +179,6 @@ class ModuleIterator implements \Iterator, \Countable
     }
 
     /**
-     * @return mixed
-     */
-    public function prev(){
-        return prev($this->modules);
-    }
-
-    /**
      * Test if key exists
      *
      * @return bool
@@ -230,6 +225,24 @@ class ModuleIterator implements \Iterator, \Countable
     public function getModule()
     {
         return $this->modules[$this->key()];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function prev()
+    {
+        return prev($this->modules);
+    }
+
+    public function getModules()
+    {
+        return $this->modules;
+    }
+
+    public function getModuleCount()
+    {
+        return count($this->modules);
     }
 
 }
