@@ -1,7 +1,6 @@
 var Ajax = require('common/Ajax');
 var Notice = require('common/Notice');
 var Config = require('common/Config');
-var Handlebars = require('hbsfy/runtime');
 var tplSummary = require('templates/backend/extensions/backup-summary.hbs');
 var BackupUi = Backbone.View.extend({
   lastItem: null,

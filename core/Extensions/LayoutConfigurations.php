@@ -22,8 +22,7 @@ class LayoutConfigurations
         add_action( 'wp_ajax_getLayoutConfig', array( $this, 'getConfigurations' ) );
         add_action( 'wp_ajax_setLayoutConfig', array( $this, 'setConfiguration' ) );
         add_action( 'wp_ajax_deleteLayoutConfig', array( $this, 'deleteConfiguration' ) );
-        add_action( 'init', array( $this, 'observeQuery' ) );
-
+        add_action( 'kb.init', array( $this, 'observeQuery' ),99 );
     }
 
     public function metaBox()
@@ -32,7 +31,7 @@ class LayoutConfigurations
 
         $i18n = I18n::getPackage( 'Extensions.layoutConfigs' );
 
-        if (post_type_supports( $screen->post_type, 'kontentblocks:layouts' )) {
+        if (post_type_supports( $screen->post_type, 'kontentblocks.layouts' )) {
             add_meta_box(
                 'kb-mb-layout-configurations',
                 $i18n['title'],
@@ -62,7 +61,7 @@ class LayoutConfigurations
         $configurations = get_option( 'kb_layout_configurations' );
 
         if (isset( $configurations[$config] )) {
-            wp_send_json( $configurations[$config] );
+            wp_send_json_success( $configurations[$config] );
         } else {
             wp_send_json_error();
         }
@@ -78,7 +77,7 @@ class LayoutConfigurations
 
         if (isset( $data['areaConfig'], $data['name'] )) {
             if ($this->saveConfiguration( $data['areaConfig'], $data['name'], $post_id )) {
-                wp_send_json_success();
+                wp_send_json_success($data);
             }
         }
 
@@ -178,6 +177,7 @@ class LayoutConfigurations
                 $bucket['state']['draft'] = 'true';
                 $bucket['mid'] = null;
                 $collection[$unique] = $bucket;
+
             };
         }
 
@@ -221,9 +221,11 @@ class LayoutConfigurations
      */
     private function resetPostMeta( $configuration, $postId, $config )
     {
+
         $storage = new ModuleStorage( $postId );
         $backupManager = new BackupDataStorage( $storage );
         $configurations = get_option( 'kb_layout_configurations' );
+
 
         if (isset( $configurations[$config][$configuration] )) {
             $backupManager->backup( 'Before loading configuration:' . $configuration );

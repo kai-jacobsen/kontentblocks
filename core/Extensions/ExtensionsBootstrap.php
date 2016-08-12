@@ -43,14 +43,14 @@ if (current_theme_supports( 'kontentblocks:backups-ui' )) {
 //}
 
 
-if (current_theme_supports( 'kontentblocks:layouts' )) {
+if (current_theme_supports( 'kontentblocks.layouts' )) {
     add_action(
         'kb.init',
         function () {
-            $support = get_theme_support( 'kontentblocks:layouts' );
-            if (is_array( $support )) {
-                foreach ($support as $postType) {
-                    add_post_type_support( $postType, 'kontentblocks:layouts' );
+            $support = get_theme_support( 'kontentblocks.layouts' );
+            if (is_array( $support ) && is_array($types = array_shift($support))) {
+                foreach ($types as $postType) {
+                    add_post_type_support( $postType, 'kontentblocks.layouts' );
                 }
             }
             new LayoutConfigurations();

@@ -2,6 +2,8 @@ var Logger = require('common/Logger');
 var Ajax = require('common/Ajax');
 var Notice = require('common/Notice');
 var Config = require('common/Config');
+var tplItem = require('templates/backend/extensions/layout-item.hbs');
+
 var LayoutConfigurations =
 {
   el: jQuery('#kb-layout-configurations'),
@@ -103,14 +105,15 @@ var LayoutConfigurations =
   renderSelectMenu: function (data) {
     var that = this;
     that.selectMenuEl.empty();
-    _.each(data, function (item, key, s) {
-      that.selectMenuEl.append(_.template("<option value='<%= data.key %>'><%= data.name %></option>", {
-        data: {
-          key: key,
-          name: item.name
-        }
-      }));
-    });
+    if (data.success){
+      _.each(data.data, function (item, key, s) {
+        that.selectMenuEl.append(tplItem({
+            key: key,
+            name: item.name
+        }));
+      });
+    }
+
   },
   _areaConfig: function () {
 
