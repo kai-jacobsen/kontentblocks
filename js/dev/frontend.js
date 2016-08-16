@@ -5689,9 +5689,9 @@ module.exports = Backbone.View.extend({
 
   },
   showPlaceholder: function () {
-    if (_.size(this.attachedModuleViews) === 0) {
+    // if (_.size(this.attachedModuleViews) === 0) {
       this.$el.append(tplPlaceholder());
-    }
+    // }
   },
   removePlaceholder: function () {
     this.$('.kb-area__empty-placeholder').remove();
@@ -5716,8 +5716,8 @@ module.exports = Backbone.View.extend({
     this.listenTo(moduleModel, 'change:area', this.removeModule); // add listener
 
     if (this.getNumberOfModules() > 0) {
-      this.removePlaceholder();
-      this.$el.removeClass('kb-area__empty');
+      // this.removePlaceholder();
+      // this.$el.removeClass('kb-area__empty');
     }
     this.trigger('kb.module.created', moduleModel);
   },
@@ -5793,7 +5793,7 @@ module.exports = Backbone.View.extend({
   },
   applyClasses: function () {
     var $parent, prev;
-    var $modules = this.AreaView.$el.find('.module');
+    var $modules = this.model.View.$el.find('.module');
     $modules.removeClass('first-module last-module repeater');
     for (var i = 0; i < $modules.length; i++) {
       var View = jQuery($modules[i]).data('ModuleView');
@@ -7243,12 +7243,11 @@ module.exports = Backbone.View.extend({
 
     var moduleEl = (this.model.get('area').get('renderSettings')).moduleElement || 'div';
     this.$dropHelper = jQuery("<" + moduleEl + " class='kb-sidebar-drop-helper ui-sortable-helper'></" + moduleEl + ">");
-
     this.$el.draggable({
       appendTo: that.listController.model.View.$el.selector,
       revert: 'invalid',
       refreshPositions: true,
-      //helper: 'clone',
+      helper: 'clone',
       cursorAt: {
         top: 5,
         left: 5
@@ -7314,7 +7313,7 @@ module.exports = Backbone.View.extend({
     payload.ui.helper.replaceWith(res.data.html);
     model = KB.Modules.add(res.data.module);
     KB.ObjectProxy.add(model);
-    model.Area.View.Layout.applyClasses();
+    model.Area.View.applyClasses();
     AreaView.prototype.resort(this.model.get('area'));
     that.model.get('area').trigger('kb.module.created');
 

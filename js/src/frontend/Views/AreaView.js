@@ -20,9 +20,9 @@ module.exports = Backbone.View.extend({
 
   },
   showPlaceholder: function () {
-    if (_.size(this.attachedModuleViews) === 0) {
+    // if (_.size(this.attachedModuleViews) === 0) {
       this.$el.append(tplPlaceholder());
-    }
+    // }
   },
   removePlaceholder: function () {
     this.$('.kb-area__empty-placeholder').remove();
@@ -47,8 +47,8 @@ module.exports = Backbone.View.extend({
     this.listenTo(moduleModel, 'change:area', this.removeModule); // add listener
 
     if (this.getNumberOfModules() > 0) {
-      this.removePlaceholder();
-      this.$el.removeClass('kb-area__empty');
+      // this.removePlaceholder();
+      // this.$el.removeClass('kb-area__empty');
     }
     this.trigger('kb.module.created', moduleModel);
   },
@@ -124,7 +124,7 @@ module.exports = Backbone.View.extend({
   },
   applyClasses: function () {
     var $parent, prev;
-    var $modules = this.AreaView.$el.find('.module');
+    var $modules = this.model.View.$el.find('.module');
     $modules.removeClass('first-module last-module repeater');
     for (var i = 0; i < $modules.length; i++) {
       var View = jQuery($modules[i]).data('ModuleView');

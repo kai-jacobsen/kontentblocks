@@ -226,6 +226,10 @@ abstract class Module implements EntityInterface
     }
 
 
+    public function defaultView(){
+        return "default.twig";
+    }
+
     /*
      * ------------------------------------
      * public setter

@@ -13,9 +13,11 @@ body.kb-editcontrols-show {
   }
 
   .kb-area__empty-placeholder{
-    padding: 45px;
+    padding: 12px;
     text-align: center;
     cursor: pointer;
+    outline: 1px dashed $blue;
+
   }
 
   .module, .single-module, .module-merged{
