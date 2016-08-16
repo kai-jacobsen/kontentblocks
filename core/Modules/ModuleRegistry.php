@@ -71,7 +71,6 @@ class ModuleRegistry
             /** @var \Kontentblocks\Areas\AreaRegistry $areaRegistry */
             $areaRegistry = $this->services['registry.areas'];
             $areaRegistry->connect($classname, $moduleArgs);
-
             // call static init method, if present
             if (method_exists($classname, 'init')) {
                 $classname::init($moduleArgs);

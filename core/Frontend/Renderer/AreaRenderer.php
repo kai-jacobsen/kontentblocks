@@ -175,7 +175,7 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface
         if (!$this->area->settings->isActive()) {
             return false;
         }
-        if ($this->area->dynamic && !$this->area->settings->isAttached()) {
+        if ($this->area->dynamic && !$this->area->settings->isAttached() && !$this->area->manual) {
             return false;
         }
 

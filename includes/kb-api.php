@@ -86,7 +86,6 @@ function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $mo
 
     $area = $environment->getAreaDefinition($areaId);
 
-
     if (!$area) {
         return '';
     }

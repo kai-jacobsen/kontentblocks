@@ -280,11 +280,11 @@ class AreaRegistry
     public function connect($classname, $args)
     {
         $setting = $args['settings']['connect'];
+        $postTypes  = get_post_types( array('public' => true, '_builtin' => false), 'names', 'and' );
 
         if (empty($setting)) {
             return false;
         }
-
         if ($setting === 'any') {
             /** @var \Kontentblocks\Areas\AreaProperties $area */
             foreach ($this->areas as $area) {
@@ -308,7 +308,11 @@ class AreaRegistry
                     foreach ($this->getGlobalAreas() as $connection) {
                         $connection->connect($classname);
                     }
-
+                } else if (in_array($target, $postTypes)){
+                    foreach ($this->areas as $area){
+                        $args['settings']['connect'] = array($area->id);
+                        $this->connect($classname, $args);
+                    }
                 } else {
                     // its not a context, not a page template
                     // area id not existent
