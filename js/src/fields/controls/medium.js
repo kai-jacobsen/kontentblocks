@@ -4,7 +4,7 @@ module.exports = BaseView.extend({
     this.render();
   },
   render: function () {
-    var that = this;
+    console.log(this.$('.kb-medium-editable'));
     this.editor = new MediumEditor(this.$('.kb-medium-editable'));
   },
   derender: function () {

@@ -72,7 +72,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function __construct($args, PostEnvironment $environment)
     {
-
         $this->environment = $environment;
         $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults($args);
@@ -275,6 +274,24 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
                 $mbDef['priority']
             );
         }
+    }
+
+
+    /**
+     * Callback handler
+     */
+    public function saveCallback($postId)
+    {
+        if (absint($postId) !== absint($this->postId)){
+            return;
+        }
+        $postData = Request::createFromGlobals();
+        $data = $postData->request->filter($this->baseId, null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        if (empty($data)) {
+            return;
+        }
+        $this->model->reset()->set($postData->request->get($this->baseId));
+        $this->save($postData);
     }
 
 }

@@ -106,7 +106,7 @@ abstract class AbstractPanel implements EntityInterface
     /**
      * Callback handler
      */
-    public function saveCallback()
+    public function saveCallback($postId)
     {
         $postData = Request::createFromGlobals();
         $data = $postData->request->filter($this->baseId, null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
