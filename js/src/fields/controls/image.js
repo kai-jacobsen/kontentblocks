@@ -46,18 +46,19 @@ module.exports = BaseView.extend({
     // value of post__in must be an array
 
     var queryargs = {};
-
     if (this.model.get('value').id !== '') {
       queryargs.post__in = [this.model.get('value').id];
     }
-
     wp.media.query(queryargs) // set the query
       .more() // execute the query, this will return an deferred object
       .done(function () { // attach callback, executes after the ajax call succeeded
         // inside the callback 'this' refers to the result collection
         // there should be only one model, assign it to a var
-        var attachment = this.first();
-        that.attachment = attachment;
+        console.log(queryargs);
+        // if (queryargs.post__in){
+          var attachment = this.first();
+          that.attachment = attachment;
+        // }
         // this is a bit odd: if you want to access the 'sizes' in the modal
         // and if you need access to the image editor / replace image function
 
@@ -71,12 +72,11 @@ module.exports = BaseView.extend({
           that.defaultFrame = 'select';
           that.defaultState = 'library';
         }
-
         // create a frame, bind 'update' callback and open in one step
         that.frame = wp.media({
           frame: that.defaultFrame, // alias for the ImageDetails frame
           state: that.defaultState, // default state, makes sense
-          metadata: metadata, // the important bit, thats where the initial informations come from
+          metadata: metadata, // the important bit, thats where the initial information come from
           imageEditView: that,
           type: 'image',
           library: {
@@ -180,7 +180,6 @@ module.exports = BaseView.extend({
       caption: attachment.get('caption'),
       alt: attachment.get('alt')
     };
-
     var oldValue = this.model.get('value');
 
     if (!_.isObject(oldValue)) {

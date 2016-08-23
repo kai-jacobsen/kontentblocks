@@ -58,6 +58,15 @@ class ConcatContent {
 			return false;
 		}
 
+		preg_match_all('/<!--kb.index.start-->(.*)<!--kb.index.end-->/sU', $string,$matches);
+
+        if (isset($matches[1])){
+            if (is_array($matches[1])){
+                foreach ($matches[1] as $string){
+                    $this->addString($string);
+                }
+            }
+        }
 
 		$this->content .= "\n" . $string;
 	}
@@ -69,11 +78,14 @@ class ConcatContent {
 	public function save( $postId ) {
 		remove_action( 'save_post', array( $this, 'save' ), 999 );
         global $post;
-		$postArgs = array(
-			'ID'           => $post->ID,
-			'post_content' => $this->content
-		);
-		wp_update_post( $postArgs );
-		do_action('kb.concat.save', $postArgs);
+        if (is_a($post,'\WP_Post')){
+            $postArgs = array(
+                'ID'           => $post->ID,
+                'post_content' => $this->content
+            );
+            wp_update_post( $postArgs );
+            do_action('kb.concat.save', $postArgs);
+        }
+
 	}
 }

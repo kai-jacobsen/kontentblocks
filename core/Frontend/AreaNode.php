@@ -157,6 +157,7 @@ class AreaNode
     {
         $classes = array(
             $this->renderSettings['wrapperClass'],
+            'with-' . $this->moduleCount . '-modules',
             $this->areaId,
             $this->getLayoutId(),
             $this->getContext(),

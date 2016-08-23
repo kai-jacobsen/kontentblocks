@@ -2,12 +2,15 @@
 
 namespace Kontentblocks\Utils\CommonTwig;
 
+use Kontentblocks\Backend\Environment\Save\ConcatContent;
+
 
 /**
  * View
  */
 class SimpleView
 {
+    public $concat;
     /**
      * Template data
      * @var array
@@ -34,22 +37,23 @@ class SimpleView
     /**
      * @param bool $tpl
      * @param array $data
+     * @param bool $concat
      */
-    public function __construct( $tpl = null, $data = array() )
+    public function __construct($tpl = null, $data = array(), $concat = false)
     {
         $this->data = $data;
         $this->tplFile = $tpl;
-
+        $this->concat = $concat;
         $this->engine = Kontentblocks()->getService('templating.twig.common');
     }
 
-    public function addData( $data )
+    public function addData($data)
     {
-        if (!is_array( $data )) {
+        if (!is_array($data)) {
             return null;
         }
 
-        $this->data = wp_parse_args( $data, $this->data );
+        $this->data = wp_parse_args($data, $this->data);
     }
 
     /**
@@ -57,12 +61,26 @@ class SimpleView
      * @param bool $echo
      * @return bool
      */
-    public function render( $echo = false )
+    public function render($echo = false)
     {
+        $concater = ConcatContent::getInstance();
+        $out = $this->engine->render($this->tplFile, $this->data);
+
+        if (current_theme_supports('kb.area.concat') && filter_input(
+                INPUT_GET,
+                'concat',
+                FILTER_SANITIZE_STRING
+            )
+        ) {
+            if ($this->concat){
+                $concater->addString(wp_kses_post($out));
+            }
+        }
+
         if ($echo) {
-            $this->engine->display( $this->tplFile, $this->data );
+            echo $out;
         } else {
-            return $this->engine->render( $this->tplFile, $this->data );
+            return $out;
         }
 
         return false;
