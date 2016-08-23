@@ -211,6 +211,9 @@ function getPostPanel($panelId = null, $postId = null)
     }
 
     $Environment = Utilities::getPostEnvironment($postId);
+    if (is_null($Environment)){
+        return null;
+    }
     $Panel = $Environment->getPanelObject($panelId);
     /** @var \Kontentblocks\Panels\PostPanel $Panel */
     if (is_a($Panel, "\\Kontentblocks\\Panels\\AbstractPanel")) {
