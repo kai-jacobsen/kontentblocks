@@ -452,6 +452,8 @@ class Utilities
         }
 
         $url = add_query_arg('concat', 'true', $base);
+        $url = add_query_arg('contime', time(), $url);
+        var_dump($url);
         if ($url !== false) {
 
             $args = wp_parse_args($args, array('timeout' => 2, 'blocking' => $blocking));

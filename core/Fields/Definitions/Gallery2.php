@@ -62,13 +62,13 @@ Class Gallery2 extends Field
             },
             $data['images']
         );
-        if (is_array($data['images'])){
+        if (is_array($data['images'])) {
             $data['images'] = array_values(array_unique($data['images']));
         }
 
-        if (isset($old['images']) && is_array($old['images']) && count($old['images']) > count($data['images'])){
+        if (isset($old['images']) && is_array($old['images']) && count($old['images']) > count($data['images'])) {
             foreach ($old['images'] as $index => $value) {
-                if (!isset($data['images'][$index])){
+                if (!isset($data['images'][$index])) {
                     $data['images'][$index] = null;
                 }
             }

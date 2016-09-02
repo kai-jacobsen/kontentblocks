@@ -149,7 +149,6 @@ abstract class OptionPanel extends AbstractPanel
      */
     public function observeSaveRequest()
     {
-
         $postData = Request::createFromGlobals();
         $data = $postData->request->filter($this->menu['slug'] . '_save', false, FILTER_VALIDATE_BOOLEAN);
         if ($data) {

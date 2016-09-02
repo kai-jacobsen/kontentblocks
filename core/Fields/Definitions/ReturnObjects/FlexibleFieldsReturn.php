@@ -57,6 +57,7 @@ class FlexibleFieldsReturn
         $this->items = $this->setupItems();
         $this->salt = $salt;
         $this->value = $value;
+
     }
 
     /**
