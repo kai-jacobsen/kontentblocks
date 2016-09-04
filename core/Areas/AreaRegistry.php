@@ -391,7 +391,7 @@ class AreaRegistry
         $areas = array();
         // bail out if this is a redirect template
         if (false !== strpos($pageTemplate, 'redirect')) {
-            return false;
+            return array();
         }
 
         if ($postType === 'kb-gmd') {
