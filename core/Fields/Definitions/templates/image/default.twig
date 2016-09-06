@@ -2,6 +2,7 @@
 {% block fieldmarkup %}
     <div class='kb-field-image-wrapper' data-kbfield="image">
         <div class='kb-js-add-image kb-field-image-container'>
+
             {% if (Field.getArg('width')) %}
                 <img src='{{ image.getSize([Field.getArg('width'),Field.getArg('height')]) }}'>
             {% else %}
@@ -17,7 +18,8 @@
             </div>
             <div class="kb-field-image-description">
                 <label>{{ i18n.description }}</label>
-        <textarea readonly class='kb-js-image-description kb-observe' type="text"
+
+                <textarea readonly class='kb-js-image-description kb-observe' type="text"
                   name='{{ Form.getFieldName( 'caption') }}'>{{ value.caption }}</textarea>
             </div>
         </div>
@@ -25,6 +27,7 @@
         {#<input class='kb-js-image-alt' type='hidden' name='{{ Form.getFieldName( 'details', 'id' ) }}'#}
         {#value='{{ value.details.alt }}'>#}
     </div>
+
     <div class="kb-field-image--footer">
         <a class="button kb-js-reset-image">Reset</a>
         {% if Field.getArg('showcrop', false) %}

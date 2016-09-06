@@ -24,8 +24,10 @@ Class Image extends Field
 
     public function prepareTemplateData($data)
     {
-        $image = new AttachmentHandler($this->getValue('id'));
 
+
+
+        $image = new AttachmentHandler($this->getValue('id'));
         if (isset($data['value']['crop']) && !is_array($data['value']['crop'])) {
             $int = absint($data['value']['crop']);
             $image->setCropPosition(self::getCropValue($int));
@@ -126,6 +128,11 @@ Class Image extends Field
      */
     public function prepareFormValue($val)
     {
+
+        if (isset($val['id']) && !is_numeric($val['id'])){
+            $val = null;
+        }
+
         if (empty($val)) {
             return array(
                 'id' => null,
