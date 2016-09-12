@@ -1,0 +1,28 @@
+<label class="heading">{{ model.label }}</label>
+<div class='kb-field-file-wrapper {{ isEmpty }}'>
+    <table>
+        <tbody>
+        <tr>
+            <td>ID:</td>
+            <td><span class="kb-file-id">{{ model.value.file.id }}</span></td>
+        </tr>
+        <tr>
+            <td>{{ i18n.title }}</td>
+            <td><span class="kb-file-title">{{ model.value.file.title }}</span></td>
+        </tr>
+        <tr>
+            <td>{{ i18n.filename }}</td>
+            <td><span class="kb-file-filename">{{ model.value.file.filename }}</span></td>
+        </tr>
+        <tr>
+            <td>{{ i18n.editLink }}</td>
+            <td><a class="kb-file-editLink" href="{{ model.value.file.editLink }}">edit</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <input type="hidden" class="kb-file-attachment-id" value="{{ model.value.file.id}}"
+           name="{{ fieldName model.baseId model.index model.primeKey }}[id]">
+</div>
+<a class="button primary kb-js-add-file">{{ i18n.selectFile }}</a>
+<a class="kb-js-reset-file {{ isEmpty }}">{{ i18n.remove }}</a>
+<p class="description">{{ model.description }}</p>

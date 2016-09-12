@@ -382,19 +382,22 @@ var Ui = {
   metaBoxReorder: function (e, o, settings, action) {
     if (settings.data) {
       var a = settings.data;
-      var b = a.split('&');
-      var result = {};
-      $.each(b, function (x, y) {
-        var temp = y.split('=');
-        result[temp[0]] = temp[1];
-      });
 
-      if (result.action === 'meta-box-order') {
-        if (action === 'restore') {
-          TinyMCE.restoreEditors();
-        }
-        else if (action === 'remove') {
-          TinyMCE.removeEditors();
+      if (a && a.split){
+        var b = a.split('&');
+        var result = {};
+        $.each(b, function (x, y) {
+          var temp = y.split('=');
+          result[temp[0]] = temp[1];
+        });
+
+        if (result.action === 'meta-box-order') {
+          if (action === 'restore') {
+            TinyMCE.restoreEditors();
+          }
+          else if (action === 'remove') {
+            TinyMCE.removeEditors();
+          }
         }
       }
     }

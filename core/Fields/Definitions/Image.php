@@ -26,7 +26,6 @@ Class Image extends Field
     {
 
 
-
         $image = new AttachmentHandler($this->getValue('id'));
         if (isset($data['value']['crop']) && !is_array($data['value']['crop'])) {
             $int = absint($data['value']['crop']);
@@ -129,7 +128,7 @@ Class Image extends Field
     public function prepareFormValue($val)
     {
 
-        if (isset($val['id']) && !is_numeric($val['id'])){
+        if (isset($val['id']) && !is_numeric($val['id'])) {
             $val = null;
         }
 

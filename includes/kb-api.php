@@ -13,7 +13,6 @@ use Kontentblocks\Panels\TermPanel;
 use Kontentblocks\Utils\CommonTwig\SimpleView;
 use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
-use Law\Post\EntityModel;
 
 /**
  * Register Area
@@ -59,11 +58,12 @@ function registerAreaTemplate($args)
  * @param array $areaSettings
  * @param array $moduleSettings
  *
+ * @param bool $echo
+ * @return string|void
  * @filter kb.get.area.dynamic.id
  *
- * @return string|void
  */
-function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $moduleSettings = array())
+function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $moduleSettings = array(), $echo = true)
 {
     global $post;
     $postId = (is_null($post_id) && !is_null($post)) ? $post->ID : $post_id;
@@ -97,7 +97,7 @@ function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $mo
     } else {
         $renderer = new AreaRenderer($environment, $areaRenderSettings, $moduleRenderSettings);
     }
-    $renderer->render(true);
+    return $renderer->render($echo);
 }
 
 /**
@@ -133,7 +133,6 @@ function renderContext($context, $post_id, $areaSettings = array(), $moduleSetti
     $Environment = Utilities::getPostEnvironment($postId);
     $areas = $Environment->getAreasForContext($context);
     $contextsOrder = $Environment->getDataProvider()->get('_kbcontexts');
-
     if (is_array($contextsOrder) && !empty($contextsOrder)) {
         foreach ($contextsOrder as $context => $areaIds) {
             if (is_array($areaIds)) {
@@ -161,6 +160,7 @@ function renderContext($context, $post_id, $areaSettings = array(), $moduleSetti
             } else {
                 $margs = $areaSettings;
             }
+
             renderSingleArea($area, $postId, $args, $margs);
         }
     }
@@ -272,6 +272,12 @@ function getPostPanelModel($panelId = null, $postId = null)
     return null;
 }
 
+/**
+ * @param null $tpl
+ * @param null $panelId
+ * @param null $postId
+ * @return SimpleView
+ */
 function getPostPanelView($tpl = null, $panelId = null, $postId = null)
 {
     $model = getPostPanelModel($panelId, $postId);
@@ -297,6 +303,10 @@ function getOptionsPanel($panelId)
     }
 }
 
+/**
+ * @param $panelId
+ * @return mixed
+ */
 function getOptionsPanelModel($panelId)
 {
     $panel = getOptionsPanel($panelId);
