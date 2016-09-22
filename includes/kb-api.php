@@ -89,6 +89,9 @@ function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $mo
     if (!$area) {
         return '';
     }
+    if (!$area->settings->isActive()){
+        return '';
+    }
 
     $areaRenderSettings = new AreaRenderSettings($areaSettings, $area);
     $moduleRenderSettings = new ModuleRenderSettings($moduleSettings);
