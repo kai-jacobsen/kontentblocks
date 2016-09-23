@@ -4869,7 +4869,7 @@ module.exports = BaseView.extend({
     Utilities.setIndex(entityData, path, value);
     this.model.get('ModuleModel').set('entityData', entityData);
     var args = that.prepareArgs();
-    if (!args.width || !args.height) {
+    if (!args.width ) {
       var src = (attachment.get('sizes').thumbnail) ? attachment.get('sizes').thumbnail.url : attachment.get('sizes').full.url;
       this.$container.html('<img src="' + src + '" >');
     } else {

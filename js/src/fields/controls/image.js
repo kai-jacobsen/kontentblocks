@@ -56,8 +56,8 @@ module.exports = BaseView.extend({
         // there should be only one model, assign it to a var
         console.log(queryargs);
         // if (queryargs.post__in){
-          var attachment = this.first();
-          that.attachment = attachment;
+        var attachment = this.first();
+        that.attachment = attachment;
         // }
         // this is a bit odd: if you want to access the 'sizes' in the modal
         // and if you need access to the image editor / replace image function
@@ -141,7 +141,7 @@ module.exports = BaseView.extend({
     Utilities.setIndex(entityData, path, value);
     this.model.get('ModuleModel').set('entityData', entityData);
     var args = that.prepareArgs();
-    if (!args.width || !args.height) {
+    if (!args.width) {
       var src = (attachment.get('sizes').thumbnail) ? attachment.get('sizes').thumbnail.url : attachment.get('sizes').full.url;
       this.$container.html('<img src="' + src + '" >');
     } else {
@@ -212,7 +212,7 @@ module.exports = BaseView.extend({
       var size = (this.attachment.get('sizes').thumbnail) ? this.attachment.get('sizes').thumbnail : this.attachment.get('sizes').full;
       return "<img src='" + size.url + "'>";
     }
-    
+
     return '';
 
   }
