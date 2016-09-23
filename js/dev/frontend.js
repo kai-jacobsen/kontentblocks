@@ -1897,7 +1897,7 @@ module.exports = BaseView.extend({
     this.model.set('value', val);
   },
   toString: function(){
-    if (this.editor && this.editor.getContent()){
+    if (this.editor){
       try {
         return this.editor.getContent();
       } catch (e){
