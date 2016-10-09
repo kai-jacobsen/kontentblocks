@@ -29,7 +29,7 @@ class RemoteGetEditor implements AjaxActionInterface
         $args = $request->request->filter('args', array(), FILTER_REQUIRE_ARRAY);
         $settings = array();
         $settings['textarea_name'] = $request->request->filter('editorName', null, FILTER_SANITIZE_STRING);
-        $media = filter_var($args['media_buttons'], FILTER_VALIDATE_BOOLEAN);
+        $media = true;//filter_var($args['media_buttons'], FILTER_VALIDATE_BOOLEAN);
         $settings['media_buttons'] = $media;
         ob_start();
         Utilities::editor(

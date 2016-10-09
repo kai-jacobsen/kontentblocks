@@ -2898,8 +2898,8 @@ module.exports = BaseView.extend({
         // there should be only one model, assign it to a var
         console.log(queryargs);
         // if (queryargs.post__in){
-          var attachment = this.first();
-          that.attachment = attachment;
+        var attachment = this.first();
+        that.attachment = attachment;
         // }
         // this is a bit odd: if you want to access the 'sizes' in the modal
         // and if you need access to the image editor / replace image function
@@ -2983,7 +2983,7 @@ module.exports = BaseView.extend({
     Utilities.setIndex(entityData, path, value);
     this.model.get('ModuleModel').set('entityData', entityData);
     var args = that.prepareArgs();
-    if (!args.width ) {
+    if (!args.width) {
       var src = (attachment.get('sizes').thumbnail) ? attachment.get('sizes').thumbnail.url : attachment.get('sizes').full.url;
       this.$container.html('<img src="' + src + '" >');
     } else {
@@ -3054,7 +3054,7 @@ module.exports = BaseView.extend({
       var size = (this.attachment.get('sizes').thumbnail) ? this.attachment.get('sizes').thumbnail : this.attachment.get('sizes').full;
       return "<img src='" + size.url + "'>";
     }
-    
+
     return '';
 
   }
@@ -3944,7 +3944,7 @@ module.exports = BaseView.extend({
     this.index = index;
     return this.template({
       config: this.config,
-      baseId: this.baseId,  
+      baseId: this.baseId,
       index: index,
       model: this.model.toJSON()
     });
@@ -3953,7 +3953,7 @@ module.exports = BaseView.extend({
     var name = this.model.get('baseId') + '[' + this.model.get('index') + ']' + '[' + this.model.get('primeKey') + ']';
     var edId = this.model.get('fieldId') + '_' + this.model.get('key') + '_editor_' + this.model.get('index');
     this.$editorWrap = jQuery('.kb-ff-editor-wrapper-' + this.model.get('index') + '-' + this.model.get('key'), this.$el);
-    TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, false);
+    TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, this.model.get('media'));
   }
 });
 },{"common/TinyMCE":17,"fieldsAPI/definitions/baseView":65,"templates/fields/Editor.hbs":139}],67:[function(require,module,exports){

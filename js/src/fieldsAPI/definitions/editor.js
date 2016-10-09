@@ -15,7 +15,7 @@ module.exports = BaseView.extend({
     this.index = index;
     return this.template({
       config: this.config,
-      baseId: this.baseId,  
+      baseId: this.baseId,
       index: index,
       model: this.model.toJSON()
     });
@@ -24,6 +24,6 @@ module.exports = BaseView.extend({
     var name = this.model.get('baseId') + '[' + this.model.get('index') + ']' + '[' + this.model.get('primeKey') + ']';
     var edId = this.model.get('fieldId') + '_' + this.model.get('key') + '_editor_' + this.model.get('index');
     this.$editorWrap = jQuery('.kb-ff-editor-wrapper-' + this.model.get('index') + '-' + this.model.get('key'), this.$el);
-    TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, false);
+    TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, this.model.get('media'));
   }
 });
