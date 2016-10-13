@@ -4,5 +4,5 @@
               placeholder='{{ Form.getPlaceholder() }}'
     {% for attr, value in Field.getArg('attributes', []) %}
         {{ attr }}="{{ value|esc_attr }}"
-    {% endfor %}>{{ Field.getValue() }}</textarea>
+    {% endfor %}>{{ Field.getValue()|raw }}</textarea>
 {% endblock %}

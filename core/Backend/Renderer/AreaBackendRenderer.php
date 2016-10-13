@@ -139,7 +139,7 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
     {
         $out = "<div class='kb-area--body'>";
         // list items for this area, block limit gets stored here
-        $out .= "<ul style='' data-context='{$this->context}' id='{$this->area->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
+        $out .= "<ul style='' data-context='{$this->context}' id='kb-area-{$this->area->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
         if (!empty($this->attachedModules)) {
             /** @var \Kontentblocks\Modules\Module $module */
             foreach ($this->attachedModules as $module) {

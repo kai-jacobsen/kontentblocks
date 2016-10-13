@@ -269,7 +269,7 @@ var Ui = {
             });
         }
       }
-    }).disableSelection();
+    });
   },
   flushLocalStorage: function () {
     var hash = Config.get('env').hash;

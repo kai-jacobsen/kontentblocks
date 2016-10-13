@@ -13,7 +13,7 @@ module.exports = Backbone.View.extend({
     this.attachedModuleViews = {};
     this.controlsContainer = jQuery('.add-modules', this.$el);
     this.settingsContainer = jQuery('.kb-area-settings-wrapper', this.$el);
-    this.modulesList = jQuery('#' + this.model.get('id'), this.$el);
+    this.modulesList = jQuery('#kb-area-' + this.model.get('id'), this.$el);
 
     this.$placeholder = jQuery(tplAreaItemPlaceholer({i18n: KB.i18n}));
     this.model.View = this;

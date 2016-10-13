@@ -1063,7 +1063,7 @@ var Ui = {
             });
         }
       }
-    }).disableSelection();
+    });
   },
   flushLocalStorage: function () {
     var hash = Config.get('env').hash;
@@ -3159,7 +3159,6 @@ module.exports = BaseView.extend({
     this.render();
   },
   render: function () {
-    console.log(this.$('.kb-medium-editable'));
     this.editor = new MediumEditor(this.$('.kb-medium-editable'));
   },
   derender: function () {
@@ -3961,18 +3960,18 @@ module.exports = BaseView.extend({
     var edId = this.model.get('fieldId') + '_' + this.model.get('key') + '_editor_' + this.model.get('index');
     this.$editorWrap = jQuery('.kb-ff-editor-wrapper-' + this.model.get('index') + '-' + this.model.get('key'), this.$el);
 
-    try{
+    try {
       open = this.fieldModel.getEntityModel().View.isOpen();
       if (open) {
         TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, this.model.get('media'));
       } else {
-        this.listenToOnce(this.fieldModel.getEntityModel(),'kb.module.view.open', function () {
+        this.listenToOnce(this.fieldModel.getEntityModel(), 'kb.module.view.open', function () {
           TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, that.model.get('value'), null, that.model.get('media'));
         })
       }
-    } catch(e){
+    } catch (e) {
       TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, this.model.get('media'));
-    } 
+    }
 
   }
 });
