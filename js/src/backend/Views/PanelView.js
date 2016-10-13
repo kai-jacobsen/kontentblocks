@@ -3,6 +3,7 @@ var FieldsRendererSections = require('backend/Views/Renderer/FieldsRendererSecti
 module.exports = Backbone.View.extend({
 
   initialize: function () {
+    this.open = true;
     this.model.View = this;
     this.setupRenderer();
   },
@@ -16,9 +17,12 @@ module.exports = Backbone.View.extend({
     var data = this.$el.data();
     if (data && data.kbFieldRenderer && data.kbFieldRenderer === 'fields-renderer-sections') {
       new FieldsRendererSections({
-        el: this.el 
+        el: this.el
       })
     }
+  },
+  isOpen: function () {
+    return this.open;
   }
 
 });

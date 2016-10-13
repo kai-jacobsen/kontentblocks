@@ -56,7 +56,7 @@ module.exports = Backbone.Model.extend({
     ev[attr] = value;
     this.set('envVars', ev);
   },
-  sync: function(){
+  sync: function () {
     Ajax.send({
       action: 'updateModuleData',
       module: this.toJSON(),

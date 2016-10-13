@@ -50,6 +50,7 @@ module.exports = Backbone.View.extend({
   },
   initialize: function () {
     // Setup Elements
+    this.open = false;
     this.$head = jQuery('.kb-module__header', this.$el);
     this.$body = jQuery('.kb-module__body', this.$el);
     this.$inner = jQuery('.kb-module__controls-inner', this.$el);
@@ -88,7 +89,6 @@ module.exports = Backbone.View.extend({
 
     this.$('.kb-template-select').select2({
       templateResult: function (state) {
-        console.log(state);
         if (!state.id) {
           return state.text;
         }
@@ -196,5 +196,8 @@ module.exports = Backbone.View.extend({
   },
   getClean: function () {
 
+  },
+  isOpen: function(){
+    return this.open;
   }
 });

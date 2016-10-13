@@ -89,7 +89,7 @@ function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $mo
     if (!$area) {
         return '';
     }
-    if (!$area->settings->isActive()){
+    if (!$area->settings->isActive()) {
         return '';
     }
 
@@ -101,6 +101,39 @@ function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $mo
         $renderer = new AreaRenderer($environment, $areaRenderSettings, $moduleRenderSettings);
     }
     return $renderer->render($echo);
+}
+
+function isActiveArea($areaId, $post_id = null)
+{
+
+    global $post;
+    $postId = (is_null($post_id) && !is_null($post)) ? $post->ID : $post_id;
+
+
+    if (is_null($postId)) {
+        return null;
+    }
+
+    /** @var \Kontentblocks\Areas\AreaRegistry $registry */
+    $registry = Kontentblocks::getService('registry.areas');
+    if ($registry->isDynamic($areaId)) {
+        $areaDef = $registry->getArea($areaId);
+        $parentObjectId = apply_filters('kb.get.area.dynamic.id', $areaDef->parentObjectId);
+        $environment = Utilities::getPostEnvironment($parentObjectId, $postId);
+    } else {
+        $environment = Utilities::getPostEnvironment($postId);
+    }
+
+    $area = $environment->getAreaDefinition($areaId);
+
+    if (!$area) {
+        return false;
+    }
+    if (!$area->settings->isActive()) {
+        return false;
+    }
+
+    return true;
 }
 
 /**
@@ -214,7 +247,7 @@ function getPostPanel($panelId = null, $postId = null)
     }
 
     $Environment = Utilities::getPostEnvironment($postId);
-    if (is_null($Environment)){
+    if (is_null($Environment)) {
         return null;
     }
     $Panel = $Environment->getPanelObject($panelId);

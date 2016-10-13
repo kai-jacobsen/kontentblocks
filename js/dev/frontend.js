@@ -1466,6 +1466,12 @@ module.exports = Backbone.Model.extend({
         Logger.Debug.error('serialize | FrontendModal | Ajax error');
       }
     });
+  },
+  getEntityModel: function () {
+    if (this.ModuleModel) {
+      return this.ModuleModel;
+    }
+    return false;
   }
 });
 },{"common/Checks":10,"common/Config":11,"common/Logger":13,"common/Payload":15,"common/Utilities":19}],22:[function(require,module,exports){
@@ -2272,23 +2278,22 @@ module.exports = Backbone.View.extend({
   },
   setupFieldInstance: function (fieldInstance, $con) {
     var that = this;
+    if (that.Controller.parentView) {
+      _.defer(function () {
+        var existing = that.Controller.Fields.findWhere({uid: fieldInstance.model.get('uid')});
+        if (_.isUndefined(existing)) {
+          fieldInstance.fieldModel = that.Controller.Fields.add(fieldInstance.model.toJSON());
+        } else {
+          existing.rebind();
+        }
+      });
+    }
     _.defer(function () {
       fieldInstance.setElement($con);
       if (fieldInstance.postRender) {
         fieldInstance.postRender.call(fieldInstance);
       }
       // add field to controller fields collection
-      if (that.Controller.parentView) {
-        _.defer(function () {
-          var existing = that.Controller.Fields.findWhere({uid: fieldInstance.model.get('uid')});
-          if (_.isUndefined(existing)) {
-            var model = that.Controller.Fields.add(fieldInstance.model.toJSON());
-            fieldInstance.fieldModel = model;
-          } else {
-            existing.rebind();
-          }
-        });
-      }
     });
   }
 });
@@ -3950,10 +3955,25 @@ module.exports = BaseView.extend({
     });
   },
   postRender: function () {
+    var open;
+    var that = this;
     var name = this.model.get('baseId') + '[' + this.model.get('index') + ']' + '[' + this.model.get('primeKey') + ']';
     var edId = this.model.get('fieldId') + '_' + this.model.get('key') + '_editor_' + this.model.get('index');
     this.$editorWrap = jQuery('.kb-ff-editor-wrapper-' + this.model.get('index') + '-' + this.model.get('key'), this.$el);
-    TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, this.model.get('media'));
+
+    try{
+      open = this.fieldModel.getEntityModel().View.isOpen();
+      if (open) {
+        TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, this.model.get('media'));
+      } else {
+        this.listenToOnce(this.fieldModel.getEntityModel(),'kb.module.view.open', function () {
+          TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, that.model.get('value'), null, that.model.get('media'));
+        })
+      }
+    } catch(e){
+      TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, this.model.get('media'));
+    } 
+
   }
 });
 },{"common/TinyMCE":17,"fieldsAPI/definitions/baseView":65,"templates/fields/Editor.hbs":139}],67:[function(require,module,exports){

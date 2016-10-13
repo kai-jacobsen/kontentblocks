@@ -158,5 +158,11 @@ module.exports = Backbone.Model.extend({
         Logger.Debug.error('serialize | FrontendModal | Ajax error');
       }
     });
+  },
+  getEntityModel: function () {
+    if (this.ModuleModel) {
+      return this.ModuleModel;
+    }
+    return false;
   }
 });

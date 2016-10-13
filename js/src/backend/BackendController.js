@@ -149,7 +149,6 @@ KB.App = (function () {
     KB.FieldControls = new FieldControlsCollection();
     KB.FieldControls.add(_.toArray(Payload.getPayload('Fields')));
 
-
   }
 
 

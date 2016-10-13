@@ -40,5 +40,6 @@ module.exports = BaseView.extend({
     this.parent.open =  !this.parent.open;
     store.set(this.parent.model.get('mid') + '_open', this.parent.open);
     this.parent.trigger('kb.module.view.open', this.parent.open);
+    this.parent.model.trigger('kb.module.view.open', this.parent.open);
   }
 });

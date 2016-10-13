@@ -102,23 +102,22 @@ module.exports = Backbone.View.extend({
   },
   setupFieldInstance: function (fieldInstance, $con) {
     var that = this;
+    if (that.Controller.parentView) {
+      _.defer(function () {
+        var existing = that.Controller.Fields.findWhere({uid: fieldInstance.model.get('uid')});
+        if (_.isUndefined(existing)) {
+          fieldInstance.fieldModel = that.Controller.Fields.add(fieldInstance.model.toJSON());
+        } else {
+          existing.rebind();
+        }
+      });
+    }
     _.defer(function () {
       fieldInstance.setElement($con);
       if (fieldInstance.postRender) {
         fieldInstance.postRender.call(fieldInstance);
       }
       // add field to controller fields collection
-      if (that.Controller.parentView) {
-        _.defer(function () {
-          var existing = that.Controller.Fields.findWhere({uid: fieldInstance.model.get('uid')});
-          if (_.isUndefined(existing)) {
-            var model = that.Controller.Fields.add(fieldInstance.model.toJSON());
-            fieldInstance.fieldModel = model;
-          } else {
-            existing.rebind();
-          }
-        });
-      }
     });
   }
 });

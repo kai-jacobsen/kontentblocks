@@ -150,7 +150,6 @@ KB.App = (function () {
     KB.FieldControls = new FieldControlsCollection();
     KB.FieldControls.add(_.toArray(Payload.getPayload('Fields')));
 
-
   }
 
 
@@ -383,7 +382,7 @@ module.exports = Backbone.Model.extend({
     ev[attr] = value;
     this.set('envVars', ev);
   },
-  sync: function(){
+  sync: function () {
     Ajax.send({
       action: 'updateModuleData',
       module: this.toJSON(),
@@ -1877,6 +1876,7 @@ module.exports = BaseView.extend({
     this.parent.open =  !this.parent.open;
     store.set(this.parent.model.get('mid') + '_open', this.parent.open);
     this.parent.trigger('kb.module.view.open', this.parent.open);
+    this.parent.model.trigger('kb.module.view.open', this.parent.open);
   }
 });
 },{"backend/Views/BaseControlView":13,"common/Checks":50}],44:[function(require,module,exports){
@@ -1932,6 +1932,7 @@ module.exports = Backbone.View.extend({
   },
   initialize: function () {
     // Setup Elements
+    this.open = false;
     this.$head = jQuery('.kb-module__header', this.$el);
     this.$body = jQuery('.kb-module__body', this.$el);
     this.$inner = jQuery('.kb-module__controls-inner', this.$el);
@@ -1970,7 +1971,6 @@ module.exports = Backbone.View.extend({
 
     this.$('.kb-template-select').select2({
       templateResult: function (state) {
-        console.log(state);
         if (!state.id) {
           return state.text;
         }
@@ -2078,6 +2078,9 @@ module.exports = Backbone.View.extend({
   },
   getClean: function () {
 
+  },
+  isOpen: function(){
+    return this.open;
   }
 });
 },{"backend/Views/ModuleControls/ControlsView":23,"backend/Views/ModuleControls/controls/DeleteControl":24,"backend/Views/ModuleControls/controls/DuplicateControl":25,"backend/Views/ModuleControls/controls/SaveControl":26,"backend/Views/ModuleControls/controls/StatusControl":27,"backend/Views/ModuleStatusBar/ModuleStatusBarView":28,"backend/Views/ModuleStatusBar/status/DraftStatus":29,"backend/Views/ModuleStatusBar/status/LoggedInStatus":30,"backend/Views/ModuleStatusBar/status/OriginalNameStatus":31,"backend/Views/ModuleStatusBar/status/SettingsStatus":38,"backend/Views/ModuleUi/ModuleUiView":39,"backend/Views/ModuleUi/controls/DisabledControl":40,"backend/Views/ModuleUi/controls/FullscreenControl":41,"backend/Views/ModuleUi/controls/MoveControl":42,"backend/Views/ModuleUi/controls/ToggleControl":43,"common/Ajax":49,"common/Checks":50,"common/Config":51,"common/Payload":56,"common/UI":58}],45:[function(require,module,exports){
@@ -2086,6 +2089,7 @@ var FieldsRendererSections = require('backend/Views/Renderer/FieldsRendererSecti
 module.exports = Backbone.View.extend({
 
   initialize: function () {
+    this.open = true;
     this.model.View = this;
     this.setupRenderer();
   },
@@ -2099,9 +2103,12 @@ module.exports = Backbone.View.extend({
     var data = this.$el.data();
     if (data && data.kbFieldRenderer && data.kbFieldRenderer === 'fields-renderer-sections') {
       new FieldsRendererSections({
-        el: this.el 
+        el: this.el
       })
     }
+  },
+  isOpen: function () {
+    return this.open;
   }
 
 });
@@ -3352,6 +3359,12 @@ module.exports = Backbone.Model.extend({
         Logger.Debug.error('serialize | FrontendModal | Ajax error');
       }
     });
+  },
+  getEntityModel: function () {
+    if (this.ModuleModel) {
+      return this.ModuleModel;
+    }
+    return false;
   }
 });
 },{"common/Checks":50,"common/Config":51,"common/Logger":54,"common/Payload":56,"common/Utilities":59}],63:[function(require,module,exports){
@@ -4158,23 +4171,22 @@ module.exports = Backbone.View.extend({
   },
   setupFieldInstance: function (fieldInstance, $con) {
     var that = this;
+    if (that.Controller.parentView) {
+      _.defer(function () {
+        var existing = that.Controller.Fields.findWhere({uid: fieldInstance.model.get('uid')});
+        if (_.isUndefined(existing)) {
+          fieldInstance.fieldModel = that.Controller.Fields.add(fieldInstance.model.toJSON());
+        } else {
+          existing.rebind();
+        }
+      });
+    }
     _.defer(function () {
       fieldInstance.setElement($con);
       if (fieldInstance.postRender) {
         fieldInstance.postRender.call(fieldInstance);
       }
       // add field to controller fields collection
-      if (that.Controller.parentView) {
-        _.defer(function () {
-          var existing = that.Controller.Fields.findWhere({uid: fieldInstance.model.get('uid')});
-          if (_.isUndefined(existing)) {
-            var model = that.Controller.Fields.add(fieldInstance.model.toJSON());
-            fieldInstance.fieldModel = model;
-          } else {
-            existing.rebind();
-          }
-        });
-      }
     });
   }
 });
@@ -5836,10 +5848,25 @@ module.exports = BaseView.extend({
     });
   },
   postRender: function () {
+    var open;
+    var that = this;
     var name = this.model.get('baseId') + '[' + this.model.get('index') + ']' + '[' + this.model.get('primeKey') + ']';
     var edId = this.model.get('fieldId') + '_' + this.model.get('key') + '_editor_' + this.model.get('index');
     this.$editorWrap = jQuery('.kb-ff-editor-wrapper-' + this.model.get('index') + '-' + this.model.get('key'), this.$el);
-    TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, this.model.get('media'));
+
+    try{
+      open = this.fieldModel.getEntityModel().View.isOpen();
+      if (open) {
+        TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, this.model.get('media'));
+      } else {
+        this.listenToOnce(this.fieldModel.getEntityModel(),'kb.module.view.open', function () {
+          TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, that.model.get('value'), null, that.model.get('media'));
+        })
+      }
+    } catch(e){
+      TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, this.model.get('media'));
+    } 
+
   }
 });
 },{"common/TinyMCE":57,"fieldsAPI/definitions/baseView":106,"templates/fields/Editor.hbs":152}],108:[function(require,module,exports){
