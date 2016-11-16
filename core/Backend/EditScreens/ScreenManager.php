@@ -158,6 +158,7 @@ class ScreenManager
 //            }
         }
 
+
         if (is_array($contextsOrder) && !empty($contextsOrder)) {
             foreach ($contextsOrder as $context => $areaIds) {
                 if (is_array($areaIds)) {
