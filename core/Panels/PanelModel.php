@@ -40,8 +40,7 @@ class PanelModel extends EntityModel
     public function sync()
     {
         $provider = $this->entity->getDataProvider();
-        $key = (Utilities::isPreview()) ? '_preview_' . $this->entity->getId() : $this->entity->getId();
-
+        $key = Utilities::buildContextKey($this->entity->getId());
         if (!Utilities::isPreview()) {
             $provider->delete('_preview_' . $this->entity->getId());
         }

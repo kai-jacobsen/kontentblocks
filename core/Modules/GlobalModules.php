@@ -15,8 +15,52 @@ class GlobalModules
 
     public static $instance;
     protected $gmodules = array();
-
     protected $api;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+
+        // gather important data
+        $this->setup();
+
+    }
+
+    /**
+     * Query templates post type and prepare data
+     * @return bool
+     */
+    private function setup()
+    {
+        $collect = array();
+        $data = get_posts(
+            array(
+                'post_type' => 'kb-gmd',
+                'posts_per_page' => -1,
+                'suppress_filters' => false,
+                'post_status' => 'publish'
+            )
+        );
+
+        if (empty($data)) {
+            return false;
+        }
+        foreach ($data as $postObj) {
+
+            $storage = new ModuleStorage($postObj->ID);
+            $index = $storage->getIndex();
+            $def = $index[$postObj->post_name];
+            $def['parentObject'] = $postObj;
+            $def['name'] = $postObj->post_title;
+            $collect[$postObj->post_name] = $def;
+        }
+        $this->gmodules = $collect;
+        if (empty($data)) {
+            return false;
+        }
+    }
 
     /**
      * Singleton
@@ -31,72 +75,18 @@ class GlobalModules
     }
 
     /**
-     *
-     */
-    public function __construct()
-    {
-
-        // gather important data
-        $this->setup();
-
-    }
-
-
-    /**
-     * Check if a specific template exists by id
-     *
-     * @param $id
-     *
+     * Check if a specific global module exists by id
+     * @param $moduleId
      * @return bool
      */
-    public function gmodule( $id )
+    public function gmodule($moduleId)
     {
         $all = $this->getAllGmodules();
-
-        if (array_key_exists( $id, $all )) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    /**
-     * Query templates post type and prepare data
-     * @return bool
-     */
-    private function setup()
-    {
-        $collect = array();
-        $data = get_posts(
-            array(
-                'post_type' => 'kb-gmd',
-                'posts_per_page' => - 1,
-                'suppress_filters' => false,
-                'post_status' => 'publish'
-            )
-        );
-
-        if (empty( $data )) {
-            return false;
-        }
-        foreach ($data as $postObj) {
-
-            $storage = new ModuleStorage( $postObj->ID );
-            $index = $storage->getIndex();
-            $def = $index[$postObj->post_name];
-            $def['parentObject'] = $postObj;
-            $def['name'] = $postObj->post_title;
-            $collect[$postObj->post_name] = $def;
-        }
-        $this->gmodules = $collect;
-        if (empty( $data )) {
-            return false;
-        }
+        return array_key_exists($moduleId, $all);
     }
 
     /**
-     * Return gmodules
+     * Get all global modules
      * @return array
      */
     public function getAllGmodules()

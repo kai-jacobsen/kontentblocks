@@ -24,7 +24,7 @@ class ModuleContext implements \JsonSerializable
     public $areaContext;
 
     public $renderPosition;
-    
+
     public $renderer;
 
     /**
@@ -32,9 +32,14 @@ class ModuleContext implements \JsonSerializable
      */
     public $renderSettings;
 
-    public function __construct( PostEnvironment $environment, Module $module )
+    /**
+     * ModuleContext constructor.
+     * @param PostEnvironment $environment
+     * @param Module $module
+     */
+    public function __construct(PostEnvironment $environment, Module $module)
     {
-        $this->set( $environment->jsonSerialize() );
+        $this->set($environment->jsonSerialize());
         $this->areaContext = &$module->properties->areaContext;
         $this->areaId = &$module->properties->area->id;
     }
@@ -43,11 +48,11 @@ class ModuleContext implements \JsonSerializable
      * @param $attributes
      * @return $this
      */
-    public function set( $attributes )
+    public function set($attributes)
     {
-        if (is_array( $attributes )) {
+        if (is_array($attributes)) {
             foreach ($attributes as $k => $v) {
-                if (property_exists( $this, $k )) {
+                if (property_exists($this, $k)) {
                     $this->$k = $v;
                 }
             }
@@ -60,9 +65,9 @@ class ModuleContext implements \JsonSerializable
      * @param null $default
      * @return null
      */
-    public function get( $prop, $default = null )
+    public function get($prop, $default = null)
     {
-        if (property_exists( $this, $prop )) {
+        if (property_exists($this, $prop)) {
             return $this->$prop;
         }
         return $default;
@@ -77,7 +82,7 @@ class ModuleContext implements \JsonSerializable
      */
     function jsonSerialize()
     {
-        return get_object_vars( $this );
+        return get_object_vars($this);
     }
 
 }

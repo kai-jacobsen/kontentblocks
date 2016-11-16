@@ -116,9 +116,8 @@ var Ui = {
      * type is not in the array of assigned modules
      * of the area
      */
-    function
-    isValidModule() {
-
+    function isValidModule() {
+      console.log(areaOver);
       var limit = areaOver.get('limit');
       var nom = numberOfModulesInArea(areaOver.get('id'));
 
@@ -178,7 +177,6 @@ var Ui = {
       // start event
       start: function (event, ui) {
 
-
         // set current model
         that.isSorting = true;
         $('body').addClass('kb-is-sorting');
@@ -215,7 +213,6 @@ var Ui = {
         areaOver = KB.Areas.get(this.id);
       },
       receive: function (event, ui) {
-
         if (!isValidModule()) {
           // inform the user
           Notice.notice('Module not allowed in this area', 'error');
@@ -224,7 +221,6 @@ var Ui = {
         }
       },
       update: function (ev, ui) {
-
         if (!isValidModule()) {
           return false;
         }

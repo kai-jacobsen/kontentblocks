@@ -120,17 +120,21 @@ class ModuleViewFilesystem
     {
 
         $collection = array();
-
+        $pageTemplate = basename($pageTemplate);
         $collection += $this->getSingles($this->views);
 
         if (array_key_exists($areaContext, $this->views)) {
             $collection = array_merge($collection, $this->getSingles($this->views[$areaContext]));
         }
-
         if ($postType === 'page' && !is_null($pageTemplate && !empty($pageTemplate))) {
             if (array_key_exists($pageTemplate, $this->views)) {
                 $ptvs = $this->views[$pageTemplate];
                 $collection = array_merge($collection, $this->getSingles($ptvs));
+
+                if (array_key_exists($areaContext, $ptvs)) {
+                    $collection = array_merge($collection, $ptvs[$areaContext]);
+                }
+
             }
         }
 

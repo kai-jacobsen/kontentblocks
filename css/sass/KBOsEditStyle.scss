@@ -525,6 +525,10 @@ body.kontentblocks-ready .mce-floatpanel.mce-tinymce-inline {
   }
 }
 
+body.kontentblocks-ready .mce-tooltip{
+  position: fixed !important;
+}
+
 body.kontentblocks-ready .mce-container.mce-panel.mce-floatpanel.mce-menu.mce-menu-align{
   position: fixed !important;
 }

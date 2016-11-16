@@ -76,10 +76,10 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
-        $key = (is_preview()) ? '_preview_' . $this->baseId : $this->baseId;
-        $this->model = new PanelModel($this->dataProvider->get($key), $this);
+        $this->model = new PanelModel($this->dataProvider->get(Utilities::buildContextKey($this->baseId)), $this);
         $this->fields = new StandardFieldController($this->baseId, $this);
         $this->fields();
+
     }
 
     /**
@@ -121,7 +121,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
                 add_action($this->hook, array($this, 'prepForm'), $this->args['priority']);
             }
         }
-        add_action("save_post", array($this, 'saveCallback'), 10, 1);
+        add_action("save_post", array($this, 'saveCallback'), 10, 2);
         add_action('wp_footer', array($this, 'toJSON'));
     }
 
@@ -279,12 +279,21 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
 
     /**
      * Callback handler
+     * @param $postId
+     * @param $postObj
      */
-    public function saveCallback($postId)
+    public function saveCallback($postId, $postObj)
     {
-        if (absint($postId) !== absint($this->postId)){
+
+
+        if ( (absint($postId) !== absint($this->postId)) && !Utilities::isPreview()) {
             return;
         }
+
+        if ($postObj->post_type === 'revision' && $postObj->post_parent !== $this->postId) {
+            return;
+        }
+
         $postData = Request::createFromGlobals();
         $data = $postData->request->filter($this->baseId, null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (empty($data)) {

@@ -3,6 +3,7 @@
 namespace Kontentblocks\Modules;
 
 use Kontentblocks\Common\Data\EntityModel;
+use Kontentblocks\Utils\Utilities;
 
 
 /**
@@ -25,11 +26,11 @@ class ModuleModel extends EntityModel
      * @param Module $module
      * @since 0.1.0
      */
-    public function __construct( $data = array(), Module $module )
+    public function __construct($data = array(), Module $module)
     {
         $this->module = $module;
         $this->_originalData = $data;
-        $this->set( $data );
+        $this->set($data);
         $this->_initialized = true;
     }
 
@@ -38,12 +39,13 @@ class ModuleModel extends EntityModel
      * @return bool
      * @since 0.2.0
      */
-    public function sync( $addslashes = false )
+    public function sync($addslashes = false)
     {
         $storage = $this->module->environment->getStorage();
         $data = $this->export();
-        do_action( 'kb.module.save', $this->module, $data, $this->module->environment->getId() );
-        $result = $storage->saveModule( $this->module->getId(), $data, $addslashes );
+        do_action('kb.module.save', $this->module, $data, $this->module->environment->getId());
+//        $result = $storage->saveModule($this->module->getId(), $data, $addslashes);
+        $result = $storage->saveModule(Utilities::buildContextKey($this->module->getId()), $data, $addslashes);
         $storage->reset();
         return $result;
     }
@@ -69,11 +71,11 @@ class ModuleModel extends EntityModel
      */
     public function jsonSerialize()
     {
-        $vars = get_object_vars( $this );
-        unset( $vars['module'] );
-        unset( $vars['_locked'] );
-        unset( $vars['_initialized'] );
-        unset( $vars['_originalData'] );
+        $vars = get_object_vars($this);
+        unset($vars['module']);
+        unset($vars['_locked']);
+        unset($vars['_initialized']);
+        unset($vars['_originalData']);
         return $vars;
     }
 }

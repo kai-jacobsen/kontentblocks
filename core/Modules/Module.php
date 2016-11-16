@@ -35,7 +35,7 @@ abstract class Module implements EntityInterface
     public $environment;
 
     /**
-     * If ViewLoader is set, View will be auto-setup
+     * If ViewLoader is set, a view will be auto-setup
      * @var \Kontentblocks\Templating\ModuleView
      */
     public $view;
@@ -56,8 +56,8 @@ abstract class Module implements EntityInterface
      * @var ModuleContext
      */
     public $context;
-    
-    
+
+
     /**
      * @param ModuleProperties $properties
      * @param array $data
@@ -78,12 +78,9 @@ abstract class Module implements EntityInterface
         $this->setupFields();
     }
 
-    /*
-     * ------------------------------------
-     * Primary module methods
-     * ------------------------------------
+    /**
+     * Setup field controller
      */
-
     public function setupFields()
     {
         // magically setup fields
@@ -96,6 +93,7 @@ abstract class Module implements EntityInterface
     }
 
     /**
+     *
      * @return string
      */
     public function getId()
@@ -110,7 +108,6 @@ abstract class Module implements EntityInterface
      */
     public static function getDefaultSettings()
     {
-
         return array(
             'disabled' => false,
             'publicName' => '',
@@ -143,11 +140,12 @@ abstract class Module implements EntityInterface
     /**
      * Setup Module Data
      * @param array $data
+     * @param bool $force
      */
-    public function updateModuleData($data = array(), $hard = false)
+    public function updateModuleData($data = array(), $force = false)
     {
 
-        if ($hard) {
+        if ($force) {
             $this->model = new ModuleModel($data, $this);
         }
 
@@ -157,12 +155,6 @@ abstract class Module implements EntityInterface
             $this->fields->updateData();
         }
     }
-
-    /*
-     * ------------------------------------
-     * public getter
-     * ------------------------------------
-     */
 
     /**
      * Creates a complete list item for the area
@@ -218,23 +210,10 @@ abstract class Module implements EntityInterface
         if (isset($this->fields)) {
             $this->setupFrontendData();
         }
-
         $this->view = $this->getView();
-
         return $this->render();
 
     }
-
-
-    public function defaultView(){
-        return "default.twig";
-    }
-
-    /*
-     * ------------------------------------
-     * public setter
-     * ------------------------------------
-     */
 
     /**
      * Pass the raw module data to the fields, where the data
@@ -243,7 +222,6 @@ abstract class Module implements EntityInterface
      */
     private function setupFrontendData()
     {
-
         if ($this->model->hasData()) {
             foreach ($this->model as $key => $v) {
                 /** @var \Kontentblocks\Fields\Field $field */
@@ -255,12 +233,6 @@ abstract class Module implements EntityInterface
         }
 
     }
-
-    /*
-     * ------------------------------------
-     * Helper
-     * ------------------------------------
-     */
 
     /**
      * Setup a prepared Twig template instance if viewLoader is used
@@ -316,6 +288,14 @@ abstract class Module implements EntityInterface
     }
 
     abstract public function render();
+
+    /**
+     * @return string
+     */
+    public function defaultView()
+    {
+        return "default.twig";
+    }
 
     /**
      * save()
@@ -409,6 +389,9 @@ abstract class Module implements EntityInterface
         return $this->model->sync() || $this->properties->sync();
     }
 
+    /**
+     * @return bool
+     */
     public function delete()
     {
         return $this->environment->getStorage()->removeFromIndex($this->getId());
@@ -422,6 +405,9 @@ abstract class Module implements EntityInterface
         return $this->properties;
     }
 
+    /**
+     * @return string
+     */
     public function getType()
     {
         return 'module';

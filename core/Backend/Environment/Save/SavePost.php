@@ -202,7 +202,6 @@ class SavePost
                 } // save real data
                 else {
                     $this->environment->getDataProvider()->delete('_preview_' . $module->getId());
-
                 }
                 $module->updateModuleData($savedData);
                 $module->getModel()->sync(true);

@@ -540,12 +540,38 @@ class Utilities
     }
 
     /**
+     * @param $key
+     * @return string
+     */
+    public static function buildContextKey($key)
+    {
+        if (self::isPreview()) {
+            return '_preview_' . $key;
+        }
+        return $key;
+    }
+
+    /**
      * @return bool
      */
     public static function isPreview()
     {
         $request = Request::createFromGlobals();
-        return ($request->request->get('wp-preview', '') === 'dopreview');
+        if (is_admin()) {
+            return ($request->request->get('wp-preview', '') === 'dopreview');
+        } else {
+            return is_preview();
+        }
+    }
+
+    public static function filterPostId($postId)
+    {
+        $postId = absint($postId);
+        if (!is_numeric($postId)) {
+            return $postId;
+        }
+
+
     }
 
 
