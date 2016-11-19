@@ -19,7 +19,7 @@ class BackupInspect
     {
         add_action( 'add_meta_boxes', array( $this, 'addMetaBox' ), 15, 2 );
         add_action( 'wp_ajax_get_backups', array( $this, 'getBackups' ) );
-        add_action( 'init', array( $this, 'observeQuery' ) );
+        add_action( 'init', array( $this, 'observeQuery' ),99 );
         add_filter( 'heartbeat_received', array( $this, 'heartbeatReceive' ), 10, 2 );
     }
 
@@ -78,7 +78,6 @@ class BackupInspect
     {
 
         $storage = new ModuleStorage( $post_id );
-
         $backupManager = new BackupDataStorage( $storage );
         $backupManager->backup( 'before backup restore' );
         $backupManager->restoreBackup( $id );

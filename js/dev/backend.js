@@ -147,6 +147,9 @@ KB.App = (function () {
     /*
      * payload.Fields collection
      */
+    if (_.isArray(KB.payload.Fields) && KB.payload.Fields.length == 0) {
+      KB.payload.Fields = {};
+    }
     KB.FieldControls = new FieldControlsCollection();
     KB.FieldControls.add(_.toArray(Payload.getPayload('Fields')));
 
@@ -3203,6 +3206,7 @@ var Logger = require('common/Logger');
 module.exports = Backbone.Model.extend({
   idAttribute: "uid",
   initialize: function () {
+    console.log(this);
     this.cleanUp(); //remove self from linked fields
     var module = this.get('fieldId'); // fieldId equals baseId equals the parent object id (Panel or Module)
     if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) { // if object exists and this field type is valid

@@ -69,9 +69,7 @@ abstract class Module implements EntityInterface
         $this->environment = $environment;
         $this->context = new ModuleContext($environment, $this);
         $this->model = new ModuleModel($data, $this);
-        if (filter_var($this->properties->getSetting('views'), FILTER_VALIDATE_BOOLEAN)) {
-            $this->viewLoader = Kontentblocks::getService('registry.moduleViews')->getViewLoader($this);
-        }
+        $this->viewLoader = Kontentblocks::getService('registry.moduleViews')->getViewLoader($this);
         /**
          * Setup FieldController, Sections and fields if used
          */
@@ -362,6 +360,7 @@ abstract class Module implements EntityInterface
             'parentObject' => $this->properties->parentObject,
             'areaContext' => $this->properties->areaContext,
             'viewfile' => $this->getViewfile(),
+            'views' => $this->viewLoader->getViews(),
             'overrides' => $this->properties->overrides,
             'globalModule' => $this->properties->globalModule,
             'submodule' => $this->properties->submodule,

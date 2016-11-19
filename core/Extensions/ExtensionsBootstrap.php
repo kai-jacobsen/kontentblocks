@@ -20,7 +20,7 @@ if (current_theme_supports( 'kontentblocks:redirect-template' )) {
 
 if (current_theme_supports( 'kontentblocks:backups-ui' )) {
     add_action(
-        'kb.init',
+        'init',
         function () {
             $support = get_theme_support( 'kontentblocks:backups-ui' );
             if (is_array( $support )) {

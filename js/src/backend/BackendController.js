@@ -146,6 +146,9 @@ KB.App = (function () {
     /*
      * payload.Fields collection
      */
+    if (_.isArray(KB.payload.Fields) && KB.payload.Fields.length == 0) {
+      KB.payload.Fields = {};
+    }
     KB.FieldControls = new FieldControlsCollection();
     KB.FieldControls.add(_.toArray(Payload.getPayload('Fields')));
 
