@@ -15,8 +15,16 @@ matrix:
       env: WP_VERSION=4.4 WP_MULTISITE=0
     - php: '7.0'
       env: WP_VERSION=4.4 WP_MULTISITE=0
+    - php: '7.0'
+      env: WP_VERSION=4.5 WP_MULTISITE=0
+    - php: '7.0'
+      env: WP_VERSION=4.6 WP_MULTISITE=0
     - php: '5.6'
       env: WP_VERSION=4.4 WP_MULTISITE=0
+    - php: '5.6'
+      env: WP_VERSION=4.5 WP_MULTISITE=0
+    - php: '5.6'
+      env: WP_VERSION=4.6 WP_MULTISITE=0
 before_install: npm install -g grunt-cli
 
 before_script:
