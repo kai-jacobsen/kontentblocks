@@ -208,7 +208,7 @@ module.exports = Backbone.View.extend({
     model = KB.ObjectProxy.add(KB.Modules.add(data.module));
     this.options.area.attachModuleView(model);
     this.parseAdditionalJSON(data.json);
-    model.View.$el.addClass('kb-open');
+    model.View.trigger('toggle.open');
 
     setTimeout(function () {
       KB.Fields.trigger('newModule', model.View);

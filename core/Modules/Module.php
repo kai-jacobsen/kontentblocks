@@ -172,10 +172,10 @@ abstract class Module implements EntityInterface
     {
         $concat = '';
 
-        if (!is_null($this->viewLoader)) {
-            // render view select field
-            $concat .= $this->viewLoader->render();
-        }
+//        if (!is_null($this->viewLoader)) {
+//            // render view select field
+//            $concat .= $this->viewLoader->render();
+//        }
         // render fields if set
         if (isset($this->fields) && is_object($this->fields)) {
             $rendererClass = $this->properties->getSetting('fieldRenderer');

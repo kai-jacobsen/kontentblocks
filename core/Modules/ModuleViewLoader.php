@@ -57,29 +57,29 @@ class ModuleViewLoader
         add_action('kb.save.frontend.module', array($this, 'frontendSave'));
     }
 
-    /**
-     * Render the viewfile select field
-     * @return bool|string
-     */
-    public function render()
-    {
-        if ($this->hasViews()) {
-            $tpl = new CoreView(
-                'view-selector.twig',
-                array('templates' => $this->prepareTemplates(), 'module' => $this->module->properties)
-            );
-            return $tpl->render();
-        } else {
-            $tpl = $this->getSingleTemplate();
-            if (is_null($tpl)) {
-                return "<p class='notice kb-field'>No View available</p>";
-            } else {
-                $this->module->properties->viewfile = $tpl->filename;
-
-                return "<input type='hidden' name='{$this->module->properties->mid}[viewfile]' value='{$tpl->filename}' >";
-            }
-        }
-    }
+//    /**
+//     * Render the viewfile select field
+//     * @return bool|string
+//     */
+//    public function render()
+//    {
+//        if ($this->hasViews()) {
+//            $tpl = new CoreView(
+//                'view-selector.twig',
+//                array('templates' => $this->prepareTemplates(), 'module' => $this->module->properties)
+//            );
+//            //return $tpl->render();
+//        } else {
+//            $tpl = $this->getSingleTemplate();
+//            if (is_null($tpl)) {
+//                return "<p class='notice kb-field'>No View available</p>";
+//            } else {
+//                $this->module->properties->viewfile = $tpl->filename;
+//
+//                return "<input type='hidden' name='{$this->module->properties->mid}[viewfile]' value='{$tpl->filename}' >";
+//            }
+//        }
+//    }
 
     /**
      * Check if files are available
