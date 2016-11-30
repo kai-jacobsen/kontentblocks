@@ -14,6 +14,7 @@ var DraftStatus = require('backend/Views/ModuleStatusBar/status/DraftStatus');
 var OriginalNameStatus = require('backend/Views/ModuleStatusBar/status/OriginalNameStatus');
 var SettingsStatus = require('backend/Views/ModuleStatusBar/status/SettingsStatus');
 var LoggedInStatus = require('backend/Views/ModuleStatusBar/status/LoggedInStatus');
+var TemplatesStatus = require('backend/Views/ModuleStatusBar/status/TemplateStatus');
 
 
 var Checks = require('common/Checks');
@@ -122,6 +123,7 @@ module.exports = Backbone.View.extend({
     this.ModuleStatusBar.addItem(new DraftStatus({model: this.model, parent: this}));
     this.ModuleStatusBar.addItem(new OriginalNameStatus({model: this.model, parent: this}));
     this.ModuleStatusBar.addItem(new LoggedInStatus({model: this.model, parent: this}));
+    this.ModuleStatusBar.addItem(new TemplatesStatus({model: this.model, parent: this}));
   },
   // get called when a module was dragged to a different area / area context
   updateModuleForm: function () {

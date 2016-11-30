@@ -445,6 +445,13 @@ class Utilities
             return;
         }
 
+        $postType = get_post_type($postId);
+
+        $blacklist = apply_filters('kb.remote.concat.posttypes', array());
+        if (in_array($postType, $blacklist)){
+            return null;
+        }
+
         $base = get_permalink($postId);
         if (!is_null($host)) {
             $parsed = parse_url($base);

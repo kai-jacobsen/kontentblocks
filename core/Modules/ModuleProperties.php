@@ -284,7 +284,7 @@ class ModuleProperties
 
     /**
      * Magic setter
-     * converts area identifier to aea object
+     * converts area identifier to area object
      * @param $var
      * @return mixed
      */

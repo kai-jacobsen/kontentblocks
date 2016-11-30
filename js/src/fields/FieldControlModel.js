@@ -6,7 +6,6 @@ var Logger = require('common/Logger');
 module.exports = Backbone.Model.extend({
   idAttribute: "uid",
   initialize: function () {
-    console.log(this);
     this.cleanUp(); //remove self from linked fields
     var module = this.get('fieldId'); // fieldId equals baseId equals the parent object id (Panel or Module)
     if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) { // if object exists and this field type is valid
