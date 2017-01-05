@@ -8,5 +8,12 @@ module.exports = BaseView.extend({
       i18n: _.extend(KB.i18n.Refields.link, KB.i18n.Refields.common),
       model: this.model.toJSON()
     });
+  },
+  getDefaults: function(){
+    return {
+      link: '',
+      linktext: '',
+      linktitle: ''
+    }
   }
 });

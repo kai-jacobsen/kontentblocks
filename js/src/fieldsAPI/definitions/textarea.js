@@ -7,5 +7,8 @@ module.exports = BaseView.extend({
     return this.template({
       model: this.model.toJSON()
     });
+  },
+  getDefaults: function(){
+    return '';
   }
 });

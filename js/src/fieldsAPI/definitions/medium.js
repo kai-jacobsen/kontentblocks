@@ -10,6 +10,9 @@ module.exports = BaseView.extend({
   },
   postRender: function(){
 
+  },
+  getDefaults: function(){
+    return '';
   }
 });
 

@@ -39,7 +39,7 @@ module.exports = Backbone.View.extend({
   render: function () {
     var inputName = this.createInputName(this.model.get('itemId'));
     var item = this.model.toJSON(); // tab information and value hold by this.model
-    var $skeleton = this.$el.append(tplSingleToggleBox({ // append the outer skeletion markup for the item / toggle head & body
+    var $skeleton = this.$el.append(tplSingleToggleBox({ // append the outer skeleton markup for the item / toggle head & body
       item: item,
       inputName: inputName,
       uid: this.model.get('itemId')

@@ -34,7 +34,6 @@ module.exports = BaseView.extend({
 
     if (!textarea)
       return;
-
     // get contents of dialog
     attrs = wpLink.getAttrs();
     title = jQuery( '#wp-link-text').val();

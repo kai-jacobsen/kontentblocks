@@ -1,7 +1,13 @@
 module.exports = Backbone.View.extend({
   initialize: function () {
-    this.defaults = this.defaults || {};
+    this.defaults = this.getDefaults() || {};
     this.extendModel();
+  },
+  getDefaults: function(){
+    return '';
+  },
+  setDefaults: function () {
+    this.setValue(this.getDefaults());
   },
   setValue: function (val) {
     this.model.set('value', val);

@@ -8,7 +8,6 @@ module.exports = Backbone.View.extend({
     var itemId = uid || _.uniqueId('ff2');
     var text = this.model.get('newitemtext') || 'Enter a title : ';
     title = title || prompt(text, '');
-
     var sections = _.clone(this.sections);
     _.each(sections, function (section) {
       _.each(section.fields, function (field) {
@@ -23,6 +22,11 @@ module.exports = Backbone.View.extend({
           type: field.type
         });
         field.view = KB.FieldsAPI.getRefByType(field.type, itemData);
+
+        if (!fielddata){
+          field.view.setDefaults();
+        }
+
       }, this)
     }, this);
 
