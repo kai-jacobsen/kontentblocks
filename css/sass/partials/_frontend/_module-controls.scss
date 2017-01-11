@@ -211,9 +211,15 @@
     Admin Bar Control
 \*------------------------------------*/
 
-body.kb-editcontrols-show{
-  .kb-module-controls, .kb-inline-toolbar{
+body.kb-editcontrols-show {
+  .kb-module-controls, .kb-inline-toolbar {
     display: block;
     z-index: 1111;
+  }
+
+  .os-edit-container:hover {
+    outline: black 1px dotted;
+    outline-offset: 4px;
+    background: rgba(0, 0, 0, 0.1);
   }
 }

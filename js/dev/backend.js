@@ -1757,7 +1757,11 @@ module.exports = BaseView.extend({
   },
   render: function () {
     var show = (_.size(this.model.get('views')) > 1);
-    this.$el.append(tplTemplatesStatus({show: show,module: this.model.toJSON()}));
+    var views = _.map(this.model.get('views'), function (view) {
+      view.selected = (view.filename === this.model.get('viewfile')) ? 'selected="selected"' : '';
+      return view;
+    },this);
+    this.$el.append(tplTemplatesStatus({show: show, module: this.model.toJSON(), views:views }));
   },
   openController: function () {
     this.getController().open();
@@ -7126,7 +7130,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "\" name=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.mid : stack1), depth0))
     + "[viewfile]\">\n"
-    + ((stack1 = helpers.each.call(depth0,((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.views : stack1),{"name":"each","hash":{},"fn":this.program(2, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.views : depth0),{"name":"each","hash":{},"fn":this.program(2, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "                </select></label>\n        </div>\n    </div>\n";
 },"2":function(depth0,helpers,partials,data) {
     var alias1=this.lambda, alias2=this.escapeExpression;

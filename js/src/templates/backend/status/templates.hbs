@@ -4,7 +4,7 @@
             <label>
                 Modultemplate
                 <select class="kb-template-select" data-kb-rel="{{ module.mid }}" name="{{ module.mid }}[viewfile]">
-                    {{#each module.views }}
+                    {{#each views }}
                         <option {{ this.selected }} value="{{ this.filename }}"
                                                     data-tpldesc="{{ this.description }}">{{ this.name }}</option>
                     {{/each}}

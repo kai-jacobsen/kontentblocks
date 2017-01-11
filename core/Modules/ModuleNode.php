@@ -31,7 +31,7 @@ class ModuleNode
     }
 
     /**
-     * @return mixed|string|void
+     * @return string
      */
     public function build()
     {
@@ -153,17 +153,10 @@ class ModuleNode
 
     private function openModuleBody()
     {
-        $lockedmsg = (!current_user_can('lock_kontentblocks')) ? 'Content is locked' : null;
         // markup for each block
         $out = "<div style='display:none;' class='kb_inner kb-module__body'>";
-        if ($lockedmsg && KONTENTLOCK) {
-            $out = $lockedmsg;
-        } else {
-            $out .= "<div class='kb-module__controls-inner'>";
-        }
-
+        $out .= "<div class='kb-module__controls-inner'>";
         return $out;
-
     }
 
     private function statusBar()

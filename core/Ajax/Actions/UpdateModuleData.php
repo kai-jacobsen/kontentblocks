@@ -45,7 +45,8 @@ class UpdateModuleData implements AjaxActionInterface
         $workshop = new ModuleWorkshop($environment, $moduleArgs);
         $module = $workshop->getModule();
 
-        $overrides = $request->request->get('overrides',array());
+        $overrides = (isset($data['overrides'])) ? $data['overrides'] : array();
+
         $module->properties->parseOverrides($overrides);
 
          // gather data
@@ -59,7 +60,6 @@ class UpdateModuleData implements AjaxActionInterface
         $module->properties->viewfile = (!empty($data['viewfile'])) ? $data['viewfile'] : '';
 
         $environment->getStorage()->reset();
-
         $environment->getStorage()->addToIndex($module->getId(), $module->properties->export());
 
         $return = array(

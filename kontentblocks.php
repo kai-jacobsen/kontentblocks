@@ -88,9 +88,6 @@ Class Kontentblocks
         define('KB_COREMODULES_PATH', plugin_dir_path(__FILE__) . 'core/Modules/Core/');
         define('KB_REFIELD_JS', plugin_dir_url(__FILE__) . 'core/Fields/Definitions/js/');
         define('KB_TEMPLATES_PATH', plugin_dir_path(__FILE__) . 'core/Templating/templates/');
-        // still there for historical reasons
-        define('KONTENTLOCK', false);
-
 
         // Composer autoloader, depends on composer setup
         if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {

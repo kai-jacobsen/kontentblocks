@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class PostPanel
- * @package Kontentblocks\Panels
  */
 abstract class PostPanel extends AbstractPanel implements FormInterface
 {
@@ -79,7 +78,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         $this->model = new PanelModel($this->dataProvider->get(Utilities::buildContextKey($this->baseId)), $this);
         $this->fields = new StandardFieldController($this->baseId, $this);
         $this->fields();
-
     }
 
     /**
@@ -286,7 +284,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
     {
 
 
-        if ( (absint($postId) !== absint($this->postId)) && !Utilities::isPreview()) {
+        if ((absint($postId) !== absint($this->postId)) && !Utilities::isPreview()) {
             return;
         }
 

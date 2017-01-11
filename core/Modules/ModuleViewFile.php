@@ -7,7 +7,7 @@ namespace Kontentblocks\Modules;
  * Class ModuleViewFile
  * @package Kontentblocks\Modules
  */
-class ModuleViewFile
+class ModuleViewFile implements \JsonSerializable
 {
 
     /**
@@ -48,7 +48,7 @@ class ModuleViewFile
      * @var
      */
     public $description;
-    
+
     /**
      * @var ModuleViewsMeta
      */
@@ -139,6 +139,21 @@ class ModuleViewFile
     }
 
     /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    function jsonSerialize()
+    {
+        $vars = get_object_vars($this);
+        unset($vars['path']);
+        unset($vars['subpath']);
+        return $vars;
+    }
+
+    /**
      * @param $normalized
      * @return string
      */
@@ -146,5 +161,4 @@ class ModuleViewFile
     {
         return str_replace('.', DIRECTORY_SEPARATOR, $normalized) . '.twig';
     }
-
 }

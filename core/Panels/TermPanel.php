@@ -87,7 +87,7 @@ abstract class TermPanel extends AbstractPanel
     public function init()
     {
         if (is_admin()) {
-            add_action("edited_{$this->args['taxonomy']}", array($this, 'saveCallback'));
+            add_action("edited_{$this->args['taxonomy']}", array($this, 'saveCallback'),10,2);
             if ($this->args['insideTable']) {
                 add_action("{$this->args['taxonomy']}_edit_form_fields", array($this, 'form'));
             } else {
@@ -101,7 +101,7 @@ abstract class TermPanel extends AbstractPanel
 
     public function changeUi()
     {
-        if ($this->args['hideDescription']){
+        if ($this->args['hideDescription']) {
             echo "<style>.term-description-wrap {display: none !important;}</style>";
         }
     }
@@ -225,6 +225,23 @@ abstract class TermPanel extends AbstractPanel
     public function getData()
     {
         return $this->model->export();
+    }
+
+    /**
+     * Callback handler
+     */
+    public function saveCallback($termId, $termObj)
+    {
+        $postData = Request::createFromGlobals();
+        if (absint($postData->request->get('tag_ID')) !== $termId) {
+            return;
+        }
+        $data = $postData->request->filter($this->baseId, null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        if (empty($data)) {
+            return;
+        }
+        $this->model->reset()->set($postData->request->get($this->baseId));
+        $this->save($postData);
     }
 
 }
