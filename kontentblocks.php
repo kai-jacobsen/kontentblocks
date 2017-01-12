@@ -8,7 +8,7 @@
   Author URI: https://github.com/kai-jacobsen/kontentblocks
   Text Domain: Kontentblocks
   Domain Path: /languages
-  GitHub Plugin URI: https://github.com/kai-jacobsen/kontentblocks
+  GitLab Plugin URI: https://gitlab.com/kai-jacobsen/kontentblocks-plugin
   License: MIT
  */
 
