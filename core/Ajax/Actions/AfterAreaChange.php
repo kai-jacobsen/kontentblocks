@@ -12,19 +12,20 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Runs after a module was dragged into a different area
- * Runs after the module view select field changed
+ * Runs after the module template select field changed
  * Gets the module form for new/changed conditions
  *
  * Class AfterAreaChange
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax
  */
 class AfterAreaChange implements AjaxActionInterface
 {
+    /**
+     * @var string
+     */
     static $nonce = 'kb-read';
 
     /**
-     * Get going
+     * Resulting form is based on the posted module definition to handle unsaved changes correctly
      * @param Request $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */

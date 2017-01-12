@@ -10,7 +10,7 @@ namespace Kontentblocks\Ajax;
  * Blueprint of ajax responses
  * Mimics the structure of the return value from wp_send_json:
  * [success: $bool, data: [], message: $string ]
- * This is the expected format from all Kontentblocks internal javascript
+ * This is the expected format from all Kontentblocks internal ajax requests
  */
 abstract class AbstractAjaxResponse implements \JsonSerializable
 {
@@ -24,10 +24,11 @@ abstract class AbstractAjaxResponse implements \JsonSerializable
      * @param array $data
      * @param bool $send
      */
-    public function __construct( $message = '', $data = array(), $send = true )
+    public function __construct($message = '', $data = array(), $send = true)
     {
         $this->message = $message;
         $this->data = $data;
+        // unit tests may suppress output
         $send = !filter_var(getenv('SILENT'), FILTER_VALIDATE_BOOLEAN);
 
         if ($send) {
@@ -38,7 +39,15 @@ abstract class AbstractAjaxResponse implements \JsonSerializable
     }
 
     /**
-     * Getter message property
+     * Wrapper to json output
+     * @return void
+     */
+    public function sendJson()
+    {
+        wp_send_json($this);
+    }
+
+    /**
      * @return string
      */
     public function getMessage()
@@ -56,15 +65,7 @@ abstract class AbstractAjaxResponse implements \JsonSerializable
     }
 
     /**
-     * Wrapper to json output
-     * @return void
-     */
-    public function sendJson()
-    {
-        wp_send_json( $this );
-    }
-
-    /**
+     *
      * Should return a boolean value
      * @return bool
      */

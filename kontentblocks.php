@@ -3,13 +3,12 @@
   Plugin Name: Kontentblocks
   Plugin URI: http://kontentblocks.de
   Description: Content modularization framework
-  Version: 0.8.3.1
+  Version: 0.8.7
   Author: Kai Jacobsen
   Author URI: https://github.com/kai-jacobsen/kontentblocks
   Text Domain: Kontentblocks
   Domain Path: /languages
   GitLab Plugin URI: https://gitlab.com/kai-jacobsen/kontentblocks-plugin
-  Release Asset: $
   License: MIT
  */
 
@@ -49,7 +48,7 @@ use Reframe\Autoloader;
 Class Kontentblocks
 {
 
-    const VERSION = '0.8.3';
+    const VERSION = '0.8.7';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.13';
     const DEBUG = false;
