@@ -9,6 +9,7 @@
   Text Domain: Kontentblocks
   Domain Path: /languages
   GitLab Plugin URI: https://gitlab.com/kai-jacobsen/kontentblocks-plugin
+  Release Asset: $
   License: MIT
  */
 
