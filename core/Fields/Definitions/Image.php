@@ -159,18 +159,18 @@ Class Image extends Field
             return null;
         }
 
-        $caption = (isset($new['caption']) && !empty($new['caption'])) ? $new['caption'] : '';
-        $title = (isset($new['title']) && !empty($new['title'])) ? $new['title'] : '';
-
-        if (isset($new['id']) && !empty($new['id'])) {
-            wp_update_post(
-                array(
-                    'ID' => absint($new['id']),
-                    'post_excerpt' => $caption,
-                    'post_title' => $title
-                )
-            );
-        }
+//        $caption = (isset($new['caption']) && !empty($new['caption'])) ? $new['caption'] : '';
+//        $title = (isset($new['title']) && !empty($new['title'])) ? $new['title'] : '';
+//
+//        if (isset($new['id']) && !empty($new['id'])) {
+//            wp_update_post(
+//                array(
+//                    'ID' => absint($new['id']),
+//                    'post_excerpt' => $caption,
+//                    'post_title' => $title
+//                )
+//            );
+//        }
         return $new;
     }
 

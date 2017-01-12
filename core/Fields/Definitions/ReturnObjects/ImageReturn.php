@@ -245,6 +245,11 @@ class ImageReturn extends StandardFieldReturn
 
     }
 
+    /**
+     * @param $width
+     * @param $height
+     * @return bool|ImageReturn
+     */
     public function size($width, $height)
     {
         return $this->setSize($width, $height);
@@ -283,11 +288,9 @@ class ImageReturn extends StandardFieldReturn
      */
     protected function prepareValue($value)
     {
-
         if (!is_array($value)) {
             return $value;
         }
-
 
         if (array_key_exists('id', $value)) {
             $this->attId = $value['id'];
