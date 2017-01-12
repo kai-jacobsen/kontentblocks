@@ -532,7 +532,7 @@ abstract class Field implements Exportable
             'std' => $this->getArg('std', ''),
             'args' => $this->cleanedArgs(),
             'section' => $this->section->sectionId,
-            'data' => $this->getFrontendValue()
+            'data' => $this->getValue()
         );
     }
 
