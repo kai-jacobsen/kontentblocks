@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
@@ -13,20 +13,18 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Class UpdateModule
  * Save module data
- * @package Kontentblocks\Ajax\Frontend
  */
-class UpdateModule implements AjaxActionInterface
+class UpdateModule extends AbstractAjaxAction
 {
 
     static $nonce = 'kb-update';
-
 
     /**
      * @param Request $request
      * @param bool $send
      * @return AjaxSuccessResponse
      */
-    public static function run(Request $request, $send = true)
+    protected static function run(Request $request, $send = true)
     {
         global $post;
 

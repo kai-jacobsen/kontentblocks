@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
@@ -11,10 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class SortModules
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax
  */
-class SortModules implements AjaxActionInterface
+class SortModules extends AbstractAjaxAction
 {
     static $nonce = 'kb-update';
 
@@ -22,7 +20,7 @@ class SortModules implements AjaxActionInterface
      * @param Request $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
 
         $data = $request->request->filter('data', array(), FILTER_DEFAULT);

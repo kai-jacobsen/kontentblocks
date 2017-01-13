@@ -35,6 +35,8 @@ class ApplyContentFilterTest extends \WP_UnitTestCase
     public function setUp()
     {
         parent::setUp();
+        $this->userId = $this->factory->user->create( array( 'role' => 'administrator' ) );
+        wp_set_current_user( $this->userId );
 
     }
 
@@ -56,6 +58,8 @@ class ApplyContentFilterTest extends \WP_UnitTestCase
     public function tearDown()
     {
         parent::tearDown();
+        wp_set_current_user( 0 );
+
     }
 
 

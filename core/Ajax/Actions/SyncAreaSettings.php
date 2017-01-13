@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Areas\AreaSettingsModel;
@@ -13,10 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class SyncAreaSettings
  * Runs when area status change
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax
  */
-class SyncAreaSettings implements AjaxActionInterface
+class SyncAreaSettings extends AbstractAjaxAction
 {
     static $nonce = 'kb-update';
 
@@ -24,7 +22,7 @@ class SyncAreaSettings implements AjaxActionInterface
      * @param Request $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
 
         $postId = $request->request->getInt('postId', null);

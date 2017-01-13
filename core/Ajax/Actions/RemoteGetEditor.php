@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Utils\Utilities;
@@ -11,10 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class RemoteGetEditor
  * Return the markup for an built-in tinymce editor instance
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax
  */
-class RemoteGetEditor implements AjaxActionInterface
+class RemoteGetEditor extends AbstractAjaxAction
 {
 
     static $nonce = 'kb-read';
@@ -23,7 +21,7 @@ class RemoteGetEditor implements AjaxActionInterface
      * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
 
         $args = $request->request->filter('args', array(), FILTER_REQUIRE_ARRAY);

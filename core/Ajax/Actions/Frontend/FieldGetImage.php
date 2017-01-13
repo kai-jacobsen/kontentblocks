@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Fields\Definitions\Image;
 use Kontentblocks\Utils\ImageResize;
@@ -11,10 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class FieldGetImage
  * Gets an resized version of the provided image attachment id
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax\Frontend
  */
-class FieldGetImage implements AjaxActionInterface
+class FieldGetImage extends AbstractAjaxAction
 {
     static $nonce = 'kb-read';
 
@@ -22,7 +20,7 @@ class FieldGetImage implements AjaxActionInterface
      * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
         $crop = false;
         $args = $request->request->get('args');

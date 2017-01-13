@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
@@ -11,11 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class BatchRemoveModules
- *
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax\Actions
  */
-class BatchRemoveModules implements AjaxActionInterface
+class BatchRemoveModules extends AbstractAjaxAction
 {
     static $nonce = 'kb-delete';
 
@@ -23,7 +20,7 @@ class BatchRemoveModules implements AjaxActionInterface
      * @param Request $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
         $postId = $request->request->getInt('postId', null);
         $environment = Utilities::getPostEnvironment($postId);

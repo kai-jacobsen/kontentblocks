@@ -2,26 +2,25 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class GetOembed
- * @package Kontentblocks\Ajax\Actions
  */
-class GetOembed implements AjaxActionInterface
+class GetOembed extends AbstractAjaxAction
 {
     static $nonce = 'kb-read';
 
     /**
      * @param Request $request
-     * @return AjaxSuccessResponse
+     * @return AjaxSuccessResponse|AjaxErrorResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
-        $url = $request->request->filter('embedUrl', false ,FILTER_VALIDATE_URL);
+        $url = $request->request->filter('embedUrl', false, FILTER_VALIDATE_URL);
 
         if ($url !== false) {
             $embed = wp_oembed_get($url);
@@ -30,10 +29,9 @@ class GetOembed implements AjaxActionInterface
                     'html' => $embed
                 ));
             }
-            return new AjaxErrorResponse('No Provider found',
-                array('html' => 'No Provider found or html could not be generated.'));
         }
-
+        return new AjaxErrorResponse('No Provider found',
+            array('html' => 'No Provider found or html could not be generated.'));
     }
 
 

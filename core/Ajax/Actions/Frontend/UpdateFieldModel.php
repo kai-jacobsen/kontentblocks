@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Utils\Utilities;
@@ -13,19 +13,16 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Class UpdateFieldModel
  * Saves data on single field level
- * @package Kontentblocks\Ajax\Frontend
  */
-class UpdateFieldModel implements AjaxActionInterface
+class UpdateFieldModel extends AbstractAjaxAction
 {
-
     static $nonce = 'kb-update';
-
 
     /**
      * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
 
         $postdata = self::setupPostData($request);

@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,10 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Runs when a dynamic area or a template gets created
  * checks if an id already exists
  *
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax
  */
-class GetSanitizedId implements AjaxActionInterface
+class GetSanitizedId extends AbstractAjaxAction
 {
 
     static $nonce = 'kb-read';
@@ -25,7 +23,7 @@ class GetSanitizedId implements AjaxActionInterface
      * @param Request $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
         // verify action
         if (!current_user_can('edit_kontentblocks')) {

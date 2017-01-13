@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -10,9 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Class ApplyContentFilter
  * Runs frontend inline editable text through the_content filter
  * Used by inline text edit to restore oembed fragments after content change
- * @package Kontentblocks\Ajax\Frontend
  */
-class ApplyContentFilter implements AjaxActionInterface
+class ApplyContentFilter extends AbstractAjaxAction
 {
     static $nonce = 'kb-read';
 
@@ -20,7 +19,7 @@ class ApplyContentFilter implements AjaxActionInterface
      * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
         global $post;
         $content = wp_unslash($request->request->get('content'));

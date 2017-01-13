@@ -137,29 +137,41 @@ class AjaxCallbackHandler
     private function verify($callback)
     {
 
-        if (!is_user_logged_in()) {
-            return new AjaxErrorResponse('Log in if you can!');
-        }
-
-        if (!current_user_can('edit_kontentblocks')) {
-            return new AjaxErrorResponse('insufficient permissions');
-        }
-
-        if (!current_user_can('edit_posts')) {
-            return new AjaxErrorResponse('insufficient permissions');
+        if (!self::canRun()) {
+            return false;
         }
 
         if (!property_exists($callback[0], 'nonce')) {
-            return new AjaxErrorResponse('static nonce property not set on class');
+            new AjaxErrorResponse('static nonce property not set on class');
+            return false;
         }
         $nonce = $callback[0]::$nonce;
         $check = check_ajax_referer($nonce, null, false);
 
         if (!$check) {
-            return new AjaxErrorResponse('Nonce verification failed', array('nonce' => $nonce, 'check' => $check));
+            new AjaxErrorResponse('Nonce verification failed', array('nonce' => $nonce, 'check' => $check));
+            return false;
         }
 
         return true;
+    }
+
+    public static function canRun()
+    {
+        if (!is_user_logged_in()) {
+            new AjaxErrorResponse('Log in if you can!');
+            return false;
+        }
+
+        if (!current_user_can('edit_kontentblocks')) {
+            new AjaxErrorResponse('insufficient permissions');
+            return false;
+        }
+
+        if (!current_user_can('edit_posts')) {
+            new AjaxErrorResponse('insufficient permissions');
+            return false;
+        }
     }
 
 }

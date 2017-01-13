@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Kontentblocks;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,10 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Class GetOptionPanelForm
  * retrieves the html for a panels form
  * used for the frontend edit modal
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax\Frontend
  */
-class GetOptionPanelForm implements AjaxActionInterface
+class GetOptionPanelForm extends AbstractAjaxAction
 {
     static $nonce = 'kb-read';
 
@@ -22,7 +20,7 @@ class GetOptionPanelForm implements AjaxActionInterface
     /**
      * @param Request $request
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
         if (!defined('KB_ONSITE_ACTIVE')) {
             define('KB_ONSITE_ACTIVE', true);

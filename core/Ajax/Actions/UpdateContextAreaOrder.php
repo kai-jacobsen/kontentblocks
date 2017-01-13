@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\EditScreens\ScreenManager;
@@ -12,10 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class UpdateContextAreaOrder
  * Runs when area order inside a context changes
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax
  */
-class UpdateContextAreaOrder implements AjaxActionInterface
+class UpdateContextAreaOrder extends AbstractAjaxAction
 {
     static $nonce = 'kb-update';
 
@@ -23,7 +21,7 @@ class UpdateContextAreaOrder implements AjaxActionInterface
      * @param Request $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
         $postId = $request->request->getInt('postId', null);
         $data = $request->request->get('data');

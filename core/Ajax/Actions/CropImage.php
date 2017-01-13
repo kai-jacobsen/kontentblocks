@@ -2,17 +2,15 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class FieldGetImage
  * Gets an resized version of the provided image attachment id
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax\Frontend
  */
-class CropImage implements AjaxActionInterface
+class CropImage extends AbstractAjaxAction
 {
     static $nonce = 'kb-create';
 
@@ -20,12 +18,9 @@ class CropImage implements AjaxActionInterface
      * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
         check_ajax_referer('image_editor-' . $request->request->getInt('id'), 'nonce');
-        if (!current_user_can('edit_posts')) {
-            wp_send_json_error();
-        }
 
         $cropDetails = $request->request->get('cropDetails');
         $cropOptions = $request->request->get('cropOptions');

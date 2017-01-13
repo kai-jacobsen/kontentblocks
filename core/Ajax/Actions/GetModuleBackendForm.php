@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
@@ -13,10 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Class GetModuleBackendForm
  * retrieves the html for a modules input form
  * used for the frontend edit modal
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax\Frontend
  */
-class GetModuleBackendForm implements AjaxActionInterface
+class GetModuleBackendForm extends AbstractAjaxAction
 {
     static $nonce = 'kb-read';
 
@@ -24,7 +22,7 @@ class GetModuleBackendForm implements AjaxActionInterface
     /**
      * @param Request $request
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
 
         if (!defined('KB_MODULE_FORM')) {

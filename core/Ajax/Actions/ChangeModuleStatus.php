@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
@@ -12,10 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class ChangeModuleStatus
  * Runs when module status change
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax
  */
-class ChangeModuleStatus implements AjaxActionInterface
+class ChangeModuleStatus extends AbstractAjaxAction
 {
     static $nonce = 'kb-update';
 
@@ -23,7 +21,7 @@ class ChangeModuleStatus implements AjaxActionInterface
      * @param Request $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    public static function action(Request $request)
     {
 
         $postId = $request->request->getInt('postId');

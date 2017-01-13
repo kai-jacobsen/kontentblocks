@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Areas\AreaProperties;
 use Kontentblocks\Frontend\ModuleRenderSettings;
@@ -14,10 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class CreateNewModule
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax
  */
-class CreateNewModule implements AjaxActionInterface
+class CreateNewModule extends AbstractAjaxAction
 {
 
     public static $nonce = 'kb-create';
@@ -83,7 +81,7 @@ class CreateNewModule implements AjaxActionInterface
      * @param Request $request
      * @return CreateNewModule
      */
-    public static function run(Request $request)
+    public static function action(Request $request)
     {
         $instance = new CreateNewModule();
         return $instance->create($request);

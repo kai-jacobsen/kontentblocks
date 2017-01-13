@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
@@ -13,10 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Runs when module was dragged into different/new area
  * and stores the new area to the module
  *
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax
  */
-class ChangeArea implements AjaxActionInterface
+class ChangeArea extends AbstractAjaxAction
 {
 
     static $nonce = 'kb-update';
@@ -25,16 +23,12 @@ class ChangeArea implements AjaxActionInterface
      * @param Request $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    public static function action(Request $request)
     {
-        if (!current_user_can('edit_kontentblocks')) {
-            return new AjaxErrorResponse('insufficient permissions');
-        }
-
         $postID = $request->request->getInt('postId', null);
         $newArea = $request->request->filter('area_id', null, FILTER_SANITIZE_STRING);
         $newAreaContext = $request->request->filter('context', null, FILTER_SANITIZE_STRING);
-        $instanceId = $request->request->filter('mid',null, FILTER_SANITIZE_STRING);
+        $instanceId = $request->request->filter('mid', null, FILTER_SANITIZE_STRING);
         $storage = new ModuleStorage($postID);
         $moduleDefinition = $storage->getModuleDefinition($instanceId);
         $moduleDefinition['area'] = $newArea;

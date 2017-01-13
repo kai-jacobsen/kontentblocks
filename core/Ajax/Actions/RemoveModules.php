@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
@@ -12,10 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class RemoveModules
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax\Actions
  */
-class RemoveModules implements AjaxActionInterface
+class RemoveModules extends AbstractAjaxAction
 {
     static $nonce = 'kb-delete';
 
@@ -23,13 +21,8 @@ class RemoveModules implements AjaxActionInterface
      * @param Request $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
-
-        if (!current_user_can('edit_kontentblocks')) {
-            return new AjaxErrorResponse('insufficient permissions');
-        }
-
         $postId = $request->request->getInt('postId', null);
         $mid = $request->request->filter('module', null, FILTER_SANITIZE_STRING);
         $environment = Utilities::getPostEnvironment($postId);

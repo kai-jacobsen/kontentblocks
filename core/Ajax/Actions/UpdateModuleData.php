@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
@@ -13,12 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Class UpdateModuleData
  *
  * Handle async data saving from backend edit screens for a single module
- *
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax\Frontend
- * @since 0.1.0
  */
-class UpdateModuleData implements AjaxActionInterface
+class UpdateModuleData extends AbstractAjaxAction
 {
     static $nonce = 'kb-update';
 
@@ -29,7 +25,7 @@ class UpdateModuleData implements AjaxActionInterface
      * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
         global $post;
 

@@ -2,17 +2,15 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class SaveStaticPanelForm
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax\Frontend
  */
-class SaveStaticPanelForm implements AjaxActionInterface
+class SaveStaticPanelForm extends AbstractAjaxAction
 {
     static $nonce = 'kb-update';
 
@@ -21,7 +19,7 @@ class SaveStaticPanelForm implements AjaxActionInterface
      * @param Request $request
      * @return AjaxSuccessResponse
      */
-    public static function run( Request $request )
+    protected static function action( Request $request )
     {
         if (!defined( 'KB_ONSITE_ACTIVE' )) {
             define( 'KB_ONSITE_ACTIVE', true );

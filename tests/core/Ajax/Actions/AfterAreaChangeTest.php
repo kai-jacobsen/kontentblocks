@@ -20,15 +20,15 @@ class AfterAreaChangeTest extends \WP_UnitTestCase
 
     public static function setUpBeforeClass()
     {
-        ( !defined( 'DOING_AJAX' ) ) ? define( 'DOING_AJAX', TRUE ) : null;
+        (!defined('DOING_AJAX')) ? define('DOING_AJAX', true) : null;
         add_filter(
             'wp_die_ajax_handler',
-            array( __CLASS__, 'dump' ),
+            array(__CLASS__, 'dump'),
             99
         );
 
         \Kontentblocks\Hooks\Capabilities::setup();
-        Kontentblocks::getService( 'registry.modules' )->add( TESTS_DIR . '/assets/ModuleText/ModuleText.php' );
+        Kontentblocks::getService('registry.modules')->add(TESTS_DIR . '/assets/ModuleText/ModuleText.php');
 
         \Kontentblocks\registerArea(array(
             'id' => 'dump'
@@ -36,11 +36,16 @@ class AfterAreaChangeTest extends \WP_UnitTestCase
 
     }
 
+    public static function dump()
+    {
+        return '__return_null';
+    }
+
     public function setUp()
     {
         parent::setUp();
-        $this->userId = $this->factory->user->create( array( 'role' => 'administrator' ) );
-        wp_set_current_user( $this->userId );
+        $this->userId = $this->factory->user->create(array('role' => 'administrator'));
+        wp_set_current_user($this->userId);
 
     }
 
@@ -48,7 +53,7 @@ class AfterAreaChangeTest extends \WP_UnitTestCase
     {
         $post = $this->factory->post->create_and_get();
         $workshop = new ModuleWorkshop(
-            new PostEnvironment( $post->ID, $post ), array(
+            new PostEnvironment($post->ID, $post), array(
                 'class' => 'ModuleText',
                 'area' => 'dump'
             )
@@ -59,20 +64,14 @@ class AfterAreaChangeTest extends \WP_UnitTestCase
             'module' => $workshop->getDefinitionArray()
         );
 
-        $Response = AfterAreaChange::run( Request::createFromGlobals());
-        $this->assertTrue( $Response->getStatus() );
-    }
-
-
-    public static function dump()
-    {
-        return '__return_null';
+        $Response = AfterAreaChange::run(Request::createFromGlobals());
+        $this->assertTrue($Response->getStatus());
     }
 
     public function tearDown()
     {
         parent::tearDown();
-        wp_set_current_user( 0 );
+        wp_set_current_user(0);
     }
 
 

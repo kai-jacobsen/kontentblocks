@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Ajax\AjaxActionInterface;
+use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Environment\PostEnvironment;
@@ -13,10 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class DuplicateModule
- * @author Kai Jacobsen
- * @package Kontentblocks\Ajax
  */
-class DuplicateModule implements AjaxActionInterface
+class DuplicateModule extends AbstractAjaxAction
 {
 
     public static $nonce = 'kb-create';
@@ -47,12 +45,8 @@ class DuplicateModule implements AjaxActionInterface
      * @param Request $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run(Request $request)
+    protected static function action(Request $request)
     {
-
-        if (!current_user_can('create_kontentblocks')) {
-            return new AjaxErrorResponse('insufficient permissions');
-        }
 
         self::$postId = $request->request->getInt('postId', null);
         self::$instanceId = $request->request->filter('module', null, FILTER_SANITIZE_STRING);

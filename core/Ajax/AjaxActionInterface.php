@@ -12,5 +12,5 @@ use Symfony\Component\HttpFoundation\Request;
  */
 interface AjaxActionInterface
 {
-    public static function run( Request $Request );
+    static function run( Request $request );
 }
