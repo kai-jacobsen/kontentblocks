@@ -138,6 +138,7 @@ class AjaxCallbackHandler
     {
 
         if (!self::canRun()) {
+            new AjaxErrorResponse('permission denied');
             return false;
         }
 
@@ -172,6 +173,8 @@ class AjaxCallbackHandler
             new AjaxErrorResponse('insufficient permissions');
             return false;
         }
+
+        return true;
     }
 
 }

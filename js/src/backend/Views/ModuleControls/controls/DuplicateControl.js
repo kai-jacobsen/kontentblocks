@@ -42,7 +42,7 @@ module.exports = BaseView.extend({
       Notice.notice('Request Error', 'error');
       return false;
     }
-    this.model.Area.View.modulesList.append(res.data.html);
+    this.model.Area.View.$modulesList.append(res.data.html);
 
     module = res.data.module;
 

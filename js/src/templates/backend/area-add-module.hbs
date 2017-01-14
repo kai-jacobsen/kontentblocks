@@ -1,3 +1,8 @@
-<a class="modal modules-link" href="">
-    {{ i18n.Areas.ui.addNewModule }}
-</a>
+<div class='add-modules cantsort'>
+    {{#if showLimit }}
+        <span class='kb-area-block_limit'>Mögliche Anzahl Module: {{ model.limit }}</span>
+    {{/if}}
+    <a class="modal modules-link" href="">
+        {{ i18n.Areas.ui.addNewModule }}
+    </a>
+</div>

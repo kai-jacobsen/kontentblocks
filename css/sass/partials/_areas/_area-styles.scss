@@ -180,11 +180,34 @@
   box-shadow: 0 1px 1px rgba(0,0,0,0.04);
 }
 
-.block_limit {
+.kb-area--footer{
+  padding: $halfpadding 27px;
+  overflow: hidden;
+  background-color: $grey-100;
+  border-top: 1px solid $grey-200;
+}
+
+.kb-area-block_limit {
   font-size: 10px;
   display: block;
-  float: right;
-  color: #ccc;
+  color: $grey-400;
+  float: left;
+
+}
+
+.add-modules {
+  a {
+    float: right;
+    text-decoration: none;
+    font-size: 12px;
+
+    &:before {
+      content: "\f132";
+      font-family: 'dashicons';
+      position: relative;
+      top: 2px;
+    }
+  }
 }
 
 .kb-selectbox {
@@ -247,22 +270,7 @@
 
 
 
-.add-modules {
-  a {
-    float: right;
-    margin-bottom: 15px;
-    margin-right: 25px;
-    text-decoration: none;
-    font-size: 12px;
 
-    &:before {
-      content: "\f132";
-      font-family: 'dashicons';
-      position: relative;
-      top: 2px;
-    }
-  }
-}
 
 .kb-area__item-placeholder {
   background: #f2f2f2;

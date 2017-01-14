@@ -109,14 +109,16 @@ class AreaProperties
      */
     public $settings;
 
+    public $showCallback;
+
     /**
      * Construct and setup properties
      * @param $properties
      */
-    public function __construct( $properties )
+    public function __construct($properties)
     {
 
-        $properties = wp_parse_args( $properties, self::getDefaults() );
+        $properties = wp_parse_args($properties, self::getDefaults());
 
         foreach ($properties as $k => $v) {
             $this->$k = $v;
@@ -130,7 +132,7 @@ class AreaProperties
      * @return array
      * @since 0.1.0
      */
-    public static function getDefaults( $manual = true )
+    public static function getDefaults($manual = true)
     {
         return array(
             'id' => '', // unique id of area
@@ -150,7 +152,8 @@ class AreaProperties
             'concat' => false,
             'sortable' => false,
             'internal' => false,
-            'settings' => null
+            'settings' => null,
+            'showCallback' => null
         );
     }
 
@@ -159,9 +162,9 @@ class AreaProperties
      * @param string $prop
      * @return mixed|null
      */
-    public function get( $prop )
+    public function get($prop)
     {
-        if (property_exists( $this, $prop )) {
+        if (property_exists($this, $prop)) {
             return $this->$prop;
         }
 
@@ -173,7 +176,7 @@ class AreaProperties
      * @param string $prop
      * @param mixed $value
      */
-    public function set( $prop, $value )
+    public function set($prop, $value)
     {
         $this->$prop = $value;
     }
@@ -183,9 +186,9 @@ class AreaProperties
      * @param string $module
      * @return $this
      */
-    public function connect( $module )
+    public function connect($module)
     {
-        if (!isset( $this->assignedModules[$module] )) {
+        if (!isset($this->assignedModules[$module])) {
             $this->assignedModules[] = $module;
         }
         return $this;
@@ -202,9 +205,11 @@ class AreaProperties
     /**
      * @return array
      */
-    public function export(){
+    public function export()
+    {
         $vars = get_object_vars($this);
-        if (is_object($vars['settings'])){
+        unset($vars['showCallback']);
+        if (is_object($vars['settings'])) {
             $vars['settings'] = $vars['settings']->export();
         }
         return $vars;

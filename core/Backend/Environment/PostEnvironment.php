@@ -153,7 +153,8 @@ class PostEnvironment implements JsonSerializable
         $areas = $this->findAreas();
         /** @var \Kontentblocks\Areas\AreaProperties $area */
         foreach ($areas as $area) {
-            $area->set('settings', new AreaSettingsModel($area, $this->postObj->ID, DataProviderService::getPostProvider($this->postObj->ID)));
+            $area->set('settings', new AreaSettingsModel($area, $this->postObj->ID,
+                DataProviderService::getPostProvider($this->postObj->ID)));
         }
         return $areas;
 
@@ -166,19 +167,14 @@ class PostEnvironment implements JsonSerializable
      */
     public function findAreas()
     {
+
+        if (is_array($this->areas)) {
+            return $this->areas;
+        }
+
         /** @var \Kontentblocks\Areas\AreaRegistry $areaRegistry */
         $areaRegistry = Kontentblocks::getService('registry.areas');
         return $areaRegistry->filterForPost($this);
-    }
-
-    /**
-     * returns the DataProvider instance
-     * @return DataProvider
-     * @since 0.1.0
-     */
-    public function getDataProvider()
-    {
-        return $this->storage->getDataProvider();
     }
 
     /**
@@ -191,6 +187,16 @@ class PostEnvironment implements JsonSerializable
                 $this->areasByContext[$area->context][$id] = $area;
             }
         }
+    }
+
+    /**
+     * returns the DataProvider instance
+     * @return DataProvider
+     * @since 0.1.0
+     */
+    public function getDataProvider()
+    {
+        return $this->storage->getDataProvider();
     }
 
     public function getPanelObject($id)

@@ -8185,7 +8185,7 @@ module.exports = Backbone.View.extend({
   success: function (res) {
     var model, data;
     data = res.data;
-    this.options.area.modulesList.append(data.html);
+    this.options.area.$modulesList.append(data.html);
     model = KB.ObjectProxy.add(KB.Modules.add(data.module));
     this.options.area.attachModuleView(model);
     this.parseAdditionalJSON(data.json);

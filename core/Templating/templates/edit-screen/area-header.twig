@@ -4,7 +4,6 @@
         {#<span class='description'>{{area.get('description')}}</span>#}
         <input type='hidden' name='areas[]' value='{{ area.get('id') }}'>
         <input type="hidden" name="kbcontext[{{ area.get('context') }}][{{ area.get('id') }}]">
-        {{ settingsMenu.render() }}
     </div>
     <div class='kb-ajax-status-dark'></div>
 </div>

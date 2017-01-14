@@ -421,7 +421,7 @@ var ControlsView = require('backend/Views/ModuleControls/ControlsView');
 var tplControls = require('templates/backend/area-controls-menu.hbs');
 module.exports = ControlsView.extend({
   initialize: function () {
-    this.$menuWrap = jQuery('.kb-area-actions', this.$el); //set outer element
+    this.$menuWrap = jQuery('.kb-area__title-text', this.$el); //set outer element
     this.$menuWrap.append(tplControls({})); // render template
     this.$menuList = jQuery('.kb-area-actions-list', this.$menuWrap);
   }
@@ -556,31 +556,30 @@ var AreaControls = require('backend/Views/AreaControls/AreaControlsView');
 var StatusControl = require('backend/Views/AreaControls/controls/StatusControl');
 var DetachControl = require('backend/Views/AreaControls/controls/DetachControl');
 var MoveControl = require('backend/Views/AreaControls/controls/MoveControl');
+var Checks = require('common/Checks');
 module.exports = Backbone.View.extend({
   initialize: function () {
 
 
     this.attachedModuleViews = {};
-    this.controlsContainer = jQuery('.add-modules', this.$el);
-    this.settingsContainer = jQuery('.kb-area-settings-wrapper', this.$el);
-    this.modulesList = jQuery('#' + this.model.get('id'), this.$el);
-
+    this.$controlsContainer = this.$('.add-modules');
+    this.$modulesList = this.$('#' + this.model.get('id'));
     this.$placeholder = jQuery(tplAreaItemPlaceholer({i18n: KB.i18n}));
+    this.$footer = this.$('.kb-area--footer');
     this.model.View = this;
 
     this.listenTo(this, 'module:attached', this.ui);
 
-
-      this.AreaControls = new AreaControls({
+    this.AreaControls = new AreaControls({
       el: this.$el,
       parent: this
     });
+
     this.setupDefaultMenuItems();
     this.render();
   },
   events: {
     'click .modules-link': 'openModuleBrowser',
-    'click .js-area-settings-opener': 'toggleSettings',
     'mouseenter': 'setActive'
   },
   render: function () {
@@ -592,7 +591,11 @@ module.exports = Backbone.View.extend({
     this.initialize();
   },
   addControls: function () {
-    this.controlsContainer.append(tplAreaAddModule({i18n: KB.i18n}));
+    var showLimit = (parseInt(this.model.get('limit'), 10) > 0);
+
+    if (Checks.userCan('create_kontentblocks') && this.model.get('assignedModules').length > 1) {
+      this.$footer.append(tplAreaAddModule({i18n: KB.i18n, model: this.model.toJSON(), showLimit: showLimit}));
+    }
   },
   openModuleBrowser: function (e) {
     e.preventDefault();
@@ -605,11 +608,7 @@ module.exports = Backbone.View.extend({
     this.ModuleBrowser.render();
 
   },
-  toggleSettings: function (e) {
-    e.preventDefault();
-    this.settingsContainer.slideToggle().toggleClass('open');
-    KB.currentArea = this.model;
-  },
+
   setActive: function () {
     KB.currentArea = this.model;
   },
@@ -637,7 +636,7 @@ module.exports = Backbone.View.extend({
     }
   },
   renderPlaceholder: function () {
-    this.modulesList.before(this.$placeholder);
+    this.$modulesList.before(this.$placeholder);
   },
   setupDefaultMenuItems: function () {
     this.AreaControls.addItem(new StatusControl({model: this.model, parent: this}));
@@ -646,7 +645,7 @@ module.exports = Backbone.View.extend({
   }
 
 });
-},{"backend/Views/AreaControls/AreaControlsView":8,"backend/Views/AreaControls/controls/DetachControl":9,"backend/Views/AreaControls/controls/MoveControl":10,"backend/Views/AreaControls/controls/StatusControl":11,"shared/ModuleBrowser/ModuleBrowserController":121,"templates/backend/area-add-module.hbs":130,"templates/backend/area-item-placeholder.hbs":132}],13:[function(require,module,exports){
+},{"backend/Views/AreaControls/AreaControlsView":8,"backend/Views/AreaControls/controls/DetachControl":9,"backend/Views/AreaControls/controls/MoveControl":10,"backend/Views/AreaControls/controls/StatusControl":11,"common/Checks":51,"shared/ModuleBrowser/ModuleBrowserController":121,"templates/backend/area-add-module.hbs":130,"templates/backend/area-item-placeholder.hbs":132}],13:[function(require,module,exports){
 //KB.Backbone.Backend.ModuleMenuItemView
 module.exports = Backbone.View.extend({
   tagName: 'div',
@@ -1291,7 +1290,7 @@ module.exports = BaseView.extend({
       Notice.notice('Request Error', 'error');
       return false;
     }
-    this.model.Area.View.modulesList.append(res.data.html);
+    this.model.Area.View.$modulesList.append(res.data.html);
 
     module = res.data.module;
 
@@ -6522,7 +6521,7 @@ module.exports = Backbone.View.extend({
   success: function (res) {
     var model, data;
     data = res.data;
-    this.options.area.modulesList.append(data.html);
+    this.options.area.$modulesList.append(data.html);
     model = KB.ObjectProxy.add(KB.Modules.add(data.module));
     this.options.area.attachModuleView(model);
     this.parseAdditionalJSON(data.json);
@@ -6879,19 +6878,27 @@ module.exports = KB.ViewsCollection;
 },{}],130:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
     var stack1;
 
-  return "<a class=\"modal modules-link\" href=\"\">\n    "
+  return "        <span class='kb-area-block_limit'>Mögliche Anzahl Module: "
+    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.limit : stack1), depth0))
+    + "</span>\n";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    var stack1;
+
+  return "<div class='add-modules cantsort'>\n"
+    + ((stack1 = helpers['if'].call(depth0,(depth0 != null ? depth0.showLimit : depth0),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + "    <a class=\"modal modules-link\" href=\"\">\n        "
     + this.escapeExpression(this.lambda(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.Areas : stack1)) != null ? stack1.ui : stack1)) != null ? stack1.addNewModule : stack1), depth0))
-    + "\n</a>";
+    + "\n    </a>\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":204}],131:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<ul class='kb-area-actions-list'></ul>";
+    return "<div class='kb-area-actions'>\n    <ul class='kb-area-actions-list'></ul>\n</div>\n";
 },"useData":true});
 
 },{"hbsfy/runtime":204}],132:[function(require,module,exports){

@@ -58,6 +58,7 @@ class AreaRegistry
 
     protected $reserved = array();
 
+
     /**
      * Constructer
      */
@@ -69,7 +70,7 @@ class AreaRegistry
         // to make sure external areas are properly setup
         add_action('kb.areas.dynamic.setup', array($this, 'init'));
         add_action('wp_footer', array($this, 'setupJSON'), 8);
-        $this->addMockArea();
+        $this->addInternalArea();
 
     }
 
@@ -81,7 +82,7 @@ class AreaRegistry
      * to a dummy area, which is created here.
      * This dummy area is ignored from any UI and does not exist publicly.
      */
-    private function addMockArea()
+    private function addInternalArea()
     {
         $this->addArea(
             array(
@@ -280,7 +281,7 @@ class AreaRegistry
     public function connect($classname, $args)
     {
         $setting = $args['settings']['connect'];
-        $postTypes  = get_post_types( array('public' => true, '_builtin' => false), 'names', 'and' );
+        $postTypes = get_post_types(array('public' => true, '_builtin' => false), 'names', 'and');
 
         if (empty($setting)) {
             return false;
@@ -308,8 +309,8 @@ class AreaRegistry
                     foreach ($this->getGlobalAreas() as $connection) {
                         $connection->connect($classname);
                     }
-                } else if (in_array($target, $postTypes)){
-                    foreach ($this->areas as $area){
+                } else if (in_array($target, $postTypes)) {
+                    foreach ($this->areas as $area) {
                         $args['settings']['connect'] = array($area->id);
                         $this->connect($classname, $args);
                     }
@@ -381,13 +382,14 @@ class AreaRegistry
      *
      * @param \Kontentblocks\Backend\Environment\PostEnvironment $environment
      *
-     * @return boolean
+     * @return array
      */
     public function filterForPost(PostEnvironment $environment)
     {
 
         $pageTemplate = $environment->getPageTemplate();
         $postType = $environment->getPostType();
+
         $areas = array();
         // bail out if this is a redirect template
         if (false !== strpos($pageTemplate, 'redirect')) {
@@ -404,6 +406,9 @@ class AreaRegistry
         // loop through areas and find all which are attached to this post type and/or page template
         /** @var \Kontentblocks\Areas\AreaProperties $area */
         foreach ($this->areas as $area) {
+
+            $validArea = null;
+
             if (empty($area->context)) {
                 $area->context = 'side';
             }
@@ -413,18 +418,30 @@ class AreaRegistry
                         $area->postTypes
                     )
                 ) {
-                    $areas[$area->id] = $area;
+                    $validArea = $area;
                 }
             } elseif (!empty($area->pageTemplates)) {
                 if (Utilities::strposa($pageTemplate, $area->pageTemplates)) {
-                    $areas[$area->id] = $area;
+                    $validArea = $area;
                 }
             } elseif (!empty($area->postTypes)) {
                 if (in_array($postType, $area->postTypes)) {
-                    $areas[$area->id] = $area;
+                    $validArea = $area;
                 }
             }
 
+
+            if (is_callable($area->showCallback)) {
+                $res = call_user_func_array($area->showCallback, array($environment, $area));
+                if ($res === true) {
+                    $validArea = $area;
+                }
+            }
+
+
+            if (!is_null($validArea)){
+                $areas[$area->id] = $validArea;
+            }
         }
         $sareas = self::orderBy($areas, 'order');
         return $sareas;

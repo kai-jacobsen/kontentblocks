@@ -41,6 +41,9 @@ class AfterAreaChangeTest extends \WP_UnitTestCase
         return '__return_null';
     }
 
+    /**
+     *
+     */
     public function setUp()
     {
         parent::setUp();

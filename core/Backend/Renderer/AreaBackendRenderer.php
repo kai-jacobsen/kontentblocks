@@ -3,7 +3,6 @@
 namespace Kontentblocks\Backend\Renderer;
 
 use Kontentblocks\Areas\AreaProperties;
-use Kontentblocks\Areas\AreaSettingsMenu;
 use Kontentblocks\Common\Interfaces\ModuleLookAheadInterface;
 use Kontentblocks\Common\Interfaces\RendererInterface;
 use Kontentblocks\Frontend\ModuleIterator;
@@ -50,12 +49,6 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
     protected $attachedModules;
 
     /**
-     * Settings menu object
-     * @var \Kontentblocks\Areas\AreaSettingsMenu
-     */
-    protected $settingsMenu;
-
-    /**
      * Categories
      * @var array
      */
@@ -84,9 +77,6 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
         // batch setting of properties
         //actual stored modules for this area
         $moduleRepository = $environment->getModuleRepository();
-
-        // custom settins for this area
-        $this->settingsMenu = new AreaSettingsMenu($this->area, $this->environment);
 
         $this->attachedModules = new ModuleIterator($moduleRepository->getModulesForArea($area->id));
         $this->cats = Utilities::setupCats();
@@ -121,8 +111,7 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
             'edit-screen/area-header.twig',
             array(
                 'area' => $this->area,
-                'headerClass' => $headerClass,
-                'settingsMenu' => $this->settingsMenu
+                'headerClass' => $headerClass
             )
         );
         $tpl->render(true);
@@ -139,7 +128,7 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
     {
         $out = "<div class='kb-area--body'>";
         // list items for this area, block limit gets stored here
-        $out .= "<ul style='' data-context='{$this->context}' id='{$this->area->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
+        $out .= "<ul data-context='{$this->context}' id='{$this->area->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
         if (!empty($this->attachedModules)) {
             /** @var \Kontentblocks\Modules\Module $module */
             foreach ($this->attachedModules as $module) {
@@ -150,10 +139,7 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
             }
         }
         $out .= "</ul>";
-
-        $out .= $this->menuLink();
-        // block limit tag, if applicable
-        $out .= $this->getModuleLimitTag();
+        $out .= "<div class='kb-area--footer'></div>";
         $out .= "</div>";
 
         if ($echo) {
@@ -163,38 +149,8 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
         return $out;
     }
 
-    /**
-     *
-     * @return bool|string
-     */
-    private function menuLink()
-    {
-        if (current_user_can('create_kontentblocks')) {
-            if (!empty($this->area->assignedModules)) {
-                $out = " <div class='add-modules cantsort'></div>";
-                return $out;
-            }
-            return false;
-        }
-    }
 
-    /**
-     * Get Markup for block limit indicator
-     * 0 indicates unlimited and is the default setting
-     * @since 0.1.0
-     */
 
-    private function getModuleLimitTag()
-    {
-        // prepare string
-        $limit = ($this->area->limit == '0') ? null : absint($this->area->limit);
-
-        if (null !== $limit) {
-            return "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";
-        }
-        return '';
-
-    }
 
     /**
      * Area Footer markup

@@ -6,31 +6,30 @@ var AreaControls = require('backend/Views/AreaControls/AreaControlsView');
 var StatusControl = require('backend/Views/AreaControls/controls/StatusControl');
 var DetachControl = require('backend/Views/AreaControls/controls/DetachControl');
 var MoveControl = require('backend/Views/AreaControls/controls/MoveControl');
+var Checks = require('common/Checks');
 module.exports = Backbone.View.extend({
   initialize: function () {
 
 
     this.attachedModuleViews = {};
-    this.controlsContainer = jQuery('.add-modules', this.$el);
-    this.settingsContainer = jQuery('.kb-area-settings-wrapper', this.$el);
-    this.modulesList = jQuery('#' + this.model.get('id'), this.$el);
-
+    this.$controlsContainer = this.$('.add-modules');
+    this.$modulesList = this.$('#' + this.model.get('id'));
     this.$placeholder = jQuery(tplAreaItemPlaceholer({i18n: KB.i18n}));
+    this.$footer = this.$('.kb-area--footer');
     this.model.View = this;
 
     this.listenTo(this, 'module:attached', this.ui);
 
-
-      this.AreaControls = new AreaControls({
+    this.AreaControls = new AreaControls({
       el: this.$el,
       parent: this
     });
+
     this.setupDefaultMenuItems();
     this.render();
   },
   events: {
     'click .modules-link': 'openModuleBrowser',
-    'click .js-area-settings-opener': 'toggleSettings',
     'mouseenter': 'setActive'
   },
   render: function () {
@@ -42,7 +41,11 @@ module.exports = Backbone.View.extend({
     this.initialize();
   },
   addControls: function () {
-    this.controlsContainer.append(tplAreaAddModule({i18n: KB.i18n}));
+    var showLimit = (parseInt(this.model.get('limit'), 10) > 0);
+
+    if (Checks.userCan('create_kontentblocks') && this.model.get('assignedModules').length > 1) {
+      this.$footer.append(tplAreaAddModule({i18n: KB.i18n, model: this.model.toJSON(), showLimit: showLimit}));
+    }
   },
   openModuleBrowser: function (e) {
     e.preventDefault();
@@ -55,11 +58,7 @@ module.exports = Backbone.View.extend({
     this.ModuleBrowser.render();
 
   },
-  toggleSettings: function (e) {
-    e.preventDefault();
-    this.settingsContainer.slideToggle().toggleClass('open');
-    KB.currentArea = this.model;
-  },
+
   setActive: function () {
     KB.currentArea = this.model;
   },
@@ -87,7 +86,7 @@ module.exports = Backbone.View.extend({
     }
   },
   renderPlaceholder: function () {
-    this.modulesList.before(this.$placeholder);
+    this.$modulesList.before(this.$placeholder);
   },
   setupDefaultMenuItems: function () {
     this.AreaControls.addItem(new StatusControl({model: this.model, parent: this}));

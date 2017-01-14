@@ -44,7 +44,7 @@ class AreaSettingsModel implements \JsonSerializable
      * @param $postId
      * @param DataProviderInterface $dataProvider
      */
-    public function __construct( AreaProperties $area, $postId,  DataProviderInterface $dataProvider )
+    public function __construct(AreaProperties $area, $postId, DataProviderInterface $dataProvider)
     {
         $this->postId = $postId;
         $this->dataProvider = $dataProvider;
@@ -59,48 +59,16 @@ class AreaSettingsModel implements \JsonSerializable
      */
     private function setupSettings()
     {
-        $meta = $this->dataProvider->get( $this->key );
-        if (!is_array( $meta )) {
+        $meta = $this->dataProvider->get($this->key);
+        if (!is_array($meta)) {
             $meta = array();
         }
-        $areaSettings = ( isset( $meta[$this->area->id] ) && is_array(
+        $areaSettings = (isset($meta[$this->area->id]) && is_array(
                 $meta[$this->area->id]
-            ) ) ? $meta[$this->area->id] : array();
+            )) ? $meta[$this->area->id] : array();
         $this->meta = $areaSettings;
-        $this->settings = wp_parse_args( $areaSettings, $this->getDefaults() );
+        $this->settings = wp_parse_args($areaSettings, $this->getDefaults());
         return $this;
-    }
-
-    /**
-     * @param $key
-     * @param $value
-     * @since 0.3.0
-     */
-    public function set( $key, $value )
-    {
-        if (in_array( $key, array_keys( $this->getDefaults() ) )) {
-            $this->settings[$key] = $value;
-        }
-    }
-
-    public function import( $settings )
-    {
-        foreach ($settings as $k => $v) {
-            $this->set( $k, $v );
-        }
-    }
-
-    /**
-     * @param $key
-     * @return mixed null on failure
-     * @since 0.3.0
-     */
-    public function get( $key )
-    {
-        if (isset( $this->settings[$key] )) {
-            return $this->settings[$key];
-        }
-        return null;
     }
 
     /**
@@ -112,9 +80,27 @@ class AreaSettingsModel implements \JsonSerializable
         return array(
             'active' => true,
             'layout' => 'default',
-//            'attached' => ( !$this->area->dynamic ) ? false : true
             'attached' => false
         );
+    }
+
+    public function import($settings)
+    {
+        foreach ($settings as $k => $v) {
+            $this->set($k, $v);
+        }
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @since 0.3.0
+     */
+    public function set($key, $value)
+    {
+        if (in_array($key, array_keys($this->getDefaults()))) {
+            $this->settings[$key] = $value;
+        }
     }
 
     /**
@@ -122,7 +108,20 @@ class AreaSettingsModel implements \JsonSerializable
      */
     public function isAttached()
     {
-        return $this->get( 'attached' );
+        return $this->get('attached');
+    }
+
+    /**
+     * @param $key
+     * @return mixed null on failure
+     * @since 0.3.0
+     */
+    public function get($key)
+    {
+        if (isset($this->settings[$key])) {
+            return $this->settings[$key];
+        }
+        return null;
     }
 
     /**
@@ -130,13 +129,11 @@ class AreaSettingsModel implements \JsonSerializable
      * @param $value
      * @return $this
      */
-    public function setLayout( $value )
+    public function setLayout($value)
     {
-
-        if (!isset( $this->settings['layout'] )) {
+        if (!isset($this->settings['layout'])) {
             $this->settings['layout'] = $value;
         }
-
         $this->settings['layout'] = $value;
         return $this;
     }
@@ -147,7 +144,7 @@ class AreaSettingsModel implements \JsonSerializable
      */
     public function isActive()
     {
-        return $this->get( 'active' );
+        return $this->get('active');
     }
 
     /**
@@ -156,7 +153,7 @@ class AreaSettingsModel implements \JsonSerializable
      */
     public function getLayout()
     {
-        if (isset( $this->settings['layout'] )) {
+        if (isset($this->settings['layout'])) {
             return $this->settings['layout'];
         } else {
             return false;
@@ -170,19 +167,30 @@ class AreaSettingsModel implements \JsonSerializable
     public function save()
     {
         $this->dataProvider->reset();
-        $meta = $this->dataProvider->get( $this->key );
+        $meta = $this->dataProvider->get($this->key);
 
-        if (!is_array( $meta )) {
+        if (!is_array($meta)) {
             $meta = array();
         }
         $meta[$this->area->id] = $this->settings;
         //we've got unslashed data from post meta, update will add wp_slash before adding to post meta
-        return $this->dataProvider->update( $this->key, $meta );
+        return $this->dataProvider->update($this->key, $meta);
     }
 
+    /**
+     * @return int
+     */
     public function getPostId()
     {
         return $this->postId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function export()
+    {
+        return $this->jsonSerialize();
     }
 
     /**
@@ -195,9 +203,5 @@ class AreaSettingsModel implements \JsonSerializable
     function jsonSerialize()
     {
         return $this->settings;
-    }
-
-    public function export(){
-        return $this->jsonSerialize();
     }
 }
