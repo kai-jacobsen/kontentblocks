@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Class AbstractAjaxAction
  * @package Kontentblocks\Ajax
  */
-abstract class AbstractAjaxAction implements AjaxActionInterface
+class AbstractAjaxAction implements AjaxActionInterface
 {
 
     /**
@@ -40,6 +40,13 @@ abstract class AbstractAjaxAction implements AjaxActionInterface
         return true;
     }
 
-    abstract protected static function action(Request $request);
+    /**
+     * @param Request $request
+     * @return AjaxErrorResponse
+     */
+    protected static function action(Request $request)
+    {
+        return new AjaxErrorResponse('no action implemented');
+    }
 
 }
