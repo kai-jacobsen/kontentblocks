@@ -6,9 +6,6 @@ use Kontentblocks\Backend\DataProvider\DataProvider;
 /**
  * Class ModuleStorage
  * Mid-level wrapper to underlying data handler to handle module related data
- *
- * @package Kontentblocks
- * @subpackage Backend
  */
 class ModuleStorage implements \Countable
 {
@@ -67,9 +64,8 @@ class ModuleStorage implements \Countable
     private function setup()
     {
         $this->index = $this->dataProvider->get('kb_kontentblocks');
-
         if (empty($this->index)) {
-            return false;
+            return $this;
         }
         $this->modules = $this->setupModuleData();
 
@@ -108,16 +104,15 @@ class ModuleStorage implements \Countable
      * Adds an module to the index and automatically saves
      * the module definition
      *
-     * @param string $id module mid
+     * @param string $mid module mid
      * @param array $args module attributes array
-     *
      * @return mixed boolean
      */
-    public function addToIndex($id, $args)
+    public function addToIndex($mid, $args)
     {
-        $this->index[$id] = $args;
-        if (!$this->getModuleData($id)) {
-            $this->saveModule($id, '');
+        $this->index[$mid] = $args;
+        if (!$this->getModuleData($mid)) {
+            $this->saveModule($mid, '');
         }
         return $this->saveIndex($this->index);
 
@@ -134,7 +129,6 @@ class ModuleStorage implements \Countable
     public function getModuleData($mid)
     {
         $mid = $this->underscorePrefix($mid);
-
 
         if (is_preview()) {
             $pmid = '_preview' . $mid;
@@ -168,7 +162,6 @@ class ModuleStorage implements \Countable
     /**
      * Wrapper to save module data
      * Makes sure that the data is stored as hidden key
-     * @todo: test if _ is given and don't prefix if so
      * @param $id string $id
      * @param array|string $data array $data
      *
@@ -180,7 +173,7 @@ class ModuleStorage implements \Countable
         if ($addslashes && $this->dataProvider->addSlashes()) {
             $data = wp_slash($data);
         }
-        return $this->dataProvider->update('_' . $id, $data);
+        return $this->dataProvider->update($this->underscorePrefix($id), $data);
     }
 
     /**
@@ -216,13 +209,13 @@ class ModuleStorage implements \Countable
     /**
      * Returns the module definition from index by instance id
      *
-     * @param string $id
+     * @param string $mid
      * @return array|boolean
      */
-    public function getModuleDefinition($id)
+    public function getModuleDefinition($mid)
     {
-        if (isset($this->index[$id])) {
-            return $this->index[$id];
+        if (isset($this->index[$mid])) {
+            return $this->index[$mid];
         } else {
             return false;
         }
@@ -266,14 +259,6 @@ class ModuleStorage implements \Countable
 
     }
 
-    /**
-     * Wrapper to update the index meta data
-     * @return bool
-     */
-    public function _updateIndex()
-    {
-        return $this->dataProvider->update('kb_kontentblocks', $this->index);
-    }
 
     /**
      * Checks if there are stored modules for a given area
@@ -354,11 +339,10 @@ class ModuleStorage implements \Countable
 
     /**
      * Delete all module-related data
-     * @TODO use array_keys
      */
     public function deleteAll()
     {
-        foreach ($this->getIndex() as $k => $module) {
+        foreach (array_keys($this->getIndex()) as $k) {
             $this->dataProvider->delete('_' . $k);
         }
 
@@ -386,10 +370,8 @@ class ModuleStorage implements \Countable
             }
         }
         $this->dataProvider->delete('kb_kontentblocks');
-
         //set new old data from backup;
         $this->dataProvider->update('kb_kontentblocks', $index);
-
 
         if (!empty($modules)) {
             foreach ($modules as $k => $value) {

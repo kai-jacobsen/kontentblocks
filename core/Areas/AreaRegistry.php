@@ -439,7 +439,7 @@ class AreaRegistry
             }
 
 
-            if (!is_null($validArea)){
+            if (!is_null($validArea)) {
                 $areas[$area->id] = $validArea;
             }
         }

@@ -10,6 +10,7 @@ use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Backend\Environment\Save\SavePost;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleRepository;
+use Kontentblocks\Panels\PostPanel;
 use Kontentblocks\Panels\PostPanelRepository;
 
 
@@ -199,10 +200,14 @@ class PostEnvironment implements JsonSerializable
         return $this->storage->getDataProvider();
     }
 
-    public function getPanelObject($id)
+    /**
+     * @param $panelId
+     * @return PostPanel|null
+     */
+    public function getPanelObject($panelId)
     {
-        if (isset($this->panels[$id])) {
-            return $this->panels[$id];
+        if (isset($this->panels[$panelId])) {
+            return $this->panels[$panelId];
         }
         return null;
     }
@@ -294,15 +299,15 @@ class PostEnvironment implements JsonSerializable
     /**
      * Get settings for given area
      *
-     * @param string $id
+     * @param string $areaId
      *
      * @return mixed
      */
-    public function getAreaSettings($id)
+    public function getAreaSettings($areaId)
     {
         $settings = $this->storage->getDataProvider()->get('kb_area_settings');
-        if (!empty($settings[$id])) {
-            return $settings[$id];
+        if (!empty($settings[$areaId])) {
+            return $settings[$areaId];
         }
         return false;
     }
@@ -311,16 +316,16 @@ class PostEnvironment implements JsonSerializable
      * Wrapper to low level handler method
      * returns instance data or an empty string
      *
-     * @param string $id
+     * @param string $mid
      *
      * @return string
      * @since 0.1.0
      */
-    public function getModuleData($id)
+    public function getModuleData($mid)
     {
 
         $this->storage->reset();
-        $data = $this->storage->getModuleData($id);
+        $data = $this->storage->getModuleData($mid);
         if ($data !== null) {
             return $data;
         } else {
@@ -338,6 +343,7 @@ class PostEnvironment implements JsonSerializable
     {
         $saveHandler = new SavePost($this);
         $saveHandler->save();
+
     }
 
     /**
@@ -369,7 +375,6 @@ class PostEnvironment implements JsonSerializable
     }
 
     /**
-     * @since 0.1.0
      */
     public function toJSON()
     {

@@ -28,6 +28,10 @@ class ModuleRepository
     protected $modules = array();
 
 
+    /**
+     * ModuleRepository constructor.
+     * @param PostEnvironment $environment
+     */
     public function __construct(PostEnvironment $environment)
     {
         $this->environment = $environment;

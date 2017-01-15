@@ -65,6 +65,9 @@ abstract class AbstractPanel implements EntityInterface
 
     }
 
+    /**
+     * @return mixed
+     */
     abstract public function init();
 
     /**

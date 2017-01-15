@@ -24,6 +24,10 @@ class SavePost
      */
     private $postdata;
 
+    /**
+     * SavePost constructor.
+     * @param PostEnvironment $environment
+     */
     public function __construct(PostEnvironment $environment)
     {
         $this->environment = $environment;
@@ -159,6 +163,9 @@ class SavePost
         return true;
     }
 
+    /**
+     * @param $modules
+     */
     public function saveModules($modules)
     {
         /** @var \Kontentblocks\Modules\Module $module */
@@ -167,12 +174,11 @@ class SavePost
                 continue;
             }
 
-            // new data from $_POST
-            //TODO: filter incoming data
             $data = wp_unslash($this->postdata->request->get($module->getId()));
             /** @var $old array */
             $old = $this->environment->getStorage()->getModuleData($module->getId());
             $module->updateModuleData($old);
+
             // check for draft and set to false
             // special block specific data
             $module = $this->moduleOverrides($module, $data);
@@ -224,7 +230,6 @@ class SavePost
         $module->properties->viewfile = (!empty($data['viewfile'])) ? $data['viewfile'] : '';
         $module->properties->overrides = (!empty($data['overrides'])) ? $data['overrides'] : array();
         $module->properties->state['draft'] = false;
-
         return $module;
     }
 
@@ -252,15 +257,20 @@ class SavePost
 
     public function saveIndex()
     {
-
         $this->environment->getStorage()->saveIndex($this->index);
     }
 
+    /**
+     * @return array|null
+     */
     public function getIndex()
     {
         return $this->index;
     }
 
+    /**
+     * @return array
+     */
     public function getSavedModules()
     {
         return $this->savedModules;

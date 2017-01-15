@@ -9,6 +9,7 @@ use Kontentblocks\Backend\Renderer\AreaBackendRenderer;
 use Kontentblocks\Backend\Renderer\DynamicAreaBackendRenderer;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\_K;
 
 /**
  * Class ScreenContext
@@ -30,14 +31,14 @@ class ScreenContext
      * @var string
      * @since 0.1.0
      */
-    public $title;
+    public $title = '';
 
     /**
      * Short description of the context
      * @var string
      * @since 0.1.0
      */
-    public $description;
+    public $description = '';
 
     /**
      * Array of area definitions
@@ -45,7 +46,7 @@ class ScreenContext
      * @var array
      * @since 0.1.0
      */
-    protected $areas;
+    protected $areas = array();
 
     /**
      * Indicator if the current screen has 'side' areas or not
@@ -66,11 +67,8 @@ class ScreenContext
      * @throws Exception
      * @since 0.1.0
      */
-    public function __construct( $args, $areas, PostEnvironment $environment, $sidebars = false )
+    public function __construct($args, $areas, PostEnvironment $environment, $sidebars = false)
     {
-        if (empty( $args )) {
-            throw new Exception( 'No Arguments specified for single Context' );
-        }
 
         $this->id = $args['id'];
         $this->title = $args['title'];
@@ -79,9 +77,13 @@ class ScreenContext
         $this->areas = $areas;
         $this->editScreenHasSidebar = $sidebars;
 
-        if (!empty( $areas )) {
+        if (!empty($areas)) {
             $this->toJSON();
         }
+
+        $noAreas = count($this->areas);
+        _K::info("{$this->id} Context created with {$noAreas} area(s)");
+
     }
 
     private function toJSON()
@@ -90,7 +92,7 @@ class ScreenContext
             'id' => $this->id,
             'title' => $this->title
         );
-        Kontentblocks::getService( 'utility.jsontransport' )->registerContext( $json );
+        Kontentblocks::getService('utility.jsontransport')->registerContext($json);
 
     }
 
@@ -101,8 +103,7 @@ class ScreenContext
      */
     public function render()
     {
-
-        if (!empty( $this->areas )) {
+        if (!empty($this->areas)) {
             // print outer wrapper markup
             $this->openContext();
             //render actual areas
@@ -111,7 +112,7 @@ class ScreenContext
             $this->closeContext();
         } else {
             // call the hook anyway
-            do_action( "context_box_{$this->id}", $this->id, $this->environment );
+            do_action("context_box_{$this->id}", $this->id, $this->environment);
         }
 
     }
@@ -141,9 +142,10 @@ class ScreenContext
     {
 
         foreach ($this->areas as $area) {
+
             if (is_user_logged_in()) {
-                Kontentblocks::getService( 'utility.jsontransport' )->registerArea(
-                    $this->augmentAreaforBackend( $area )
+                Kontentblocks::getService('utility.jsontransport')->registerArea(
+                    $this->augmentAreaforBackend($area)
                 );
             }
 
@@ -154,9 +156,9 @@ class ScreenContext
 
             // Setup new Area
             if ($area->dynamic) {
-                $areaHTML = new DynamicAreaBackendRenderer( $area, $this->environment, $this->id );
+                $areaHTML = new DynamicAreaBackendRenderer($area, $this->environment, $this->id);
             } else {
-                $areaHTML = new AreaBackendRenderer( $area, $this->environment, $this->id );
+                $areaHTML = new AreaBackendRenderer($area, $this->environment, $this->id);
             }
             // do area header markup
             $areaHTML->header();
@@ -172,16 +174,15 @@ class ScreenContext
      * @since 0.3.0
      * @return AreaProperties
      */
-    private function augmentAreaforBackend( AreaProperties $area )
+    private function augmentAreaforBackend(AreaProperties $area)
     {
-
         if ($area->dynamic) {
-            $storage = new ModuleStorage( $area->parent_id );
+            $storage = new ModuleStorage($area->parent_id);
             $area->set(
                 'meta',
                 array(
-                    'modules' => count( $storage->getIndex() ),
-                    'editLink' => html_entity_decode( get_edit_post_link( $area->parent_id ) )
+                    'modules' => count($storage->getIndex()),
+                    'editLink' => html_entity_decode(get_edit_post_link($area->parent_id))
                 )
             );
         }
@@ -196,14 +197,16 @@ class ScreenContext
     {
         echo "</div>"; // end inner
         // hook to add custom stuff after areas
-        do_action( "context_box_{$this->id}", $this->id, $this->environment );
+        do_action("context_box_{$this->id}", $this->id, $this->environment);
         echo "</div>";
-
     }
 
+    /**
+     * @return bool
+     */
     public function hasAreas()
     {
-        return !empty( $this->areas );
+        return !empty($this->areas);
     }
 
 }

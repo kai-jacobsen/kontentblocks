@@ -26,7 +26,6 @@ class DynamicAreaBackendRenderer extends AreaBackendRenderer
     public function render( $echo = true )
     {
         $out = "<div class='kb-area--body'>";
-
         $storage = new ModuleStorage( $this->area->parent_id );
         $view = new CoreView(
             'edit-screen/dynamic-area-body.twig', array(

@@ -4,12 +4,11 @@ namespace Kontentblocks\Panels;
 
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\_K;
 
 /**
  * Class PanelRepository
- * @package Kontentblocks\Panels
  */
 class PostPanelRepository extends StandardPanelRepository
 {
@@ -21,13 +20,13 @@ class PostPanelRepository extends StandardPanelRepository
     {
         $this->environment = $environment;
         $this->setupPanelsforPost();
+        _K::info("Post Panel Repository created");
     }
 
     /**
      *
-     * @since 0.3.8
      */
-    public function setupPanelsForPost()
+    private function setupPanelsForPost()
     {
         $environment = $this->environment;
         $filtered = $this->filterPanelsForPost($environment);
@@ -44,23 +43,19 @@ class PostPanelRepository extends StandardPanelRepository
 
     /**
      *
-     * @since 0.3.8
      * @param PostEnvironment $environment
      * @return array
      */
     private function filterPanelsForPost(PostEnvironment $environment)
     {
         $red = array();
-
         /** @var \Kontentblocks\Panels\PanelRegistry $registry */
         $registry = Kontentblocks::getService('registry.panels');
 
-        foreach ($registry->getAll() as $id => $panel) {
-            if ($panel['type'] !== 'post') {
-                continue;
-            }
+        foreach ($registry->getByType('post') as $id => $panel) {
             $postTypes = !empty($panel['postTypes']) ? $panel['postTypes'] : [];
             $pageTemplates = !empty($panel['pageTemplates']) ? $panel['pageTemplates'] : [];
+
             if (is_array($pageTemplates) && !empty($pageTemplates)) {
                 if (!in_array($environment->getPageTemplate(), $pageTemplates)) {
                     continue;
@@ -69,6 +64,13 @@ class PostPanelRepository extends StandardPanelRepository
 
             if (is_array($postTypes) && !empty($postTypes)) {
                 if (!in_array($environment->getPostType(), $postTypes)) {
+                    continue;
+                }
+            }
+
+            if (method_exists($panel['class'], 'showCallback')) {
+                $result = $panel['class']::showCallback($environment, $panel);
+                if ($result !== true) {
                     continue;
                 }
             }

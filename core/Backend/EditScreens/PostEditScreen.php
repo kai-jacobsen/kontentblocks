@@ -8,6 +8,7 @@ use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Edit Screen (Post Edit Screen)
@@ -45,7 +46,6 @@ Class PostEditScreen
             // register save callback
             add_action('save_post', array($this, 'save'), 5, 2);
             add_filter('_wp_post_revision_fields', array($this, 'revisionFields'));
-
             // expose data to the document
             add_action('admin_footer', array($this, 'toJSON'), 1);
         }
@@ -73,8 +73,8 @@ Class PostEditScreen
         add_action(
             'edit_form_after_editor',
             function () use ($post) {
-                echo $this->userInterface($post);
-                _K::info('user interfaced rendered for a post type');
+                echo $this->userInterface();
+                _K::info("user interfaced rendered for post type");
             }
         );
 
@@ -86,10 +86,9 @@ Class PostEditScreen
      * Adds some generic but important meta informations in hidden fields
      * calls renderScreen
      * @since 0.1.0
-     * @param $post
-     * @return null
+     * @return string
      */
-    public function userInterface($post)
+    public function userInterface()
     {
         // bail if post type doesn't support kontentblocks
         if (!post_type_supports($this->environment->getPostType(), 'kontentblocks')) {
@@ -104,8 +103,6 @@ Class PostEditScreen
         if (!$areas || empty($areas)) {
             $hasAreas = false;
         }
-
-
 
         $screenManager = new ScreenManager($areas, $this->environment);
         $view = new CoreView(
@@ -129,6 +126,9 @@ Class PostEditScreen
     # Helper methods
     #-------------------------------------------------
 
+    /**
+     * @return bool|string
+     */
     private function handleEmptyAreas()
     {
         if (current_user_can('manage_kontentblocks')) {
@@ -142,14 +142,16 @@ Class PostEditScreen
      * Handles the saving of modules and supplemental data
      *
      * @param int $postId The current post id
-     * @since 0.1.0
      */
     function save($postId)
     {
-        if (isset($_POST['wp-preview']) && $_POST['wp-preview'] === 'dopreview') {
+        $request = Request::createFromGlobals();
+        if (!empty($request->request->get('wp-preview', '')) && $request->request->get('wp-preview',
+                '') === 'dopreview'
+        ) {
             $postId = get_the_ID();
         }
-        if (post_type_supports(get_post_type($postId),'kontentblocks')){
+        if (post_type_supports(get_post_type($postId), 'kontentblocks')) {
             $environment = Utilities::getPostEnvironment($postId);
             $environment->save();
         }

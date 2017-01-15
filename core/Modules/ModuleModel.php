@@ -29,7 +29,7 @@ class ModuleModel extends EntityModel
     public function __construct($data = array(), Module $module)
     {
         $this->module = $module;
-        $this->_originalData = $data;
+        $this->originalData = $data;
         $this->set($data);
         $this->_initialized = true;
     }

@@ -9,12 +9,11 @@ use Kontentblocks\Utils\Utilities;
 
 /**
  * Class PanelModel
- * @package Kontentblocks\Panels
  */
 class PanelModel extends EntityModel
 {
 
-    public $_originalData;
+    protected $originalData;
 
     /**
      * @var EntityInterface
@@ -28,7 +27,7 @@ class PanelModel extends EntityModel
      */
     public function __construct($data = array(), AbstractPanel $entity)
     {
-        $this->_originalData = $data;
+        $this->originalData = $data;
         $this->set($data);
         $this->_initialized = true;
         $this->entity = $entity;
@@ -71,7 +70,7 @@ class PanelModel extends EntityModel
         $vars = get_object_vars($this);
         unset($vars['_locked']);
         unset($vars['_initialized']);
-        unset($vars['_originalData']);
+        unset($vars['originalData']);
         unset($vars['entity']);
         return $vars;
     }
@@ -88,13 +87,16 @@ class PanelModel extends EntityModel
         }
     }
 
+    /**
+     * @return $this
+     */
     public function reset()
     {
         $keys = array_keys($this->export());
         foreach ($keys as $key) {
             unset($this->$key);
         }
-        $this->_originalData = array();
+        $this->originalData = array();
         return $this;
     }
 }

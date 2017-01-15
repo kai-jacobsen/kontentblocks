@@ -7,6 +7,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayout;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
+use Kontentblocks\Utils\_K;
 
 /**
  * Class ScreenManager
@@ -89,7 +90,6 @@ class ScreenManager
         // test if final context layout includes an sidebar
         // e.g. if an non-dynamic area is assigned to 'side'
         $this->hasSidebar = (!empty($this->contexts['side']) && !empty($this->contexts['normal']));
-
         $this->setupLayout();
 
     }
@@ -151,13 +151,12 @@ class ScreenManager
             return array();
         }
 
-        // @TODO 157 159 was commented out, and that was right
+        // @TODO 157 159 was commented out, and that was probably correct
         foreach ($this->areas as $area) {
 //            if (!$area->dynamic || ($area->dynamic && $area->settings->isAttached())) {
-                $areas[$area->context][$area->id] = $area;
+            $areas[$area->context][$area->id] = $area;
 //            }
         }
-
 
         if (is_array($contextsOrder) && !empty($contextsOrder)) {
             foreach ($contextsOrder as $context => $areaIds) {
@@ -180,9 +179,9 @@ class ScreenManager
     {
         $screenLayouts = \Kontentblocks\EditScreenLayoutsRegistry()->layouts;
         $lyt = apply_filters('kb.screenLayout', 'default-boxes', $this->environment, $screenLayouts);
+        _K::info("Screemlayout found: {$lyt}");
         $this->selectedLayout = (isset($screenLayouts[$lyt])) ? $screenLayouts[$lyt] : $screenLayouts['default-boxes'];
         \Kontentblocks\JSONTransport()->registerPublicData('config', 'layoutMode', $lyt);
-
     }
 
     /**
@@ -191,6 +190,8 @@ class ScreenManager
      */
     public function render()
     {
+        _K::info("ScreenManager will render");
+
         foreach ($this->contextLayout as $args) {
             // delegate the actual output to ScreenContext
             $this->contextRenderer[$args['id']] = new ScreenContext(
@@ -206,6 +207,7 @@ class ScreenManager
         ));
 
         $this->selectedLayout->render(true);
+        _K::info("ScreenManager did render");
 
     }
 

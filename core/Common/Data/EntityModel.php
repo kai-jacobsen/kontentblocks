@@ -24,7 +24,7 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
     /**
      * @var array
      */
-    protected $_originalData = array();
+    protected $originalData = array();
 
     /**
      * @param $data
@@ -45,7 +45,7 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
                 }
                 $this->$key = $v;
             }
-            $this->_originalData = $data;
+            $this->originalData = $data;
         }
         return $this;
     }
@@ -92,7 +92,7 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      */
     public function getOriginalData()
     {
-        return $this->_originalData;
+        return $this->originalData;
     }
 
     abstract public function export();

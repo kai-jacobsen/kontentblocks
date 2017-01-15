@@ -49,11 +49,13 @@ class Utilities
     {
         if ($storageId && is_numeric($storageId) && $storageId !== -1) {
             if (isset(self::$postEnvironments[$storageId])) {
+                _K::info("cached PostEnvironment found for post ID {$storageId}");
                 return self::$postEnvironments[$storageId];
             } else {
                 $realId = (is_null($actualPostId)) ? $storageId : $actualPostId;
                 $postObj = get_post($realId);
                 if (!is_null($postObj)) {
+                    _K::info("new PostEnvironment built for post ID {$storageId}");
                     return self::$postEnvironments[$storageId] = new PostEnvironment($storageId, $postObj);
                 }
                 return null;
@@ -72,13 +74,14 @@ class Utilities
     {
         if ($termId && is_numeric($termId) && $termId !== -1) {
             if (isset(self::$termEnvironments[$termId])) {
+                _K::info("cached TermEnvironment found for post ID {$termId}");
                 return self::$termEnvironments[$termId];
             } else {
                 $termObj = get_term($termId, $taxonomy);
+                _K::info("new TermEnvironment built for post ID {$termId}");
                 return self::$termEnvironments[$termId] = new TermEnvironment($termId, $termObj);
             }
         }
-
     }
 
     /**
@@ -448,7 +451,7 @@ class Utilities
         $postType = get_post_type($postId);
 
         $blacklist = apply_filters('kb.remote.concat.posttypes', array());
-        if (in_array($postType, $blacklist)){
+        if (in_array($postType, $blacklist)) {
             return null;
         }
 

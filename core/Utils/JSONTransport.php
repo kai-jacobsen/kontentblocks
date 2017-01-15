@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Utils;
 
+use Kontentblocks\Areas\AreaProperties;
+
 /**
  * Class JSONTransport
  * Collect specific or arbitrary data arrays during run time
@@ -26,7 +28,6 @@ class JSONTransport
      *
      * Register actions
      *
-     * @since 0.1.0
      * @action wp_print_footer_script
      * @action admin_footer
      */
@@ -49,7 +50,6 @@ class JSONTransport
      * @param string $key key of data entry
      * @param mixed $data value of data entry
      *
-     * @since 0.1.0
      * @return object self
      */
     public function registerData($group, $key, $data)
@@ -71,7 +71,6 @@ class JSONTransport
      * @param string $key key of data entry
      * @param mixed $data value of data entry
      *
-     * @since 0.1.0
      * @return object $this
      */
     public function registerPublicData($group, $key, $data)
@@ -94,7 +93,6 @@ class JSONTransport
      * @param string $key key of field
      * @param $arrayKey
      *
-     * @since 0.1.0
      * @return object $this
      */
     public function registerFieldData($modid, $type, $data, $key, $arrayKey)
@@ -132,17 +130,14 @@ class JSONTransport
      * Wrapper to register multiple modules at once
      * @param array $modules array of module definitions
      *
-     * @since 0.1.0
      * @return false|void
      */
     public function registerModules($modules)
     {
-        if (!is_array($modules)) {
-            return false;
-        }
-
-        foreach ($modules as $module) {
-            $this->registerModule($module);
+        if (is_array($modules)) {
+            foreach ($modules as $module) {
+                $this->registerModule($module);
+            }
         }
     }
 
@@ -150,8 +145,6 @@ class JSONTransport
      * Register module definition
      *
      * @param array $module module definition array
-     *
-     * @since 0.1.0
      * @return object $this
      */
     public function registerModule($module)
@@ -161,6 +154,9 @@ class JSONTransport
         return $this;
     }
 
+    /**
+     * @param $areas
+     */
     public function registerAreas($areas)
     {
         foreach ($areas as $area) {
@@ -171,9 +167,8 @@ class JSONTransport
     /**
      * Register area definition
      *
-     * @param array $area
+     * @param AreaProperties $area
      *
-     * @since 0.1.0
      * @return object $this
      */
     public function registerArea($area)
@@ -184,7 +179,6 @@ class JSONTransport
 
     /**
      * @param $context
-     * @since 0.3.0
      */
     public function registerContext($context)
     {
@@ -196,7 +190,6 @@ class JSONTransport
      *
      * @param array $panel
      *
-     * @since 0.1.0
      * @return object $this
      */
     public function registerPanel($panel)

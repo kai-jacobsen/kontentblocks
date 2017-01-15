@@ -38,7 +38,6 @@ use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple;
-use Reframe\Autoloader;
 
 
 /**
@@ -51,11 +50,11 @@ Class Kontentblocks
     const VERSION = '0.8.8';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.13';
-    const DEBUG = false;
+    const DEBUG = true;
     const DEBUG_LOG = false;
     static $instance;
-    static $AjaxHandler;
-    public $Services;
+    static $ajaxhandler;
+    public $services;
 
     /**
      *
@@ -63,8 +62,7 @@ Class Kontentblocks
     public function __construct()
     {
         self::bootstrap();
-
-        $this->Services = new Pimple\Container();
+        $this->services = new Pimple\Container();
         // setup services
         $this->setupTemplating();
         $this->setupRegistries();
@@ -114,19 +112,19 @@ Class Kontentblocks
     private function setupTemplating()
     {
         // pimpled
-        $this->Services['templating.twig.loader'] = function ($container) {
-            return Twig::setupLoader($container);
+        $this->services['templating.twig.loader'] = function () {
+            return Twig::setupLoader();
         };
 
-        $this->Services['templating.twig.public'] = function ($container) {
+        $this->services['templating.twig.public'] = function ($container) {
             return Twig::setupEnvironment($container);
         };
 
-        $this->Services['templating.twig.fields'] = function ($container) {
+        $this->services['templating.twig.fields'] = function ($container) {
             return Twig::setupEnvironment($container, false);
         };
 
-        $this->Services['templating.twig.common'] = function ($container) {
+        $this->services['templating.twig.common'] = function () {
             return SimpleTwig::init();
         };
 
@@ -134,71 +132,75 @@ Class Kontentblocks
 
     private function setupRegistries()
     {
-        $this->Services['registry.modules'] = function ($Services) {
-            return new ModuleRegistry($Services);
+        $this->services['registry.modules'] = function ($services) {
+            return new ModuleRegistry($services);
         };
 
-
-        $this->Services['registry.areas'] = function ($Services) {
-            return new AreaRegistry($Services);
+        $this->services['registry.areas'] = function ($services) {
+            return new AreaRegistry($services);
         };
-        $this->Services['registry.moduleViews'] = function ($Services) {
-            return new ModuleViewsRegistry($Services);
+        $this->services['registry.moduleViews'] = function ($services) {
+            return new ModuleViewsRegistry($services);
         };
-        $this->Services['registry.fields'] = function ($Services) {
-            return new FieldRegistry($Services);
+        $this->services['registry.fields'] = function ($services) {
+            return new FieldRegistry($services);
         };
-        $this->Services['registry.panels'] = function ($Services) {
-            return new PanelRegistry($Services);
+        $this->services['registry.panels'] = function ($services) {
+            return new PanelRegistry($services);
         };
-        $this->Services['registry.screenLayouts'] = function ($Services) {
-            return new EditScreenLayoutsRegistry($Services);
+        $this->services['registry.screenLayouts'] = function ($services) {
+            return new EditScreenLayoutsRegistry($services);
         };
 
 
     }
 
+    /**
+     *
+     */
     private function setupUtilities()
     {
-        $this->Services['utility.logger'] = function ($container) {
+        $this->services['utility.logger'] = function ($container) {
             $path = KB_PLUGIN_PATH . '/logs';
 
             $ajax = defined('DOING_AJAX') && DOING_AJAX;
-            $Logger = new Logger('kontentblocks');
+            $logger = new Logger('kontentblocks');
             if (Kontentblocks::DEBUG && is_user_logged_in() && apply_filters('kb.use.logger.console', true)) {
                 if (!$ajax) {
-                    $Logger->pushHandler(new BrowserConsoleHandler());
-                    $Logger->addInfo(
-                        'Hey there! Kontentblocks is running in dev mode but don\'t worry. Have a great day'
+                    $logger->pushHandler(new BrowserConsoleHandler());
+                    $logger->addInfo(
+                        'Hey there! Kontentblocks is running in debug mode but don\'t worry. Have a great day'
                     );
                 }
 
                 if (is_dir($path) && Kontentblocks::DEBUG_LOG) {
-                    $Logger->pushHandler(new StreamHandler($path . '/debug.log'));
+                    $logger->pushHandler(new StreamHandler($path . '/debug.log'));
                 }
             } else {
-                $Logger->pushHandler(new NullHandler());
+                $logger->pushHandler(new NullHandler());
             }
-            return $Logger;
+            return $logger;
         };
 
-        $this->Services['utility.mobileDetect'] = function ($container) {
+        $this->services['utility.mobileDetect'] = function ($container) {
             return new MobileDetect();
         };
 
-        $this->Services['utility.jsontransport'] = function ($container) {
+        $this->services['utility.jsontransport'] = function ($container) {
             return new JSONTransport();
         };
 
-        $this->Services['utility.ajaxhandler'] = function ($container) {
+        $this->services['utility.ajaxhandler'] = function ($container) {
             return new AjaxCallbackHandler();
         };
 
-        self::$AjaxHandler = $this->Services['utility.ajaxhandler'];
 
-
+        self::$ajaxhandler = $this->services['utility.ajaxhandler'];
     }
 
+    /**
+     *
+     */
     public static function onActivation()
     {
         if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
@@ -206,12 +208,12 @@ Class Kontentblocks
         }
 
         if (!is_dir(get_template_directory() . '/module-templates')) {
-            mkdir(get_template_directory() . '/module-templates', 0775, true);
+            mkdir(get_template_directory() . '/module-templates', 0755, true);
         }
 
         if (is_child_theme()) {
             if (!is_dir(get_stylesheet_directory() . '/module-templates')) {
-                mkdir(get_stylesheet_directory() . '/module-templates', 0775, true);
+                mkdir(get_stylesheet_directory() . '/module-templates', 0755, true);
             }
         }
 
@@ -234,11 +236,18 @@ Class Kontentblocks
         $wpdb->query("DROP TABLE IF EXISTS $table");
     }
 
+    /**
+     * @param $service
+     * @return mixed
+     */
     public static function getService($service)
     {
-        return Kontentblocks::getInstance()->Services[$service];
+        return Kontentblocks::getInstance()->services[$service];
     }
 
+    /**
+     * @return null|static
+     */
     public static function getInstance()
     {
         static $instance = null;
@@ -248,16 +257,19 @@ Class Kontentblocks
         return $instance;
     }
 
+    /**
+     * @param $service
+     * @param $callable
+     */
     public static function addService($service, $callable)
     {
-        Kontentblocks::getInstance()->Services[$service] = $callable;
+        Kontentblocks::getInstance()->services[$service] = $callable;
     }
 
     public function setup()
     {
         require_once dirname(__FILE__) . '/core/Hooks/setup.php';
         Capabilities::setup();
-
         add_theme_support('kontentblocks:clipboard');
 
         if (file_exists(get_template_directory() . '/kontentblocks.php')) {
@@ -293,12 +305,10 @@ Class Kontentblocks
     {
         load_plugin_textdomain('Kontentblocks', false, dirname(plugin_basename(__FILE__)) . '/languages/');
         Language\I18n::getInstance();
-
     }
 
     /**
      * Load Extensions
-     * @since 1.0.0
      */
     public function loadExtensions()
     {
@@ -311,9 +321,8 @@ Class Kontentblocks
     public function loadFields()
     {
         foreach (glob(KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php') as $file) {
-            $this->Services['registry.fields']->add($file);
+            $this->services['registry.fields']->add($file);
         }
-
         _K::info('Fields loaded');
     }
 
@@ -349,8 +358,8 @@ Class Kontentblocks
     public function loadModules()
     {
 
-        /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
-        $Registry = $this->Services['registry.modules'];
+        /** @var \Kontentblocks\Modules\ModuleRegistry $registry */
+        $registry = $this->services['registry.modules'];
         // add core modules path
         $paths = array(KB_COREMODULES_PATH);
         $paths = apply_filters('kb.module.paths', $paths);
@@ -362,7 +371,7 @@ Class Kontentblocks
                     $files = glob($subdir . '/[mM]odule*.php');
                     foreach ($files as $template) {
                         if (strpos(basename($template), '__') === false) {
-                            $Registry->add($template);
+                            $registry->add($template);
                         }
                     }
                 }
@@ -372,7 +381,6 @@ Class Kontentblocks
         do_action('kb.modules.loaded');
         do_action('kb.init');
         _K::info('kb.init action fired. We\'re good to go.');
-
     }
 
     /**
@@ -381,7 +389,7 @@ Class Kontentblocks
     public function loadPanels()
     {
         /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
-        $Registry = $this->Services['registry.panels'];
+        $Registry = $this->services['registry.panels'];
         // add core modules path
         $paths = apply_filters('kb.panel.paths', array());
         $paths = array_unique($paths);
@@ -405,9 +413,7 @@ Class Kontentblocks
             }
         }
         _K::info('Panels loaded');
-
         do_action('kb.panels.loaded');
-
     }
 
     /**

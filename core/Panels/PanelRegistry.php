@@ -12,16 +12,19 @@ use Kontentblocks\Utils\Utilities;
 class PanelRegistry
 {
 
-    public static $instance;
-
-
+    /**
+     * @var array
+     */
+    public $objects = array();
     /**
      * Panels collection
      * @var array
      */
-    public $panels = array();
-
-    public $objects = array();
+    private $panels = array();
+    /**
+     * @var array
+     */
+    private $panelsByType = array();
 
     /**
      * @param $file
@@ -55,23 +58,13 @@ class PanelRegistry
      */
     public function add($panelId, $args)
     {
-
         if (!isset($this->panels[$panelId])) {
-
             $reflection = new \ReflectionClass($args['class']);
             $name = $reflection->getParentClass()->name;
-
-            if ($name == 'Kontentblocks\Panels\OptionPanel') {
-                $args['type'] = 'option';
-            } else if ($name == 'Kontentblocks\Panels\TermPanel') {
-                $args['type'] = 'term';
-            } else if ($name == 'Kontentblocks\Panels\UserPanel') {
-                $args['type'] = 'user';
-            } else {
-                $args['type'] = 'post';
-            }
+            $type = $this->getType($name);
+            $args['type'] = $type;
             $this->panels[$panelId] = $args;
-
+            $this->addToPanelsByType($type, $panelId, $args);
             /** @var \Kontentblocks\Panels\AbstractPanel $args */
             $args['class']::run($args);
             return true;
@@ -85,6 +78,41 @@ class PanelRegistry
     }
 
     /**
+     * @param $name
+     * @return string
+     */
+    private function getType($name)
+    {
+        switch ($name) {
+            case 'Kontentblocks\Panels\OptionPanel':
+                return 'option';
+                break;
+            case 'Kontentblocks\Panels\TermPanel':
+                return 'term';
+                break;
+            case 'Kontentblocks\Panels\UserPanel':
+                return 'user';
+                break;
+            default:
+                return 'post';
+                break;
+        }
+    }
+
+    /**
+     * @param string $type
+     * @param string $panelId
+     * @param array $args
+     */
+    private function addToPanelsByType($type, $panelId, $args)
+    {
+        if (!isset($this->panelsByType[$type])) {
+            $this->panelsByType[$type] = [];
+        }
+        $this->panelsByType[$type][$panelId] = $args;
+    }
+
+    /**
      * @param $panelId
      * @return bool
      */
@@ -95,7 +123,7 @@ class PanelRegistry
 
     /**
      * @param $panelId
-     * @return mixed
+     * @return array
      */
     public function get($panelId)
     {
@@ -110,6 +138,18 @@ class PanelRegistry
     public function getAll()
     {
         return $this->panels;
+    }
+
+    /**
+     * @param string $type
+     * @return array
+     */
+    public function getByType($type)
+    {
+        if (isset($this->panelsByType[$type]) && is_array($this->panelsByType[$type])) {
+            return $this->panelsByType[$type];
+        }
+        return [];
     }
 
 

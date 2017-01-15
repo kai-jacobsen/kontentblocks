@@ -2,7 +2,6 @@
 namespace Kontentblocks\Panels;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Fields\FormInterface;
 use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Kontentblocks;
@@ -63,7 +62,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     protected $uid;
 
-
     /**
      * @param array $args
      * @param PostEnvironment $environment
@@ -93,10 +91,9 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
             'hook' => 'edit_form_after_title',
             'priority' => 10,
             'postTypes' => array(),
-            'frontend' => true,
             'pageTemplates' => array('default'),
+            'frontend' => true,
         );
-
         return wp_parse_args($args, $defaults);
     }
 
@@ -282,8 +279,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function saveCallback($postId, $postObj)
     {
-
-
         if ((absint($postId) !== absint($this->postId)) && !Utilities::isPreview()) {
             return;
         }

@@ -3,15 +3,19 @@
 namespace Kontentblocks\Panels;
 
 
+/**
+ * Class StandardPanelRepository
+ * @package Kontentblocks\Panels
+ */
 class StandardPanelRepository
 {
 
-    public $environment;
+    protected $environment;
 
     /**
-     * @var
+     * @var array
      */
-    public $panels;
+    protected $panels;
 
     /**
      * @return array
