@@ -94,7 +94,7 @@ class PostEnvironment implements JsonSerializable
     /**
      * Class constructor
      *
-     * @param $storageId
+     * @param int $storageId
      * @param \WP_Post $postObj
      * @since 0.1.0
      */
@@ -232,15 +232,6 @@ class PostEnvironment implements JsonSerializable
         return $this->postObj;
     }
 
-    /**
-     * Returns all modules set to this post
-     * @return array
-     * @since 0.1.0
-     */
-    public function getAllModules()
-    {
-        return $this->modules;
-    }
 
 
     /**
@@ -310,28 +301,6 @@ class PostEnvironment implements JsonSerializable
             return $settings[$areaId];
         }
         return false;
-    }
-
-    /**
-     * Wrapper to low level handler method
-     * returns instance data or an empty string
-     *
-     * @param string $mid
-     *
-     * @return string
-     * @since 0.1.0
-     */
-    public function getModuleData($mid)
-    {
-
-        $this->storage->reset();
-        $data = $this->storage->getModuleData($mid);
-        if ($data !== null) {
-            return $data;
-        } else {
-            return array();
-        }
-
     }
 
     /**

@@ -77,6 +77,10 @@ class TermEnvironment implements \JsonSerializable
         );
     }
 
+    /**
+     * @param $panelid
+     * @return \Kontentblocks\Panels\OptionPanel|null
+     */
     public function getTermPanel($panelid)
     {
         return $this->termPanels->getPanelObject($panelid);

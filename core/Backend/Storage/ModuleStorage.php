@@ -126,10 +126,9 @@ class ModuleStorage implements \Countable
      *
      * @return array|string|null
      */
-    public function getModuleData($mid)
+    public function getModuleData($mid, $default = null)
     {
         $mid = $this->underscorePrefix($mid);
-
         if (is_preview()) {
             $pmid = '_preview' . $mid;
             if (isset($this->modules[$pmid])) {
@@ -142,7 +141,7 @@ class ModuleStorage implements \Countable
         if (isset($this->modules[$mid])) {
             return $this->modules[$mid];
         }
-        return null;
+        return $default;
     }
 
     /**

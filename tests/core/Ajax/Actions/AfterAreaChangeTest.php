@@ -4,6 +4,7 @@ namespace Kontentblocks\tests\core\Ajax\Actions;
 
 use Kontentblocks\Ajax\Actions\AfterAreaChange;
 use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Hooks\Capabilities;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +28,7 @@ class AfterAreaChangeTest extends \WP_UnitTestCase
             99
         );
 
-        \Kontentblocks\Hooks\Capabilities::setup();
+        Capabilities::setup();
         Kontentblocks::getService('registry.modules')->add(TESTS_DIR . '/assets/ModuleText/ModuleText.php');
 
         \Kontentblocks\registerArea(array(

@@ -45,7 +45,7 @@ class UpdateModuleData extends AbstractAjaxAction
 
         $module->properties->parseOverrides($overrides);
 
-         // gather data
+        // gather data
         $old = $module->model->export();
         $new = $module->save($data, $old);
         $mergedData = Utilities::arrayMergeRecursive($new, $old);
