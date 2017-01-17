@@ -305,7 +305,7 @@ class ModuleProperties
 
         if (is_null($area->settings)) {
             $area->set('settings',
-                new AreaSettingsModel($area, $this->postId, new DataProvider($this->postId, 'post')));
+                new AreaSettingsModel($area, new DataProvider($this->postId, 'post')));
         }
 
         /**

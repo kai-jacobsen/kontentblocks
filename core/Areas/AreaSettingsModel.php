@@ -12,12 +12,6 @@ use Kontentblocks\Backend\DataProvider\DataProviderInterface;
  */
 class AreaSettingsModel implements \JsonSerializable
 {
-
-    /**
-     * @var int
-     */
-    protected $postId;
-
     /**
      * @var string
      */
@@ -44,9 +38,8 @@ class AreaSettingsModel implements \JsonSerializable
      * @param $postId
      * @param DataProviderInterface $dataProvider
      */
-    public function __construct(AreaProperties $area, $postId, DataProviderInterface $dataProvider)
+    public function __construct(AreaProperties $area, DataProviderInterface $dataProvider)
     {
-        $this->postId = $postId;
         $this->dataProvider = $dataProvider;
         $this->area = $area;
         $this->setupSettings();
@@ -125,39 +118,11 @@ class AreaSettingsModel implements \JsonSerializable
     }
 
     /**
-     * Set Layout
-     * @param $value
-     * @return $this
-     */
-    public function setLayout($value)
-    {
-        if (!isset($this->settings['layout'])) {
-            $this->settings['layout'] = $value;
-        }
-        $this->settings['layout'] = $value;
-        return $this;
-    }
-
-
-    /**
      * @return mixed
      */
     public function isActive()
     {
         return $this->get('active');
-    }
-
-    /**
-     * Get layout
-     * @return mixed
-     */
-    public function getLayout()
-    {
-        if (isset($this->settings['layout'])) {
-            return $this->settings['layout'];
-        } else {
-            return false;
-        }
     }
 
     /**
@@ -175,14 +140,6 @@ class AreaSettingsModel implements \JsonSerializable
         $meta[$this->area->id] = $this->settings;
         //we've got unslashed data from post meta, update will add wp_slash before adding to post meta
         return $this->dataProvider->update($this->key, $meta);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPostId()
-    {
-        return $this->postId;
     }
 
     /**

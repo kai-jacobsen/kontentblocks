@@ -31,7 +31,7 @@ class SyncAreaSettings extends AbstractAjaxAction
         $environment = Utilities::getPostEnvironment($postId);
         $Area = $environment->getAreaDefinition($areaId);
 
-        $areaSettings = new AreaSettingsModel($Area, $postId, DataProviderService::getPostProvider($postId));
+        $areaSettings = new AreaSettingsModel($Area, DataProviderService::getPostProvider($postId));
         $areaSettings->import(Utilities::validateBoolRecursive($settings));
         $update = $areaSettings->save();
 
