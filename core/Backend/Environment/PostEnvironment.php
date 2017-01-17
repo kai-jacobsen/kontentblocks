@@ -288,22 +288,6 @@ class PostEnvironment implements JsonSerializable
     }
 
     /**
-     * Get settings for given area
-     *
-     * @param string $areaId
-     *
-     * @return mixed
-     */
-    public function getAreaSettings($areaId)
-    {
-        $settings = $this->storage->getDataProvider()->get('kb_area_settings');
-        if (!empty($settings[$areaId])) {
-            return $settings[$areaId];
-        }
-        return false;
-    }
-
-    /**
      * Save callback handler
      * @return void
      * @since 0.1.0
