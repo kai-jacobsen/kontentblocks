@@ -28,15 +28,10 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
 
     /**
      * @param $data
-     * @since 0.1.0
      * @return $this
      */
     public function set($data)
     {
-        if (!is_array($data) && !is_null($data)) {
-            $this->singleValue = $data;
-            return $this;
-        }
 
         if (is_array($data)) {
             foreach ($data as $key => $v) {
@@ -55,7 +50,6 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      * @param string $default
      * @param null $group
      * @return string
-     * @since 0.1.0
      */
     public function get($offset, $default = '', $group = null)
     {
@@ -88,7 +82,6 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
 
     /**
      * @return array
-     * @since 0.1.0
      */
     public function getOriginalData()
     {
@@ -170,7 +163,6 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
     /**
      * Lock Model write access
      * @return void
-     * @since 0.1.0
      */
     public function lock()
     {
@@ -180,7 +172,6 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
     /**
      * Unlock Model write access
      * @return void
-     * @since 0.1.0
      */
     public function unlock()
     {
@@ -189,7 +180,6 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
 
     /**
      * @return bool
-     * @since 0.1.0
      */
     public function hasData()
     {

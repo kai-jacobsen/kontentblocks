@@ -8,7 +8,6 @@ use Symfony\Component\Yaml\Parser;
 
 /**
  * Class FieldsYamlLoader
- * @package Kontentblocks\Fields
  */
 class FieldsYamlLoader
 {
