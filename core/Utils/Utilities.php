@@ -456,7 +456,9 @@ class Utilities
         }
 
         if (post_type_supports($postType, 'editor')) {
-            return null;
+            if (!apply_filters('kb.remote.concat.ignore.editor', '__return_false')){
+                return null;
+            }
         }
 
         $base = get_permalink($postId);
@@ -468,7 +470,7 @@ class Utilities
         $url = add_query_arg('concat', 'true', $base);
         $url = add_query_arg('contime', time(), $url);
         if ($url !== false) {
-            $args = wp_parse_args($args, array('timeout' => 2, 'blocking' => $blocking));
+            $args = wp_parse_args($args, array('timeout' => 3, 'blocking' => $blocking));
             $args = apply_filters('kb.remote.concat.args', $args, $url);
             $response = wp_remote_get($url, $args);
             return $response;
