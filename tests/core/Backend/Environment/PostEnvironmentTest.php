@@ -9,10 +9,9 @@ use Kontentblocks\Utils\Utilities;
 
 
 /**
- * Class AfterAreaChangeTest
- * @package Kontentblocks\tests\core\Ajax\Actions
+ * Class PostEnvironmentTest
  */
-class AfterAreaChangeTest extends \WP_UnitTestCase
+class PostEnvironmentTest extends \WP_UnitTestCase
 {
 
     protected $userId;

@@ -38,7 +38,7 @@ class TermPanelRepository extends StandardPanelRepository
     {
         /** @var \Kontentblocks\Panels\PanelRegistry $registry */
         $registry = Kontentblocks::getService( 'registry.panels' );
-        return array_filter( $registry->panels,function($panel){
+        return array_filter( $registry->getAll(),function($panel){
             return $panel['type'] === 'term';
         });
     }

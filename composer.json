@@ -34,7 +34,7 @@
     "symfony/http-foundation": "3.0.*"
   },
   "require-dev": {
-    "codeclimate/php-test-reporter": "dev-master"
+    "codeclimate/php-test-reporter": "*"
   }
 }
 
