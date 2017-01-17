@@ -5,7 +5,7 @@ php: '5.5'
 sudo: false
 addons:
     code_climate:
-        repo_token: a3f0e2a275b80d1aa8f47afaabfba2cfe4d6371142d161813a789f499c1d74c3
+        repo_token: 7f1b407be97ef1daa00d48b2ff2237ba79752c18d8cf8bdb887b780db2d7a384
 env:
   - WP_VERSION=master WP_MULTISITE=0
 
