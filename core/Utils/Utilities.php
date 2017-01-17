@@ -440,7 +440,7 @@ class Utilities
     public static function remoteConcatGet($postId = null, $blocking = false, $host = null, $args = array())
     {
 
-        if (apply_filters('kb.remote.concat.get', false)) {
+        if (apply_filters('kb.remote.concat.get.disable', false)) {
             return null;
         }
 
@@ -455,6 +455,10 @@ class Utilities
             return null;
         }
 
+        if (post_type_supports($postType, 'editor')) {
+            return null;
+        }
+
         $base = get_permalink($postId);
         if (!is_null($host)) {
             $parsed = parse_url($base);
@@ -464,7 +468,6 @@ class Utilities
         $url = add_query_arg('concat', 'true', $base);
         $url = add_query_arg('contime', time(), $url);
         if ($url !== false) {
-
             $args = wp_parse_args($args, array('timeout' => 2, 'blocking' => $blocking));
             $args = apply_filters('kb.remote.concat.args', $args, $url);
             $response = wp_remote_get($url, $args);

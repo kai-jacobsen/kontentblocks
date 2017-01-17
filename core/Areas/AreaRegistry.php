@@ -387,10 +387,6 @@ class AreaRegistry
         $postType = $environment->getPostType();
 
         $areas = array();
-        // bail out if this is a redirect template
-        if (false !== strpos($pageTemplate, 'redirect')) {
-            return array();
-        }
 
         if ($postType === 'kb-gmd') {
             return array('global-module' => $this->getArea('global-module'));

@@ -21,71 +21,73 @@ namespace Kontentblocks\Backend\Environment\Save;
  * @since 0.1.0
  * @TODO Works currently only if save called from post edit screen
  */
-class ConcatContent {
-	public static $instance;
+class ConcatContent
+{
+    public static $instance;
 
-	public $content = "";
+    public $content = "";
 
-	public static function getInstance() {
-		if ( null == self::$instance ) {
-			self::$instance = new self;
-		}
+    /**
+     * Class constructor
+     *
+     * @action save_post
+     */
+    public function __construct()
+    {
+        if (filter_input(INPUT_GET, 'concat')) {
+            add_action('wp_footer', array($this, 'save'), 999);
+        }
+    }
 
-		return self::$instance;
+    public static function getInstance()
+    {
+        if (null == self::$instance) {
+            self::$instance = new self;
+        }
 
-	}
+        return self::$instance;
+    }
 
-	/**
-	 * Class constructor
-	 *
-	 * @action save_post
-	 */
-	public function __construct() {
-		if (filter_input(INPUT_GET, 'concat')){
-			add_action( 'wp_footer', array( $this, 'save' ), 999 );
-		}
-	}
+    /**
+     * Add String
+     *
+     * @param $string
+     * @return false if no string is provided
+     */
+    public function addString($string)
+    {
+        if (!is_string($string)) {
+            return false;
+        }
+        preg_match_all('/<!--kb.index.start-->(.*)<!--kb.index.end-->/sU', $string, $matches);
 
-	/**
-	 * Add String
-	 *
-	 * @param $string
-	 *
-	 * @return false if no string is provided
-	 */
-	public function addString( $string ) {
-		if ( ! is_string( $string ) ) {
-			return false;
-		}
-
-		preg_match_all('/<!--kb.index.start-->(.*)<!--kb.index.end-->/sU', $string,$matches);
-
-        if (isset($matches[1])){
-            if (is_array($matches[1])){
-                foreach ($matches[1] as $string){
+        if (isset($matches[1])) {
+            if (is_array($matches[1])) {
+                foreach ($matches[1] as $string) {
                     $this->addString($string);
                 }
             }
         }
 
-		$this->content .= "\n" . $string;
-	}
+        $this->content .= "\n" . $string;
+    }
 
-	/**
-	 * Update the Post Object
-	 * @param $postId
-	 */
-	public function save( $postId ) {
-		remove_action( 'save_post', array( $this, 'save' ), 999 );
+    /**
+     * Update the Post Object
+     * @param $postId
+     */
+    public function save($postId)
+    {
+        remove_action('save_post', array($this, 'save'), 999);
         global $post;
-        if (is_a($post,'\WP_Post')){
+        if (is_a($post, '\WP_Post')) {
             $postArgs = array(
-                'ID'           => $post->ID,
+                'ID' => $post->ID,
                 'post_content' => $this->content
             );
-            wp_update_post( $postArgs );
+            wp_update_post($postArgs);
             do_action('kb.concat.save', $postArgs);
         }
 
-	}
+    }
 }
