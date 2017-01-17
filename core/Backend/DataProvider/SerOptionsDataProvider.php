@@ -5,8 +5,6 @@ namespace Kontentblocks\Backend\DataProvider;
 /**
  * Class SerOptionsDataProvider
  * Wrapper to work with serialized data from the options api
- * @author Kai Jacobsen
- * @package Kontentblocks\Backend\DataProvider
  */
 class SerOptionsDataProvider implements DataProviderInterface
 {
