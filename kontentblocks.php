@@ -3,7 +3,7 @@
   Plugin Name: Kontentblocks
   Plugin URI: http://kontentblocks.de
   Description: Content modularization framework
-  Version: 0.8.10
+  Version: 0.8.11
   Author: Kai Jacobsen
   Author URI: https://github.com/kai-jacobsen/kontentblocks
   Text Domain: Kontentblocks
@@ -47,7 +47,7 @@ use Pimple;
 Class Kontentblocks
 {
 
-    const VERSION = '0.8.10';
+    const VERSION = '0.8.11';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.13';
     const DEBUG = true;
