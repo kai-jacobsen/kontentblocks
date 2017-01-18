@@ -7,6 +7,7 @@ use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Modules\Module;
 use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * Class SavePost
@@ -67,6 +68,7 @@ class SavePost
         $this->saveEditLayouts();
         // finally update the index
         $this->saveIndex();
+
     }
 
     /**

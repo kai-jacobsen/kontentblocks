@@ -24,7 +24,7 @@ class UpdateModule extends AbstractAjaxAction
      * @param bool $send
      * @return AjaxSuccessResponse
      */
-    protected static function run(Request $request, $send = true)
+    public static function action(Request $request, $send = true)
     {
         global $post;
 
