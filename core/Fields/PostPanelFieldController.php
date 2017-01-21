@@ -5,6 +5,7 @@ namespace Kontentblocks\Fields;
 use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Modules\Module;
+use Kontentblocks\Panels\PostPanel;
 use Kontentblocks\Utils\Utilities;
 use Reframe\Kontentblocks\Kontentblocks;
 
@@ -20,14 +21,12 @@ use Reframe\Kontentblocks\Kontentblocks;
  *
  * Instantiated by Kontentblocks\Modules\Module if fields() method is present
  * in extending class
- *
- * @param \Kontentblocks\Modules\Module
  */
-class ModuleFieldController extends StandardFieldController
+class PostPanelFieldController extends StandardFieldController
 {
 
     /**
-     * @var Module
+     * @var PostPanel
      */
     public $entity;
 
@@ -43,7 +42,7 @@ class ModuleFieldController extends StandardFieldController
     public function addSection($sectionId, $args = array())
     {
         if (!$this->idExists($sectionId)) {
-            $this->sections[$sectionId] = new ModuleFieldSection(
+            $this->sections[$sectionId] = new PostPanelFieldSection(
                 $sectionId,
                 $args,
                 $this
@@ -51,19 +50,6 @@ class ModuleFieldController extends StandardFieldController
         }
         return $this->sections[$sectionId];
 
-    }
-
-    /**
-     * @param null $file
-     * @return FieldsYamlLoader
-     */
-    public function yamlLoader($file = null)
-    {
-        if (is_null($file)) {
-            $file = trailingslashit($this->entity->getProperties()->getSetting('path')) . 'fields.yml';
-        }
-
-        parent::yamlLoader($file);
     }
 
 }

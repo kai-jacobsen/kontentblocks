@@ -221,8 +221,6 @@ class StandardFieldSection implements Exportable
 
     /**
      * Set visibility of field based on environment vars given by the Panel
-     * Panels have no envVars yet so all fields are visible
-     *
      * @param Field $field
      *
      * @return mixed

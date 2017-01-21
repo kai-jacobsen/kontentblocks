@@ -101,24 +101,17 @@ abstract class AbstractPanel implements EntityInterface
         return $this->baseId;
     }
 
-    public function getProperties()
-    {
-        // TODO: Implement getProperties() method.
-    }
+    abstract public function getProperties();
+
+    abstract public function getContext();
 
     /**
      * Callback handler
+     * @param $objectId
+     * @param $objectObject
+     * @return
      */
-    public function saveCallback($postId, $postObj)
-    {
-        $postData = Request::createFromGlobals();
-        $data = $postData->request->filter($this->baseId, null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        if (empty($data)) {
-            return;
-        }
-        $this->model->reset()->set($postData->request->get($this->baseId));
-        $this->save($postData);
-    }
+    abstract public function saveCallback($objectId, $objectObject);
 
     /**
      * @param Request $postData
@@ -132,13 +125,12 @@ abstract class AbstractPanel implements EntityInterface
         $this->model->set($merged)->sync();
 
         if ($this->saveAsSingle) {
-         $this->model->saveasSingle();
+            $this->model->saveasSingle();
         }
-        
     }
 
     /**
-     * @return PanelModel
+     * @return EntityModel
      */
     public function getModel()
     {

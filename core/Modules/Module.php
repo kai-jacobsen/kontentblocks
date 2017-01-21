@@ -411,4 +411,12 @@ abstract class Module implements EntityInterface
     {
         return 'module';
     }
+
+    /**
+     * @return ModuleContext
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
 }

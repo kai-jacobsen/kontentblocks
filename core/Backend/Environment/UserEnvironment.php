@@ -14,7 +14,7 @@ use Kontentblocks\Panels\UserPanelRepository;
  * Class UserEnvironment
  * @package Kontentblocks\Backend\Environment
  */
-class UserEnvironment implements \JsonSerializable
+class UserEnvironment implements \JsonSerializable, EnvironmentInterface
 {
 
     /**
@@ -31,6 +31,11 @@ class UserEnvironment implements \JsonSerializable
      * @var UserMetaDataProvider
      */
     public $dataProvider;
+
+    /**
+     * @var UserPanelRepository
+     */
+    public $userPanels;
 
     /**
      * TermEnvironment constructor.
@@ -85,5 +90,13 @@ class UserEnvironment implements \JsonSerializable
     public function getUserPanel($panelid)
     {
         return $this->userPanels->getPanelObject($panelid);
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->userId;
     }
 }

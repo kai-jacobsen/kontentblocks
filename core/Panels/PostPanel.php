@@ -3,7 +3,7 @@ namespace Kontentblocks\Panels;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Fields\FormInterface;
-use Kontentblocks\Fields\StandardFieldController;
+use Kontentblocks\Fields\PostPanelFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +29,10 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      * @var \Kontentblocks\Fields\StandardFieldController
      */
     public $fields;
-
+    /**
+     * @var PostPanelContext
+     */
+    public $context;
     /**
      * meta box args
      * @var array|null
@@ -70,11 +73,12 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
     public function __construct($args, PostEnvironment $environment)
     {
         $this->environment = $environment;
+        $this->context = new PostPanelContext($environment, $this);
         $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
         $this->model = new PanelModel($this->dataProvider->get(Utilities::buildContextKey($this->baseId)), $this);
-        $this->fields = new StandardFieldController($this->baseId, $this);
+        $this->fields = new PostPanelFieldController($this->baseId, $this);
         $this->fields();
     }
 
@@ -204,6 +208,15 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
 
     public function toJSON()
     {
+        $args = $this->getProperties();
+        Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
+    }
+
+    /**
+     *
+     */
+    public function getProperties()
+    {
         $args = array(
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
@@ -215,9 +228,9 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
             'postId' => get_the_ID(),
             'parentObjectId' => get_the_ID()
         );
-        Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
-    }
 
+        return $args;
+    }
 
     /**
      * @return array
@@ -271,6 +284,13 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         }
     }
 
+    /**
+     * @return PostPanelContext
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
 
     /**
      * Callback handler

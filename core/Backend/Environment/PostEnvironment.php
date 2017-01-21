@@ -21,7 +21,7 @@ use Kontentblocks\Panels\PostPanelRepository;
  * @subpackage Post
  * @since 0.1.0
  */
-class PostEnvironment implements JsonSerializable
+class PostEnvironment implements JsonSerializable,EnvironmentInterface
 {
 
     /**

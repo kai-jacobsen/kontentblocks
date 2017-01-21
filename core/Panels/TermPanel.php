@@ -87,7 +87,7 @@ abstract class TermPanel extends AbstractPanel
     public function init()
     {
         if (is_admin()) {
-            add_action("edited_{$this->args['taxonomy']}", array($this, 'saveCallback'),10,2);
+            add_action("edited_{$this->args['taxonomy']}", array($this, 'saveCallback'), 10, 2);
             if ($this->args['insideTable']) {
                 add_action("{$this->args['taxonomy']}_edit_form_fields", array($this, 'form'));
             } else {

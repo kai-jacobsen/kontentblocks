@@ -17,4 +17,6 @@ interface EntityInterface
 
     public function getType();
 
+    public function getContext();
+
 }

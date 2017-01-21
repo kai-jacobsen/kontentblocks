@@ -12,7 +12,7 @@ use Kontentblocks\Panels\TermPanelRepository;
  * Class TermEnvironment
  * @package Kontentblocks\Backend\Environment
  */
-class TermEnvironment implements \JsonSerializable
+class TermEnvironment implements \JsonSerializable, EnvironmentInterface
 {
 
     /**
@@ -29,6 +29,11 @@ class TermEnvironment implements \JsonSerializable
      * @var TermMetaDataProvider
      */
     public $dataProvider;
+
+    /**
+     * @var TermPanelRepository
+     */
+    public $termPanels;
 
     /**
      * TermEnvironment constructor.
@@ -84,5 +89,13 @@ class TermEnvironment implements \JsonSerializable
     public function getTermPanel($panelid)
     {
         return $this->termPanels->getPanelObject($panelid);
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->termId;
     }
 }

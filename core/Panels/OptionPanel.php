@@ -152,9 +152,21 @@ abstract class OptionPanel extends AbstractPanel
         $postData = Request::createFromGlobals();
         $data = $postData->request->filter($this->menu['slug'] . '_save', false, FILTER_VALIDATE_BOOLEAN);
         if ($data) {
-            $this->save($postData);
+            $this->saveCallback(null, null);
         }
 
+    }
+
+    /**
+     * Callback handler
+     * @param $objectId
+     * @param $objectObject
+     * @return
+     */
+    public function saveCallback($objectId, $objectObject)
+    {
+        $postData = Request::createFromGlobals();
+        $this->save($postData);
     }
 
     /**
@@ -187,7 +199,6 @@ abstract class OptionPanel extends AbstractPanel
 
         Utilities::hiddenEditor();
         $this->toJSON();
-
 
         echo $this->beforeForm();
         echo $this->renderFields();
