@@ -6,6 +6,7 @@ use Kontentblocks\Backend\DataProvider\DataProviderService;
 use Kontentblocks\Backend\DataProvider\TermMetaDataProvider;
 use Kontentblocks\Backend\Environment\TermEnvironment;
 use Kontentblocks\Fields\StandardFieldController;
+use Kontentblocks\Fields\TermPanelFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,6 +48,11 @@ abstract class TermPanel extends AbstractPanel
     private $renderer;
 
     /**
+     * @var TermPanelContext
+     */
+    private $context;
+
+    /**
      * Class constructor
      *
      * @param array $args
@@ -58,7 +64,8 @@ abstract class TermPanel extends AbstractPanel
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
         $this->term = $environment->termObj;
-        $this->fields = new StandardFieldController($args['baseId'], $this);
+        $this->context = new TermPanelContext($environment, $this);
+        $this->fields = new TermPanelFieldController($args['baseId'], $this);
         $this->model = new PanelModel($environment->getDataProvider()->get($args['baseId']), $this);
         $this->data = $this->model->export();
         $this->fields();

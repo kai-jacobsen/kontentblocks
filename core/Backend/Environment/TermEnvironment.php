@@ -78,8 +78,18 @@ class TermEnvironment implements \JsonSerializable, EnvironmentInterface
         return array(
             'postId' => 0,
             'entityType' => 'term',
-            'term' => $this->termObj
+            'term' => $this->termObj,
+            'termId' => $this->getId(),
+            'taxonomy' => $this->termObj->taxonomy
         );
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->termId;
     }
 
     /**
@@ -89,13 +99,5 @@ class TermEnvironment implements \JsonSerializable, EnvironmentInterface
     public function getTermPanel($panelid)
     {
         return $this->termPanels->getPanelObject($panelid);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->termId;
     }
 }

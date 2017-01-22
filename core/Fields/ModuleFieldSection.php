@@ -2,7 +2,6 @@
 
 namespace Kontentblocks\Fields;
 
-use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Modules\Module;
 
 /**
@@ -13,11 +12,6 @@ use Kontentblocks\Modules\Module;
  *
  * Gets instantiated by Kontentblocks\Fields\ModuleFieldController when
  * addGroup() is called
- *
- * @see Kontentblocks\Fields\FieldManager::addSection()
- * @package Fields
- * @package Fields
- * @since 0.1.0
  */
 class ModuleFieldSection extends StandardFieldSection
 {
@@ -40,9 +34,20 @@ class ModuleFieldSection extends StandardFieldSection
     {
 
         $field->setVisibility(true);
-        $areaContext = $this->entity->context->get('areaContext');
-        $postType = $this->entity->context->get('postType');
-        $pageTemplate = $this->entity->context->get('pageTemplate');
+        $areaContext = $this->entity->getContext()->get('areaContext');
+        $postType = $this->entity->getContext()->get('postType');
+        $pageTemplate = $this->entity->getContext()->get('pageTemplate');
+
+        $callback = $field->getCondition('callback');
+        if (is_callable($callback)) {
+            $res = call_user_func_array($callback, [$this, $field]);
+            if ($res === false) {
+                $field->setVisibility(false);
+                $this->decreaseVisibleFields();
+                return;
+            }
+        }
+
         if ($this->entity->properties->getSetting('views')) {
             $moduleTemplate = $this->entity->getViewfile();
             if ($field->getCondition('viewfile') && !in_array(

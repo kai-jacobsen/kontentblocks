@@ -517,6 +517,9 @@ abstract class Field implements Exportable
 
     }
 
+    /**
+     * @param $collection
+     */
     public function export(&$collection)
     {
         $concatKey = ($this->getArg('arrayKey')) ? $this->getArg('arrayKey') . '.' . $this->getKey() : $this->getKey();

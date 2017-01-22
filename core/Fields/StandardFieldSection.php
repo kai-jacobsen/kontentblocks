@@ -160,7 +160,6 @@ class StandardFieldSection implements Exportable
                     $this->fields[$key] = $field;
                 }
 
-
                 $field->setData($this->getFielddata($field));
                 $this->increaseVisibleFields();
                 $this->orderFields();
@@ -264,7 +263,7 @@ class StandardFieldSection implements Exportable
             return $this->fields[$groupkey];
         }
     }
-    
+
 
     private function getFielddata($field)
     {

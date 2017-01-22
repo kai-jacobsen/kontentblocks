@@ -22,22 +22,34 @@ class SerOptionsDataProvider implements DataProviderInterface
     /**
      * @param $storageId string key
      */
-    public function __construct( $storageId )
+    public function __construct($storageId)
     {
         $this->storageId = $storageId;
-        $this->data = get_option( $storageId, array());
+        $this->data = get_option($storageId, array());
     }
 
     /**
      * @param $key
      * @return mixed|null
      */
-    public function get( $key )
+    public function get($key)
     {
-        if (isset( $this->data[$key] )) {
+        if (isset($this->data[$key])) {
             return $this->data[$key];
         }
         return null;
+    }
+
+    /**
+     * wrapper to update()
+     * @param string $key
+     * @param mixed $value
+     * @return $this
+     */
+    public function add($key, $value)
+    {
+        $this->update($key, $value, false);
+        return $this;
     }
 
     /**
@@ -46,7 +58,7 @@ class SerOptionsDataProvider implements DataProviderInterface
      * @param bool $save whether to instantly update the db option
      * @return $this
      */
-    public function update( $key, $value, $save = false )
+    public function update($key, $value, $save = false)
     {
         $this->data[$key] = $value;
         if ($save) {
@@ -56,14 +68,12 @@ class SerOptionsDataProvider implements DataProviderInterface
     }
 
     /**
-     * wrapper to update()
-     * @param string $key
-     * @param mixed $value
+     * Update data to db
      * @return $this
      */
-    public function add( $key, $value )
+    public function save()
     {
-        $this->update( $key, $value, false );
+        update_option($this->storageId, wp_unslash($this->data));
         return $this;
     }
 
@@ -72,9 +82,9 @@ class SerOptionsDataProvider implements DataProviderInterface
      * @param bool $save
      * @return $this
      */
-    public function delete( $key, $save = false )
+    public function delete($key, $save = false)
     {
-        unset( $this->data[$key] );
+        unset($this->data[$key]);
         if ($save) {
             $this->save();
         }
@@ -86,7 +96,7 @@ class SerOptionsDataProvider implements DataProviderInterface
      * @param $data
      * @return $this
      */
-    public function set( $data )
+    public function set($data)
     {
         $this->data = $data;
         return $this;
@@ -94,7 +104,7 @@ class SerOptionsDataProvider implements DataProviderInterface
 
     /**
      * get the complete data array
-     * @return array|mixed|void
+     * @return array
      */
     public function export()
     {
@@ -107,17 +117,7 @@ class SerOptionsDataProvider implements DataProviderInterface
      */
     public function reset()
     {
-        $this->data = get_option( $this->storageId );
-        return $this;
-    }
-
-    /**
-     * Update data to db
-     * @return $this
-     */
-    public function save()
-    {
-        update_option( $this->storageId, wp_unslash($this->data) );
+        $this->data = get_option($this->storageId);
         return $this;
     }
 
@@ -126,7 +126,7 @@ class SerOptionsDataProvider implements DataProviderInterface
      */
     public function getAll()
     {
-       return $this->data;
+        return $this->data;
     }
 
     /**

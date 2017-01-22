@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Fields;
 
-use Kontentblocks\Panels\PostPanel;
+use Kontentblocks\Panels\TermPanel;
 
 /**
  * Purpose of this Class:
@@ -10,12 +10,12 @@ use Kontentblocks\Panels\PostPanel;
  * This serves as a collection handler for fields and offers
  * methods to interact with registered fields.
  */
-class PostPanelFieldSection extends StandardFieldSection
+class TermPanelFieldSection extends StandardFieldSection
 {
 
 
     /**
-     * @var PostPanel
+     * @var TermPanel
      */
     public $entity;
 
@@ -31,9 +31,6 @@ class PostPanelFieldSection extends StandardFieldSection
     {
 
         $field->setVisibility(true);
-        $postType = $this->entity->context->get('postType');
-        $pageTemplate = $this->entity->context->get('pageTemplate');
-
         $callback = $field->getCondition('callback');
         if (is_callable($callback)){
             $res = call_user_func_array($callback,[$this,$field]);
@@ -43,23 +40,6 @@ class PostPanelFieldSection extends StandardFieldSection
                 return;
             }
         }
-
-        if ($field->getCondition('postType') && !in_array($postType, (array)$field->getCondition('postType'))) {
-            $field->setVisibility(false);
-            $this->decreaseVisibleFields();
-            return;
-        }
-
-        if ($field->getCondition('pageTemplate') && !in_array(
-                $pageTemplate,
-                (array)$field->getCondition('pageTemplate')
-            )
-        ) {
-            $field->setVisibility(false);
-            $this->decreaseVisibleFields();
-            return;
-        }
-
         return;
     }
 
