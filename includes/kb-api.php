@@ -3,6 +3,7 @@
 namespace Kontentblocks;
 
 use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayoutsRegistry;
+use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
