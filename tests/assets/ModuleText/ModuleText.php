@@ -16,7 +16,7 @@ class ModuleText extends Module
         'globalModule' => true,
         'asTemplate' => true,
         'views' => true,
-        'connect' => array( 'normal', 'side' ),
+        'connect' => array('normal', 'side'),
         'id' => 'wysiwyg',
         'controls' => array(
             'width' => 600
@@ -59,7 +59,7 @@ class ModuleText extends Module
      */
     public function fields()
     {
-        $this->fields->addGroup( 'editor', array( 'label' => 'Editor' ) )
+        $this->fields->addGroup('editor', array('label' => 'Editor'))
                      ->addField(
                          'editor', // field type
                          'demotest', // field key
@@ -67,10 +67,16 @@ class ModuleText extends Module
                              'label' => 'Editor',
                              'returnObj' => 'Element',
                              'conditions' => array(
-                                 'areaContext' => array( 'normal' ) // only visible in 'normal' area context
+                                 'areaContext' => array('normal') // only visible in 'normal' area context
                              )
                          )
-                     );
+                     )
+                     ->addField('text', 'demotestconditional', array(
+                         'label' => 'Conditional',
+                         'conditions' => array(
+                             'areaContext' => array('side') // only visible in 'normal' area context
+                         )
+                     ));
 
     }
 

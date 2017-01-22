@@ -77,6 +77,10 @@ class AreaRegistryTest extends \WP_UnitTestCase
             'id' => 'should be sanitized',
             'dynamic' => true
         ));
+
+        $areaside = $this->registry->getArea('testareaside');
+        $this->assertTrue($this->registry->areaExists('testareaside'));
+        $this->assertAttributeEquals('side','context',$areaside);
     }
 
 

@@ -158,6 +158,9 @@ class StandardFieldController
     }
 
 
+    /**
+     * @return array
+     */
     public function collectToForms()
     {
         $coll = $this->collectAllFields();

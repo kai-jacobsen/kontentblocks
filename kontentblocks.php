@@ -276,7 +276,6 @@ Class Kontentblocks
             add_theme_support('kontentblocks');
             include_once(get_template_directory() . '/kontentblocks.php');
             _K::info('kontentblocks.php loaded from main theme');
-
         }
 
         if (is_child_theme() && file_exists(get_stylesheet_directory() . '/kontentblocks.php')) {
@@ -285,6 +284,7 @@ Class Kontentblocks
             _K::info('kontentblocks.php loaded from childtheme');
         }
 
+        do_action('kb.configphp.setup');
 
         if (current_theme_supports('kontentblocks')) {
             // Enqueues of front and backend scripts and styles is handled here

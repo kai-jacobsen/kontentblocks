@@ -2,25 +2,11 @@
 
 namespace Kontentblocks\Fields;
 
-use Kontentblocks\Common\Data\EntityModel;
-use Kontentblocks\Common\Interfaces\EntityInterface;
-use Kontentblocks\Modules\Module;
 use Kontentblocks\Panels\PostPanel;
-use Kontentblocks\Utils\Utilities;
-use Reframe\Kontentblocks\Kontentblocks;
 
 /**
- * ModuleFieldController
- * Purpose of this class:
- * Connecting fields to a module and offering an API to interact with
- * fields and the underlying structure.
- *
- * There are two different cases which are handled by this class:
- * 1) Backend: preparing fields and initiate the rendering of the field output
- * 2) Frontend: Setting fields up.
- *
- * Instantiated by Kontentblocks\Modules\Module if fields() method is present
- * in extending class
+ * Class PostPanelFieldController
+ * @package Kontentblocks\Fields
  */
 class PostPanelFieldController extends StandardFieldController
 {

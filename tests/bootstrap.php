@@ -2,7 +2,7 @@
 
 use Kontentblocks\Kontentblocks;
 
-$_tests_dir = getenv( 'WP_DEVELOP_DIR' );
+$_tests_dir = getenv('WP_DEVELOP_DIR');
 if (!$_tests_dir) {
     $_tests_dir = '/home/kaiser/Development/wordpress/wordpress-tests-lib';
 }
@@ -13,10 +13,10 @@ require_once $_tests_dir . '/includes/functions.php';
 
 function _manually_load_plugin()
 {
-    require dirname( __FILE__ ) . '/../kontentblocks.php';
-    add_theme_support( 'kontentblocks' );
+    require dirname(__FILE__) . '/../kontentblocks.php';
+    add_theme_support('kontentblocks');
 
-    $dbVersion = get_option( 'kb_dbVersion' );
+    $dbVersion = get_option('kb_dbVersion');
     if ($dbVersion !== Kontentblocks::TABLEVERSION) {
         global $wpdb;
 
@@ -31,17 +31,20 @@ function _manually_load_plugin()
   PRIMARY KEY  (id)
     );";
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
-        update_option( "kb_dbVersion", Kontentblocks::TABLEVERSION );
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+        update_option("kb_dbVersion", Kontentblocks::TABLEVERSION);
     }
 
+    add_action('kb.configphp.setup', function () {
+        require dirname(__FILE__) . '/assets/kontentblocks.php';
 
-
+    }, 11);
 
 }
 
-tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
+tests_add_filter('muplugins_loaded', '_manually_load_plugin');
+
 
 
 require $_tests_dir . '/includes/bootstrap.php';
