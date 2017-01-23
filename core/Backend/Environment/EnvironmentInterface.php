@@ -11,4 +11,6 @@ interface EnvironmentInterface
     public function getDataProvider();
 
     public function getId();
+
+    public function export();
 }

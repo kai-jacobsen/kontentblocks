@@ -67,7 +67,7 @@ abstract class Module implements EntityInterface
     {
         $this->properties = $properties;
         $this->environment = $environment;
-        $this->context = new ModuleContext($environment, $this);
+        $this->context = new ModuleContext($environment->export(), $this);
         $this->model = new ModuleModel($data, $this);
         $this->viewLoader = Kontentblocks::getService('registry.moduleViews')->getViewLoader($this);
         /**

@@ -79,8 +79,16 @@ class UserEnvironment implements \JsonSerializable, EnvironmentInterface
         return array(
             'postId' => 0,
             'entityType' => 'user',
-            'term' => $this->userObj
+            'userId' => $this->getId()
         );
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->userId;
     }
 
     /**
@@ -93,10 +101,10 @@ class UserEnvironment implements \JsonSerializable, EnvironmentInterface
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getId()
+    public function export()
     {
-        return $this->userId;
+        return $this->jsonSerialize();
     }
 }

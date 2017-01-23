@@ -100,4 +100,12 @@ class TermEnvironment implements \JsonSerializable, EnvironmentInterface
     {
         return $this->termPanels->getPanelObject($panelid);
     }
+
+    /**
+     * @return mixed
+     */
+    public function export()
+    {
+        return $this->jsonSerialize();
+    }
 }

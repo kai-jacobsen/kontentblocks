@@ -5,6 +5,7 @@ namespace Kontentblocks\Panels;
 use Kontentblocks\Backend\DataProvider\UserMetaDataProvider;
 use Kontentblocks\Backend\Environment\UserEnvironment;
 use Kontentblocks\Fields\StandardFieldController;
+use Kontentblocks\Fields\UserPanelFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
@@ -41,6 +42,11 @@ abstract class UserPanel extends AbstractPanel
      */
     private $renderer;
 
+    /**
+     * @var UserPanelContext
+     */
+    private $context;
+
 
     /**
      * Class constructor
@@ -53,9 +59,10 @@ abstract class UserPanel extends AbstractPanel
         $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
+        $this->context = new UserPanelContext($environment->export(), $this);
         $this->user = $environment->userObj;
-        $this->fields = new StandardFieldController($this->getBaseId(), $this);
-        $this->model = new PanelModel($this->dataProvider->get($this->getBaseId(), $this));
+        $this->fields = new UserPanelFieldController($this->getBaseId(), $this);
+        $this->model = new PanelModel($this->dataProvider->get($this->getBaseId()), $this);
         $this->data = $this->model->export();
         $this->fields();
 

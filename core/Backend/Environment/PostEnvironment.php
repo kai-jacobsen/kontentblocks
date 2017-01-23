@@ -333,4 +333,12 @@ class PostEnvironment implements JsonSerializable,EnvironmentInterface
     {
         echo "<script> var KB = KB || {}; KB.Environment =" . json_encode($this) . "</script>";
     }
+
+    /**
+     * @return mixed
+     */
+    public function export()
+    {
+        return $this->jsonSerialize();
+    }
 }
