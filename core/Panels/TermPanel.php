@@ -64,7 +64,7 @@ abstract class TermPanel extends AbstractPanel
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
         $this->term = $environment->termObj;
-        $this->context = new TermPanelContext($environment->export(),$this);
+        $this->context = new TermPanelContext($environment->export(), $this);
         $this->fields = new TermPanelFieldController($args['baseId'], $this);
         $this->model = new PanelModel($environment->getDataProvider()->get($args['baseId']), $this);
         $this->data = $this->model->export();
@@ -115,7 +115,13 @@ abstract class TermPanel extends AbstractPanel
 
     public function toJSON()
     {
-        $args = array(
+        $args = $this->getProperties();
+        Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
+    }
+
+    public function getProperties()
+    {
+        return array(
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
             'id' => $this->getBaseId(),
@@ -124,9 +130,7 @@ abstract class TermPanel extends AbstractPanel
             'type' => 'term',
             'settings' => $this->args
         );
-        Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
     }
-
 
     /**
      * @param $termId
@@ -207,7 +211,6 @@ abstract class TermPanel extends AbstractPanel
         return $this->term;
     }
 
-
     /**
      * Get specific key value from data
      * Setup data, if not already done
@@ -251,4 +254,11 @@ abstract class TermPanel extends AbstractPanel
         $this->save($postData);
     }
 
+    /**
+     * @return TermPanelContext
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
 }

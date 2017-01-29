@@ -96,15 +96,7 @@ abstract class UserPanel extends AbstractPanel
 
     public function toJSON()
     {
-        $args = array(
-            'baseId' => $this->getBaseId(),
-            'mid' => $this->getBaseId(),
-            'id' => $this->getBaseId(),
-            'entityData' => $this->model->getOriginalData(),
-            'area' => '_internal',
-            'type' => 'user',
-            'settings' => $this->args
-        );
+        $args = $this->getProperties();
         Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
     }
 
@@ -173,5 +165,27 @@ abstract class UserPanel extends AbstractPanel
         return $this->model->export();
     }
 
+    /**
+     * @return UserPanelContext
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
 
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return array(
+            'baseId' => $this->getBaseId(),
+            'mid' => $this->getBaseId(),
+            'id' => $this->getBaseId(),
+            'entityData' => $this->model->getOriginalData(),
+            'area' => '_internal',
+            'type' => 'user',
+            'settings' => $this->args
+        );
+    }
 }
