@@ -3,8 +3,11 @@
 namespace Kontentblocks\Common;
 
 
-interface Exportable {
+use Kontentblocks\Fields\FieldExport;
 
-    public function export(&$collection);
+interface Exportable
+{
+
+    public function export(FieldExport $exporter);
 
 }

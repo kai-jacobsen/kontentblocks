@@ -37,7 +37,7 @@ class FieldSubGroup implements Exportable
      */
     protected $baseId;
     /**
-     * @var Returnobjects\FieldCollection
+     * @var FieldCollection
      * @since 0.1.0
      */
     protected $returnObj;
@@ -89,7 +89,7 @@ class FieldSubGroup implements Exportable
         /** @var Field $field */
         foreach ($this->fields as $field) {
 
-            if (!is_object($field)){
+            if (!is_object($field)) {
                 continue;
             }
 
@@ -195,7 +195,7 @@ class FieldSubGroup implements Exportable
     {
         $collect = array();
         foreach ($this->fields as $field) {
-            if (!is_object($field)){
+            if (!is_object($field)) {
                 continue;
             }
             $collect[$field->getKey()] = $field->getDefaultValue();
@@ -261,12 +261,12 @@ class FieldSubGroup implements Exportable
     }
 
     /**
-     * @param $collection
+     * @param FieldExport $exporter
      */
-    public function export(&$collection)
+    public function export(FieldExport $exporter)
     {
         foreach ($this->fields as $field) {
-            $field->export($collection);
+            $field->export($exporter);
         }
     }
 }

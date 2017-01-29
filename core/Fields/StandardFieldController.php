@@ -157,6 +157,13 @@ class StandardFieldController
 
     }
 
+    /**
+     * @return EntityModel
+     */
+    public function getModel()
+    {
+        return $this->entity->getModel();
+    }
 
     /**
      * @return array
@@ -168,24 +175,16 @@ class StandardFieldController
         foreach ($coll as $field) {
             if (is_a($field, '\Kontentblocks\Fields\FieldSubGroup')) {
                 $coll[$field->getKey()] = array();
-                foreach($field->getFields() as $subfield){
+                foreach ($field->getFields() as $subfield) {
                     $coll[$field->getKey()][$subfield->getKey()] = new FieldFormRenderer($subfield);
                 }
 
-            } else{
-                $coll[$field->getKey()]  = new FieldFormRenderer($field);
+            } else {
+                $coll[$field->getKey()] = new FieldFormRenderer($field);
             }
         }
 
         return $coll;
-    }
-
-    /**
-     * @return EntityModel
-     */
-    public function getModel()
-    {
-        return $this->entity->getModel();
     }
 
     /**
@@ -272,9 +271,7 @@ class StandardFieldController
      * exists in group
      *
      * @param string $sectionId
-     *
-     * @return object
-     * @since 0.1.0
+     * @return bool
      */
     public function idExists($sectionId)
     {
@@ -286,11 +283,13 @@ class StandardFieldController
      */
     public function export()
     {
-        $collection = array();
+        $exporter = new FieldExport();
+
+        /** @var StandardFieldSection $section */
         foreach ($this->sections as $section) {
-            $section->export($collection);
+            $section->export($exporter);
         }
-        return $collection;
+        return $exporter;
     }
 
     /**

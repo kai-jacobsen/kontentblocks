@@ -31,9 +31,9 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
      * @param Field $field
      * @param $salt
      */
-    public function __construct( $value, Field $field, $salt )
+    public function __construct($value, Field $field, $salt)
     {
-        $this->value = $this->prepareValue( $value );
+        $this->value = $this->prepareValue($value);
         $this->field = $field;
     }
 
@@ -41,7 +41,7 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
      * @param $value
      * @return mixed
      */
-    protected function prepareValue( $value )
+    protected function prepareValue($value)
     {
         return $value;
     }
@@ -58,9 +58,9 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
      * The return value will be casted to boolean if non-boolean was returned.
      * @since 5.0.0
      */
-    public function offsetExists( $offset )
+    public function offsetExists($offset)
     {
-        return isset( $this->value[$offset] );
+        return isset($this->value[$offset]);
     }
 
     /**
@@ -72,7 +72,7 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
      * @return mixed Can return all value types.
      * @since 5.0.0
      */
-    public function offsetGet( $offset )
+    public function offsetGet($offset)
     {
         return $this->value[$offset];
     }
@@ -89,7 +89,7 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
      * @return void
      * @since 5.0.0
      */
-    public function offsetSet( $offset, $value )
+    public function offsetSet($offset, $value)
     {
         $this->value[$offset] = $value;
     }
@@ -103,9 +103,9 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
      * @return void
      * @since 5.0.0
      */
-    public function offsetUnset( $offset )
+    public function offsetUnset($offset)
     {
-        unset( $this->value[$offset] );
+        unset($this->value[$offset]);
     }
 
     /**
@@ -116,17 +116,8 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
         return $this->value;
     }
 
-//    public function handleLoggedInUsers()
-//    {
-//
-//    }
-
     /**
-     * Specify data which should be serialized to JSON
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
      */
     function jsonSerialize()
     {
@@ -138,15 +129,15 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
      */
     public function __toString()
     {
-        if (is_array( $this->value )) {
-            if (!is_null( $this->idKey ) && array_key_exists( $this->idKey, $this->value ) && is_string(
+        if (is_array($this->value)) {
+            if (!is_null($this->idKey) && array_key_exists($this->idKey, $this->value) && is_string(
                     $this->value[$this->idKey]
                 )
             ) {
                 return $this->value[$this->idKey];
             }
 
-            $value = array_values( $this->value );
+            $value = array_values($this->value);
             return $value[0];
         }
         return $this->value;

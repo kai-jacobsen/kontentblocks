@@ -425,16 +425,17 @@ class StandardFieldSection implements Exportable
     }
 
     /**
-     * @param $collection
+     * @param FieldExport $exporter
      * @return array
      */
-    public function export(&$collection)
+    public function export(FieldExport $exporter)
     {
         if (empty($this->fields) || is_null($this->fields)) {
             return array();
         }
+        /** @var Field $field */
         foreach ($this->fields as $field) {
-            $field->export($collection);
+            $field->export($exporter);
         }
     }
 
