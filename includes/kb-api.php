@@ -8,6 +8,8 @@ use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
+use Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Panels\PanelModel;
 use Kontentblocks\Panels\PostPanel;
 use Kontentblocks\Panels\TermPanel;
@@ -26,31 +28,6 @@ function registerArea($args)
     $AreaRegistry->addArea($args, true);
 
 }
-
-/**
- * Register Area template
- * @param $args
- */
-function registerAreaTemplate($args)
-{
-    $defaults = array
-    (
-        'id' => '',
-        'label' => '',
-        'layout' => array(),
-        'last-item' => false,
-        'thumbnail' => null,
-        'cycle' => false
-    );
-
-    $settings = wp_parse_args($args, $defaults);
-
-    if (!empty($settings['id'])) {
-        Kontentblocks::getService('registry.areas')->addTemplate($settings);
-    }
-
-}
-
 
 /**
  * Render a single area by id
@@ -104,11 +81,11 @@ function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $mo
     return $renderer->render($echo);
 }
 
-function isActiveArea($areaId, $post_id = null)
+function isActiveArea($areaId, $postId = null)
 {
 
     global $post;
-    $postId = (is_null($post_id) && !is_null($post)) ? $post->ID : $post_id;
+    $postId = (is_null($postId) && !is_null($post)) ? $post->ID : $postId;
 
 
     if (is_null($postId)) {
@@ -139,15 +116,15 @@ function isActiveArea($areaId, $post_id = null)
 
 /**
  * Render attached side(bar) areas
- * @param int $id
+ * @param int $postId
  * @param array $areaSettings
  * @param array $moduleSettings
  */
-function renderSideAreas($id, $areaSettings = array(), $moduleSettings = array())
+function renderSideAreas($postId, $areaSettings = array(), $moduleSettings = array())
 {
     global $post;
 
-    $post_id = (null === $id) ? $post->ID : $id;
+    $post_id = (null === $postId) ? $post->ID : $postId;
     $areas = get_post_meta($post_id, 'active_sidebar_areas', true);
     if (!empty($areas)) {
         foreach ($areas as $area) {
@@ -159,14 +136,14 @@ function renderSideAreas($id, $areaSettings = array(), $moduleSettings = array()
 
 /**
  * @param $context
- * @param $post_id
+ * @param $postId
  * @param array $areaSettings
  * @param array $moduleSettings
  */
-function renderContext($context, $post_id, $areaSettings = array(), $moduleSettings = array())
+function renderContext($context, $postId, $areaSettings = array(), $moduleSettings = array())
 {
     global $post;
-    $postId = (null === $post_id) ? $post->ID : $post_id;
+    $postId = (null === $postId) ? $post->ID : $postId;
     $Environment = Utilities::getPostEnvironment($postId);
     $areas = $Environment->getAreasForContext($context);
     $contextsOrder = $Environment->getDataProvider()->get('_kbcontexts');
@@ -227,13 +204,13 @@ function hasModules($area, $postId)
 
 
 /**
- * @param null $id
+ * @param null $panelId
  * @param null $post_id
  * @return Panels\OptionPanel|null|\WP_Error
  */
-function getPanel($id = null, $post_id = null)
+function getPanel($panelId = null, $post_id = null)
 {
-    return getPostPanel($id, $post_id);
+    return getPostPanel($panelId, $post_id);
 }
 
 /**
@@ -397,6 +374,4 @@ function getFromPostPanel($panelId, $key, $default = '', $postId = null)
     }
 
     return $panelModel->get($key, $default);
-
-
 }

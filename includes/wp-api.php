@@ -17,15 +17,6 @@ function kb_register_area( $args )
 }
 
 
-/**
- * Register area template wrapper
- * @param array $args
- */
-function kb_register_area_template( $args )
-{
-    \Kontentblocks\registerAreaTemplate( $args );
-}
-
 
 /**
  * Render a single area wrapper

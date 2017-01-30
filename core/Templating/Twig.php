@@ -72,6 +72,7 @@ class Twig
         $environment->registerUndefinedFilterCallback(array(__CLASS__, 'undefinedFilters'));
 
         self::addCustomFunctions($environment);
+        do_action('kb.twig.setup.environment', $environment);
 
         return $environment;
     }
