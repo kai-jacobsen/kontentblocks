@@ -292,7 +292,7 @@ class ModuleWorkshop
         if ($fModule->fields) {
             $data = array();
             $config = $fModule->fields->export();
-            foreach (array_values( $config ) as $attrs) {
+            foreach ($config->getFields() as $attrs) {
                 if ($attrs['arrayKey']) {
                     $data[$attrs['arrayKey']][$attrs['key']] = $attrs['std'];
                 } else {

@@ -85,4 +85,11 @@ class FieldExport implements \ArrayAccess
         }
     }
 
+    /**
+     * @return array
+     */
+    public function getFields(){
+        return $this->fields;
+    }
+
 }

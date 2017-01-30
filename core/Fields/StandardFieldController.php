@@ -279,7 +279,7 @@ class StandardFieldController
     }
 
     /**
-     * @return array
+     * @return FieldExport
      */
     public function export()
     {
