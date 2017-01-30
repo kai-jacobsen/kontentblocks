@@ -1,11 +1,11 @@
 <?php
 /*
   Plugin Name: Kontentblocks
-  Plugin URI: http://kontentblocks.de
+  Plugin URI: https://github.com/kai-jacobsen/kontentblocks
   Description: Content modularization framework
-  Version: 0.8.15
+  Version: 0.8.16
   Author: Kai Jacobsen
-  Author URI: https://github.com/kai-jacobsen/kontentblocks
+  Author URI: https://github.com/kai-jacobsen/kontentblocks-plugin
   Text Domain: Kontentblocks
   Domain Path: /languages
   GitHub Plugin URI: https://github.com/kai-jacobsen/kontentblocks-plugin
@@ -47,7 +47,7 @@ use Pimple;
 Class Kontentblocks
 {
 
-    const VERSION = '0.8.15';
+    const VERSION = '0.8.16';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.13';
     const DEBUG = true;
