@@ -185,7 +185,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         if ($this->fields) {
             $data = array();
             $config = $this->fields->export();
-            foreach (array_values($config) as $attrs) {
+            foreach ($config->getFields() as $attrs) {
                 if ($attrs['arrayKey']) {
                     $data[$attrs['arrayKey']][$attrs['key']] = $attrs['std'];
                 } else {
