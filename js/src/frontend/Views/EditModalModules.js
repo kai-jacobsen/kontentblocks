@@ -282,7 +282,7 @@ module.exports = Backbone.View.extend({
 
         var tinymce = window.tinymce;
         var $$ = tinymce.$;
-        $$(document).on('click', function (event) {
+        $(document).on('click', function (event) {
           var id, mode,
             target = $$(event.target);
 
@@ -328,9 +328,10 @@ module.exports = Backbone.View.extend({
         // delayed recalibration
         setTimeout(function () {
           that.$el.show();
+
           that.recalibrate();
           that.LoadingAnimation.hide();
-
+          that.ModuleView.renderStatusBar(that.$el);
           that.$('.kb-template-select').select2({
             templateResult: function (state) {
               if (!state.id) {

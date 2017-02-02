@@ -47,7 +47,8 @@ class GetModuleForm extends AbstractAjaxAction
         $merged = Utilities::arrayMergeRecursive($currentData, $oldData);
 
         $module->updateModuleData($merged);
-        $html = $module->form();
+        $html = "<div class='kb-module--status-bar'></div>";
+        $html .= $module->form();
         $return = array(
             'html' => $html,
 //            'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )

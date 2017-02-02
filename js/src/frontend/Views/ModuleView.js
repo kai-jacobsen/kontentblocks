@@ -5,6 +5,8 @@
 //KB.Backbone.ModuleView
 var ModuleControlsView = require('frontend/Views/ModuleControls/ModuleControls');
 var Check = require('common/Checks');
+var ModuleStatusBarView = require('backend/Views/ModuleStatusBar/ModuleStatusBarView');
+var TemplatesStatus = require('backend/Views/ModuleStatusBar/status/TemplateStatus');
 
 var tplModulePlaceholder = require('templates/frontend/module-placeholder.hbs');
 module.exports = Backbone.View.extend({
@@ -43,7 +45,14 @@ module.exports = Backbone.View.extend({
     "click .kb-module__placeholder": "openOptions",
     "click .editable": "reloadModal",
     "mouseenter.first": "setActive"
-    //"mouseenter.second": "setControlsPosition"
+  },
+  renderStatusBar: function($el){
+    this.ModuleStatusBar = new ModuleStatusBarView({
+      el: $el,
+      parent: this
+    });
+    this.ModuleStatusBar.addItem(new TemplatesStatus({model: this.model, parent: this}));
+
   },
   openOptions: function () {
     this.Controls.EditControl.openForm();

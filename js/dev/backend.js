@@ -1451,7 +1451,7 @@ var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var I18n = require('common/I18n');
 module.exports = BaseView.extend({
-  id: 'draft',
+  // id: 'draft',
   className: 'kb-status-draft',
   events: {
     'click': 'toggleDraft'
@@ -1489,7 +1489,7 @@ var BaseView = require('backend/Views/BaseControlView');
 var tplLoggedInStatus = require('templates/backend/status/loggedin.hbs');
 var SettingsController = require('backend/Views/ModuleStatusBar/status/Settings/SettingsStatusController');
 module.exports = BaseView.extend({
-  id: 'loggedIn',
+  // id: 'loggedIn',
   controller: null,
   className: 'kb-status-loggedin',
   initialize: function(options){
@@ -1512,7 +1512,7 @@ module.exports = BaseView.extend({
 //KB.Backbone.Backend.ModuleDelete
 var BaseView = require('backend/Views/BaseControlView');
 module.exports = BaseView.extend({
-  id: 'name',
+  // id: 'name',
   className: 'kb-status-name  ',
   isValid: function () {
     return true;
@@ -1711,7 +1711,7 @@ var BaseView = require('backend/Views/BaseControlView');
 var tplSettingsStatus = require('templates/backend/status/settings.hbs');
 var SettingsController = require('backend/Views/ModuleStatusBar/status/Settings/SettingsStatusController');
 module.exports = BaseView.extend({
-  id: 'settings',
+  // id: 'settings',
   controller: null,
   className: 'kb-status-settings',
   events: {
@@ -1740,9 +1740,8 @@ module.exports = BaseView.extend({
 },{"backend/Views/BaseControlView":13,"backend/Views/ModuleStatusBar/status/Settings/SettingsStatusController":32,"templates/backend/status/settings.hbs":149}],39:[function(require,module,exports){
 var BaseView = require('backend/Views/BaseControlView');
 var tplTemplatesStatus = require('templates/backend/status/templates.hbs');
-var SettingsController = require('backend/Views/ModuleStatusBar/status/Settings/SettingsStatusController');
 module.exports = BaseView.extend({
-  id: 'settings',
+  // id: 'settings',
   controller: null,
   className: 'kb-status-templates',
   events: {
@@ -1761,19 +1760,10 @@ module.exports = BaseView.extend({
       return view;
     },this);
     this.$el.append(tplTemplatesStatus({show: show, module: this.model.toJSON(), views:views }));
-  },
-  openController: function () {
-    this.getController().open();
-  },
-  getController: function () {
-    if (!this.controller) {
-      this.controller = new SettingsController({moduleView: this.moduleView, model: this.moduleView.model});
-    }
-    return this.controller;
   }
 
 });
-},{"backend/Views/BaseControlView":13,"backend/Views/ModuleStatusBar/status/Settings/SettingsStatusController":32,"templates/backend/status/templates.hbs":153}],40:[function(require,module,exports){
+},{"backend/Views/BaseControlView":13,"templates/backend/status/templates.hbs":153}],40:[function(require,module,exports){
 var ControlsView = require('backend/Views/ModuleControls/ControlsView');
 var tplUiMenu = require('templates/backend/ui-menu.hbs');
 module.exports = ControlsView.extend({

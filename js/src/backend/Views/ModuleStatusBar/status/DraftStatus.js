@@ -4,7 +4,7 @@ var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var I18n = require('common/I18n');
 module.exports = BaseView.extend({
-  id: 'draft',
+  // id: 'draft',
   className: 'kb-status-draft',
   events: {
     'click': 'toggleDraft'

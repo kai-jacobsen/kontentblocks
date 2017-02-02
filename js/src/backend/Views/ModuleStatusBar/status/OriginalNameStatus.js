@@ -1,7 +1,7 @@
 //KB.Backbone.Backend.ModuleDelete
 var BaseView = require('backend/Views/BaseControlView');
 module.exports = BaseView.extend({
-  id: 'name',
+  // id: 'name',
   className: 'kb-status-name  ',
   isValid: function () {
     return true;

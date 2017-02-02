@@ -31,12 +31,12 @@
   font-weight: 100;
 }
 
-li.kb-module-draft{
-  .kb-module__header{
-      border-left: 3px solid $orange;
+li.kb-module-draft {
+  .kb-module__header {
+    border-left: 3px solid $orange;
   }
 
-  .kb-status-draft{
+  .kb-status-draft {
     color: $orange;
     font-weight: bold;
     cursor: pointer;
@@ -64,7 +64,6 @@ li.kb-module-draft{
     border: none;
     box-shadow: none;
     border-bottom: 1px solid $lightblue;
-
 
   }
 }
@@ -120,7 +119,7 @@ li.kb-module-draft{
   }
 }
 
-.kb-disabled{
+.kb-disabled {
   position: relative;
   top: 2px;
   padding: 0 5px;
@@ -148,9 +147,16 @@ li.kb-module-draft{
   }
 }
 
-.kb-tpl-desc{
+.kb-tpl-desc {
   font-size: 11px !important;
   color: $grey-700;
   line-height: 100%;
   font-style: italic;
+}
+
+.kb-field-wrapper.kb-fields-no-options {
+  padding: $halfpadding;
+  p {
+    font-size: 12px;
+  }
 }

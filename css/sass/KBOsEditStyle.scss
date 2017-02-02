@@ -69,6 +69,8 @@
 
 body.onsite-editing {
 
+
+
   .module {
     min-height: 30px;
   }
@@ -139,6 +141,7 @@ body.onsite-editing {
 }
 
 .os-controls-container {
+
 
   .controls-title {
     font-weight: 100;
@@ -236,7 +239,6 @@ body.onsite-editing {
 
 #onsite-modal * {
   box-sizing: border-box;
-
 }
 
 //#onsite-modal .kb-field *, #onsite-modal .kb-template-selector--wrapper * {
@@ -271,6 +273,11 @@ body.onsite-editing {
   h1, h2, h3, h4, h5, h6 {
     font-family: Open-Sans, sans-serif !important;
   }
+
+  .kb-module--status-bar-list{
+    margin: 0 !important;
+  }
+
 
   .controls-title {
     font-size: 12px;
@@ -389,7 +396,7 @@ body.onsite-editing {
     label {
       font-size: 12px !important;
       color: #999 !important;
-      font-family: 'Open Sans' !important;
+      font-family: 'Open Sans', sans-serif !important;
     }
 
     input[type=button], .button {
