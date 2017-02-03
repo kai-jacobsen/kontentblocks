@@ -1,0 +1,15 @@
+.kb-field--date-multiple-control{
+  display: inline-block;
+  color: $dark-grey;
+
+  &.kbf-sort{
+    cursor: move;
+  }
+}
+.kb-field--date-multiple-item{
+  margin-bottom: 12px;
+
+  input{
+    display: inline-block;
+  }
+}

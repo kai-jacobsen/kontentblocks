@@ -1,0 +1,10 @@
+<div class="kb-field--date-multiple-item">
+    <div class="kb-field--date-multiple-control kbf-sort"><span class="dashicons dashicons-menu hide"></span></div>
+    <input type='text'  name='{{ model.baseId }}[{{ model.uniqueId }}][human]'
+           value='{{ model.value.human }}' class='kb-datetimepicker'>
+    <input type='hidden' name='{{ model.baseId }}[{{ model.uniqueId }}][unix]' value='{{ model.value.unix }}'
+           class='kb-datetimepicker--js-unix'>
+    <input type='hidden' name='{{ model.baseId }}[{{ model.uniqueId }}][sql]' value='{{ model.value.sql }}'
+           class='kb-datetimepicker--js-sql'>
+    <div data-kbfaction="delete" class="kb-field--text-multiple-control kbf-delete"><span class="dashicons dashicons-trash" ></span></div>
+</div>

@@ -120,7 +120,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
                 add_action($this->hook, array($this, 'prepForm'), $this->args['priority']);
             }
         }
-        add_action("save_post", array($this, 'saveCallback'), 10, 2);
+        add_action("save_post", array($this, 'saveCallback'), 90, 2);
         add_action('wp_footer', array($this, 'toJSON'));
     }
 

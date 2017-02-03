@@ -129,11 +129,20 @@ class StandardFieldSection implements Exportable
      */
     public function addField($type, $key, $args = array())
     {
+
+
+        /** @var \Kontentblocks\Fields\FieldRegistry $registry */
+        $registry = Kontentblocks::getService('registry.fields');
+
         // don't init admin-only fields
         if (isset($args['adminOnly']) && ($args['adminOnly'] === true)) {
             if (!is_admin()) {
                 return $this;
             }
+        }
+
+        if (!$registry->validType($type)){
+            return $this;
         }
 
         if (!$this->fieldExists($key)) {
@@ -143,8 +152,6 @@ class StandardFieldSection implements Exportable
                 $args['priority'] = $this->getPriorityIndex();
             }
 
-            /** @var \Kontentblocks\Fields\FieldRegistry $registry */
-            $registry = Kontentblocks::getService('registry.fields');
             $field = $registry->getField($type, $this->baseId, $groupkey, $key, $args);
             $field->setController($this->controller);
             if (!$field) {

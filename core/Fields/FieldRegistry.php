@@ -2,8 +2,6 @@
 
 namespace Kontentblocks\Fields;
 
-use Pimple\Container;
-
 /**
  *
  * Class FieldRegistry
