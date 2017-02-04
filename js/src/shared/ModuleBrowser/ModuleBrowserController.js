@@ -63,16 +63,16 @@ module.exports = Backbone.View.extend({
   events: {
     'click .close-browser': 'close',
     'click .module-browser--switch__list-view': 'toggleViewMode',
-    'click .module-browser--switch__excerpt-view': 'toggleViewMode'
+    'click .module-browser--switch__grid-view': 'toggleViewMode'
   },
   subviews: {},
   toggleViewMode: function () {
-    jQuery('.module-browser-wrapper', this.$el).toggleClass('module-browser--list-view module-browser--excerpt-view');
+    jQuery('.module-browser-wrapper', this.$el).toggleClass('module-browser--list-view module-browser--grid-view');
     var abbr = 'mdb_' + this.area.model.get('id') + '_state';
     var curr = store.get(abbr);
     if (curr == 'list') {
-      this.viewMode = 'excerpt';
-      store.set(abbr, 'excerpt');
+      this.viewMode = 'grid';
+      store.set(abbr, 'grid');
     } else {
       this.viewMode = 'list';
       store.set(abbr, 'list');
@@ -100,7 +100,7 @@ module.exports = Backbone.View.extend({
     if (this.viewMode === 'list') {
       return 'module-browser--list-view';
     } else {
-      return 'module-browser--excerpt-view';
+      return 'module-browser--grid-view';
     }
   },
   bindHandlers: function () {

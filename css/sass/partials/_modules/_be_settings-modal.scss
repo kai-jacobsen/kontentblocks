@@ -71,6 +71,12 @@
 .kbms-field-wrap{
   padding:  $halfpadding $fullpadding;
   background: #f9f9f9;
+  border-bottom: 1px solid $grey-400;
+
+  &:first-child{
+    border-top: 1px solid $grey-400;
+
+  }
 }
 
 .kb-status-settings--tab-nav-list{

@@ -21,7 +21,7 @@ module.exports = Backbone.View.extend({
   },
   showPlaceholder: function () {
     // if (_.size(this.attachedModuleViews) === 0) {
-      this.$el.append(tplPlaceholder());
+      this.$el.append(tplPlaceholder({i18n: KB.i18n}));
     // }
   },
   removePlaceholder: function () {

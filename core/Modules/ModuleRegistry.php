@@ -162,6 +162,7 @@ class ModuleRegistry
     public function setupJSON()
     {
         foreach ($this->modules as $classname => $moduleArgs) {
+            unset($moduleArgs['settings']['path']);
             Kontentblocks::getService('utility.jsontransport')->registerData(
                 'ModuleDefinitions',
                 $classname,

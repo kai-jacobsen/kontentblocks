@@ -13,7 +13,7 @@ module.exports = Backbone.View.extend({
     this.listenTo(this.model, 'remove', this.dispose);
     this.moduleView = options.moduleView;
     this.$el.attr('id', this.model.get('mid') + '-settings-modal');
-    this.$el.append(tplSettingsModal({model: this.model.toJSON()}));
+    this.$el.append(tplSettingsModal({model: this.model.toJSON(), i18n: KB.i18n}));
     this.tabController = new SettingsTabController({
       controller: this,
       model: this.model,
@@ -22,13 +22,13 @@ module.exports = Backbone.View.extend({
     this.setupTabItems();
   },
   setupTabItems: function () {
-    this.tabController.addItem({id: 'visibility', 'label': 'Visibility'}, new LoggedInOnly({
+    this.tabController.addItem({id: 'visibility', 'label': KB.i18n.Modules.settings.label.visibility}, new LoggedInOnly({
       model: this.model,
       controller: this,
       bindId: 'loggedinonly'
     }));
 
-    this.tabController.addItem({id: 'details', 'label': 'Details'}, new WrapperClasses({
+    this.tabController.addItem({id: 'details', 'label': KB.i18n.Modules.settings.label.details}, new WrapperClasses({
       model: this.model,
       controller: this,
       bindId: 'wrapperclasses'

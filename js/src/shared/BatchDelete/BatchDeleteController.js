@@ -2,6 +2,7 @@ var tplBatchDelete = require('templates/backend/batch-delete.hbs');
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var TinyMCE = require('common/TinyMCE');
+var i18n = require('common/I18n');
 var BatchDeleteController = Backbone.View.extend({
   collection: {},
   visible: false,
@@ -14,7 +15,7 @@ var BatchDeleteController = Backbone.View.extend({
     this.render();
   },
   render: function () {
-    this.$el.append(tplBatchDelete());
+    this.$el.append(tplBatchDelete({i18n: i18n.getString('EditScreen.batchdelete')}));
     jQuery('body').append(this.$el);
   },
   add: function (control) {

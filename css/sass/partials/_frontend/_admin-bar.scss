@@ -13,11 +13,18 @@ body.kb-editcontrols-show {
   }
 
   .kb-area__empty-placeholder{
-    padding: 12px;
+    padding: 8px;
     text-align: center;
     cursor: pointer;
-    outline: 1px dashed $blue;
+    outline: 1px dotted $lowgrey;
+    outline-offset: -2px;
+    opacity: 0.5;
+    transition: all .3s ease-in;
 
+    &:hover{
+      opacity: 1;
+      padding: 16px 8px;
+    }
   }
 
   .module, .single-module, .module-merged{

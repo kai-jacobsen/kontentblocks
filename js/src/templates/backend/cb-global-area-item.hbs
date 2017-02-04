@@ -1,6 +1,6 @@
 <div class="dashicons dashicons-plus"></div>
 <div class="kb-global-area-item">
-    <h4>{{ name }} <span>(Contains {{ meta.modules }} modules)</span></h4>
-    <p>{{ description }}</p>
-    <a target="_blank" class="kb-button-small" href="{{ meta.editLink }}">View</a>
+    <h4>{{ item.name }} <span>({{ item.meta.modules }} {{ i18n.Common.modules }})</span></h4>
+    <p>{{ item.description }}</p>
+    <a target="_blank" class="kb-button-small" href="{{ item.meta.editLink }}">{{ i18n.Common.view }}</a>
 </div>

@@ -1,5 +1,5 @@
 {{#if model.overrides.loggedinonly }}
-    <span class="kb-module--status-label">Visible for</span><br><span>Logged in only</span>
+    <span class="kb-module--status-label">{{ i18n.Modules.status.visibleFor}}</span><br><span>{{ i18n.Modules.status.loggedIn }}</span>
 {{ else }}
-    <span class="kb-module--status-label">Visible for</span><br><span>Anyone</span>
+    <span class="kb-module--status-label">{{ i18n.Modules.status.visibleFor}}</span><br><span>{{ i18n.Modules.status.anyone }}</span>
 {{/if}}

@@ -1,6 +1,5 @@
 var BaseView = require('backend/Views/BaseControlView');
-var tplSettingsStatus = require('templates/backend/status/settings.hbs');
-var SettingsController = require('backend/Views/ModuleStatusBar/status/Settings/SettingsStatusController');
+var SettingsController = require('shared/ModuleStatusBar/status/Settings/SettingsStatusController');
 module.exports = BaseView.extend({
   // id: 'settings',
   controller: null,
@@ -15,7 +14,10 @@ module.exports = BaseView.extend({
     return true;
   },
   render: function () {
-    this.$el.append(tplSettingsStatus({}));
+    this.$el.append('' +
+      '<span class="kb-module--status-label kb-cursor-pointer">Settings</span>' +
+      '<br>' +
+      '<span class="dashicons dashicons-admin-generic kb-cursor-pointer"></span>');
   },
   openController: function(){
     this.getController().open();

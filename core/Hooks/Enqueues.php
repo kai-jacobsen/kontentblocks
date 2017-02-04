@@ -89,35 +89,6 @@ class Enqueues
             true
         );
 
-
-        // Common & Util. Functions
-//        wp_register_script(
-//            'kb-common',
-//            KB_PLUGIN_URL . 'js/' . $folder . '/common' . $suffix . '.js',
-//            array( 'kb-plugins' ),
-//            null,
-//            true
-//        );
-
-
-        // FieldsAPI
-//        wp_register_script(
-//            'kb-fields-api',
-//            KB_PLUGIN_URL . 'js/' . $folder . '/fieldsAPI' . $suffix . '.js',
-//            array(),
-//            null,
-//            true
-//        );
-
-//        // fields handler
-//        wp_register_script(
-//            'kb-refields',
-//            KB_PLUGIN_URL . 'js/' . $folder . '/refields' . $suffix . '.js',
-//            array('kb-fields-api', 'kb-media-ext'),
-//            null,
-//            true
-//        );
-
         // Backend 'controller'
         wp_register_script(
             'kb-backend',

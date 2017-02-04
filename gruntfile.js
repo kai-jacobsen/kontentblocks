@@ -63,7 +63,7 @@ module.exports = function (grunt) {
         src: ['js/src/wpMediaExt/**/*.js'],
         dest: 'js/tmp/wpMediaExt.concat.js',
         nonull: true
-      }
+      },
     },
     browserify: {
       options: {
@@ -78,18 +78,10 @@ module.exports = function (grunt) {
         src: 'js/src/frontend/FrontendController.js',
         dest: 'js/dev/frontend.js'
       },
-      //fieldsAPI: {
-      //  src: 'js/src/fieldsAPI/FieldsAPIController.js',
-      //  dest: 'js/dev/fieldsAPI.js'
-      //},
       backend: {
         src: 'js/src/backend/BackendController.js',
         dest: 'js/dev/backend.js'
       },
-      //refields: {
-      //  src: 'js/src/fields/RefieldsController.js',
-      //  dest: 'js/dev/refields.js'
-      //},
       extensions: {
         src: 'js/src/extensions/ExtensionsController.js',
         dest: 'js/dev/extensions.js'
@@ -115,7 +107,6 @@ module.exports = function (grunt) {
       dev: {
         options: {                       // Target options
           outputStyle: 'expanded',
-          //includePaths: ['bower_components/foundation/scss'],
           sourceMap: false,
           sourceComments: true
         },

@@ -33,7 +33,6 @@ module.exports = Backbone.Model.extend({
     this.set('area', area.get('id'));
     this.Area = area;
     this.subscribeToArea(area);
-    //this.areaChanged();
   },
   areaChanged: function () {
     // @see backend::views:ModuleView.js

@@ -20,7 +20,6 @@ module.exports = BaseView.extend({
       $parent.addClass('kb-module-draft');
     } else {
       $parent.removeClass('kb-module-draft');
-
     }
   },
   toggleDraft: function () {

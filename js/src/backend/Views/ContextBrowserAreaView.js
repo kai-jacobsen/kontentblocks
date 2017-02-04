@@ -6,20 +6,20 @@ module.exports = Backbone.View.extend({
   tagName: 'li',
   initialize: function (options) {
     this.Browser = options.Browser;
-    this.listenTo(this.model, 'change:settings',this.visibility)
+    this.listenTo(this.model, 'change:settings', this.visibility)
   },
   events: {
     'click': 'add'
   },
-  visibility: function(){
-      if (this.model.get('settings').attached){
-        this.$el.hide();
-      } else {
-        this.$el.show();
-      }
+  visibility: function () {
+    if (this.model.get('settings').attached) {
+      this.$el.hide();
+    } else {
+      this.$el.show();
+    }
   },
   render: function () {
-    this.$el.append(tplGlobalAreaItem(this.model.toJSON()));
+    this.$el.append(tplGlobalAreaItem({item: this.model.toJSON(), i18n: KB.i18n}));
     this.$el.appendTo(this.Browser.$list);
     this.visibility();
   },

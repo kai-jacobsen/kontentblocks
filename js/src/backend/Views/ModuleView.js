@@ -1,7 +1,7 @@
 //KB.Backbone.Backend.ModuleView
 var ModuleControlsView = require('backend/Views/ModuleControls/ControlsView');
 var ModuleUiView = require('backend/Views/ModuleUi/ModuleUiView');
-var ModuleStatusBarView = require('backend/Views/ModuleStatusBar/ModuleStatusBarView');
+var ModuleStatusBarView = require('shared/ModuleStatusBar/ModuleStatusBarView');
 var DeleteControl = require('backend/Views/ModuleControls/controls/DeleteControl');
 var DuplicateControl = require('backend/Views/ModuleControls/controls/DuplicateControl');
 var SaveControl = require('backend/Views/ModuleControls/controls/SaveControl');
@@ -10,11 +10,11 @@ var MoveControl = require('backend/Views/ModuleUi/controls/MoveControl');
 var ToggleControl = require('backend/Views/ModuleUi/controls/ToggleControl');
 var FullscreenControl = require('backend/Views/ModuleUi/controls/FullscreenControl');
 var DisabledControl = require('backend/Views/ModuleUi/controls/DisabledControl');
-var DraftStatus = require('backend/Views/ModuleStatusBar/status/DraftStatus');
-var OriginalNameStatus = require('backend/Views/ModuleStatusBar/status/OriginalNameStatus');
-var SettingsStatus = require('backend/Views/ModuleStatusBar/status/SettingsStatus');
-var LoggedInStatus = require('backend/Views/ModuleStatusBar/status/LoggedInStatus');
-var TemplatesStatus = require('backend/Views/ModuleStatusBar/status/TemplateStatus');
+var DraftStatus = require('shared/ModuleStatusBar/status/DraftStatus');
+var OriginalNameStatus = require('shared/ModuleStatusBar/status/OriginalNameStatus');
+var SettingsStatus = require('shared/ModuleStatusBar/status/SettingsStatus');
+var LoggedInStatus = require('shared/ModuleStatusBar/status/LoggedInStatus');
+var TemplatesStatus = require('shared/ModuleStatusBar/status/TemplateStatus');
 
 
 var Checks = require('common/Checks');

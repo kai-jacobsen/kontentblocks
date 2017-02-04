@@ -1,198 +1,206 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kontentblocks 1.0.0\n"
-"POT-Creation-Date: 2016-01-06 01:19+0100\n"
-"PO-Revision-Date: 2016-01-06 01:20+0100\n"
+"POT-Creation-Date: 2017-02-04 13:29+0100\n"
+"PO-Revision-Date: 2017-02-04 13:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: Kai Jacobsen\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.9\n"
 "X-Poedit-KeywordsList: __;_e;_x\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ../core/Language/.\n"
 "X-Poedit-SearchPath-1: ../core/.\n"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:365
-#: ../core/./Backend/Dynamic/DynamicAreas.php:367
-#: ../core/./Backend/Dynamic/DynamicAreas.php:368
+#: ../core/./Ajax/Actions/CropImage.php:40
+msgid "Image could not be processed. Please go back and try again."
+msgstr ""
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:165
+msgid "Dynamic"
+msgstr "Dynamisch"
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:381
+#: ../core/./Backend/Dynamic/DynamicAreas.php:383
+#: ../core/./Backend/Dynamic/DynamicAreas.php:384
 msgid "Areas"
 msgstr "Areas"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:366
+#: ../core/./Backend/Dynamic/DynamicAreas.php:382
 msgid "Area"
 msgstr "Area"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:369
+#: ../core/./Backend/Dynamic/DynamicAreas.php:385
 msgid "Add New"
 msgstr "Hinzufügen"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:370
+#: ../core/./Backend/Dynamic/DynamicAreas.php:386
 msgid "Add New Area"
 msgstr "Neue Area hinzufügen"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:371
+#: ../core/./Backend/Dynamic/DynamicAreas.php:387
 msgid "New Area"
 msgstr "Neue Area"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:372
+#: ../core/./Backend/Dynamic/DynamicAreas.php:388
 msgid "Edit Area"
 msgstr "Area bearbeiten"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:373
+#: ../core/./Backend/Dynamic/DynamicAreas.php:389
 msgid "View Area"
 msgstr "Area ansehen"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:374
+#: ../core/./Backend/Dynamic/DynamicAreas.php:390
 msgid "All Areas"
 msgstr "Alle Areas"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:375
+#: ../core/./Backend/Dynamic/DynamicAreas.php:391
 msgid "Search Areas"
 msgstr "Areas durchsuchen"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:376
+#: ../core/./Backend/Dynamic/DynamicAreas.php:392
 msgid "Parent Area:"
 msgstr "Elternarea"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:377
+#: ../core/./Backend/Dynamic/DynamicAreas.php:393
 msgid "No Areas found."
 msgstr "Keine Areas gefunden."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:378
+#: ../core/./Backend/Dynamic/DynamicAreas.php:394
 msgid "No Areas found in Trash."
 msgstr "Keine Areas im Papierkorb."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:414
-#: ../core/./Backend/Dynamic/DynamicAreas.php:417
+#: ../core/./Backend/Dynamic/DynamicAreas.php:430
+#: ../core/./Backend/Dynamic/DynamicAreas.php:433
 msgid "Area updated."
 msgstr "Area wurde aktualisiert."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:415
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:407
+#: ../core/./Backend/Dynamic/DynamicAreas.php:431
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:335
 msgid "Custom field updated."
 msgstr "Custom field aktualisiert."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:416
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:408
+#: ../core/./Backend/Dynamic/DynamicAreas.php:432
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:336
 msgid "Custom field deleted."
 msgstr "Custom field gelöscht."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:420
+#: ../core/./Backend/Dynamic/DynamicAreas.php:436
 #, php-format
 msgid "Area restored to revision from %s"
 msgstr ""
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:423
+#: ../core/./Backend/Dynamic/DynamicAreas.php:439
 msgid "Area published."
 msgstr "Area wurde veröffentlicht."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:424
+#: ../core/./Backend/Dynamic/DynamicAreas.php:440
 msgid "Area saved."
 msgstr "Area wurde gespeichert."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:425
+#: ../core/./Backend/Dynamic/DynamicAreas.php:441
 msgid "Area submitted."
-msgstr ""
+msgstr "Area abgesendet"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:427
+#: ../core/./Backend/Dynamic/DynamicAreas.php:443
 #, php-format
 msgid "Area scheduled for: <strong>%1$s</strong>."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:429
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:424
+#: ../core/./Backend/Dynamic/DynamicAreas.php:445
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:352
 msgid "M j, Y @ G:i"
 msgstr ""
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:431
+#: ../core/./Backend/Dynamic/DynamicAreas.php:447
 msgid "Area draft updated."
-msgstr ""
+msgstr "Area Entwurf aktualisiert"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:357
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:358
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:285
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:286
 msgid "Global Module"
 msgstr "Globales Modul"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:359
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:360
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:287
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:288
 #: ../core/./Language/packages/i18n_Modules.php:53
-#: ../core/./Utils/Utilities.php:457
+#: ../core/./Utils/Utilities.php:516
 #: ../core/Language/./packages/i18n_Modules.php:53
 msgid "Global Modules"
 msgstr "Globale Module"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:361
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:289
 msgid "add New"
 msgstr "neu hinzufügen"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:362
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:290
 msgid "add New global module"
 msgstr "neues globales Modul hinzufügen"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:363
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:291
 msgid "new global module"
 msgstr "neues globales Modul"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:364
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:292
 msgid "edit global module"
 msgstr "globales Modul bearbeiten"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:365
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:293
 msgid "view global module"
 msgstr "globales Modul ansehen"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:366
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:294
 msgid "all global modules"
 msgstr "alle globalen Module"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:367
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:295
 msgid "search global modules"
 msgstr "globale Module durchsuchen"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:368
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:296
 msgid "parent global modules:"
 msgstr ""
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:369
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:297
 msgid "No global modules found."
 msgstr "Keine globalen Module gefunden"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:370
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:298
 msgid "No global modules found in Trash."
 msgstr "Keine globalen Module im Papierkorb"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:406
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:409
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:334
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:337
 msgid "global modules updated."
 msgstr "globales Modul wurde aktualisiert"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:413
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:341
 #, php-format
 msgid "global module restored to revision from %s"
 msgstr ""
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:418
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:346
 msgid "global module published."
 msgstr "globales Modul veröffentlicht."
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:419
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:347
 msgid "global module saved."
 msgstr "globales Modul gespeichert"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:420
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:348
 msgid "global module submitted."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:422
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:350
 #, php-format
 msgid "global module scheduled for: <strong>%1$s</strong>."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:426
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:354
 msgid "global module draft updated."
 msgstr ""
 
@@ -220,15 +228,15 @@ msgstr "Footer"
 msgid "Allowed Image Files"
 msgstr "Erlaubte Bilddateien"
 
-#: ../core/./Hooks/Enqueues.php:367
+#: ../core/./Hooks/Enqueues.php:335
 msgid "Clear"
 msgstr "Reset"
 
-#: ../core/./Hooks/Enqueues.php:368
+#: ../core/./Hooks/Enqueues.php:336
 msgid "Default"
 msgstr "Standardvorlage"
 
-#: ../core/./Hooks/Enqueues.php:369
+#: ../core/./Hooks/Enqueues.php:337
 msgid "Select Color"
 msgstr "Farbe wählen"
 
@@ -355,6 +363,21 @@ msgstr "Name"
 msgid "Page Templates"
 msgstr "Seitenvorlagen"
 
+#: ../core/./Language/packages/i18n_Common.php:12
+#: ../core/Language/./packages/i18n_Common.php:12
+msgid "Modules"
+msgstr "Module"
+
+#: ../core/./Language/packages/i18n_Common.php:13
+#: ../core/Language/./packages/i18n_Common.php:13
+msgid "duplicate"
+msgstr "duplizieren"
+
+#: ../core/./Language/packages/i18n_Common.php:14
+#: ../core/Language/./packages/i18n_Common.php:14
+msgid "move"
+msgstr "verschieben"
+
 #: ../core/./Language/packages/i18n_EditScreen.php:6
 #: ../core/Language/./packages/i18n_EditScreen.php:6
 msgid "This action will erase all data. Are you sure?"
@@ -369,6 +392,36 @@ msgstr "Ja, löschen."
 #: ../core/Language/./packages/i18n_EditScreen.php:8
 msgid "No, keep module"
 msgstr "Modul behalten"
+
+#: ../core/./Language/packages/i18n_EditScreen.php:11
+#: ../core/Language/./packages/i18n_EditScreen.php:11
+msgid "Multiple modules are selected"
+msgstr "mehrere Module sind ausgewählt"
+
+#: ../core/./Language/packages/i18n_EditScreen.php:12
+#: ../core/Language/./packages/i18n_EditScreen.php:12
+msgid "Delete all"
+msgstr "Alle entfernen"
+
+#: ../core/./Language/packages/i18n_EditScreen.php:13
+#: ../core/Language/./packages/i18n_EditScreen.php:13
+msgid "Deselect all"
+msgstr "Auswahl aufheben"
+
+#: ../core/./Language/packages/i18n_EditScreen.php:16
+#: ../core/Language/./packages/i18n_EditScreen.php:16
+msgid "Global areas assigned to this context"
+msgstr "Globale Areas für diesen Bereich"
+
+#: ../core/./Language/packages/i18n_EditScreen.php:17
+#: ../core/Language/./packages/i18n_EditScreen.php:17
+msgid "add global areas"
+msgstr "globale Areas hinzufügen"
+
+#: ../core/./Language/packages/i18n_EditScreen.php:20
+#: ../core/Language/./packages/i18n_EditScreen.php:20
+msgid "add module"
+msgstr "Modul hinzufügen"
 
 #: ../core/./Language/packages/i18n_ExtPageSettings.php:6
 #: ../core/Language/./packages/i18n_ExtPageSettings.php:6
@@ -589,6 +642,43 @@ msgstr "Modulname"
 msgid "Chose the module type"
 msgstr "Modultyp"
 
+#: ../core/./Language/packages/i18n_Modules.php:57
+#: ../core/Language/./packages/i18n_Modules.php:57
+msgid "Visible for"
+msgstr "sichtbar für"
+
+#: ../core/./Language/packages/i18n_Modules.php:58
+#: ../core/Language/./packages/i18n_Modules.php:58
+msgid "Logged in users"
+msgstr "angemeldete Benutzer"
+
+#: ../core/./Language/packages/i18n_Modules.php:59
+#: ../core/Language/./packages/i18n_Modules.php:59
+msgid "Anyone"
+msgstr "Jeden"
+
+#: ../core/./Language/packages/i18n_Modules.php:62
+#: ../core/Language/./packages/i18n_Modules.php:62
+msgid "Additional wrapper classes"
+msgstr "zusätzliche CSS Container-Klassen"
+
+#: ../core/./Language/packages/i18n_Modules.php:63
+#: ../core/./Language/packages/i18n_Modules.php:66
+#: ../core/Language/./packages/i18n_Modules.php:63
+#: ../core/Language/./packages/i18n_Modules.php:66
+msgid "Visibility"
+msgstr "Sichtbarkeit"
+
+#: ../core/./Language/packages/i18n_Modules.php:64
+#: ../core/Language/./packages/i18n_Modules.php:64
+msgid "Visible for logged-in users only"
+msgstr "Sichtbar für angemeldete Benutzer"
+
+#: ../core/./Language/packages/i18n_Modules.php:67
+#: ../core/Language/./packages/i18n_Modules.php:67
+msgid "Details"
+msgstr "Details"
+
 #: ../core/./Language/packages/i18n_Refields.php:9
 #: ../core/Language/./packages/i18n_Refields.php:9
 msgid "Select"
@@ -781,19 +871,19 @@ msgstr ""
 "Es gibt ungespeicherte Änderungen. <span class=\"kb-button\">Jetzt "
 "speichern</span>"
 
-#: ../core/./Utils/Utilities.php:450
+#: ../core/./Utils/Utilities.php:509
 msgid "Standard"
 msgstr "Standard"
 
-#: ../core/./Utils/Utilities.php:454
+#: ../core/./Utils/Utilities.php:513
 msgid "Media"
 msgstr "Media"
 
-#: ../core/./Utils/Utilities.php:455
+#: ../core/./Utils/Utilities.php:514
 msgid "Spezial"
 msgstr "Spezial"
 
-#: ../core/./Utils/Utilities.php:456
+#: ../core/./Utils/Utilities.php:515
 msgid "System"
 msgstr "System"
 
@@ -867,9 +957,6 @@ msgstr "System"
 
 #~ msgid "edit"
 #~ msgstr "bearbeite"
-
-#~ msgid "add module"
-#~ msgstr "Module hinzufügen"
 
 #~ msgid "Main content column of this page"
 #~ msgstr "Hauptinhaltsspalte der Seite"

@@ -5,8 +5,8 @@
 //KB.Backbone.ModuleView
 var ModuleControlsView = require('frontend/Views/ModuleControls/ModuleControls');
 var Check = require('common/Checks');
-var ModuleStatusBarView = require('backend/Views/ModuleStatusBar/ModuleStatusBarView');
-var TemplatesStatus = require('backend/Views/ModuleStatusBar/status/TemplateStatus');
+var ModuleStatusBarView = require('shared/ModuleStatusBar/ModuleStatusBarView');
+var TemplatesStatus = require('shared/ModuleStatusBar/status/TemplateStatus');
 
 var tplModulePlaceholder = require('templates/frontend/module-placeholder.hbs');
 module.exports = Backbone.View.extend({

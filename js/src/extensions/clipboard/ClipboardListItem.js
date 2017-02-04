@@ -6,7 +6,7 @@ module.exports = ListItem.extend({
 // render list
   className: 'modules-list-item clipboard-list-item',
   render: function (el) {
-    this.$el.html(tplListItem({module: this.model.toJSON()}));
+    this.$el.html(tplListItem({module: this.model.toJSON(), i18n: KB.i18n}));
     el.append(this.$el);
   },
   events:{

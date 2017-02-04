@@ -23,7 +23,7 @@ module.exports = Backbone.View.extend({
   },
   setupElements: function () {
     this.$header = this.$('.kb-context__header');
-    this.$header.append(tplContextHeader({}));
+    this.$header.append(tplContextHeader({i18n: KB.i18n}));
     this.$button = jQuery('.kb-button-small', this.$header);
     this.$inner = this.$('.kb-context__inner');
     this.$overlay = jQuery('<div class="kb-context-inner--overlay"><span>' + this.model.get('title') + '</span><br>click to show</div>');

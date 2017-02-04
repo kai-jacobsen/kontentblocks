@@ -845,7 +845,7 @@ module.exports = ListItem.extend({
 // render list
   className: 'modules-list-item clipboard-list-item',
   render: function (el) {
-    this.$el.html(tplListItem({module: this.model.toJSON()}));
+    this.$el.html(tplListItem({module: this.model.toJSON(), i18n: KB.i18n}));
     el.append(this.$el);
   },
   events:{
@@ -961,7 +961,10 @@ module.exports = Backbone.View.extend({
     // flag the first
     var first = false;
     this.$el.empty();
-    _.each(this.cat.model.get('modules'), function (module) {
+    var modules = this.cat.model.get('modules');
+    console.log(modules);
+    modules.sort(function(a,b) {return (a.get('settings').name > b.get('settings').name) ? 1 : ((b.get('settings').name > a.get('settings').name) ? -1 : 0);} );
+    _.each(modules, function (module) {
       that.subviews[module.cid] = new ListItem({
         model: module,
         parent: that,
@@ -983,7 +986,7 @@ module.exports = Backbone.View.extend({
 var tplTemplateListItem = require('templates/backend/modulebrowser/module-template-list-item.hbs');
 var tplListItem = require('templates/backend/modulebrowser/module-list-item.hbs');
 module.exports = Backbone.View.extend({
-  tagName: 'li',
+  tagName: 'div',
   className: 'modules-list-item',
   initialize: function (options) {
     this.options = options || {};
@@ -996,9 +999,9 @@ module.exports = Backbone.View.extend({
   // render list
   render: function (el) {
     if (this.model.get('globalModule')) {
-      this.$el.html(tplTemplateListItem({module: this.model.toJSON()}));
+      this.$el.html(tplTemplateListItem({module: this.model.toJSON(), i18n: KB.i18n}));
     } else {
-      this.$el.html(tplListItem({module: this.model.toJSON()}));
+      this.$el.html(tplListItem({module: this.model.toJSON(),i18n: KB.i18n}));
     }
     el.append(this.$el);
   },
@@ -1041,7 +1044,11 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.postObject : stack1)) != null ? stack1.ID : stack1), depth0))
     + "<br>\n    <em>Post Title:</em>"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.postObject : stack1)) != null ? stack1.post_title : stack1), depth0))
-    + "<br>\n</p>\n<div class=\"kb-js-duplicate-clipboard kb-clipboard-action\">duplicate</div>\n<div class=\"kb-js-move-clipboard kb-clipboard-action\">move</div>";
+    + "<br>\n</p>\n<div class=\"kb-js-duplicate-clipboard kb-clipboard-action\">"
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.Common : stack1)) != null ? stack1.duplicate : stack1), depth0))
+    + "</div>\n<div class=\"kb-js-move-clipboard kb-clipboard-action\">"
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.Common : stack1)) != null ? stack1.move : stack1), depth0))
+    + "</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":37}],25:[function(require,module,exports){
@@ -1078,11 +1085,11 @@ var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
-  return "<div class=\"dashicons dashicons-plus kb-js-create-module\"></div>\n<h4>"
+  return "<div class=\"dashicons dashicons-plus kb-js-create-module\"></div>\n<div class=\"kbmb-hl\">"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0))
-    + "</h4>\n<p class=\"description\">"
+    + "</div>\n<div class=\"kbmb-description\">"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.description : stack1), depth0))
-    + "</p>";
+    + "</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":37}],28:[function(require,module,exports){
@@ -1091,9 +1098,9 @@ var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1;
 
-  return "<div class=\"dashicons dashicons-plus kb-js-create-module\"></div>\n<h4>"
+  return "<div class=\"dashicons dashicons-plus kb-js-create-module\"></div>\n<div class=\"kbmb-hl\">"
     + this.escapeExpression(this.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.parentObject : stack1)) != null ? stack1.post_title : stack1), depth0))
-    + "</h4>";
+    + "</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":37}],29:[function(require,module,exports){

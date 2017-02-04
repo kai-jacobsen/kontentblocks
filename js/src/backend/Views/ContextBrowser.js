@@ -26,7 +26,7 @@ module.exports = Backbone.View.extend({
   },
   setupElements: function () {
     this.$backdrop = jQuery("<div class='kb-global-areas-backdrop'></div>");
-    this.$el.append(tplContextBrowser());
+    this.$el.append(tplContextBrowser({i18n: KB.i18n}));
     this.$list = this.$(".kb-global-areas-list");
   },
   open: function () {

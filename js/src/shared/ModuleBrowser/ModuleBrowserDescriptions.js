@@ -15,9 +15,9 @@ module.exports = Backbone.View.extend({
     var that = this;
     this.$el.empty();
     if (this.model.get('template')) {
-      this.$el.html(tplModuleTemplateDescription( {module: this.model.toJSON()}));
+      this.$el.html(tplModuleTemplateDescription( {module: this.model.toJSON(), i18n: KB.i18n}));
     } else {
-      this.$el.html(tplModuleDescription({module: this.model.toJSON()}));
+      this.$el.html(tplModuleDescription({module: this.model.toJSON(), i18n: KB.i18n}));
     }
     if (this.model.get('settings').poster !== false) {
       this.$el.append(tplModulePoster({module: this.model.toJSON()}));

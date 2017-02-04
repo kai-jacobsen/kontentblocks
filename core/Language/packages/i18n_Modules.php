@@ -52,6 +52,21 @@
             'moduleType' => __('Chose the module type', 'Kontentblocks'),
             'menuTitle' => __('Global Modules', 'Kontentblocks'),
 
+        ),
+        'status' => array(
+            'visibleFor' => __('Visible for', 'Kontentblocks'),
+            'loggedIn' => __('Logged in users', 'Kontentblocks'),
+            'anyone' => __('Anyone', 'Kontentblocks'),
+        ),
+        'settings' => array(
+            'addClasses' => __('Additional wrapper classes', 'Kontentblocks'),
+            'visibility' => __('Visibility', 'Kontentblocks'),
+            'forLoggedInOnly' => __('Visible for logged-in users only', 'Kontentblocks'),
+            'label' => array(
+                'visibility' => __('Visibility', 'Kontentblocks'),
+                'details' => __('Details', 'Kontentblocks'),
+
+            )
         )
 
     )

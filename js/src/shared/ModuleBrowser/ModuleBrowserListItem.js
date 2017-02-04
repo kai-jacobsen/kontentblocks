@@ -2,7 +2,7 @@
 var tplTemplateListItem = require('templates/backend/modulebrowser/module-template-list-item.hbs');
 var tplListItem = require('templates/backend/modulebrowser/module-list-item.hbs');
 module.exports = Backbone.View.extend({
-  tagName: 'li',
+  tagName: 'div',
   className: 'modules-list-item',
   initialize: function (options) {
     this.options = options || {};
@@ -15,9 +15,9 @@ module.exports = Backbone.View.extend({
   // render list
   render: function (el) {
     if (this.model.get('globalModule')) {
-      this.$el.html(tplTemplateListItem({module: this.model.toJSON()}));
+      this.$el.html(tplTemplateListItem({module: this.model.toJSON(), i18n: KB.i18n}));
     } else {
-      this.$el.html(tplListItem({module: this.model.toJSON()}));
+      this.$el.html(tplListItem({module: this.model.toJSON(),i18n: KB.i18n}));
     }
     el.append(this.$el);
   },

@@ -18,7 +18,10 @@ module.exports = Backbone.View.extend({
     // flag the first
     var first = false;
     this.$el.empty();
-    _.each(this.cat.model.get('modules'), function (module) {
+    var modules = this.cat.model.get('modules');
+    console.log(modules);
+    modules.sort(function(a,b) {return (a.get('settings').name > b.get('settings').name) ? 1 : ((b.get('settings').name > a.get('settings').name) ? -1 : 0);} );
+    _.each(modules, function (module) {
       that.subviews[module.cid] = new ListItem({
         model: module,
         parent: that,

@@ -9,7 +9,7 @@ module.exports = Backbone.View.extend({
       this.listRenderer = new ModuleBrowserList({cat: this, el: options.browser.$list, browser: options.browser});
     }
   },
-  tagName: 'li',
+  tagName: 'div',
   className: 'cat-item',
   events: {
     'click': 'change'
@@ -17,7 +17,7 @@ module.exports = Backbone.View.extend({
   change: function () {
     this.options.parent.trigger('browser:change', this);
     this.$el.addClass('active');
-    jQuery('li').not(this.$el).removeClass('active');
+    jQuery('.cat-item').not(this.$el).removeClass('active');
   },
   render: function () {
     var count = _.keys(this.model.get('modules')).length;

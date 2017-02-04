@@ -4,7 +4,7 @@ module.exports = Backbone.View.extend({
   initialize: function (options) {
     var that = this;
     this.options = options || {};
-    this.$list = jQuery('<ul></ul>').appendTo(this.$el);
+    this.$list = jQuery('<div></div>').appendTo(this.$el);
     _.each(this.options.cats, function (cat) {
       var model = new Backbone.Model(cat);
       new ModuleBrowserTabItemView({parent: that, model: model, browser: that.options.browser}).render();

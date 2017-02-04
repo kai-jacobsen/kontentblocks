@@ -3,14 +3,13 @@
  * like: duplicate, delete, status
  */
 //KB.Backbone.Backend.ModuleControlsView
-var tplModuleMenu = require('templates/backend/module-menu.hbs');
 module.exports = Backbone.View.extend({
   id: '',
   $menuWrap: {}, // wrap container jQuery element
   $menuList: {}, // ul item
   initialize: function () {
     this.$menuWrap = jQuery('.menu-wrap', this.$el); //set outer element
-    this.$menuWrap.append(tplModuleMenu({})); // render template
+    this.$menuWrap.append("<ul class='module-actions'></ul>"); // render template
     this.$menuList = jQuery('.module-actions', this.$menuWrap);
   },
   /**

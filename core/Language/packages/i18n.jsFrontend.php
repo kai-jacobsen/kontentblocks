@@ -13,6 +13,9 @@
             'controlsEdit' => __('Edit', 'Kontentblocks'),
             'controlsUpdate' => __('Save', 'Kontentblocks'),
             'controlsTrash' => __('Trash', 'Kontentblocks')
+        ),
+        'onpage' => array(
+            'placeholder' => __('add module', 'Kontentblocks')
         )
     )
 );
