@@ -6,6 +6,10 @@
   }
 }
 
+.kb-area__empty-placeholder{
+  display: none;
+}
+
 body.kb-editcontrols-show {
   .kb-area__empty{
     outline: 1px dashed $blue;
@@ -14,6 +18,7 @@ body.kb-editcontrols-show {
 
   .kb-area__empty-placeholder{
     padding: 8px;
+    display: block;
     text-align: center;
     cursor: pointer;
     outline: 1px dotted $lowgrey;

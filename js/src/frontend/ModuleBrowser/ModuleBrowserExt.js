@@ -2,7 +2,6 @@
  * Override module browser success method
  */
 var ModuleBrowser = require('shared/ModuleBrowser/ModuleBrowserController');
-var ModuleModel = require('frontend/Models/ModuleModel');
 var TinyMCE = require('common/TinyMCE');
 module.exports = ModuleBrowser.extend({
   success : function (res) {

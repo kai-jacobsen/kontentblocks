@@ -10,7 +10,7 @@ use Kontentblocks\Templating\CoreView;
  * Class ModuleViewLoader
  * @package Kontentblocks\Modules
  */
-class ModuleViewLoader
+class ModuleViewManager
 {
 
     /**
@@ -45,8 +45,7 @@ class ModuleViewLoader
     {
         $this->viewFilesystem = $filesystem;
         $this->module = $module;
-        $this->views = $this->viewFilesystem->getTemplatesforContext($module->context->areaContext,
-            $module->context->postType, $module->context->pageTemplate);
+        $this->views = $this->viewFilesystem->getTemplatesforContext($module->getContext());
         if (count($this->views) > 1) {
             $this->hasViews = true;
         }
@@ -57,29 +56,7 @@ class ModuleViewLoader
         add_action('kb.save.frontend.module', array($this, 'frontendSave'));
     }
 
-//    /**
-//     * Render the viewfile select field
-//     * @return bool|string
-//     */
-//    public function render()
-//    {
-//        if ($this->hasViews()) {
-//            $tpl = new CoreView(
-//                'view-selector.twig',
-//                array('templates' => $this->prepareTemplates(), 'module' => $this->module->properties)
-//            );
-//            //return $tpl->render();
-//        } else {
-//            $tpl = $this->getSingleTemplate();
-//            if (is_null($tpl)) {
-//                return "<p class='notice kb-field'>No View available</p>";
-//            } else {
-//                $this->module->properties->viewfile = $tpl->filename;
-//
-//                return "<input type='hidden' name='{$this->module->properties->mid}[viewfile]' value='{$tpl->filename}' >";
-//            }
-//        }
-//    }
+
 
     /**
      * Check if files are available
@@ -90,26 +67,8 @@ class ModuleViewLoader
         return $this->hasViews;
     }
 
-    /**
-     * Prepare templates for view select field
-     * @return array
-     */
-    private function prepareTemplates()
-    {
-        $prepared = array();
-
-        $selected = $this->module->properties->viewfile;
-        if (empty($selected) || !$this->isValidTemplate($selected)) {
-            $selected = $this->findDefaultTemplate();
-        }
-
-        
-        foreach ($this->views as $item) {
-            $item->selected = ($item->filename === $selected) ? "selected='selected'" : '';
-            $prepared[] = $item;
-        }
-
-        return $prepared;
+    public function getPreview(){
+        return $this->viewFilesystem->getPreview();
     }
 
     /**
@@ -155,17 +114,10 @@ class ModuleViewLoader
         }
     }
 
-    /**
-     * If there is is only one file, use it
-     * @return string
-     */
-    private function getSingleTemplate()
-    {
-        if (count($this->views) === 1) {
-            return current(array_slice($this->views, -1));
-        }
-    }
 
+    /**
+     * @return array
+     */
     public function getViews()
     {
         return $this->views;
@@ -176,7 +128,7 @@ class ModuleViewLoader
      *
      * @return null
      */
-    public function getTemplateByName($name)
+    public function getViewByName($name)
     {
         if (isset($this->views[$name])) {
             return $this->views[$name];
@@ -193,7 +145,6 @@ class ModuleViewLoader
      */
     public function frontendSave(Module $module)
     {
-
         $viewfile = $module->getViewfile();
         if (empty($viewfile)) {
             return null;

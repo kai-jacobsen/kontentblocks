@@ -9,7 +9,7 @@ module.exports = Backbone.View.extend({
   $menuList: {}, // ul item
   initialize: function () {
     this.$menuWrap = jQuery('.menu-wrap', this.$el); //set outer element
-    this.$menuWrap.append("<ul class='module-actions'></ul>"); // render template
+    this.$menuWrap.append("<div class='module-actions'></div>"); // render template
     this.$menuList = jQuery('.module-actions', this.$menuWrap);
   },
   /**
@@ -24,7 +24,7 @@ module.exports = Backbone.View.extend({
     // if isValid render the menu item view
     // see /ModuleMenuItems/ files for action items
     if (view.isValid && view.isValid() === true) {
-      var $liItem = jQuery('<li></li>').appendTo(this.$menuList);
+      var $liItem = jQuery('<div class="kb-controls-item"></div>').appendTo(this.$menuList);
       var $menuItem = $liItem.append(view.el);
       this.$menuList.append($menuItem);
       view.render.call(view);

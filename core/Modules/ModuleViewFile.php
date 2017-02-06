@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Modules;
 
+use SplFileInfo;
+
 
 /**
  * Class ModuleViewFile
@@ -60,10 +62,9 @@ class ModuleViewFile implements \JsonSerializable
 
     /**
      * ModuleViewFile constructor.
-     * @param \DirectoryIterator $node
      * @param $rootPath
      */
-    public function __construct(\DirectoryIterator $node, $rootPath, ModuleViewsMeta $meta)
+    public function __construct(SplFileInfo $node, $rootPath, ModuleViewsMeta $meta)
     {
         $this->rootPath = $rootPath;
         $this->node = $node;

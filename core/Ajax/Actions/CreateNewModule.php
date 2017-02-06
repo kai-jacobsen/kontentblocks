@@ -79,7 +79,7 @@ class CreateNewModule extends AbstractAjaxAction
     /**
      * Required by AjaxCallbackHandler
      * @param Request $request
-     * @return CreateNewModule
+     * @return \Kontentblocks\Ajax\AjaxErrorResponse|AjaxSuccessResponse
      */
     public static function action(Request $request)
     {
@@ -139,9 +139,6 @@ class CreateNewModule extends AbstractAjaxAction
 
         $this->moduleArgs['class'] = $request->request->filter('class', null, FILTER_SANITIZE_STRING);
 
-//
-//        if ($Request->getFiltered( 'globalModule', FILTER_VALIDATE_BOOLEAN )) {
-//        }
         $this->moduleArgs['postId'] = absint($this->postId);
         $this->moduleArgs['area'] = $request->request->filter('area', null, FILTER_SANITIZE_STRING);
         $this->moduleArgs['submodule'] = $this->isSubmodule;

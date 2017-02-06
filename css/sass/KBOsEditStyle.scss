@@ -539,3 +539,18 @@ body.kontentblocks-ready .mce-tooltip{
 body.kontentblocks-ready .mce-container.mce-panel.mce-floatpanel.mce-menu.mce-menu-align{
   position: fixed !important;
 }
+
+body.kontentblocks-ready{
+
+  .kb-status-public,.kb-status-draft{
+    cursor: pointer;
+  }
+
+  .kb-status-public.kb-button-small{
+    background-color: $green;
+  }
+  .kb-status-draft.kb-button-small{
+    background-color: $red;
+  }
+
+}

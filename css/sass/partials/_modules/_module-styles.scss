@@ -31,7 +31,7 @@
   font-weight: 100;
 }
 
-li.kb-module-draft {
+div.kb-module-draft {
   .kb-module__header {
     border-left: 3px solid $orange;
   }
@@ -81,7 +81,7 @@ li.kb-module-draft {
   list-style: none;
   display: inline-block;
 
-  li {
+  div {
     display: inline-block;
     margin: 0;
     cursor: pointer;

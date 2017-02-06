@@ -2,7 +2,7 @@ var ModuleListItem = require('frontend/Views/Sidebar/AreaOverview/ModuleListItem
 var AreaDetailsController = require('frontend/Views/Sidebar/AreaDetails/AreaDetailsController');
 var tplEmptyArea = require('templates/frontend/sidebar/empty-area.hbs');
 module.exports = Backbone.View.extend({
-  tagName: 'ul',
+  tagName: 'div',
   className: 'kb-sidebar-areaview__modules-list',
   ModuleViews: {},
   initialize: function (options) {

@@ -1,0 +1,5 @@
+{{#if draft }}
+    <div class="kb-status-draft kb-button-small" data-kbtooltip="{{strings.tooltipUndraft}}"><span>{{ strings.draft }}</span></div>
+{{ else }}
+   <div class="kb-status-public kb-button-small" data-kbtooltip="{{strings.tooltipDraft}}"><span>{{ strings.published }}</span></div>
+{{/if}}

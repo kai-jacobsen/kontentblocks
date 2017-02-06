@@ -9,7 +9,7 @@ var Ajax = require('common/Ajax');
 
 var tplCategoryModuleItem = require('templates/frontend/sidebar/category-module-item.hbs');
 module.exports = Backbone.View.extend({
-  tagName: 'li',
+  tagName: 'div',
   className: 'kb-sidebar-module',
   initialize: function (options) {
     var that = this;
@@ -27,14 +27,13 @@ module.exports = Backbone.View.extend({
       appendTo: that.listController.model.View.$el.selector,
       revert: 'invalid',
       refreshPositions: true,
-      helper: 'clone',
+      // helper: 'clone',
       cursorAt: {
         top: 5,
         left: 5
       },
       stop: function () {
         that.listController.model.View.$el.css('overflow', '');
-
       },
       helper: function () {
         that.listController.model.View.$el.css('overflow', 'hidden');
@@ -101,7 +100,7 @@ module.exports = Backbone.View.extend({
     _.defer(function () {
       Payload.parseAdditionalJSON(res.data.json);
       KB.Events.trigger('content.change reposition');
-      if (KB.App.adminBar.isActive()){
+      if (KB.App.adminBar.isActive()) {
         model.trigger('module.create');
       }
     });

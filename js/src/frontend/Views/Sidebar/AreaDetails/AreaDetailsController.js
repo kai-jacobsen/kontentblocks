@@ -18,17 +18,11 @@ module.exports = Backbone.View.extend({
     this.renderHeader();
     this.renderCategories();
   },
-  events: {
-    'click .kb-sidebar-action--cog': 'toggle',
-    'click .kb-sidebar-action--update': 'updateAreaSettings'
-  },
   render: function () {
     return this.$el;
   },
   renderHeader: function () {
     this.$el.append(tplAreaDetailsHeader(this.model.toJSON()));
-    this.$settingsContainer = this.$el.find('.kb-sidebar-area-details__settings');
-    this.$updateHandle = this.$el.find('.kb-sidebar-action--update').hide();
   },
   renderCategories: function () {
     var that = this;
@@ -39,8 +33,5 @@ module.exports = Backbone.View.extend({
       });
       that.$el.append(catView.render());
     });
-  },
-  toggle: function () {
-    this.$settingsContainer.slideToggle();
   }
 });

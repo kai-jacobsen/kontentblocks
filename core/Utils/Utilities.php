@@ -506,14 +506,14 @@ class Utilities
     {
         // defaults
         $cats = array(
-            'standard' => __('Standard', 'kontentblocks'),
+            'standard' => __('Standard', 'Kontentblocks'),
         );
 
         $cats = apply_filters('kb.module.cats', $cats);
-        $cats['media'] = __('Media', 'kontentblocks');
-        $cats['special'] = __('Spezial', 'kontentblocks');
-        $cats['core'] = __('System', 'kontentblocks');
-        $cats['gmodule'] = __('Global Modules', 'kontentblocks');
+        $cats['media'] = __('Media', 'Kontentblocks');
+        $cats['special'] = __('Spezial', 'Kontentblocks');
+        $cats['core'] = __('System', 'Kontentblocks');
+        $cats['gmodule'] = __('Global Modules', 'Kontentblocks');
 
         Kontentblocks::getService('utility.jsontransport')->registerData('ModuleCategories', null, $cats);
         return $cats;

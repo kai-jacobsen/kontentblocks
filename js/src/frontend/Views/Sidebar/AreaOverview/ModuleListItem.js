@@ -1,7 +1,9 @@
 //KB.Backbone.Sidebar.AreaOverview.ModuleListItem
 var tplModuleViewItem = require('templates/frontend/sidebar/module-view-item.hbs');
 module.exports = Backbone.View.extend({
-  tagName: 'li',
+  tagName: 'div',
+  className: 'kb-sidebar-module-list-container',
+
   initialize: function (options) {
     // parent area list
     this.$parent = options.$parent;

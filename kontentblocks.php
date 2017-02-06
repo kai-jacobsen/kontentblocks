@@ -432,6 +432,9 @@ Class Kontentblocks
         return trailingslashit(KB_PLUGIN_URL);
     }
 
+    /**
+     * @return string
+     */
     public function getTemplatesPath()
     {
         return trailingslashit(KB_TEMPLATES_PATH);

@@ -137,11 +137,10 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface
             }
             $module->context->renderer = $this;
             $module->context->set(array('renderPosition' => $this->position));
-            $moduleOutput = $module->module();
             $output .= $this->areaHtmlNode->openLayoutWrapper();
-            $output .= $this->beforeModule($module);
-            $output .= $moduleOutput;
-            $output .= $this->afterModule($module);
+            $this->beforeModule($module);
+            $output .= $this->moduleRenderer->render();
+            $this->afterModule($module);
             $output .= $this->areaHtmlNode->closeLayoutWrapper();
             if (current_theme_supports('kb.area.concat') && filter_input(
                     INPUT_GET,
@@ -150,7 +149,7 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface
                 )
             ) {
                 if ($module->properties->getSetting('concat')) {
-                    $concater->addString(wp_kses_post($moduleOutput));
+                    $concater->addString(wp_kses_post($this->moduleRenderer->getModuleOutput()));
                 }
             }
         }
@@ -184,38 +183,13 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface
 
     /**
      * @param Module $module
-     * @return string
      */
     public function beforeModule(Module $module)
-    {
-
-        $this->_beforeModule($module);
-        $layout = $this->areaHtmlNode->getCurrentLayoutClasses();
-
-        if (!empty($layout)) {
-            return sprintf(
-                '<div class="kb-wrap %2$s">%1$s',
-                $this->moduleRenderer->beforeModule(),
-                implode(' ', $layout)
-            );
-        } else {
-            return $this->moduleRenderer->beforeModule();
-        }
-
-    }
-
-    /**
-     * @param Module $module
-     */
-    public function _beforeModule(Module $module)
     {
         $moduleClasses = $this->modules->getCurrentModuleClasses();
         $additionalClasses = $this->getAdditionalClasses($module);
 
         $mergedClasses = array_merge($moduleClasses, $additionalClasses);
-        if (method_exists($module, 'preRender')) {
-            $module->preRender();
-        }
 
         $this->moduleRenderer->addClasses($mergedClasses);
     }
@@ -242,7 +216,7 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface
             $classes[] = 'os-edit-container';
 
             if ($module->properties->getState('draft')) {
-                $classes[] = 'draft';
+                $classes[] = 'kb-module-draft';
             }
         }
 
@@ -267,31 +241,19 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface
     }
 
     /**
-     * @param $module
-     * @return string
-     */
-    public function afterModule(Module $module)
-    {
-
-        $this->_afterModule($module);
-        $layout = $this->areaHtmlNode->getCurrentLayoutClasses();
-        if (!empty($layout)) {
-            return "</div>" . sprintf("%s", $this->moduleRenderer->afterModule());
-        } else {
-            return $this->moduleRenderer->afterModule();
-        }
-    }
-
-    /**
      * @param Module $module
      */
-    public function _afterModule(Module $module)
+    public function afterModule(Module $module)
     {
         $this->previousModule = $module->properties->getSetting('hash');
         $this->position++;
         $this->areaHtmlNode->nextLayout();
     }
 
+
+    /**
+     * @return mixed
+     */
     public function getNextModule()
     {
         $next = $this->modules->next();

@@ -63,7 +63,7 @@ module.exports = Backbone.View.extend({
       that.recalibrate();
     });
 
-    this.listenTo(KB.Events, 'KB::tinymce.new-editor', function (ed) {
+    this.listenTo(KB.Events, 'kb.tinymce.new-editor', function (ed) {
       if (ed.settings && ed.settings.kblive) {
         that.attachEditorEvents(ed);
       }
@@ -108,7 +108,6 @@ module.exports = Backbone.View.extend({
     this.ModuleView = ModuleView;
     this.model = ModuleView.model;
     this.realmid = this.setupModuleId();
-
     this.setupWindow();
     this.attach();
     this.render();
@@ -127,8 +126,6 @@ module.exports = Backbone.View.extend({
    */
   attach: function () {
     var that = this;
-    // attach event listeners
-
     //when update gets called from module controls, notify this view
     this.listenTo(this.ModuleView, 'kb.frontend.module.inline.saved', this.frontendViewUpdated);
     /**
@@ -202,7 +199,6 @@ module.exports = Backbone.View.extend({
         handle: 'h2',
         containment: 'window',
         stop: function (eve, ui) {
-          //KB.OSConfig.wrapPosition = ui.position;
           // fit modal to window in size and position
           that.recalibrate(ui.position);
         }
@@ -338,10 +334,9 @@ module.exports = Backbone.View.extend({
                 return state.text;
               }
               var desc = state.element.dataset.tpldesc;
-              var $state = jQuery(
+              return jQuery(
                 '<span>' + state.text + '<br><span class="kb-tpl-desc">' + desc + '</span></span>'
               );
-              return $state;
             }
           });
         }, 550);

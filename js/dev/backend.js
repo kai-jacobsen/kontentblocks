@@ -1140,7 +1140,7 @@ module.exports = Backbone.View.extend({
   $menuList: {}, // ul item
   initialize: function () {
     this.$menuWrap = jQuery('.menu-wrap', this.$el); //set outer element
-    this.$menuWrap.append("<ul class='module-actions'></ul>"); // render template
+    this.$menuWrap.append("<div class='module-actions'></div>"); // render template
     this.$menuList = jQuery('.module-actions', this.$menuWrap);
   },
   /**
@@ -1155,7 +1155,7 @@ module.exports = Backbone.View.extend({
     // if isValid render the menu item view
     // see /ModuleMenuItems/ files for action items
     if (view.isValid && view.isValid() === true) {
-      var $liItem = jQuery('<li></li>').appendTo(this.$menuList);
+      var $liItem = jQuery('<div class="kb-controls-item"></div>').appendTo(this.$menuList);
       var $menuItem = $liItem.append(view.el);
       this.$menuList.append($menuItem);
       view.render.call(view);
@@ -1432,7 +1432,7 @@ var ControlsView = require('backend/Views/ModuleControls/ControlsView');
 module.exports = ControlsView.extend({
   initialize: function () {
     this.$menuWrap = jQuery('.ui-wrap', this.$el); //set outer element
-    this.$menuWrap.append("<ul class='ui-actions'></ul>"); // render template
+    this.$menuWrap.append("<div class='ui-actions'></div>"); // render template
     this.$menuList = jQuery('.ui-actions', this.$menuWrap);
   }
 });
@@ -2289,7 +2289,7 @@ module.exports =
       settings.remove_linebreaks = false;
       settings.setup = function (ed) {
         ed.on('init', function () {
-          KB.Events.trigger('KB::tinymce.new-editor', ed);
+          KB.Events.trigger('kb.tinymce.new-editor', ed);
         });
         ed.on('change', function () {
           // var $module, moduleView;
@@ -5103,7 +5103,7 @@ module.exports = Backbone.View.extend({
     if (this.formLoaded) {
       this.open();
     } else {
-      data = {
+      var data = {
         action: 'getModuleBackendForm',
         _ajax_nonce: Config.getNonce('read'),
         module: this.ModuleModel.toJSON()
@@ -6573,11 +6573,11 @@ module.exports = Backbone.Model.extend({
 var ControlsView = require('backend/Views/ModuleControls/ControlsView');
 
 module.exports = ControlsView.extend({
-  tagName: 'ul',
+  tagName: 'div',
   className: 'kb-module--status-bar-list',
   initialize: function (options) {
     this.$menuWrap = jQuery('.kb-module--status-bar', this.$el); //set outer element
-    this.$menuWrap.append("<ul class='kb-module--status-bar-list'></ul>"); // render template
+    this.$menuWrap.append("<div class='kb-module--status-bar-list'></div>"); // render template
     this.$menuList = jQuery('.kb-module--status-bar-list', this.$menuWrap);
   }
 
@@ -6588,8 +6588,8 @@ var tplDraftStatus = require('templates/backend/status/draft.hbs');
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var I18n = require('common/I18n');
+var Notice = require('common/Notice');
 module.exports = BaseView.extend({
-  // id: 'draft',
   className: 'kb-status-draft',
   events: {
     'click': 'toggleDraft'
@@ -6617,11 +6617,12 @@ module.exports = BaseView.extend({
       that.model.get('state').draft = !that.model.get('state').draft;
       that.$el.empty();
       that.render();
+      Notice.notice('Status changed', 'success');
     });
   }
 
 });
-},{"backend/Views/BaseControlView":13,"common/Ajax":38,"common/Config":40,"common/I18n":41,"templates/backend/status/draft.hbs":148}],123:[function(require,module,exports){
+},{"backend/Views/BaseControlView":13,"common/Ajax":38,"common/Config":40,"common/I18n":41,"common/Notice":44,"templates/backend/status/draft.hbs":148}],123:[function(require,module,exports){
 var BaseView = require('backend/Views/BaseControlView');
 var tplLoggedInStatus = require('templates/backend/status/loggedin.hbs');
 module.exports = BaseView.extend({
@@ -6878,12 +6879,8 @@ module.exports = BaseView.extend({
 var BaseView = require('backend/Views/BaseControlView');
 var tplTemplatesStatus = require('templates/backend/status/templates.hbs');
 module.exports = BaseView.extend({
-  // id: 'settings',
   controller: null,
   className: 'kb-status-templates',
-  events: {
-    // 'click' : 'openController'
-  },
   initialize: function (options) {
     this.moduleView = options.parent;
   },

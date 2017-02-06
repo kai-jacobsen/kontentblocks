@@ -9,7 +9,7 @@ module.exports = Backbone.View.extend({
     // ModuleListController
     this.controller = options.controller;
     this.$el.append(tplCategoryList(this.model.toJSON()));
-    this.$list = this.$el.find('ul');
+    this.$list = this.$el.find('.kb-sidebar__category-item__module-list');
     this.setupModuleItems();
   },
   render: function () {

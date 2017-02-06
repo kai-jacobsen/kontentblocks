@@ -4,6 +4,7 @@ namespace Kontentblocks\Templating;
 use Exception;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\Module;
+use Kontentblocks\Modules\ModuleViewFile;
 use Kontentblocks\Utils\MobileDetect;
 
 /**
@@ -13,6 +14,10 @@ use Kontentblocks\Utils\MobileDetect;
 class ModuleView implements \JsonSerializable
 {
 
+    /**
+     * @var array
+     */
+    protected $addData;
     /**
      * @var object  Module Instance
      */
@@ -37,59 +42,45 @@ class ModuleView implements \JsonSerializable
     /**
      * Class Constructor
      *
-     * @param \Kontentblocks\Modules\Module
-     * @param bool $tpl
+     * @param Module $module
+     * @param ModuleViewFile $tpl
      * @param array $addData
      *
-     * @throws Exception
      */
-    public function __construct( Module $module, $tpl = null, $addData = array() )
+    public function __construct(Module $module, ModuleViewFile $tpl, $addData = array())
     {
-
-
-        if (!isset( $module ) || !is_object( $module )) {
-            throw new \Exception( 'Module is not set' );
-        }
-
+        $this->addData = $addData;
         $this->module = $module;
-
         // merge module data and additional injected data
-        $this->data = $this->_setupData( $module->model->export(), $addData );
-
-        // if no tpl is given, set a default
-        // @TODO Kinda useless, things should break in that case
-        $this->tplFile = ( $tpl !== false ) ? $tpl : null;
-
-
-        $this->engine = Kontentblocks::getService( 'templating.twig.public' );
+        $this->tplFile = $tpl;
+        $this->setPath($tpl->path);
+        $this->engine = Kontentblocks::getService('templating.twig.public');
     }
 
-    public function render( $echo = false )
+    /**
+     * @param $path
+     */
+    public function setPath($path)
     {
-
-        if (empty( $this->tplFile )) {
-            return false; //@TODO template missing
+        if (!empty($path) && is_dir($path)) {
+            Twig::setPath($path);
         }
+
+    }
+
+    /**
+     * @param bool $echo
+     * @return bool
+     */
+    public function render($echo = false)
+    {
+        $this->data = $this->setupData($this->module->model->export(), $this->addData);
 
         if ($echo) {
-            $this->engine->display( $this->tplFile, $this->data );
+            $this->engine->display($this->tplFile->filename, $this->data);
         } else {
-            return $this->engine->render( $this->tplFile, $this->data );
+            return $this->engine->render($this->tplFile->filename, $this->data);
         }
-
-    }
-
-    public function setPath( $path )
-    {
-        if (!empty( $path ) && is_dir( $path )) {
-            Twig::setPath( $path );
-        }
-
-    }
-
-    public function __destruct()
-    {
-        //Twig::resetPath();
 
     }
 
@@ -103,20 +94,20 @@ class ModuleView implements \JsonSerializable
      *
      * @return array
      */
-    private function _setupData( $modData, $addData )
+    private function setupData($modData, $addData)
     {
         if ($addData) {
-            $data = wp_parse_args( $addData, $modData );
+            $data = wp_parse_args($addData, $modData);
         } else {
             $data = $modData;
         }
 
 
-        if (!is_array( $data )) {
+        if (!is_array($data)) {
             $data = array();
         }
 
-        if (is_object( $this->module->getModel() )) {
+        if (is_object($this->module->getModel())) {
             $data['Model'] = $this->module->getModel();
         }
 
@@ -124,7 +115,7 @@ class ModuleView implements \JsonSerializable
 
         // make sure there is a key value pair, if not
         // make 'data' the default key
-        if (!is_array( $data )) {
+        if (!is_array($data)) {
             $data = array(
                 'data' => $data
             );
@@ -136,27 +127,34 @@ class ModuleView implements \JsonSerializable
 
     }
 
+    /**
+     * @return array
+     */
     private function setupUtilities()
     {
         return array(
-            'MobileDetect' => Kontentblocks::getService( 'utility.mobileDetect' )
+            'MobileDetect' => Kontentblocks::getService('utility.mobileDetect')
         );
     }
 
-    public function addData( $data )
+    /**
+     * @param $data
+     * @return bool
+     */
+    public function addData($data)
     {
-
-        if (!is_array( $data )) {
+        if (!is_array($data)) {
             return false;
         }
-
         $this->module->model->set($data);
-        $this->data = wp_parse_args( $data, $this->data );
-
+        $this->data = wp_parse_args($data, $this->data);
         return true;
     }
 
-    public function setTplFile( $file )
+    /**
+     * @param $file
+     */
+    public function setTplFile(ModuleViewFile $file)
     {
         $this->tplFile = $file;
     }
@@ -171,7 +169,7 @@ class ModuleView implements \JsonSerializable
     function jsonSerialize()
     {
         return array(
-            'viewfile' => $this->tplFile,
+            'viewfile' => $this->tplFile->filename,
             'data' => $this->data
         );
     }

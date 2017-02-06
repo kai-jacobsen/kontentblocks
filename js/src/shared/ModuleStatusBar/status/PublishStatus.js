@@ -1,9 +1,8 @@
 var BaseView = require('backend/Views/BaseControlView');
-var tplDraftStatus = require('templates/backend/status/draft.hbs');
+var tplPublishStatus = require('templates/backend/status/publish.hbs');
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var I18n = require('common/I18n');
-var Notice = require('common/Notice');
 module.exports = BaseView.extend({
   className: 'kb-status-draft',
   events: {
@@ -15,7 +14,7 @@ module.exports = BaseView.extend({
   render: function () {
     var draft = this.model.get('state').draft;
     var $parent = this.model.View.$el;
-    this.$el.append(tplDraftStatus({draft: this.model.get('state').draft, strings: I18n.getString('Modules.tooltips')}));
+    this.$el.append(tplPublishStatus({draft: this.model.get('state').draft, strings: I18n.getString('Modules.tooltips')}));
     if (draft){
       $parent.addClass('kb-module-draft');
     } else {
@@ -29,10 +28,10 @@ module.exports = BaseView.extend({
       module: this.model.toJSON(),
       _ajax_nonce: Config.getNonce('update')
     }).done(function () {
+      console.log(that);
       that.model.get('state').draft = !that.model.get('state').draft;
       that.$el.empty();
       that.render();
-      Notice.notice('Status changed', 'success');
     });
   }
 

@@ -16,16 +16,20 @@ module.exports = Backbone.View.extend({
     this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
     this.listenToOnce(KB.Events, 'frontend.init', this.setupUi);
     this.listenTo(this, 'kb.module.deleted', this.removeModule);
+    this.listenTo(this, 'kb.module.created', this.refreshPlaceholder);
     this.model.View = this;
-
+    this.$placeholder = jQuery(tplPlaceholder({i18n: KB.i18n}));
   },
   showPlaceholder: function () {
-    // if (_.size(this.attachedModuleViews) === 0) {
-      this.$el.append(tplPlaceholder({i18n: KB.i18n}));
-    // }
+    this.$el.append(this.$placeholder);
+    return this;
   },
   removePlaceholder: function () {
-    this.$('.kb-area__empty-placeholder').remove();
+    this.$placeholder.detach();
+    return this;
+  },
+  refreshPlaceholder: function () {
+    this.removePlaceholder().showPlaceholder();
   },
   setupUi: function () {
     // Sortable

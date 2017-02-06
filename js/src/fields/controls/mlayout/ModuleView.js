@@ -46,7 +46,7 @@ module.exports = Backbone.View.extend({
     if (this.formLoaded) {
       this.open();
     } else {
-      data = {
+      var data = {
         action: 'getModuleBackendForm',
         _ajax_nonce: Config.getNonce('read'),
         module: this.ModuleModel.toJSON()

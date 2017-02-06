@@ -17,11 +17,11 @@ class ModuleViewsRegistry
     /**
      *
      * @param Module $module
-     * @return ModuleViewLoader
+     * @return ModuleViewManager
      */
-    public function getViewLoader(Module $module)
+    public function getViewManager(Module $module)
     {
-        $viewLoader = new ModuleViewLoader($module, $this->getViewFileSystem($module));
+        $viewLoader = new ModuleViewManager($module, $this->getViewFileSystem($module));
         return $viewLoader;
 
     }

@@ -25,9 +25,9 @@ abstract class Module implements EntityInterface
 
     /**
      * View Loader if setting is enabled
-     * @var ModuleViewLoader;
+     * @var ModuleViewManager;
      */
-    public $viewLoader;
+    public $viewManager;
 
     /**
      * @var \Kontentblocks\Backend\Environment\PostEnvironment
@@ -69,7 +69,7 @@ abstract class Module implements EntityInterface
         $this->environment = $environment;
         $this->context = new ModuleContext($environment->export(), $this);
         $this->model = new ModuleModel($data, $this);
-        $this->viewLoader = Kontentblocks::getService('registry.moduleViews')->getViewLoader($this);
+        $this->viewManager = Kontentblocks::getService('registry.moduleViews')->getViewManager($this);
         /**
          * Setup FieldController, Sections and fields if used
          */
@@ -172,10 +172,6 @@ abstract class Module implements EntityInterface
     {
         $concat = '';
 
-//        if (!is_null($this->viewLoader)) {
-//            // render view select field
-//            $concat .= $this->viewLoader->render();
-//        }
         // render fields if set
         if (isset($this->fields) && is_object($this->fields)) {
             $rendererClass = $this->properties->getSetting('fieldRenderer');
@@ -245,16 +241,10 @@ abstract class Module implements EntityInterface
 
         if ($this->properties->getSetting('views') && is_null($this->view)) {
             $tpl = $this->getViewfile();
-            $moduleView = new ModuleView($this);
-            $full = $this->viewLoader->getTemplateByName($tpl);
-            if (isset($full->filename)) {
-                $moduleView->setTplFile($full->filename);
-                $moduleView->setPath($full->path);
-            }
-
+            $full = $this->viewManager->getViewByName($tpl);
+            $moduleView = new ModuleView($this, $full);
             $this->view = $moduleView;
             return $this->view;
-
         } else if ($this->view) {
             return $this->view;
         }
@@ -274,18 +264,26 @@ abstract class Module implements EntityInterface
             return '';
         }
         // a viewfile was already set
-        if (!empty($this->properties->viewfile) && $this->viewLoader->isValidTemplate(
+        if (!empty($this->properties->viewfile) && $this->viewManager->isValidTemplate(
                 $this->properties->viewfile
             )
         ) {
             return $this->properties->viewfile;
         } else {
-            return $this->properties->viewfile = $this->viewLoader->findDefaultTemplate();
+            return $this->properties->viewfile = $this->viewManager->findDefaultTemplate();
         }
 
     }
 
     abstract public function render();
+
+    /**
+     * @param ModuleView $view
+     */
+    public function setView(ModuleView $view)
+    {
+        $this->view = $view;
+    }
 
     /**
      * @return string
@@ -324,7 +322,6 @@ abstract class Module implements EntityInterface
         } else {
             return $this->properties->settings['name'];
         }
-
     }
 
     /**
@@ -360,7 +357,7 @@ abstract class Module implements EntityInterface
             'parentObject' => $this->properties->parentObject,
             'areaContext' => $this->properties->areaContext,
             'viewfile' => $this->getViewfile(),
-            'views' => $this->viewLoader->getViews(),
+            'views' => $this->viewManager->getViews(),
             'overrides' => $this->properties->overrides,
             'globalModule' => $this->properties->globalModule,
             'submodule' => $this->properties->submodule,
@@ -418,5 +415,13 @@ abstract class Module implements EntityInterface
     public function getContext()
     {
         return $this->context;
+    }
+
+    /**
+     * @return ModuleViewManager
+     */
+    public function getViewManager()
+    {
+        return $this->viewManager;
     }
 }

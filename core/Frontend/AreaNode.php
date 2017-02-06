@@ -229,6 +229,7 @@ class AreaNode
     /**
      * Get the urrent wrapper classes for the current module from LayoutIterator
      * @return array
+     * @deprecated
      */
     public function getCurrentLayoutClasses()
     {
@@ -247,6 +248,7 @@ class AreaNode
 
     /**
      * Advance to the next layout
+     * @deprecated
      */
     public function nextLayout()
     {
@@ -277,6 +279,7 @@ class AreaNode
     /**
      * Logic to create the outer wrapper if layout has one set
      * @return string
+     * @deprecated
      */
     public function openLayoutWrapper()
     {
@@ -298,6 +301,7 @@ class AreaNode
     /**
      * Logic to close the outer wrapper if layout has one set
      * @return string
+     * @deprecated
      */
     public function closeLayoutWrapper()
     {

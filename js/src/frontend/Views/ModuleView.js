@@ -1,12 +1,8 @@
-/**
- * That is what is rendered for each module when the user enters frontside editing mode
- * This will initiate the FrontsideEditView
- */
-//KB.Backbone.ModuleView
 var ModuleControlsView = require('frontend/Views/ModuleControls/ModuleControls');
 var Check = require('common/Checks');
 var ModuleStatusBarView = require('shared/ModuleStatusBar/ModuleStatusBarView');
 var TemplatesStatus = require('shared/ModuleStatusBar/status/TemplateStatus');
+var PublishStatus = require('shared/ModuleStatusBar/status/PublishStatus');
 
 var tplModulePlaceholder = require('templates/frontend/module-placeholder.hbs');
 module.exports = Backbone.View.extend({
@@ -52,6 +48,7 @@ module.exports = Backbone.View.extend({
       parent: this
     });
     this.ModuleStatusBar.addItem(new TemplatesStatus({model: this.model, parent: this}));
+    this.ModuleStatusBar.addItem(new PublishStatus({model: this.model, parent: this}));
 
   },
   openOptions: function () {
@@ -74,7 +71,7 @@ module.exports = Backbone.View.extend({
   render: function () {
     var settings;
 
-    if (this.$el.hasClass('draft') && this.model.get('entityData') === '') {
+    if (this.$el.hasClass('draft') && this.$el.html() == '') {
       this.renderPlaceholder();
     }
     //assign rel attribute to handle sortable serialize
@@ -85,9 +82,7 @@ module.exports = Backbone.View.extend({
       return;
     }
     this.Controls.render();
-
     this.setControlsPosition();
-
   },
   setControlsPosition: function () {
     this.Controls.reposition();
@@ -97,7 +92,6 @@ module.exports = Backbone.View.extend({
     if (KB.EditModalModules) {
       KB.EditModalModules.reload(this, force);
     }
-    KB.CurrentModel = this.model;
     KB.focusedModule = this.model;
     return this;
   },

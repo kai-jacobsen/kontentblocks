@@ -33,6 +33,11 @@ class SingleModuleRenderer implements RendererInterface
     public $module;
 
     /**
+     * @var
+     */
+    protected $moduleOutput;
+
+    /**
      * @param Module $module
      * @param ModuleRenderSettings $renderSettings
      */
@@ -67,8 +72,7 @@ class SingleModuleRenderer implements RendererInterface
                 'element' => (isset($renderSettings['element'])) ? $renderSettings['element'] : $this->module->properties->getSetting(
                     'element'
                 ),
-                'action' => null,
-                'area_template' => 'default'
+                'action' => null
             )
         );
 
@@ -115,9 +119,14 @@ class SingleModuleRenderer implements RendererInterface
             return false;
         }
 
+        if (method_exists($this->module, 'preRender')) {
+            $this->module->preRender();
+        }
+
+
         $out = '';
         $out .= $this->beforeModule();
-        $out .= $this->module->module();
+        $out .= $this->getModuleOutput();
         $out .= $this->afterModule();
 
 
@@ -144,12 +153,12 @@ class SingleModuleRenderer implements RendererInterface
     /**
      * @return string
      */
-    private function getModuleClasses()
+    protected function getModuleClasses()
     {
         return implode(' ', array_unique($this->classes));
     }
 
-    private function renderAttributes()
+    protected function renderAttributes()
     {
         $attr = $this->renderSettings->get('attributes');
         if (is_array($attr)) {
@@ -181,6 +190,17 @@ class SingleModuleRenderer implements RendererInterface
     {
         $this->classes = array_merge($this->classes, $classes);
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModuleOutput()
+    {
+        if (!is_null($this->moduleOutput)){
+            return $this->moduleOutput;
+        }
+        return $this->module->module();
     }
 
 }

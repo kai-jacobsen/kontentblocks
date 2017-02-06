@@ -1,12 +1,8 @@
 var BaseView = require('backend/Views/BaseControlView');
 var tplTemplatesStatus = require('templates/backend/status/templates.hbs');
 module.exports = BaseView.extend({
-  // id: 'settings',
   controller: null,
   className: 'kb-status-templates',
-  events: {
-    // 'click' : 'openController'
-  },
   initialize: function (options) {
     this.moduleView = options.parent;
   },

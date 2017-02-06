@@ -19,6 +19,8 @@ class ModuleViewFilesystem
     protected $views = array();
     protected $paths = array();
     protected $viewsMeta;
+    protected $preview;
+
     /**
      * @var Module
      */
@@ -94,7 +96,11 @@ class ModuleViewFilesystem
                 $filename = $node->getFilename();
                 if (is_string($filename) && $filename[0] !== '_') {
                     if ($node->getExtension() == 'twig') {
-                        $data[$node->getFilename()] = new ModuleViewFile($node, $root, $this->viewsMeta);
+                        if ($node->getFilename() === 'preview.twig') {
+                            $this->preview = new ModuleViewFile($node, $root, $this->viewsMeta);
+                        } else {
+                            $data[$node->getFilename()] = new ModuleViewFile($node, $root, $this->viewsMeta);
+                        }
                     }
                 }
             }
@@ -102,6 +108,12 @@ class ModuleViewFilesystem
         return $data;
     }
 
+
+
+    public function getPreview()
+    {
+        return $this->preview;
+    }
 
     /**
      * @return array
@@ -116,12 +128,15 @@ class ModuleViewFilesystem
      * @param $postType
      * @return array
      */
-    public function getTemplatesforContext($areaContext, $postType, $pageTemplate)
+    public function getTemplatesforContext(ModuleContext $context)
     {
 
         $collection = array();
-        $pageTemplate = basename($pageTemplate);
         $collection += $this->getSingles($this->views);
+
+        $areaContext = $context->areaContext;
+        $postType = $context->postType;
+        $pageTemplate = basename($context->pageTemplate);
 
         if (array_key_exists($areaContext, $this->views)) {
             $collection = array_merge($collection, $this->getSingles($this->views[$areaContext]));

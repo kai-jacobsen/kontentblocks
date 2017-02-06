@@ -76,7 +76,7 @@ module.exports =
       settings.remove_linebreaks = false;
       settings.setup = function (ed) {
         ed.on('init', function () {
-          KB.Events.trigger('KB::tinymce.new-editor', ed);
+          KB.Events.trigger('kb.tinymce.new-editor', ed);
         });
         ed.on('change', function () {
           // var $module, moduleView;
