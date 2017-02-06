@@ -6374,7 +6374,7 @@ module.exports = Backbone.View.extend({
 
         var tinymce = window.tinymce;
         var $$ = tinymce.$;
-        $(document).on('click', function (event) {
+        jQuery(document).on('click', function (event) {
           var id, mode,
             target = $$(event.target);
 

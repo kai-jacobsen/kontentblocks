@@ -47,7 +47,7 @@
             this.controller.frame.on("content:error:crop", this.onError, this);
             this.$image = this.$el.find(".crop-image");
             this.$image.on("load", this.onImageLoad);
-            $(window).on("resize.cropper", _.debounce(this.onImageLoad, 250));
+            jQuery(window).on("resize.cropper", _.debounce(this.onImageLoad, 250));
         },
         prepare: function() {
             return {
