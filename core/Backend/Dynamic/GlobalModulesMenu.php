@@ -553,6 +553,10 @@ class GlobalModulesMenu
             return false;
         }
 
+        if (get_post_type($postId) !== 'kb-gmd') {
+            return false;
+        }
+
         // checks passed
         return true;
     }

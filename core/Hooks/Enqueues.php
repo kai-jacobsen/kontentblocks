@@ -46,6 +46,7 @@ class Enqueues
     {
         $folder = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? 'dev' : 'dist';
         $suffix = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? '' : '.min';
+        $version = Kontentblocks::VERSION;
         $dependencies = array(
             'jquery',
             'jquery-ui-core',
@@ -67,7 +68,7 @@ class Enqueues
             'kb-client',
             KB_PLUGIN_URL . 'js/' . $folder . '/client' . $suffix . '.js',
             array('jquery', 'underscore'),
-            null,
+            $version,
             true
         );
 
@@ -94,7 +95,7 @@ class Enqueues
             'kb-backend',
             KB_PLUGIN_URL . 'js/' . $folder . '/backend' . $suffix . '.js',
             array('kb-plugins'),
-            null,
+            $version,
             true
         );
         // frontend controller
@@ -102,7 +103,7 @@ class Enqueues
             'kb-frontend',
             KB_PLUGIN_URL . 'js/' . $folder . '/frontend' . $suffix . '.js',
             array('kb-plugins'),
-            null,
+            $version,
             true
         );
 
@@ -111,7 +112,7 @@ class Enqueues
             'kb-extensions',
             KB_PLUGIN_URL . 'js/' . $folder . '/extensions' . $suffix . '.js',
             array(),
-            null,
+            $version,
             true
         );
 
@@ -173,7 +174,7 @@ class Enqueues
         if (is_admin()) {
 
             // Main Stylesheet
-            wp_enqueue_style('kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css');
+            wp_enqueue_style('kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css',array(), Kontentblocks::VERSION);
             self::enqueueStyles();
 
             wp_enqueue_script('kb-backend');
@@ -304,8 +305,8 @@ class Enqueues
     {
         if (is_user_logged_in() && !is_admin() && current_user_can('edit_kontentblocks')) {
             wp_enqueue_style('wp-color-picker');
-            wp_enqueue_style('kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css');
-            wp_enqueue_style('kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css');
+            wp_enqueue_style('kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css', array(),Kontentblocks::VERSION);
+            wp_enqueue_style('kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css', array(), Kontentblocks::VERSION);
             self::enqueueStyles();
         }
     }

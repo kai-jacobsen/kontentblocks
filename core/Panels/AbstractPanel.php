@@ -179,6 +179,9 @@ abstract class AbstractPanel implements EntityInterface
         foreach ($this->model as $key => $v) {
             /** @var \Kontentblocks\Fields\Field $field */
             $field = $this->fields->getFieldByKey($key);
+            if (!is_null($field)) {
+                $field->setValue($v);
+            }
             $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue() : $v;
         }
         return $this->model;

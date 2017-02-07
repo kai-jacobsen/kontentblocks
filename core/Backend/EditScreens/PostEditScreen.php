@@ -146,11 +146,14 @@ Class PostEditScreen
     function save($postId)
     {
         $request = Request::createFromGlobals();
+
+        // get the real postId
         if (!empty($request->request->get('wp-preview', '')) && $request->request->get('wp-preview',
                 '') === 'dopreview'
         ) {
             $postId = get_the_ID();
         }
+
         if (post_type_supports(get_post_type($postId), 'kontentblocks')) {
             $environment = Utilities::getPostEnvironment($postId);
             $environment->save();
@@ -171,7 +174,7 @@ Class PostEditScreen
 
     /**
      * By adding a unknown field WordPress internals will never come to the conclusion
-     * a revision equals the original
+     * a revision equals the original which is important to create fresh previews
      * @param $fields
      * @return mixed
      * @since 0.2.0

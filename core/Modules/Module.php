@@ -242,6 +242,11 @@ abstract class Module implements EntityInterface
         if ($this->properties->getSetting('views') && is_null($this->view)) {
             $tpl = $this->getViewfile();
             $full = $this->viewManager->getViewByName($tpl);
+
+            if (is_null($full)) {
+                return null;
+            }
+
             $moduleView = new ModuleView($this, $full);
             $this->view = $moduleView;
             return $this->view;

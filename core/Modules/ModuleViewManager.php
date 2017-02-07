@@ -57,7 +57,6 @@ class ModuleViewManager
     }
 
 
-
     /**
      * Check if files are available
      * @return bool
@@ -67,8 +66,36 @@ class ModuleViewManager
         return $this->hasViews;
     }
 
-    public function getPreview(){
+    public function getPreview()
+    {
         return $this->viewFilesystem->getPreview();
+    }
+
+    /**
+     * Lookup the default viewfile to use.
+     * A module can specify the default template by implementing 'defaultView'
+     * That method must return a valid .twig file in the paths of the loader
+     *
+     * the first view in the found viewfiles is returned as fallback
+     * @return string
+     */
+    public function findDefaultTemplate()
+    {
+        $keys = array_values($this->views);
+        if (method_exists($this->module, 'defaultView')) {
+            $setByModule = $this->module->defaultView();
+            if (!empty($setByModule) && $this->isValidTemplate($setByModule)) {
+                return $setByModule;
+            } elseif (isset($keys[0])) {
+                $first = $keys[0];
+                return $first->filename;
+            }
+        } elseif (isset($keys[0])) {
+            $first = $keys[0];
+            return $first->filename;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -89,31 +116,6 @@ class ModuleViewManager
 
         return false;
     }
-
-    /**
-     * Lookup the default viewfile to use.
-     * A module can specify the default template by implementing 'defaultView'
-     * That method must return a valid .twig file in the paths of the loader
-     *
-     * the first view in the found viewfiles is returned as fallback
-     * @return string
-     */
-    public function findDefaultTemplate()
-    {
-        $keys = array_values($this->views);
-        if (method_exists($this->module, 'defaultView')) {
-            $setByModule = $this->module->defaultView();
-            if (!empty($setByModule) && $this->isValidTemplate($setByModule)) {
-                return $setByModule;
-            }
-        } elseif (isset($keys[0])) {
-            $first = $keys[0];
-            return $first->filename;
-        } else {
-            return null;
-        }
-    }
-
 
     /**
      * @return array

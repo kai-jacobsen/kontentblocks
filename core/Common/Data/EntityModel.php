@@ -32,7 +32,6 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      */
     public function set($data)
     {
-
         if (is_array($data)) {
             foreach ($data as $key => $v) {
                 if (is_null($v)) {
