@@ -55,12 +55,12 @@
   right: $fullpadding;
   top: 8px;
 
-  ul {
+  .kb-area-actions-list {
     list-style: none;
     margin: 0;
   }
 
-  li {
+  .kb-controls-item {
     display: inline-block;
     color: $grey-500;
     cursor: pointer;
