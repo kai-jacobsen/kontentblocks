@@ -8795,17 +8795,17 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 
   return "    <div class=\"kb-status-draft kb-button-small\" data-kbtooltip=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.tooltipUndraft : stack1), depth0))
-    + "\"><span>"
+    + "\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.draft : stack1), depth0))
-    + "</span></div>\n";
+    + "</div>\n";
 },"3":function(depth0,helpers,partials,data) {
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
   return "   <div class=\"kb-status-public kb-button-small\" data-kbtooltip=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.tooltipDraft : stack1), depth0))
-    + "\"><span>"
+    + "\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.published : stack1), depth0))
-    + "</span></div>\n";
+    + "</div>\n";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1;
 

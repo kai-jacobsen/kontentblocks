@@ -81,7 +81,6 @@ abstract class OptionPanel extends AbstractPanel
         return wp_parse_args($args, $defaults);
     }
 
-
     abstract public function fields();
 
     /**
@@ -91,6 +90,19 @@ abstract class OptionPanel extends AbstractPanel
     {
         $instance = new $args['class']($args);
         $instance->init();
+    }
+
+    public function getContext()
+    {
+        return null;
+    }
+
+    /**
+     *
+     */
+    public function getProperties()
+    {
+        return $this->args;
     }
 
     public function init()

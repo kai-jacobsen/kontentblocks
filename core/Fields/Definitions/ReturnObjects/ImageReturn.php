@@ -237,6 +237,7 @@ class ImageReturn extends StandardFieldReturn
      */
     public function nsize($string)
     {
+
         if (isset($this->attachment['sizes'][$string])) {
             $size = $this->attachment['sizes'][$string];
             $this->setSize($size['width'], $size['height']);
