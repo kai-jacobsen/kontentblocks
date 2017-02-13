@@ -61,6 +61,8 @@ class BackupDataStorage
      */
     public function backup( $logmsg = '' )
     {
+        return null;
+
         $this->backupData = $this->storage->backup();
         $this->msg = $logmsg;
         $this->save();
