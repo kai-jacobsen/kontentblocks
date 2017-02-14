@@ -157,6 +157,12 @@ class FlexibleFieldsReturn
         return $items;
     }
 
+    public function shuffle(){
+
+        shuffle($this->items);
+        return $this;
+    }
+
     /**
      * Validate if all necessary props are set
      * @since 0.1.0
