@@ -1,20 +1,21 @@
 {{ contexts.top.render() }}
-
+{% set side2hasAreas = contexts.side2.hasAreas() %}
     {% if contexts.side.hasAreas() %}
         <div class="kb-context-row grid">
-            {#<div data-kbcolname="Left" class="grid__col grid__col--4-of-12 kb-context-col">#}
-                {#{{ contexts.side2.render() }}#}
-            {#</div>#}
-            <div data-kbcolname="Normal" class="grid__col grid__col--6-of-12 kb-context-col">
+            {% if side2hasAreas %}
+                <div data-kbcolname="Left" class="grid__col grid__col--4-of-12 kb-context-col">
+                    {{ contexts.side2.render() }}
+                </div>
+            {% endif %}
+
+            <div data-kbcolname="Normal" class="grid__col {% if side2hasAreas %}grid__col--4-of-12 {% else %} grid__col--6-of-12 {% endif %} kb-context-col">
                 {{ contexts.normal.render() }}
             </div>
-            <div data-kbcolname="Side" class="grid__col grid__col--6-of-12 kb-context-col">
+            <div data-kbcolname="Side" class="grid__col {% if side2hasAreas %}grid__col--4-of-12 {% else %} grid__col--6-of-12 {% endif %} kb-context-col">
                 {{ contexts.side.render() }}
             </div>
         </div>
     {% else %}
         {{ contexts.normal.render() }}
     {% endif %}
-
-
 {{ contexts.bottom.render() }}
