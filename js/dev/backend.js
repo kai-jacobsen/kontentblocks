@@ -1720,6 +1720,8 @@ module.exports = Backbone.View.extend({
     KB.Fields.trigger('update');
     this.trigger('kb:backend::viewUpdated');
     this.model.trigger('after.change.area');
+    console.log('b', this.model);
+    console.trace();
   },
   serialize: function () {
     var formData, entityData;
@@ -2924,6 +2926,7 @@ module.exports = Backbone.Model.extend({
     this.listenTo(this.ModuleModel, 'modal.serialize', this.rebind); // frontend modal reloaded parent obj, reattach handlers
     this.listenTo(this.ModuleModel, 'change:area', this.unbind); // parent obj was dragged to new area, detach handlers
     this.listenTo(this.ModuleModel, 'after.change.area', this.rebind); // parent obj was dragged to new area, reattach handlers
+    console.log(this.ModuleModel);
   },
   setupType: function () {
     var view;
@@ -3715,6 +3718,7 @@ module.exports = BaseView.extend({
     this.FlexFieldsController.derender(); 
   },
   rerender: function () {
+    this.FlexFieldsController.derender();
     this.render();
   },
   createController: function () {
@@ -3823,7 +3827,7 @@ module.exports = Backbone.View.extend({
         this.$list.append(view.render());
         UI.initTabs();
         KB.Events.trigger('modal.recalibrate');
-      },this);
+      }, this);
     }
 
     UI.initTabs();
@@ -3840,7 +3844,7 @@ module.exports = Backbone.View.extend({
     this._initialized = true; // flag init state
   },
   render: function () {
-    if (this.active){
+    if (this.active) {
       return null;
     }
     this.$el.append(tplSkeleton({

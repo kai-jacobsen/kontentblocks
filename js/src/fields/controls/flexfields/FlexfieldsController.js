@@ -47,7 +47,7 @@ module.exports = Backbone.View.extend({
         this.$list.append(view.render());
         UI.initTabs();
         KB.Events.trigger('modal.recalibrate');
-      },this);
+      }, this);
     }
 
     UI.initTabs();
@@ -64,7 +64,7 @@ module.exports = Backbone.View.extend({
     this._initialized = true; // flag init state
   },
   render: function () {
-    if (this.active){
+    if (this.active) {
       return null;
     }
     this.$el.append(tplSkeleton({

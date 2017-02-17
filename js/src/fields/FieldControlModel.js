@@ -35,6 +35,7 @@ module.exports = Backbone.Model.extend({
     this.listenTo(this.ModuleModel, 'modal.serialize', this.rebind); // frontend modal reloaded parent obj, reattach handlers
     this.listenTo(this.ModuleModel, 'change:area', this.unbind); // parent obj was dragged to new area, detach handlers
     this.listenTo(this.ModuleModel, 'after.change.area', this.rebind); // parent obj was dragged to new area, reattach handlers
+    console.log(this.ModuleModel);
   },
   setupType: function () {
     var view;
