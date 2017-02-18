@@ -71,11 +71,58 @@ class SlotRenderer
     public function getBatch($number = 1, $args = array())
     {
         $collect = array();
-        for ($i=0; $i < $number; $i++){
-            $collect[] = $this->slot($this->position,true, $args);
+        for ($i = 0; $i < $number; $i++) {
+            $collect[] = $this->slot($this->position, true, $args);
             $this->next();
         }
         return $collect;
+    }
+
+    /**
+     * Actual method to handle the stuff
+     * @param $pos
+     * @param bool $returnModule
+     * @param array $args
+     * @return bool|string
+     * @since 0.1.0
+     */
+    public function slot($pos = null, $returnModule = false, $args = array())
+    {
+        if (is_null($pos)) {
+            $pos = $this->position;
+        }
+        $module = $this->iterator->setPosition($pos);
+        if (is_a($module, '\Kontentblocks\Modules\Module')) {
+            if (in_array($module->getId(), $this->done)) {
+                return null;
+            }
+            $this->moduleSettings->import($args);
+            $module->context->renderer = $this;
+            $module->context->set(array('renderPosition' => $this->position));
+            $module->context->set(array('renderSettings' => $this->moduleSettings));
+            $renderer = new SingleModuleRenderer($module, $this->moduleSettings);
+            $module->toJSON();
+            array_push($this->done, $module->getId());
+
+            if ($returnModule) {
+                return $renderer;
+            }
+
+            if ($out = $renderer->render()) {
+                return $out;
+            }
+        }
+    }
+
+    /**
+     * Simply render the next module
+     * @since 0.1.0
+     */
+    public function next()
+    {
+        $this->position++;
+        return $this;
+
     }
 
     /**
@@ -119,56 +166,22 @@ class SlotRenderer
     }
 
     /**
-     * Actual method to handle the stuff
-     * @param $pos
-     * @param bool $returnModule
-     * @param array $args
-     * @return bool|string
-     * @since 0.1.0
+     * @return bool
      */
-    public function slot($pos = null, $returnModule = false, $args = array())
-    {
-        if (is_null($pos)) {
-            $pos = $this->position;
-        }
-        $module = $this->iterator->setPosition($pos);
-        if (is_a($module, '\Kontentblocks\Modules\Module')) {
-            if (in_array($module->getId(), $this->done)) {
-                return null;
-            }
-            $this->moduleSettings->import($args);
-            $module->context->set(array('renderPosition' => $this->position));
-            $module->context->set(array('renderSettings' => $this->moduleSettings));
-            $renderer = new SingleModuleRenderer($module, $this->moduleSettings);
-            $module->toJSON();
-            array_push($this->done, $module->getId());
-
-            if ($returnModule){
-                return $renderer;
-            }
-
-            if ($out = $renderer->render()) {
-                return $out;
-            }
-        }
-    }
-
-    /**
-     * Simply render the next module
-     * @since 0.1.0
-     */
-    public function next()
-    {
-        $this->position++;
-        return $this;
-
-    }
-
     public function hasModule()
     {
         return ($this->iterator->next() !== false) ? true : false;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getNextModule()
+    {
+        $next = $this->iterator->next();
+        $this->iterator->prev();
+        return $next;
+    }
 
 }
 
