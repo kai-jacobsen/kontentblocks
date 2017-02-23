@@ -79,7 +79,11 @@ class Capabilities
                 ),
                 'author' => array
                 (
+                    'manage_kontentblocks',
+                    'edit_kontentblocks',
+                    'deactivate_kontentblocks',
                     'sort_kontentblocks',
+                    'lock_kontentblocks',
                     'create_kontentblocks',
                     'delete_kontentblocks'
                 )
