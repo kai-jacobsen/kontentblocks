@@ -109,6 +109,9 @@ class AreaProperties
      */
     public $settings;
 
+    /**
+     * @var callable
+     */
     public $showCallback;
 
     /**
@@ -119,7 +122,6 @@ class AreaProperties
     {
 
         $properties = wp_parse_args($properties, self::getDefaults());
-
         foreach ($properties as $k => $v) {
             $this->$k = $v;
         }

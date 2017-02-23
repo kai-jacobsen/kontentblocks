@@ -68,7 +68,6 @@ class PanelModel extends EntityModel
     public function jsonSerialize()
     {
         $vars = get_object_vars($this);
-        unset($vars['_locked']);
         unset($vars['_initialized']);
         unset($vars['originalData']);
         unset($vars['entity']);

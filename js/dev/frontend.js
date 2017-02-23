@@ -247,6 +247,7 @@ module.exports = Backbone.View.extend({
   },
   open: function () {
     var that = this;
+    that.model.View.open = true;
     TinyMCE.removeEditors();
     this.$backdrop = jQuery('<div class="kb-fullscreen-backdrop"></div>').appendTo('body');
     this.$fswrap = jQuery(tplFullscreenInner()).appendTo(this.$el);
@@ -274,6 +275,7 @@ module.exports = Backbone.View.extend({
     this.$fswrap.remove();
     this.$el.detach();
     jQuery(window).off('scroll', jQuery.proxy(this.reposition, this));
+    this.model.View.open = false;
 
     setTimeout(function () {
       TinyMCE.restoreEditors();
@@ -1338,7 +1340,6 @@ module.exports = Backbone.Model.extend({
     this.listenTo(this.ModuleModel, 'modal.serialize', this.rebind); // frontend modal reloaded parent obj, reattach handlers
     this.listenTo(this.ModuleModel, 'change:area', this.unbind); // parent obj was dragged to new area, detach handlers
     this.listenTo(this.ModuleModel, 'after.change.area', this.rebind); // parent obj was dragged to new area, reattach handlers
-    console.log(this.ModuleModel);
   },
   setupType: function () {
     var view;
@@ -9073,13 +9074,13 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.hideMeta : stack1),{"name":"if","hash":{},"fn":this.program(3, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + " \">\n            <div class=\"kb-field-image-title\">\n                <label>"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.title : stack1), depth0))
-    + "</label>\n                <input class='kb-js-image-title kb-observe' readonly type=\"text\"\n                       name='"
+    + "</label>\n                <input class='kb-js-image-title kb-observe' type=\"text\"\n                       name='"
     + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias3).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
     + "[title]'\n                       value='"
     + ((stack1 = alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.title : stack1), depth0)) != null ? stack1 : "")
     + "'>\n            </div>\n            <div class=\"kb-field-image-description\">\n                <label>"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.description : stack1), depth0))
-    + "</label>\n        <textarea readonly class='kb-js-image-description kb-observe'\n                  name='"
+    + "</label>\n        <textarea class='kb-js-image-description kb-observe'\n                  name='"
     + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias3).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
     + "[caption]'>\n            "
     + ((stack1 = alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.caption : stack1), depth0)) != null ? stack1 : "")

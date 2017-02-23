@@ -21,7 +21,7 @@ use Kontentblocks\Panels\PostPanelRepository;
  * @subpackage Post
  * @since 0.1.0
  */
-class PostEnvironment implements JsonSerializable,EnvironmentInterface
+class PostEnvironment implements JsonSerializable, EnvironmentInterface
 {
 
     /**
@@ -233,7 +233,6 @@ class PostEnvironment implements JsonSerializable,EnvironmentInterface
     }
 
 
-
     /**
      * @return ModuleRepository
      */
@@ -300,24 +299,6 @@ class PostEnvironment implements JsonSerializable,EnvironmentInterface
     }
 
     /**
-     * (PHP 5 &gt;= 5.4.0)<br/>
-     * Specify data which should be serialized to JSON
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 0.1.0
-     */
-    function jsonSerialize()
-    {
-        return array(
-            'postId' => absint($this->storageId),
-            'pageTemplate' => $this->getPageTemplate(),
-            'postType' => $this->getPostType(),
-            'entityType' => 'post'
-        );
-    }
-
-    /**
      * Return this Storage Object
      * @return ModuleStorage
      * @since 0.1.0
@@ -340,5 +321,23 @@ class PostEnvironment implements JsonSerializable,EnvironmentInterface
     public function export()
     {
         return $this->jsonSerialize();
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.4.0)<br/>
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 0.1.0
+     */
+    function jsonSerialize()
+    {
+        return array(
+            'postId' => absint($this->storageId),
+            'pageTemplate' => $this->getPageTemplate(),
+            'postType' => $this->getPostType(),
+            'entityType' => 'post'
+        );
     }
 }

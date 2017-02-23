@@ -73,7 +73,6 @@ class ModuleModel extends EntityModel
     {
         $vars = get_object_vars($this);
         unset($vars['module']);
-        unset($vars['_locked']);
         unset($vars['_initialized']);
         unset($vars['originalData']);
         return $vars;

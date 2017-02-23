@@ -148,8 +148,6 @@ module.exports = Backbone.View.extend({
     KB.Fields.trigger('update');
     this.trigger('kb:backend::viewUpdated');
     this.model.trigger('after.change.area');
-    console.log('b', this.model);
-    console.trace();
   },
   serialize: function () {
     var formData, entityData;

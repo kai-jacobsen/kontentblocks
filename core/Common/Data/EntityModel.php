@@ -18,10 +18,6 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      */
     protected $_initialized = false;
     /**
-     * @var bool
-     */
-    protected $_locked = false;
-    /**
      * @var array
      */
     protected $originalData = array();
@@ -134,11 +130,7 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        if (!$this->_locked) {
             $this->$offset = $value;
-        } else {
-            trigger_error('Module Model is locked', E_USER_WARNING);
-        }
     }
 
     /**
@@ -152,29 +144,7 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        if (!$this->_locked) {
             unset($this->$offset);
-        } else {
-            trigger_error(' Module Model is locked', E_USER_WARNING);
-        }
-    }
-
-    /**
-     * Lock Model write access
-     * @return void
-     */
-    public function lock()
-    {
-        $this->_locked = true;
-    }
-
-    /**
-     * Unlock Model write access
-     * @return void
-     */
-    public function unlock()
-    {
-        $this->_locked = false;
     }
 
     /**

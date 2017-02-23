@@ -8,13 +8,13 @@
         <div class="kb-field-image-meta {{#if model.hideMeta }} kb-hide {{/if}} ">
             <div class="kb-field-image-title">
                 <label>{{ i18n.title }}</label>
-                <input class='kb-js-image-title kb-observe' readonly type="text"
+                <input class='kb-js-image-title kb-observe' type="text"
                        name='{{fieldName model.baseId model.index model.primeKey }}[title]'
                        value='{{{ model.value.title }}}'>
             </div>
             <div class="kb-field-image-description">
                 <label>{{ i18n.description }}</label>
-        <textarea readonly class='kb-js-image-description kb-observe'
+        <textarea class='kb-js-image-description kb-observe'
                   name='{{ fieldName model.baseId model.index model.primeKey }}[caption]'>
             {{{ model.value.caption }}}
         </textarea>

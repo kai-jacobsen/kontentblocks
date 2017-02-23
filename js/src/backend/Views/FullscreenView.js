@@ -22,6 +22,7 @@ module.exports = Backbone.View.extend({
   },
   open: function () {
     var that = this;
+    that.model.View.open = true;
     TinyMCE.removeEditors();
     this.$backdrop = jQuery('<div class="kb-fullscreen-backdrop"></div>').appendTo('body');
     this.$fswrap = jQuery(tplFullscreenInner()).appendTo(this.$el);
@@ -49,6 +50,7 @@ module.exports = Backbone.View.extend({
     this.$fswrap.remove();
     this.$el.detach();
     jQuery(window).off('scroll', jQuery.proxy(this.reposition, this));
+    this.model.View.open = false;
 
     setTimeout(function () {
       TinyMCE.restoreEditors();

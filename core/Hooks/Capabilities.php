@@ -10,32 +10,31 @@ class Capabilities
 {
 
 
+    public static function reset()
+    {
+        delete_site_option('kb.capabilities.setup');
+        self::setup();
+    }
+
     /**
      * Add capabilities to roles
      *
      * @return void
      */
-    public static function  setup()
+    public static function setup()
     {
-        $options = get_site_option( 'kb.capabilities.setup' );
-        if (empty( $options )) {
-            update_site_option( 'kb.capabilities.setup', time() );
+        $options = get_site_option('kb.capabilities.setup');
+        if (empty($options)) {
+            update_site_option('kb.capabilities.setup', time());
             foreach (self::defaultCapabilities() as $role => $set) {
-                $role = get_role( $role );
+                $role = get_role($role);
                 foreach ($set as $cap) {
-                    $role->add_cap( $cap );
+                    $role->add_cap($cap);
                 }
-                unset( $role );
+                unset($role);
             }
         }
     }
-
-    public static function reset()
-    {
-        delete_site_option( 'kb.capabilities.setup' );
-        self::setup();
-    }
-
 
     /**
      * Default capabilities
@@ -58,7 +57,7 @@ class Capabilities
                     'deactivate_kontentblocks', // set a block inactive/active
                     'sort_kontentblocks' // sort blocks
                 ),
-                'editor'        => array
+                'editor' => array
                 (
                     'manage_kontentblocks',
                     'edit_kontentblocks',
@@ -68,13 +67,17 @@ class Capabilities
                     'create_kontentblocks',
                     'delete_kontentblocks'
                 ),
-                'contributor'   => array
+                'contributor' => array
                 (
+                    'manage_kontentblocks',
+                    'edit_kontentblocks',
+                    'deactivate_kontentblocks',
                     'sort_kontentblocks',
+                    'lock_kontentblocks',
                     'create_kontentblocks',
                     'delete_kontentblocks'
                 ),
-                'author'        => array
+                'author' => array
                 (
                     'sort_kontentblocks',
                     'create_kontentblocks',
