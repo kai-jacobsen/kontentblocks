@@ -6327,7 +6327,9 @@ module.exports = Backbone.Collection.extend({
     return this;
   },
   getModules: function (id) {
-    return this.categories[id].modules;
+    if (this.categories[id]) {
+      return this.categories[id].modules;
+    }
   },
   getCategories: function () {
     return this.categories;
