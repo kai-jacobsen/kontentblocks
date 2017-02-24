@@ -5152,16 +5152,16 @@ var EditableText = Backbone.View.extend({
     });
     this.render();
   },
-  showPlaceholder: function(){
+  showPlaceholder: function () {
     this.preValue = this.model.get('value');
     var $isEmpty = _.isEmpty(this.cleanString(this.model.get('value')));
-    if ($isEmpty){
+    if ($isEmpty) {
       this.$el.html('<p>Start writing here</p>');
     }
   },
-  removePlaceholder: function(){
+  removePlaceholder: function () {
     var $isEmpty = _.isEmpty(this.cleanString(this.model.get('value')));
-    if ($isEmpty){
+    if ($isEmpty) {
       this.$el.html(this.preValue);
     }
   },
@@ -5190,28 +5190,31 @@ var EditableText = Backbone.View.extend({
     var that = this;
     // defaults
     var defaults = {
-      theme: 'modern',
+      theme: 'inlite',
       skin: false,
       menubar: false,
       add_unload_trigger: false,
       entity_encoding: "raw",
       fixed_toolbar_container: null,
-      //fixed_toolbar_container: '#kb-toolbar',
+      insert_toolbar: '',
+      // fixed_toolbar_container: '#kb-toolbar',
       schema: 'html5',
       inline: true,
-      plugins: 'textcolor, wptextpattern',
+      selection_toolbar: 'bold italic | quicklink h2 h3 blockquote',
+      plugins: 'textcolor, wptextpattern,paste',
       statusbar: false,
       preview_styles: false,
+      paste_as_text: true,
 
       setup: function (ed) {
         ed.on('init', function () {
           that.editor = ed;
           ed.module = that.model.get('ModuleModel');
-          ed.kfilter = (that.model.get('filter') && that.model.get('filter') === 'content') ? true : false;
+          ed.kfilter = (that.model.get('filter') && that.model.get('filter') === 'content');
           KB.Events.trigger('KB::tinymce.new-inline-editor', ed);
           ed.focus();
 
-          jQuery('.mce-panel.mce-floatpanel').hide();
+          // jQuery('.mce-panel.mce-floatpanel').hide();
           jQuery(window).on('scroll.kbmce resize.kbmce', function () {
             jQuery('.mce-panel.mce-floatpanel').hide();
           });
@@ -5219,10 +5222,11 @@ var EditableText = Backbone.View.extend({
         });
 
         ed.on('selectionchange mouseup', function (e) {
-          that.getSelection(ed, e);
+          // that.getSelection(ed, e);
         });
 
         ed.on('NodeChange', function (e) {
+          // that.getSelection(ed, e);
           KB.Events.trigger('window.change');
         });
 
@@ -5304,7 +5308,7 @@ var EditableText = Backbone.View.extend({
         that.model.set('value', content);
         that.model.syncContent = ed.getContent();
 
-        that.model.trigger('field.model.dirty',that.model);
+        that.model.trigger('field.model.dirty', that.model);
         that.model.trigger('external.change', that.model);
         KB.Events.trigger('content.change');
 
@@ -5323,7 +5327,7 @@ var EditableText = Backbone.View.extend({
     });
   },
   activate: function (e) {
-    if (KB.EditModalModules){
+    if (KB.EditModalModules) {
       KB.EditModalModules.destroy();
     }
     e.stopPropagation();
@@ -5349,24 +5353,25 @@ var EditableText = Backbone.View.extend({
       .replace(/<p><\/p>/g, '');
   },
   getSelection: function (editor, event) {
-    var sel = editor.selection.getContent();
-    var $toolbar = jQuery('.mce-panel.mce-floatpanel');
-    if (sel === '') {
-      $toolbar.hide();
-    } else {
-      var mpos = markSelection();
-      var w = $toolbar.width();
-      $toolbar.css({top: mpos.top - 40 + 'px', left: mpos.left - w + 'px'});
-      $toolbar.show();
-    }
+    // var sel = editor.selection.getContent();
+    // var $toolbar = jQuery('.mce-panel.mce-floatpanel');
+    // if (sel === '') {
+    //   $toolbar.hide();
+    // } else {
+    //   var mpos = markSelection();
+    //   var w = $toolbar.width();
+    //   $toolbar.css({top: mpos.top - 40 + 'px', left: mpos.left - w + 'px'});
+    //   console.log('ran');
+    //   $toolbar.show();
+    // }
   },
   synchronize: function (model) {
-    if (this.editor){
+    if (this.editor) {
       this.editor.setContent(model.syncContent);
     } else {
       this.$el.html(model.syncContent);
     }
-    this.model.trigger('field.model.dirty',this.model);
+    this.model.trigger('field.model.dirty', this.model);
 
   }
 });

@@ -84,7 +84,7 @@ class ScreenManager
         // set this environment
         $this->environment = $environment;
         //setup region layout
-        $this->contextLayout = self::getDefaultContextLayout();
+        $this->contextLayout = $this->setupContextLayout();
         // setup filtered areas
         $this->contexts = $this->areasSortedByContext();
         // test if final context layout includes an sidebar
@@ -92,6 +92,14 @@ class ScreenManager
         $this->hasSidebar = (!empty($this->contexts['side']) && !empty($this->contexts['normal']));
         $this->setupLayout();
 
+    }
+
+    /**
+     * @return mixed|void
+     */
+    private function setupContextLayout()
+    {
+        return apply_filters('kb.screen.context.layout', self::getDefaultContextLayout(), $this);
     }
 
     /**
@@ -132,7 +140,8 @@ class ScreenManager
         );
 
         // plugins may change this
-        return apply_filters('kb_default_context_layout', $defaults);
+        $filtered = apply_filters('kb.default.context.layout', $defaults);
+        return apply_filters('kb_default_context_layout', $filtered);
 
     }
 

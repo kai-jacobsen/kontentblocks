@@ -95,6 +95,76 @@ class GlobalModulesMenu
     }
 
     /**
+     * Form for creating new template
+     *
+     * @since 0.1.0
+     * @return void
+     */
+    protected function createForm()
+    {
+
+        $screen = get_current_screen();
+        $request = Request::createFromGlobals();
+        if ($screen->post_type !== 'kb-gmd') {
+            return;
+        }
+
+
+        /*
+         * Form validation happens on the frontend
+         * if this fails for any reason, data is preserved anyway
+         * for completeness
+         */
+        $postData = $request->request->get('new-module', array());
+
+        // Data for twig
+        $templateData = array(
+            'modules' => $this->prepareModulesforSelectbox($postData),
+            'nonce' => wp_create_nonce('new-gmodule'),
+            'data' => $postData,
+            'strings' => I18n::getPackages('Common', 'Modules')
+        );
+
+        // To keep html out of php files as much as possible twig is used
+        // Good thing about twig is it handles unset vars gracefully
+        $formNew = new CoreView('global-modules/add-new.twig', $templateData);
+        $formNew->render(true);
+
+    }
+
+    /**
+     * Gets all available Modules from registry
+     *
+     * @param array $postData potential incomplete form data
+     *
+     * @since 0.1.0
+     * @return array
+     */
+    private function prepareModulesforSelectbox($postData)
+    {
+
+        $type = (isset($postData['type'])) ? $postData['type'] : '';
+        $modules =
+        $modules = $this->getGloballyAllowed();
+
+        $collection = array();
+
+        if (!empty($modules)) {
+            foreach ($modules as $module) {
+                $collection[] = array(
+                    'name' => $module['settings']['name'],
+                    'class' => $module['settings']['class'],
+                    'selected' => ($module['settings']['class'] === $type) ? 'selected="selected"' : ''
+                );
+            }
+
+        }
+
+        return $collection;
+
+    }
+
+    /**
      * Filter all modules which may be created as a template
      * @since 0.1.0
      * @return array
@@ -113,6 +183,79 @@ class GlobalModulesMenu
                 return false;
             }
         );
+    }
+
+    /**
+     * Display form of the module
+     *
+     * @param $gmodule
+     * @since 0.1.0
+     * @return void|string
+     */
+    protected function globalModule($gmodule)
+    {
+        global $post;
+        if (empty($gmodule)) {
+            wp_die('no template arg provided');
+        }
+        // TODO Include a public context switch
+        // Modules resp. the input form of a module may rely on a certain context
+        // or have different fields configuration
+        // TODO Explanation text for non-developers on page
+        $context = (isset($_GET['area-context'])) ? $_GET['area-context'] : 'normal';
+        // infamous hidden editor hack
+        Utilities::hiddenEditor();
+        // need to create a ew module here in order to override areaContext
+        $environment = Utilities::getPostEnvironment($post->ID);
+        $gmodule['areaContext'] = $context;
+        $workshop = new ModuleWorkshop($environment, $gmodule);
+        $module = $workshop->getModule();
+        if ($module === false) {
+            $formNew = new CoreView('global-modules/edit-gmodule-gone.twig', array(
+                'i18n' => I18n::getPackages('Common', 'Menus'),
+                'attachedTo' => $this->prepareAttachedTo()
+
+            ));
+            return $formNew->render(true);
+        }
+
+        Kontentblocks::getService('utility.jsontransport')->registerModule($module->toJSON());
+        // Data for twig
+        $templateData = array(
+            'nonce' => wp_create_nonce('update-gmodule'),
+            'module' => $module,
+            'attachedTo' => $this->prepareAttachedTo(),
+            'contexts' => ScreenManager::getDefaultContextLayout(),
+            'strings' => I18n::getPackages('Common', 'Menus')
+        );
+
+
+        $return = filter_input(INPUT_GET, 'return', FILTER_VALIDATE_INT);
+        if (is_numeric($return)) {
+            echo "<input type='hidden' name='kb_return_to_post' value='{$return}' >";
+        }
+        // To keep html out of php files as much as possible twig is used
+        $formNew = new CoreView('global-modules/edit-gmodule.twig', $templateData);
+        $formNew->render(true);
+    }
+
+    /**
+     * @return array
+     * @since 0.2.0
+     */
+    private function prepareAttachedTo()
+    {
+        global $wpdb;
+        $posts = array();
+        $meta = get_post_meta(get_the_ID(), '_kb_attached_to', true);
+        if (!is_array($meta)) {
+            return $posts;
+        }
+        $unique = implode(',', array_values($meta));
+        if (!empty($unique)) {
+            $posts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE ID IN ('$unique') ");
+        }
+        return $posts;
     }
 
     /**
@@ -164,6 +307,53 @@ class GlobalModulesMenu
             }
         }
 
+    }
+
+    /**
+     * Various checks
+     *
+     * @param $postId
+     *
+     * @since 0.1.0
+     * @return bool
+     */
+    private function auth($postId)
+    {
+        // verify if this is an auto save routine.
+        // If it is our form has not been submitted, so we dont want to do anything
+        if (empty($_POST)) {
+            return false;
+        }
+
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return false;
+        }
+
+        // verify this came from the our screen and with proper authorization,
+        // because save_post can be triggered at other times
+//        if (!wp_verify_nonce($_POST['kb_noncename'], 'kontentblocks_save_post')) {
+//            return false;
+//        }
+
+        // Check permissions
+        if (!current_user_can('edit_post', $postId)) {
+            return false;
+        }
+
+        if (!current_user_can('edit_kontentblocks')) {
+            return false;
+        }
+
+        if (get_post_type($postId) == 'revision' && !Utilities::isPreview()) {
+            return false;
+        }
+
+        if (get_post_type($postId) !== 'kb-gmd') {
+            return false;
+        }
+
+        // checks passed
+        return true;
     }
 
     /**
@@ -369,196 +559,6 @@ class GlobalModulesMenu
                 'dynamic' => false
             )
         );
-    }
-
-    /**
-     * Form for creating new template
-     *
-     * @since 0.1.0
-     * @return void
-     */
-    protected function createForm()
-    {
-
-        $screen = get_current_screen();
-        $request = Request::createFromGlobals();
-        if ($screen->post_type !== 'kb-gmd') {
-            return;
-        }
-
-
-        /*
-         * Form validation happens on the frontend
-         * if this fails for any reason, data is preserved anyway
-         * for completeness
-         */
-        $postData = $request->request->get('new-module', array());
-
-        // Data for twig
-        $templateData = array(
-            'modules' => $this->prepareModulesforSelectbox($postData),
-            'nonce' => wp_create_nonce('new-gmodule'),
-            'data' => $postData,
-            'strings' => I18n::getPackages('Common', 'Modules')
-        );
-
-        // To keep html out of php files as much as possible twig is used
-        // Good thing about twig is it handles unset vars gracefully
-        $formNew = new CoreView('global-modules/add-new.twig', $templateData);
-        $formNew->render(true);
-
-    }
-
-    /**
-     * Display form of the module
-     *
-     * @param $gmodule
-     * @since 0.1.0
-     * @return void|string
-     */
-    protected function globalModule($gmodule)
-    {
-        global $post;
-        if (empty($gmodule)) {
-            wp_die('no template arg provided');
-        }
-        // TODO Include a public context switch
-        // Modules resp. the input form of a module may rely on a certain context
-        // or have different fields configuration
-        // TODO Explanation text for non-developers on page
-        $context = (isset($_GET['area-context'])) ? $_GET['area-context'] : 'normal';
-        // infamous hidden editor hack
-        Utilities::hiddenEditor();
-        // need to create a ew module here in order to override areaContext
-        $environment = Utilities::getPostEnvironment($post->ID);
-        $gmodule['areaContext'] = $context;
-        $workshop = new ModuleWorkshop($environment, $gmodule);
-        $module = $workshop->getModule();
-        if ($module === false) {
-            $formNew = new CoreView('global-modules/edit-gmodule-gone.twig', array(
-                'i18n' => I18n::getPackages('Common', 'Menus'),
-                'attachedTo' => $this->prepareAttachedTo()
-
-            ));
-            return $formNew->render(true);
-        }
-
-        Kontentblocks::getService('utility.jsontransport')->registerModule($module->toJSON());
-        // Data for twig
-        $templateData = array(
-            'nonce' => wp_create_nonce('update-gmodule'),
-            'module' => $module,
-            'attachedTo' => $this->prepareAttachedTo(),
-            'contexts' => ScreenManager::getDefaultContextLayout(),
-            'strings' => I18n::getPackages('Common', 'Menus')
-        );
-
-
-        $return = filter_input(INPUT_GET, 'return', FILTER_VALIDATE_INT);
-        if (is_numeric($return)) {
-            echo "<input type='hidden' name='kb_return_to_post' value='{$return}' >";
-        }
-        // To keep html out of php files as much as possible twig is used
-        $formNew = new CoreView('global-modules/edit-gmodule.twig', $templateData);
-        $formNew->render(true);
-    }
-
-    /**
-     * Gets all available Modules from registry
-     *
-     * @param array $postData potential incomplete form data
-     *
-     * @since 0.1.0
-     * @return array
-     */
-    private function prepareModulesforSelectbox($postData)
-    {
-
-        $type = (isset($postData['type'])) ? $postData['type'] : '';
-        $modules =
-        $modules = $this->getGloballyAllowed();
-
-        $collection = array();
-
-        if (!empty($modules)) {
-            foreach ($modules as $module) {
-                $collection[] = array(
-                    'name' => $module['settings']['name'],
-                    'class' => $module['settings']['class'],
-                    'selected' => ($module['settings']['class'] === $type) ? 'selected="selected"' : ''
-                );
-            }
-
-        }
-
-        return $collection;
-
-    }
-
-    /**
-     * @return array
-     * @since 0.2.0
-     */
-    private function prepareAttachedTo()
-    {
-        global $wpdb;
-        $posts = array();
-        $meta = get_post_meta(get_the_ID(), '_kb_attached_to', true);
-        if (!is_array($meta)) {
-            return $posts;
-        }
-        $unique = implode(',', array_values($meta));
-        if (!empty($unique)) {
-            $posts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE ID IN ('$unique') ");
-        }
-        return $posts;
-    }
-
-    /**
-     * Various checks
-     *
-     * @param $postId
-     *
-     * @since 0.1.0
-     * @return bool
-     */
-    private function auth($postId)
-    {
-        // verify if this is an auto save routine.
-        // If it is our form has not been submitted, so we dont want to do anything
-        if (empty($_POST)) {
-            return false;
-        }
-
-        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return false;
-        }
-
-        // verify this came from the our screen and with proper authorization,
-        // because save_post can be triggered at other times
-//        if (!wp_verify_nonce($_POST['kb_noncename'], 'kontentblocks_save_post')) {
-//            return false;
-//        }
-
-        // Check permissions
-        if (!current_user_can('edit_post', $postId)) {
-            return false;
-        }
-
-        if (!current_user_can('edit_kontentblocks')) {
-            return false;
-        }
-
-        if (get_post_type($postId) == 'revision' && !Utilities::isPreview()) {
-            return false;
-        }
-
-        if (get_post_type($postId) !== 'kb-gmd') {
-            return false;
-        }
-
-        // checks passed
-        return true;
     }
 
 }

@@ -512,35 +512,37 @@ body.onsite-editing {
   box-sizing: content-box;
 }
 
-body.kontentblocks-ready .mce-floatpanel.mce-tinymce-inline {
-  .mce-toolbar-grp.mce-container, .mce-container-body.mce-stack-layout {
-    width: auto !important;
-  }
-
-  .mce-stack-layout-item, .mce-container-body {
-    display: inline-block !important;
-  }
-
-  .mce-tooltip {
-    font-family: 'Open-Sans', sans-serif !important;
-  }
-
-  .mce-widget.mce-btn {
-    button:hover {
-      background-color: #ffffff !important;
-    }
-  }
-}
-
-body.kontentblocks-ready .mce-tooltip{
-  position: fixed !important;
-}
-
+//body.kontentblocks-ready .mce-floatpanel.mce-tinymce-inline {
+//  .mce-toolbar-grp.mce-container, .mce-container-body.mce-stack-layout {
+//    width: auto !important;
+//  }
+//
+//  .mce-stack-layout-item, .mce-container-body {
+//    display: inline-block !important;
+//  }
+//
+//  .mce-tooltip {
+//    font-family: 'Open-Sans', sans-serif !important;
+//  }
+//
+//  .mce-widget.mce-btn {
+//    button:hover {
+//      background-color: #ffffff !important;
+//    }
+//  }
+//}
+//
+//body.kontentblocks-ready .mce-tooltip{
+//  position: fixed !important;
+//}
+//
 body.kontentblocks-ready .mce-container.mce-panel.mce-floatpanel.mce-menu.mce-menu-align{
   position: fixed !important;
 }
 
 body.kontentblocks-ready{
+
+  position: relative;
 
   .kb-status-public,.kb-status-draft{
     cursor: pointer;

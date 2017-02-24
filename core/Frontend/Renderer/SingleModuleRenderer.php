@@ -158,6 +158,9 @@ class SingleModuleRenderer implements RendererInterface
         return implode(' ', array_unique($this->classes));
     }
 
+    /**
+     * @return string
+     */
     protected function renderAttributes()
     {
         $attr = $this->renderSettings->get('attributes');
