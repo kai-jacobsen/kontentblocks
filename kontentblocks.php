@@ -49,7 +49,7 @@ Class Kontentblocks
 
     const VERSION = '0.8.34';
     const DEVMODE = true;
-    const TABLEVERSION = '1.0.13';
+    const TABLEVERSION = '1.0.15';
     const DEBUG = true;
     const DEBUG_LOG = false;
     static $instance;

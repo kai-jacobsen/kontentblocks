@@ -4,6 +4,7 @@ namespace Kontentblocks\Backend\Environment\Save;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
+use Kontentblocks\Backend\Storage\BackupDataStorage2;
 use Kontentblocks\Modules\Module;
 use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,6 +59,7 @@ class SavePost
 
         // create backup
         $this->createBackup();
+
         foreach ($areas as $area) {
             if (!$this->saveByArea($area)) {
                 continue;
@@ -137,11 +139,13 @@ class SavePost
      */
     private function createBackup()
     {
+
         // Backup data, not for Previews
-        if (!isset($_POST['wp-preview'])) {
-            $backupManager = new BackupDataStorage($this->environment->getStorage());
-            $backupManager->backup('Before regular update');
+        if (isset($_POST['wp-preview']) && !empty($_POST['wp-preview'])) {
+            return;
         }
+        $backupManager = new BackupDataStorage2($this->environment);
+        $backupManager->insertBackup("Post updated");
     }
 
     /**
@@ -170,6 +174,7 @@ class SavePost
      */
     public function saveModules($modules)
     {
+
         /** @var \Kontentblocks\Modules\Module $module */
         foreach ($modules as $module) {
             if (!$this->postdata->request->has($module->getId())) {
@@ -216,8 +221,6 @@ class SavePost
             }
         }
 
-        $backupManager = new BackupDataStorage($this->environment->getStorage());
-        $backupManager->backup("Post updated");
 
     }
 

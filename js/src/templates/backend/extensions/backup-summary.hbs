@@ -3,9 +3,9 @@
         <summary>
             {{ time }}
         </summary>
-        <div class='actions' data-id='{{ key }}'>
+        <div class='actions' data-id='{{ item.id }}'>
             <span class='js-restore'>Restore</span>
-            <p class='description'><b>Comment:</b> {{ item.msg }}</p>
+            <p class='description'><b>Comment:</b> {{ item.comment }} ({{ item.username }})</p>
         </div>
     </details>
 </li>

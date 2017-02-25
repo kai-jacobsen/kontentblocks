@@ -2,8 +2,13 @@
 
 namespace Kontentblocks\Extensions;
 
+use Kontentblocks\Ajax\AjaxErrorResponse;
+use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
+use Kontentblocks\Backend\Storage\BackupDataStorage2;
 use Kontentblocks\Backend\Storage\ModuleStorage;
+use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class BackupInspect
@@ -17,10 +22,10 @@ class BackupInspect
      */
     public function __construct()
     {
-        add_action( 'add_meta_boxes', array( $this, 'addMetaBox' ), 15, 2 );
-        add_action( 'wp_ajax_get_backups', array( $this, 'getBackups' ) );
-        add_action( 'init', array( $this, 'observeQuery' ),99 );
-        add_filter( 'heartbeat_received', array( $this, 'heartbeatReceive' ), 10, 2 );
+        add_action('add_meta_boxes', array($this, 'addMetaBox'), 15, 2);
+        add_action('wp_ajax_get_backups', array($this, 'getBackups'));
+        add_action('init', array($this, 'observeQuery'), 99);
+        add_filter('heartbeat_received', array($this, 'heartbeatReceive'), 10, 2);
     }
 
     /**
@@ -30,11 +35,11 @@ class BackupInspect
     {
         $screen = get_current_screen();
 
-        if (post_type_supports( $screen->post_type, 'kontentblocks:backups-ui' )) {
+        if (post_type_supports($screen->post_type, 'kontentblocks:backups-ui')) {
             add_meta_box(
                 'kb-backup-inspect',
                 'Kontenblocks Backup',
-                array( $this, 'controls' ),
+                array($this, 'controls'),
                 $screen->post_type,
                 'side',
                 'high'
@@ -59,10 +64,10 @@ class BackupInspect
      */
     public function observeQuery()
     {
-        if (isset( $_GET['restore_backup'] )) {
-            $location = add_query_arg( array( 'restore_backup' => false, 'post_id' => false ) );
-            $this->restoreBackup( $_GET['post_id'], $_GET['restore_backup'] );
-            wp_redirect( $location );
+        if (isset($_GET['restore_backup'])) {
+            $location = add_query_arg(array('restore_backup' => false, 'post_id' => false));
+            $this->restoreBackup($_GET['post_id'], $_GET['restore_backup']);
+            wp_redirect($location);
             exit;
         }
 
@@ -74,13 +79,12 @@ class BackupInspect
      * @param $post_id int post id
      * @param $id string id of target backup (a timestamp most likely)
      */
-    public function restoreBackup( $post_id, $id )
+    public function restoreBackup($post_id, $id)
     {
-
-        $storage = new ModuleStorage( $post_id );
-        $backupManager = new BackupDataStorage( $storage );
-        $backupManager->backup( 'before backup restore' );
-        $backupManager->restoreBackup( $id );
+        $environment = Utilities::getPostEnvironment($post_id);
+        $backupManager = new BackupDataStorage2($environment);
+//        $backupManager->backup('before backup restore');
+        $backupManager->restoreBackup($id);
 
     }
 
@@ -89,16 +93,22 @@ class BackupInspect
      */
     public function getBackups()
     {
-        check_ajax_referer( 'kb-read' );
+        check_ajax_referer('kb-read');
+        $request = Request::createFromGlobals();
+        $postId = $request->request->get('post_id', null);
 
-        $postId = $_REQUEST['post_id'];
+        if (is_null($postId)) {
+            return new AjaxErrorResponse('No post id provided', []);
+        }
 
-        $storage = new ModuleStorage( $postId );
-        $backupManager = new BackupDataStorage( $storage );
-        $backups = $backupManager->queryBackup( $postId );
-        $return = ( !empty( $backups ) ) ? unserialize( base64_decode( $backups->value ) ) : array();
-        $this->backupData = $return;
-        wp_send_json( $return );
+        $environment = Utilities::getPostEnvironment($postId);
+        $backupManager = new BackupDataStorage2($environment);
+        $items = array_map(function ($row) {
+            unset($row->value);
+            return $row;
+        }, $backupManager->getAll());
+        return new AjaxSuccessResponse('Backups retrieved', $items);
+
     }
 
     /**
@@ -109,21 +119,19 @@ class BackupInspect
      *
      * @return mixed
      */
-    public function heartbeatReceive( $response, $data )
+    public function heartbeatReceive($response, $data)
     {
-        if (isset( $data['kbBackupWatcher'] ) && $data['kbBackupWatcher'] != null) {
+        if (isset($data['kbBackupWatcher']) && $data['kbBackupWatcher'] != null) {
 
-            $storage = new ModuleStorage( $data['post_id'] );
 
-            if ($data['kbBackupWatcher'] == get_post_meta( $data['post_id'], 'kb_last_backup', true )) {
+            if ($data['kbBackupWatcher'] == get_post_meta($data['post_id'], 'kb_last_backup', true)) {
                 $response['kbHasNewBackups'] = false;
             } else {
-                $backupManager = new BackupDataStorage( $storage );
-                $backups = $backupManager->queryBackup( $data['post_id'] );
-                $response['hmm'] = update_post_meta( $data['post_id'], 'kb_last_backup', $data['kbBackupWatcher'] );
-                $response['kbHasNewBackups'] = ( !empty( $backups ) ) ? unserialize(
-                    base64_decode( $backups->value )
-                ) : array();
+                $environment = Utilities::getPostEnvironment($data['post_id']);
+                $backupManager = new BackupDataStorage2($environment);
+                $backups = $backupManager->getAll();
+                $response['hmm'] = update_post_meta($data['post_id'], 'kb_last_backup', $data['kbBackupWatcher']);
+                $response['kbHasNewBackups'] = (!empty($backups)) ? $backups : array();
             }
         }
         return $response;

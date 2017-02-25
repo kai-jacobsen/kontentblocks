@@ -58,7 +58,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      * in the meta table
      * @var bool
      */
-    protected $saveAsSingle = false;
+    public $saveAsSingle = false;
     /**
      * unique identifier
      * @var string

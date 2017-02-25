@@ -187,7 +187,6 @@ class BackupDataStorage
     private function updateBackup()
     {
         global $wpdb;
-
         $existingData = unserialize( base64_decode( $this->package->value ) );
         $user = wp_get_current_user();
 

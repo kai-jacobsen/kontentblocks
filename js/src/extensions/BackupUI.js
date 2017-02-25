@@ -34,8 +34,8 @@ var BackupUi = Backbone.View.extend({
         _ajax_nonce: Config.getNonce('read')
       },
       function (response) {
-        that.items = response;
-        that.renderList(response);
+        that.items = response.data;
+        that.renderList(response.data);
       });
 
   },
@@ -43,11 +43,10 @@ var BackupUi = Backbone.View.extend({
     var that = this;
     this.listEl.empty();
     _.each(items, function (item, key) {
-      that.lastItem = key;
+      that.lastItem = item;
       var data = {
-        time: new Date(key * 1000).toGMTString(),
-        item: item,
-        key: key
+        time: new Date(item.created).toGMTString(),
+        item: item
       };
       that.listEl.append(tplSummary(data));
     });

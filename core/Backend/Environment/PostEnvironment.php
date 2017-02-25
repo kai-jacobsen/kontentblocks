@@ -213,6 +213,13 @@ class PostEnvironment implements JsonSerializable, EnvironmentInterface
     }
 
     /**
+     * @return array
+     */
+    public function getPanels(){
+        return $this->panels;
+    }
+
+    /**
      * Return ID for the current storage entity
      * (most likely equals post id)
      * @return int

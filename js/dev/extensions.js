@@ -382,8 +382,8 @@ var BackupUi = Backbone.View.extend({
         _ajax_nonce: Config.getNonce('read')
       },
       function (response) {
-        that.items = response;
-        that.renderList(response);
+        that.items = response.data;
+        that.renderList(response.data);
       });
 
   },
@@ -391,11 +391,10 @@ var BackupUi = Backbone.View.extend({
     var that = this;
     this.listEl.empty();
     _.each(items, function (item, key) {
-      that.lastItem = key;
+      that.lastItem = item;
       var data = {
-        time: new Date(key * 1000).toGMTString(),
-        item: item,
-        key: key
+        time: new Date(item.created).toGMTString(),
+        item: item
       };
       that.listEl.append(tplSummary(data));
     });
@@ -1055,15 +1054,17 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
+    var stack1, helper, alias1=this.escapeExpression, alias2=this.lambda;
 
   return "<li>\n    <details>\n        <summary>\n            "
-    + alias3(((helper = (helper = helpers.time || (depth0 != null ? depth0.time : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"time","hash":{},"data":data}) : helper)))
+    + alias1(((helper = (helper = helpers.time || (depth0 != null ? depth0.time : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"time","hash":{},"data":data}) : helper)))
     + "\n        </summary>\n        <div class='actions' data-id='"
-    + alias3(((helper = (helper = helpers.key || (depth0 != null ? depth0.key : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"key","hash":{},"data":data}) : helper)))
+    + alias1(alias2(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.id : stack1), depth0))
     + "'>\n            <span class='js-restore'>Restore</span>\n            <p class='description'><b>Comment:</b> "
-    + alias3(this.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.msg : stack1), depth0))
-    + "</p>\n        </div>\n    </details>\n</li>";
+    + alias1(alias2(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.comment : stack1), depth0))
+    + " ("
+    + alias1(alias2(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.username : stack1), depth0))
+    + ")</p>\n        </div>\n    </details>\n</li>";
 },"useData":true});
 
 },{"hbsfy/runtime":37}],26:[function(require,module,exports){
