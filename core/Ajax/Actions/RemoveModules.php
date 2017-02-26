@@ -5,7 +5,7 @@ namespace Kontentblocks\Ajax\Actions;
 use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Backend\Storage\BackupDataStorage;
+use Kontentblocks\Backend\Storage\BackupDataStorage2;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,8 +29,8 @@ class RemoveModules extends AbstractAjaxAction
         $workshop = new ModuleWorkshop($environment, $environment->getStorage()->getModuleDefinition($mid));
         $module = $workshop->getModule();
         $storage = $environment->getStorage();
-        $backupManager = new BackupDataStorage($storage);
-        $backupManager->backup("Before Module: {$mid} was deleted");
+        $backupManager = new BackupDataStorage2($environment);
+        $backupManager->insertBackup("Before Module: {$mid} was deleted");
         $update = $storage->removeFromIndex($mid);
         if ($update) {
             do_action('kb.module.delete', $module);

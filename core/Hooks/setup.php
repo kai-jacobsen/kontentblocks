@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Hooks;
 
-use Kontentblocks\Backend\Storage\BackupDataStorage;
+use Kontentblocks\Backend\Storage\BackupDataStorage2;
 
 
 /*
@@ -35,7 +35,7 @@ add_action( 'init', __NAMESPACE__ . '\remove_editor_support', 12 );
  */
 function deleteBackup( $postId )
 {
-    BackupDataStorage::deletePostCallback( $postId );
+    BackupDataStorage2::deletePostCallback( $postId );
 }
 
 add_action( 'delete_post', __NAMESPACE__ . '\deleteBackup' );

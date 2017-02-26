@@ -69,6 +69,11 @@ class BackupDataStorage2
             return false;
         }
 
+        if (apply_filters('kb.backups.enabled', '__return_false') !== true) {
+            return false;
+        }
+
+
         $user = wp_get_current_user();
 
         $value = array(
@@ -92,10 +97,10 @@ class BackupDataStorage2
             'username' => $user->user_login
         );
 
-        update_post_meta($this->storage->getStorageId(), 'kb_last_backup', $now);
         wp_cache_delete('kb_backups_' . $data['post_id'], Utilities::getCacheGroup());
         $insertRecord = $wpdb->insert($wpdb->prefix . "kb_backups", $data);
         $this->cleanUp();
+        update_post_meta($this->storage->getStorageId(), 'kb_last_backup', $insertRecord);
         return $insertRecord;
     }
 
@@ -135,6 +140,11 @@ class BackupDataStorage2
         if (!current_user_can('edit_kontentblocks')) {
             return false;
         }
+
+        if (apply_filters('kb.backups.enabled', '__return_false') !== true) {
+            return [];
+        }
+
         $backupid = $this->storage->getStorageId();
         $prefix = $wpdb->prefix;
         $cache = wp_cache_get('kb_backups_' . $backupid, Utilities::getCacheGroup());
@@ -184,9 +194,14 @@ class BackupDataStorage2
 
     /**
      * @param $id
+     * @return bool
      */
     public function restoreBackup($id)
     {
+        if (!apply_filters('kb.backups.enabled', '__return_true')) {
+            return false;
+        }
+
         global $wpdb;
         $row = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}kb_backups WHERE id = '{$id}'");
         if (!empty($row)) {
@@ -218,11 +233,32 @@ class BackupDataStorage2
                         $module->getModel()->sync(true);
                     }
                 }
-
             }
+
+            $this->storage->saveIndex($prow->value['index']);
+
+            $panels = $this->environment->getPanels();
+            $paneldata = $prow->value['panels'];
+            /** @var PostPanel $panel */
+            foreach ($panels as $panel) {
+                $pid = $panel->getId();
+                if (isset($paneldata[$pid])) {
+                    $model = $panel->getModel()->set($paneldata[$pid]);
+                    $model->sync();
+                }
+            }
+
+
+            clean_post_cache($this->environment->getId());
+            Utilities::remoteConcatGet($this->environment->getId());
+
         }
     }
 
+    /**
+     * @param $new
+     * @return array
+     */
     private function diffIndex($new)
     {
         $old = $this->environment->getStorage()->getIndex();
@@ -236,6 +272,9 @@ class BackupDataStorage2
     }
 
 
+    /**
+     * @param $timestamp
+     */
     public function setTransient($timestamp)
     {
         set_transient('kb_last_backup', $timestamp);

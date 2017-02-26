@@ -411,7 +411,7 @@ var BackupUi = Backbone.View.extend({
   },
   restore: function (id) {
     var that = this;
-    var location = window.location.href + '&amp;restore_backup=' + id + '&amp;post_id=' + jQuery('#post_ID').val();
+    var location = window.location.href + '&restore_backup=' + id + '&post_id=' + jQuery('#post_ID').val();
     window.location = location;
   }
 });

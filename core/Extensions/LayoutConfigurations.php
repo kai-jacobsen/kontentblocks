@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Extensions;
 
-use Kontentblocks\Backend\Storage\BackupDataStorage;
+use Kontentblocks\Backend\Storage\BackupDataStorage2;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Language\I18n;
 
@@ -223,7 +223,7 @@ class LayoutConfigurations
     {
 
         $storage = new ModuleStorage( $postId );
-        $backupManager = new BackupDataStorage( $storage );
+        $backupManager = new BackupDataStorage2( $storage );
         $configurations = get_option( 'kb_layout_configurations' );
 
 

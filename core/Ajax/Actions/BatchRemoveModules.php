@@ -5,7 +5,7 @@ namespace Kontentblocks\Ajax\Actions;
 use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Backend\Storage\BackupDataStorage;
+use Kontentblocks\Backend\Storage\BackupDataStorage2;
 use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,8 +26,10 @@ class BatchRemoveModules extends AbstractAjaxAction
         $environment = Utilities::getPostEnvironment($postId);
         $storage = $environment->getStorage();
         $mids = $request->request->filter('modules', null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        $backupManager = new BackupDataStorage($storage);
-        $backupManager->backup("Before batch removal of modules");
+
+        $backupManager = new BackupDataStorage2($environment);
+        $backupManager->insertBackup("Before batch removal of modules");
+
         $responseMap = array();
         $moduleRepository = $environment->getModuleRepository();
         foreach ($mids as $mid) {

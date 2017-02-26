@@ -9,14 +9,14 @@ if (current_theme_supports( 'kontentblocks:page-settings' )) {
     add_action( 'kb.init', array( '\Kontentblocks\Extensions\PageSettingsUI', 'init' ) );
 }
 
-if (current_theme_supports( 'kontentblocks:backups-ui' )) {
+if (current_theme_supports( 'kb.backups.ui' )) {
     add_action(
         'init',
         function () {
-            $support = get_theme_support( 'kontentblocks:backups-ui' );
+            $support = get_theme_support( 'kb.backups.ui' );
             if (is_array( $support )) {
                 foreach ($support as $postType) {
-                    add_post_type_support( $postType, 'kontentblocks:backups-ui' );
+                    add_post_type_support( $postType, 'kb.backups.ui' );
                 }
             }
             new BackupInspect();
