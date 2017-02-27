@@ -27,11 +27,10 @@ class GetGlobalAreaHTML extends AbstractAjaxAction
         $postId = $request->request->getInt('postId');
         $areaId = $request->request->filter('areaId', null, FILTER_SANITIZE_STRING);
         $settings = $request->request->get('settings');
-
         $environment = Utilities::getPostEnvironment($postId);
         $area = $environment->getAreaDefinition($areaId);
 
-        $areaSettings = new AreaSettingsModel($area, $postId, $environment->getDataProvider());
+        $areaSettings = new AreaSettingsModel($area, $environment->getDataProvider());
         $areaSettings->import(Utilities::validateBoolRecursive($settings));
         $update = $areaSettings->save();
         $html = '';
