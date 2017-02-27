@@ -34,6 +34,7 @@ class SavePost
         $this->postid = $environment->getId();
         $this->postdata = Request::createFromGlobals();
         $this->index = $this->environment->getStorage()->getIndex();
+        $this->postObj = $environment->getPostObject();
     }
 
 
@@ -120,13 +121,11 @@ class SavePost
             return false;
         }
 
-        if (get_post_type($this->postid) == 'revision' && !is_null($this->postdata->get('wp-preview'))) {
-            return false;
-        }
 
-        if ($this->environment->getPostType() == 'revision') {
-            return false;
-        }
+//        if ($this->environment->getPostType() == 'revision' && $this->postObj->post_parent !== $this->postid) {
+//            return false;
+//        }
+
 
         // checks passed
         return true;

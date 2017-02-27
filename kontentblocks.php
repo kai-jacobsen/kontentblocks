@@ -21,6 +21,7 @@ use Kontentblocks\Backend\Dynamic\DynamicAreas;
 use Kontentblocks\Backend\Dynamic\GlobalModulesMenu;
 use Kontentblocks\Backend\EditScreens\PostEditScreen;
 use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayoutsRegistry;
+use Kontentblocks\Backend\EditScreens\Revisions;
 use Kontentblocks\Backend\EditScreens\TaxonomyEditScreen;
 use Kontentblocks\Backend\EditScreens\UserEditScreen;
 use Kontentblocks\Hooks\Enqueues;
@@ -296,6 +297,7 @@ Class Kontentblocks
             $this->initInterface();
 
             add_post_type_support('page', 'kontentblocks');
+            add_post_type_support('revision', 'kontentblocks');
             remove_post_type_support('page', 'revisions');
         }
 
@@ -344,6 +346,7 @@ Class Kontentblocks
          * Main post edit screen handler
          * Post type must support 'kontentblocks"
          */
+        new Revisions();
         new PostEditScreen();
         new TaxonomyEditScreen();
         new UserEditScreen();

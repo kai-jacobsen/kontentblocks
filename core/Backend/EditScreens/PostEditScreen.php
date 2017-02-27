@@ -42,10 +42,12 @@ Class PostEditScreen
         global $pagenow;
         if (in_array($pagenow, $this->setupHooks())) {
             // add UI
+
             add_action('add_meta_boxes', array($this, 'renderUserInterface'), 10, 2);
             // register save callback
             add_action('save_post', array($this, 'save'), 5, 2);
             add_filter('_wp_post_revision_fields', array($this, 'revisionFields'));
+            add_filter('wp_save_post_revision_check_for_changes', '__return_true', 10, 3);
             // expose data to the document
             add_action('admin_footer', array($this, 'toJSON'), 1);
         }
@@ -59,7 +61,7 @@ Class PostEditScreen
      */
     private function setupHooks()
     {
-        return apply_filters('kb.setup.hooks', array('post.php', 'post-new.php'));
+        return apply_filters('kb.setup.hooks', array('post.php', 'post-new.php', 'revision.php'));
 
     }
 
@@ -184,6 +186,7 @@ Class PostEditScreen
         $fields["kb_preview"] = "kb_preview";
         return $fields;
     }
+
 
 
 }
