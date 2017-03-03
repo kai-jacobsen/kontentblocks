@@ -217,7 +217,12 @@ module.exports = Backbone.View.extend({
    * Calls serialize in preview mode
    * No data gets saved
    */
-  preview: function () {
+  preview: function (options) {
+    if (options && options.hasOwnProperty('silent')) {
+      if (options.silent == true) {
+        return;
+      }
+    }
     this.serialize(false, false);
   },
   /**
@@ -259,6 +264,7 @@ module.exports = Backbone.View.extend({
         that.LoadingAnimation.show();
       },
       success: function (res) {
+
         // indicate working state
         //that.$el.fadeTo(300, 0.1);
         // clear form content
@@ -314,6 +320,7 @@ module.exports = Backbone.View.extend({
             KB.Events.trigger('modal.reload');
           }
         }
+        Logger.User.info('Frontend modal.reload triggered.');
 
         // delayed fields update
         // keep, but isn't used
@@ -324,7 +331,6 @@ module.exports = Backbone.View.extend({
         // delayed recalibration
         setTimeout(function () {
           that.$el.show();
-
           that.recalibrate();
           that.LoadingAnimation.hide();
           that.ModuleView.renderStatusBar(that.$el);
@@ -512,7 +518,8 @@ module.exports = Backbone.View.extend({
       current: this.ModuleView.model.get('viewfile'),
       target: e.currentTarget.value
     };
-    this.model.set('viewfile', e.currentTarget.value);
+    this.model.set('viewfile', e.currentTarget.value, {silent: true});
+    this.preview();
   },
   /**
    * Update modules element class to new view to

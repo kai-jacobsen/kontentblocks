@@ -94,10 +94,9 @@ module.exports = Backbone.View.extend({
           return state.text;
         }
         var desc = state.element.dataset.tpldesc;
-        var $state = jQuery(
+        return jQuery(
           '<span>' + state.text + '<br><span class="kb-tpl-desc">' + desc + '</span></span>'
         );
-        return $state;
       }
     });
   },

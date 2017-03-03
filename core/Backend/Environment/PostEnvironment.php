@@ -193,7 +193,6 @@ class PostEnvironment implements JsonSerializable, EnvironmentInterface
     public function initUi()
     {
         $panels = $this->getPanels();
-        var_dump($panels);
         foreach ($panels as $panel) {
             $panel->init();
         }

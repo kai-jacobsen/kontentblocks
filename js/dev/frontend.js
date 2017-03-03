@@ -1416,6 +1416,7 @@ module.exports = Backbone.Model.extend({
     KB.FieldControls.remove(this);
   },
   rebind: function () {
+
     var that = this;
     _.defer(function () {
       if (_.isUndefined(that.getElement())) {
@@ -1881,7 +1882,7 @@ module.exports = BaseView.extend({
     this.$description.val(attachment.get('caption'));
     this.$title.val(attachment.get('title'));
     //KB.Events.trigger('modal.preview');
-    this.model.get('ModuleModel').trigger('data.updated');
+    this.model.get('ModuleModel').trigger('data.updated', {silent: true});
   },
   retrieveImage: function (args, id) {
     var that = this;
@@ -2131,6 +2132,8 @@ module.exports = BaseView.extend({
     this.FlexFieldsController.derender(); 
   },
   rerender: function () {
+    console.log('rerender',this);
+    console.trace();
     this.FlexFieldsController.derender();
     this.render();
   },
@@ -2224,6 +2227,9 @@ module.exports = Backbone.View.extend({
   },
   initialSetup: function () {
     var data;
+    console.log('initset');
+    console.trace();
+
     data = this.model.get('value'); // model equals FieldControlModel, value equals parent obj data for this field key
     if (!_.isEmpty(data)) {
       _.each(data, function (dataobj, index) {
@@ -3131,7 +3137,7 @@ module.exports = BaseView.extend({
     this.$description.val(attachment.get('caption'));
     this.$title.val(attachment.get('title'));
     //KB.Events.trigger('modal.preview');
-    this.model.get('ModuleModel').trigger('data.updated');
+    this.model.get('ModuleModel').trigger('data.updated', {silent: true});
   },
   retrieveImage: function (args, id) {
     var that = this;
@@ -6321,7 +6327,12 @@ module.exports = Backbone.View.extend({
    * Calls serialize in preview mode
    * No data gets saved
    */
-  preview: function () {
+  preview: function (options) {
+    if (options && options.hasOwnProperty('silent')) {
+      if (options.silent == true) {
+        return;
+      }
+    }
     this.serialize(false, false);
   },
   /**
@@ -6363,6 +6374,7 @@ module.exports = Backbone.View.extend({
         that.LoadingAnimation.show();
       },
       success: function (res) {
+
         // indicate working state
         //that.$el.fadeTo(300, 0.1);
         // clear form content
@@ -6418,6 +6430,7 @@ module.exports = Backbone.View.extend({
             KB.Events.trigger('modal.reload');
           }
         }
+        Logger.User.info('Frontend modal.reload triggered.');
 
         // delayed fields update
         // keep, but isn't used
@@ -6428,7 +6441,6 @@ module.exports = Backbone.View.extend({
         // delayed recalibration
         setTimeout(function () {
           that.$el.show();
-
           that.recalibrate();
           that.LoadingAnimation.hide();
           that.ModuleView.renderStatusBar(that.$el);
@@ -6616,7 +6628,8 @@ module.exports = Backbone.View.extend({
       current: this.ModuleView.model.get('viewfile'),
       target: e.currentTarget.value
     };
-    this.model.set('viewfile', e.currentTarget.value);
+    this.model.set('viewfile', e.currentTarget.value, {silent: true});
+    this.preview();
   },
   /**
    * Update modules element class to new view to

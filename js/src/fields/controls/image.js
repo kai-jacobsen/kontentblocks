@@ -151,7 +151,7 @@ module.exports = BaseView.extend({
     this.$description.val(attachment.get('caption'));
     this.$title.val(attachment.get('title'));
     //KB.Events.trigger('modal.preview');
-    this.model.get('ModuleModel').trigger('data.updated');
+    this.model.get('ModuleModel').trigger('data.updated', {silent: true});
   },
   retrieveImage: function (args, id) {
     var that = this;
