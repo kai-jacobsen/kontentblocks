@@ -8,7 +8,7 @@ use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Utils\Utilities;
 
 /**
- * Class PanelModel
+ * Class BaseModel
  */
 class PanelModel extends EntityModel
 {

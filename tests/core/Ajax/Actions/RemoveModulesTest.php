@@ -4,7 +4,6 @@ namespace Kontentblocks\tests\core\Ajax\Actions;
 use Kontentblocks\Ajax\Actions\RemoveModules;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
-use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -590,10 +590,14 @@ class Utilities
     }
 
 
+    /**
+     * @return string
+     */
     public static function getCacheGroup()
     {
         $parts = array();
         $parts[] = 'kontentblocks';
+
         if (defined('ICL_LANGUAGE_CODE')) {
             $parts[] = ICL_LANGUAGE_CODE;
         }

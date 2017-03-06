@@ -1,7 +1,6 @@
 <?php
 namespace Kontentblocks\tests\core\Ajax\Actions;
 
-use Kontentblocks\Common\Data\ValueStorage;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

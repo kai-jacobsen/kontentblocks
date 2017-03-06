@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 abstract class AbstractPanel implements EntityInterface
 {
 
+    public $saveAsSingle;
     /**
      * Form data
      * @var array
@@ -29,7 +30,7 @@ abstract class AbstractPanel implements EntityInterface
      */
     public $type;
     /**
-     * @var EntityModel
+     * @var PanelModel
      */
     public $model;
     /**
@@ -171,8 +172,7 @@ abstract class AbstractPanel implements EntityInterface
     }
 
     /**
-     * @return mixed
-     * @throws \Exception
+     * @return PanelModel
      */
     public function setupFrontendData()
     {
@@ -181,14 +181,16 @@ abstract class AbstractPanel implements EntityInterface
             $field = $this->fields->getFieldByKey($key);
             if (!is_null($field)) {
                 $field->setValue($v);
+                $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue() : $v;
+            } else {
+                unset($this->model[$key]);
             }
-            $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue() : $v;
         }
         return $this->model;
     }
 
     /**
-     * @return EntityModel
+     * @return PanelModel
      */
     public function setupRawData()
     {

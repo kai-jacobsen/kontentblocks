@@ -4719,8 +4719,8 @@ module.exports = BaseView.extend({
       that.retrieveImage(args, id);
     }
     this.$saveId.val(attachment.get('id'));
-    this.$description.val(attachment.get('caption'));
-    this.$title.val(attachment.get('title'));
+    this.$description.val(value.caption);
+    this.$title.val(value.title);
     //KB.Events.trigger('modal.preview');
     this.model.get('ModuleModel').trigger('data.updated', {silent: true});
   },
@@ -4747,12 +4747,12 @@ module.exports = BaseView.extend({
   prepareValue: function (attachment) {
     var newValue = {
       id: attachment.get('id'),
-      title: attachment.get('title'),
-      caption: attachment.get('caption'),
+      // title: attachment.get('title'),
+      // caption: attachment.get('caption'),
       alt: attachment.get('alt')
     };
     var oldValue = this.model.get('value');
-
+    console.log(oldValue, newValue);
     if (!_.isObject(oldValue)) {
       oldValue = {};
     }

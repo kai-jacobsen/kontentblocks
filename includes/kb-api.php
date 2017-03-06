@@ -4,17 +4,16 @@ namespace Kontentblocks;
 
 use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayoutsRegistry;
 use Kontentblocks\Common\Data\EntityModel;
+use Kontentblocks\Common\Data\ValueObject;
 use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
-use Kontentblocks\Modules\ModuleFactory;
-use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Panels\PanelModel;
-use Kontentblocks\Panels\PostPanel;
 use Kontentblocks\Panels\TermPanel;
 use Kontentblocks\Utils\CommonTwig\SimpleView;
 use Kontentblocks\Utils\JSONTransport;
+use Kontentblocks\Utils\RuntimeCache;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -263,6 +262,7 @@ function getTermPanel($panelId, $termId, $taxonomy = null)
  * @param $termId
  * @param null $taxonomy
  * @return mixed
+ * @deprecated
  */
 function getTermPanelModel($panelId, $termId, $taxonomy = null)
 {
@@ -287,6 +287,31 @@ function getPostPanelModel($panelId = null, $postId = null)
 }
 
 /**
+ * @param null $panelId
+ * @param null $postId
+ * @param bool $raw
+ * @return ValueObject
+ */
+function getPostPanelData($panelId = null, $postId = null, $raw = false)
+{
+    $cached = RuntimeCache::get(func_get_args());
+    if ($cached) {
+        return $cached;
+    }
+
+    $data = [];
+    $panel = getPostPanel($panelId, $postId);
+    if (is_a($panel, '\Kontentblocks\Panels\PostPanel')) {
+        if (!$raw) {
+            $data = $panel->setupFrontendData()->export();
+        } else {
+            $data = $panel->setupRawData()->export();
+        }
+    }
+    return RuntimeCache::add(func_get_args(), new ValueObject($data));
+}
+
+/**
  * @param null $tpl
  * @param null $panelId
  * @param null $postId
@@ -297,7 +322,6 @@ function getPostPanelView($tpl = null, $panelId = null, $postId = null)
     $model = getPostPanelModel($panelId, $postId);
     if (!is_null($model)) {
         return new SimpleView($tpl, $model->export());
-
     }
 
 }

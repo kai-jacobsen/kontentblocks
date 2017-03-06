@@ -50,6 +50,14 @@ class SavePost
         }
         $areas = $this->environment->getAreas();
 
+        $panels = $this->environment->getPanels();
+
+        /** @var PostPanel $panel */
+        foreach ($panels as $panel){
+            $panel->saveCallback($postId, $postObj);
+        }
+
+
         // Bail out if no areas are set
         if (empty($areas)) {
             return false;
@@ -65,11 +73,6 @@ class SavePost
             }
         }
 
-        $panels = $this->environment->getPanels();
-        /** @var PostPanel $panel */
-        foreach ($panels as $panel){
-            $panel->saveCallback($postId, $postObj);
-        }
 
         $this->concat();
         $this->saveAreaContextMap();
