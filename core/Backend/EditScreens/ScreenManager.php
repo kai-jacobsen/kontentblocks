@@ -188,7 +188,7 @@ class ScreenManager
     {
         $screenLayouts = \Kontentblocks\EditScreenLayoutsRegistry()->layouts;
         $lyt = apply_filters('kb.screenLayout', 'default-boxes', $this->environment, $screenLayouts);
-        _K::info("Screemlayout found: {$lyt}");
+        _K::info("Screenlayout found: {$lyt}");
         $this->selectedLayout = (isset($screenLayouts[$lyt])) ? $screenLayouts[$lyt] : $screenLayouts['default-boxes'];
         \Kontentblocks\JSONTransport()->registerPublicData('config', 'layoutMode', $lyt);
     }

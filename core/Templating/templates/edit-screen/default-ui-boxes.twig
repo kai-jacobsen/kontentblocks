@@ -8,10 +8,12 @@
                 </div>
             {% endif %}
 
-            <div data-kbcolname="Normal" class="grid__col {% if side2hasAreas %}grid__col--4-of-12 {% else %} grid__col--6-of-12 {% endif %} kb-context-col">
+            <div data-kbcolname="Normal"
+                 class="grid__col {% if side2hasAreas %}grid__col--4-of-12 {% else %} grid__col--6-of-12 {% endif %} kb-context-col">
                 {{ contexts.normal.render() }}
             </div>
-            <div data-kbcolname="Side" class="grid__col {% if side2hasAreas %}grid__col--4-of-12 {% else %} grid__col--6-of-12 {% endif %} kb-context-col">
+            <div data-kbcolname="Side"
+                 class="grid__col {% if side2hasAreas %}grid__col--4-of-12 {% else %} grid__col--6-of-12 {% endif %} kb-context-col">
                 {{ contexts.side.render() }}
             </div>
         </div>
