@@ -8,6 +8,7 @@ use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Fields\UserPanelFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class UserPanel
@@ -100,6 +101,21 @@ abstract class UserPanel extends AbstractPanel
         Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
     }
 
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return array(
+            'baseId' => $this->getBaseId(),
+            'mid' => $this->getBaseId(),
+            'id' => $this->getBaseId(),
+            'entityData' => $this->model->getOriginalData(),
+            'area' => '_internal',
+            'type' => 'user',
+            'settings' => $this->args
+        );
+    }
 
     /**
      * @return bool
@@ -174,18 +190,20 @@ abstract class UserPanel extends AbstractPanel
     }
 
     /**
-     * @return array
+     * Callback handler
      */
-    public function getProperties()
+    public function saveCallback($termId, $termObj)
     {
-        return array(
-            'baseId' => $this->getBaseId(),
-            'mid' => $this->getBaseId(),
-            'id' => $this->getBaseId(),
-            'entityData' => $this->model->getOriginalData(),
-            'area' => '_internal',
-            'type' => 'user',
-            'settings' => $this->args
-        );
+        $postData = Request::createFromGlobals();
+//        if (absint($postData->request->get('tag_ID')) !== $termId) {
+//            return;
+//        }
+        $data = $postData->request->filter($this->baseId, null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        if (empty($data)) {
+            return;
+        }
+        $this->model->reset()->set($postData->request->get($this->baseId));
+        $this->save($postData);
     }
+
 }
