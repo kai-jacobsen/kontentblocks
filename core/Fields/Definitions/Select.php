@@ -80,7 +80,6 @@ Class Select extends Field
         if (!$new) {
             return null;
         }
-
         return $new;
     }
 
