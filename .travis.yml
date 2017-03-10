@@ -47,5 +47,5 @@ before_script:
   - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
 
 script:
-  - phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml
+  - php vendor/bin/phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml
   - CODECLIMATE_REPO_TOKEN=7f1b407be97ef1daa00d48b2ff2237ba79752c18d8cf8bdb887b780db2d7a384 php vendor/bin/test-reporter
