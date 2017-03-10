@@ -28,12 +28,7 @@ matrix:
 before_install: npm install -g grunt-cli
 
 before_script:
-  - |
-    if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then
-    composer global require "phpunit/phpunit=5.7.*"
-    elif [[ ${TRAVIS_PHP_VERSION:0:3} != "5.2" ]]; then
-    composer global require "phpunit/phpunit=4.8.*"
-    fi
+  - composer global require "phpunit/phpunit=5.6.*"
   - PLUGIN_SLUG=$(basename $(pwd))
   - export WP_DEVELOP_DIR=/tmp/wordpress/tests/phpunit/
   - export CODECLIMATE_REPO_TOKEN=7f1b407be97ef1daa00d48b2ff2237ba79752c18d8cf8bdb887b780db2d7a384
