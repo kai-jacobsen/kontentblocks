@@ -22,7 +22,7 @@ use Kontentblocks\Modules\Module;
  *                  $Render->render($echo);
  * @package Kontentblocks\Render
  */
-class AreaRenderer implements RendererInterface, ModuleLookAheadInterface
+class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \JsonSerializable
 {
 
     /**
@@ -261,4 +261,8 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface
         return $next;
     }
 
+    public function jsonSerialize()
+    {
+        return [];
+    }
 }

@@ -40,9 +40,11 @@ class ModuleContext extends EntityContext
      */
     public function __construct($args = [], Module $module)
     {
-        parent::__construct($args,$module);
+        parent::__construct($args, $module);
         $this->areaContext = &$module->properties->areaContext;
         $this->areaId = &$module->properties->area->id;
     }
+
+
 
 }

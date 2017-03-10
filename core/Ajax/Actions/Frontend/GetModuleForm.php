@@ -21,6 +21,7 @@ class GetModuleForm extends AbstractAjaxAction
 
     /**
      * @param Request $request
+     * @return \Kontentblocks\Ajax\AjaxErrorResponse|void
      */
     protected static function action(Request $request)
     {
@@ -45,7 +46,6 @@ class GetModuleForm extends AbstractAjaxAction
         $currentData = wp_unslash($request->request->filter('entityData', array(), FILTER_DEFAULT));
         $oldData = $module->model->export();
         $merged = Utilities::arrayMergeRecursive($currentData, $oldData);
-
         $module->updateModuleData($merged);
         $html = "<div class='kb-module--status-bar'></div>";
         $html .= $module->form();

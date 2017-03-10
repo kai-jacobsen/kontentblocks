@@ -96,7 +96,6 @@ class MLayout extends Field
      */
     public function prepareTemplateData($data)
     {
-        $repository = new MLayoutRepository($this);
         $file = $this->getArg('layoutFile');
         if ($file) {
             $data['layoutView'] = new CoreView($file);

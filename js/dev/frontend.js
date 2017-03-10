@@ -6235,18 +6235,8 @@ module.exports = Backbone.View.extend({
    * Attach events to Module View
    */
   attach: function () {
-    var that = this;
     //when update gets called from module controls, notify this view
     this.listenTo(this.ModuleView, 'kb.frontend.module.inline.saved', this.frontendViewUpdated);
-    /**
-     * when the viewfile select changed,
-     * reload to account for a different input form
-     */
-    this.listenTo(this.model, 'change:viewfile', function () {
-      that.serialize(false, true);
-      that.reload();
-    });
-
     this.listenTo(this.model, 'data.updated', this.preview);
     this.listenTo(this.model, 'remove', this.destroy);
   },
@@ -6456,8 +6446,6 @@ module.exports = Backbone.View.extend({
             }
           });
         }, 550);
-
-
       },
       error: function () {
         Notice.notice('There went something wrong', 'error');
@@ -6628,8 +6616,10 @@ module.exports = Backbone.View.extend({
       current: this.ModuleView.model.get('viewfile'),
       target: e.currentTarget.value
     };
+
     this.model.set('viewfile', e.currentTarget.value, {silent: true});
     this.preview();
+    this.reload();
   },
   /**
    * Update modules element class to new view to
@@ -6637,11 +6627,9 @@ module.exports = Backbone.View.extend({
    * @param viewfile string
    */
   updateContainerClass: function (viewfile) {
-
     if (!viewfile || !viewfile.current || !viewfile.target) {
       return false;
     }
-
     this.ModuleView.$el.removeClass(this._classifyView(viewfile.current));
     this.ModuleView.$el.addClass(this._classifyView(viewfile.target));
     this.updateViewClassTo = false;
