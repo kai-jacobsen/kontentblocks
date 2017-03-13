@@ -19,12 +19,13 @@ use Kontentblocks\Utils\Utilities;
 /**
  * Register Area
  * @param $args
+ * @return Areas\AreaProperties
  */
 function registerArea($args)
 {
     /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
     $AreaRegistry = Kontentblocks::getService('registry.areas');
-    $AreaRegistry->addArea($args, true);
+    return $AreaRegistry->addArea($args, true);
 
 }
 

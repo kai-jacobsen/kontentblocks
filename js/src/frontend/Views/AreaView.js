@@ -10,7 +10,7 @@ module.exports = Backbone.View.extend({
     'click .kb-area__empty-placeholder': 'openModuleBrowser'
   },
   initialize: function () {
-    this.attachedModuleViews = {};
+    this.attachedModules = {};
     this.renderSettings = this.model.get('renderSettings');
     this.listenTo(KB.Events, 'editcontrols.show', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
@@ -46,8 +46,8 @@ module.exports = Backbone.View.extend({
     this.ModuleBrowser.render();
     return this.ModuleBrowser;
   },
-  attachModuleView: function (moduleModel) {
-    this.attachedModuleViews[moduleModel.get('mid')] = moduleModel; // add module
+  attachModule: function (moduleModel) {
+    this.attachedModules[moduleModel.get('mid')] = moduleModel; // add module
     this.listenTo(moduleModel, 'change:area', this.removeModule); // add listener
 
     if (this.getNumberOfModules() > 0) {
@@ -58,10 +58,10 @@ module.exports = Backbone.View.extend({
   },
 
   getNumberOfModules: function () {
-    return _.size(this.attachedModuleViews);
+    return _.size(this.attachedModules);
   },
   getAttachedModules: function () {
-    return this.attachedModuleViews;
+    return this.attachedModules;
   },
   setupSortables: function () {
     var that = this;
@@ -102,8 +102,8 @@ module.exports = Backbone.View.extend({
   },
   removeModule: function (ModuleView) {
     var id = ModuleView.model.get('mid');
-    if (this.attachedModuleViews[id]) {
-      delete this.attachedModuleViews[id];
+    if (this.attachedModules[id]) {
+      delete this.attachedModules[id];
     }
     if (this.getNumberOfModules() < 1) {
       this.$el.addClass('kb-area__empty');

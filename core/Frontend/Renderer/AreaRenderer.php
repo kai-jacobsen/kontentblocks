@@ -17,7 +17,6 @@ use Kontentblocks\Modules\Module;
  * Handles the frontend output for an area and containing modules
  *
  * Usage:
- * - simplified failsafe method: do_action('area', '## id of area ##', '## optional post id or null ##', $args)
  * - manual method: $Render = new \Kontentblocks\Frontend\AreaRenderer($id, $postId, $args);
  *                  $Render->render($echo);
  * @package Kontentblocks\Render
@@ -137,11 +136,9 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
             }
             $module->context->renderer = $this;
             $module->context->set(array('renderPosition' => $this->position));
-            $output .= $this->areaHtmlNode->openLayoutWrapper();
             $this->beforeModule($module);
             $output .= $this->moduleRenderer->render();
             $this->afterModule($module);
-            $output .= $this->areaHtmlNode->closeLayoutWrapper();
             if (current_theme_supports('kb.area.concat') && filter_input(
                     INPUT_GET,
                     'concat',
@@ -247,7 +244,6 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
     {
         $this->previousModule = $module->properties->getSetting('hash');
         $this->position++;
-        $this->areaHtmlNode->nextLayout();
     }
 
 
@@ -261,6 +257,9 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
         return $next;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize()
     {
         return [];

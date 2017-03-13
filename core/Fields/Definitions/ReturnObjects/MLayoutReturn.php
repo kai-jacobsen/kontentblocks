@@ -5,7 +5,7 @@ namespace Kontentblocks\Fields\Returnobjects;
 
 use Kontentblocks\Fields\Definitions\ReturnObjects\StandardFieldReturn;
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Fields\Helper\MLayoutRepository;
+use Kontentblocks\Fields\Helper\SubmoduleRepository;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\SingleModuleRenderer;
 
@@ -81,7 +81,7 @@ class MLayoutReturn extends StandardFieldReturn
      */
     protected function prepareValue( $value )
     {
-        $this->repository = new MLayoutRepository( $this->field );
+        $this->repository = new SubmoduleRepository( $this->field );
         $this->modules = $this->repository->getModules();
         return $value;
     }

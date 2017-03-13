@@ -28,7 +28,6 @@ module.exports = BaseView.extend({
       module: this.model.toJSON(),
       _ajax_nonce: Config.getNonce('update')
     }).done(function () {
-      console.log(that);
       that.model.get('state').draft = !that.model.get('state').draft;
       that.$el.empty();
       that.render();

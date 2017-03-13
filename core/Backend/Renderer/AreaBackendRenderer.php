@@ -77,7 +77,6 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
         // batch setting of properties
         //actual stored modules for this area
         $moduleRepository = $environment->getModuleRepository();
-
         $this->attachedModules = new ModuleIterator($moduleRepository->getModulesForArea($area->id));
         $this->cats = Utilities::setupCats();
 

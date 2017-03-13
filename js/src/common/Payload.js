@@ -56,9 +56,16 @@ module.exports = {
       Fields: []
     };
 
+    if (json && json.Areas) {
+      _.each(json.Areas, function (area) {
+        KB.ObjectProxy.add(KB.Areas.add(area));
+      });
+    }
+
     if (json && json.Fields) {
       ret.Fields = KB.FieldControls.add(_.toArray(json.Fields));
     }
+
     return ret;
   },
   getPayload: function (key) {

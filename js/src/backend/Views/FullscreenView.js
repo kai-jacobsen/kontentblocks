@@ -6,6 +6,17 @@ module.exports = Backbone.View.extend({
   initialize: function () {
     this.$parent = this.model.View.$el;
     this.$body = jQuery('.kb-module__body', this.$parent);
+//     this.observer = new MutationObserver(function(mutations) {
+//       mutations.forEach(function(mutation) {
+//         console.log(mutation.type);
+//       });
+//     });
+//     // configuration of the observer:
+//     var config = { attributes: true, childList: true, characterData: true, subtree:true };
+//
+// // pass in the target node, as well as the observer options
+//     this.observer.observe(this.el, config);
+
     return this;
 
   },
@@ -36,6 +47,11 @@ module.exports = Backbone.View.extend({
     TinyMCE.restoreEditors();
     this.trigger('open');
     this.reposition();
+
+    var height = jQuery(window).height();
+
+    jQuery('.kb-nano', this.$el).height(height - 100);
+    jQuery('.kb-nano').nanoScroller({preventPageScrolling: true, contentClass: 'kb-nano-content'});
     //jQuery(window).on('scroll', jQuery.proxy(this.reposition, this));
   },
   reposition: function(){

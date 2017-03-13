@@ -18,10 +18,35 @@
   transform: translate(-50%);
   min-height: 600px;
   z-index: 298;
-  padding: $fullpadding;
+  padding: 1px;
   background-color: #fff;
   @extend .base-box-shadow;
   @extend .base-box-border;
+
+  .kb-fullscreen--controls{
+    padding: 6px;
+    background-color: $grey-200;
+    overflow: hidden;
+
+    .kb-fullscreen-js-close{
+      float: right;
+    }
+  }
+
+  .kb-field-wrapper:hover{
+    border-left: 0;
+  }
+
+  .kb-template-selector--wrapper{
+    right: 30px;
+  }
+
+  .kb-module__controls-inner{
+    position: relative;
+  }
+
+
+
 }
 
 body.kontentblocks-ready .kb-fullscreen--holder{

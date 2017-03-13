@@ -2,22 +2,24 @@
 namespace Kontentblocks\Fields\Definitions;
 
 
+use Kontentblocks\Areas\LayoutArea;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\Helper\SubmoduleRepository;
 use Kontentblocks\Modules\Module;
-use Kontentblocks\Templating\CoreView;
+use Kontentblocks\Utils\Utilities;
 
 /**
- * Class MLayout
+ * Class Subarea
  * @package Kontentblocks\Fields\Definitions
  */
-class MLayout extends Field
+class Subarea extends Field
 {
 
     // Defaults
     public static $settings = array(
-        'type' => 'mlayout',
-        'forceSave' => false
+        'type' => 'subarea',
+        'forceSave' => false,
+        'returnObj' => 'SubareaRenderer'
     );
 
     /**
@@ -33,22 +35,19 @@ class MLayout extends Field
         add_action('kb.module.delete', array($this, 'deleteCallback'));
     }
 
+    /**
+     * @param Module $module
+     */
     public function deleteCallback(Module $module)
     {
         if ($this->baseId === $module->getId()) {
-            $repository = new SubmoduleRepository($this);
+            $environment = Utilities::getPostEnvironment($this->controller->getEntity()->getProperties()->parentObjectId);
+            $repository = new SubmoduleRepository($environment, $this->getValue('slots', []));
             foreach ($repository->getModules() as $module) {
                 $module->delete();
             }
         };
     }
-
-//    public function frontendForm(FieldFormController $formController){
-//        $this->setArgs(array(
-//            'template' => 'frontend'
-//        ));
-//        return $this->form($formController);
-//    }
 
     /**
      * Fields saving method
@@ -60,7 +59,8 @@ class MLayout extends Field
      */
     public function save($new, $old)
     {
-        $repository = new SubmoduleRepository($this);
+        $environment = Utilities::getPostEnvironment($this->controller->getEntity()->getProperties()->parentObjectId);
+        $repository = new SubmoduleRepository($environment, $this->getValue('slots', []));
         $repository->saveModules();
         if (isset($new['slots']) && is_array($new['slots'])) {
             return array('slots' => $new['slots']);
@@ -97,8 +97,10 @@ class MLayout extends Field
     public function prepareTemplateData($data)
     {
         $file = $this->getArg('layoutFile');
+        $environment = Utilities::getPostEnvironment($this->controller->getEntity()->getProperties()->parentObjectId);
+        $repository = new SubmoduleRepository($environment, $this->getValue('slots', []));
         if ($file) {
-            $data['layoutView'] = new CoreView($file);
+            $data['layoutView'] = new LayoutArea($file, $this->baseId, $this->getKey(), $repository);
         }
         return $data;
     }

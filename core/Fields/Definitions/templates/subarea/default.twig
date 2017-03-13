@@ -1,0 +1,6 @@
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    <div class="kb-field--subarea-stage" id="{{ layoutView.areaid }}">
+        {{ layoutView.render() | raw }}
+    </div>
+{% endblock %}

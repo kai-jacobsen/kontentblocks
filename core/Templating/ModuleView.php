@@ -57,6 +57,7 @@ class ModuleView implements \JsonSerializable
         $this->engine = Kontentblocks::getService('templating.twig.public');
     }
 
+
     /**
      * @param $path
      */
@@ -122,7 +123,7 @@ class ModuleView implements \JsonSerializable
         }
 
         $data['_utils'] = $this->setupUtilities();
-
+        $data = apply_filters('kb.module.view.data', $data, $this->module);
         return $data;
 
     }

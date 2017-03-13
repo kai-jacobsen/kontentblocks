@@ -84,7 +84,6 @@ class ModuleWorkshop
         $attrs['mid'] = $mid;
         $attrs = wp_parse_args( $attrs, $this->getDefaults() );
 
-
 //        if (empty( $attrs['post_id'] )) {
         $attrs['post_id'] = $this->environment->getId();
         $attrs['postId'] = $this->environment->getId();

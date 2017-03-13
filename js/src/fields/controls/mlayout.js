@@ -20,7 +20,7 @@ module.exports = BaseView.extend({
   },
   createController: function () {
     if (!this.MLayoutController) {
-      return this.MLayoutController = new MLayoutController({
+      return this.SubareaConroller = new MLayoutController({
         el: this.$('.kb-field--mlayout-stage'),
         model: this.model,
         parentView: this,

@@ -18,6 +18,7 @@ var Config = require('common/Config');
 var ModuleView = require('backend/Views/ModuleView');
 var ModuleModel = require('backend/Models/ModuleModel');
 var AreaView = require('backend/Views/AreaView');
+var SystemAreaView = require('backend/Views/SystemAreaView');
 var AreaModel = require('backend/Models/AreaModel');
 var PanelModel = require('backend/Models/PanelModel');
 var PanelView = require('backend/Views/PanelView');
@@ -119,13 +120,10 @@ KB.App = (function () {
    */
   function addViews() {
     // iterate over raw areas
-
     _.each(Payload.getPayload('Areas'), function (area) {
       if (area.id !== '_internal') {
-        if (!_.isNull(area.settings)) {
-          // create new area model
-          KB.ObjectProxy.add(KB.Areas.add(area));
-        }
+        // create new area model
+        KB.ObjectProxy.add(KB.Areas.add(area));
       }
     });
 
@@ -180,10 +178,17 @@ KB.App = (function () {
    * @returns void
    */
   function createAreaViews(area) {
-    KB.Views.Areas.add(area.get('id'), new AreaView({
-      model: area,
-      el: '#' + area.get('id') + '-container'
-    }));
+    if (area.get('public')){
+      KB.Views.Areas.add(area.get('id'), new AreaView({
+        model: area,
+        el: '#' + area.get('id') + '-container'
+      }));
+    } else{
+      KB.Views.Areas.add(area.get('id'), new SystemAreaView({
+        model: area,
+        el: '#' + area.get('id') + '-container'
+      }));
+    }
   }
 
   function createPanelViews(panel) {

@@ -97,8 +97,7 @@ class AreaRegistry
      *
      * @param array $args
      * @param bool $manual
-     *
-     * @return void
+     * @return AreaProperties
      * @since 0.1.0
      */
     public function addArea($args, $manual = true)
@@ -120,6 +119,7 @@ class AreaRegistry
 
         $this->areas[$area->id] = $area;
         $this->preFilterAreas($this->areas[$area->id]);
+        return $area;
     }
 
     /**
@@ -421,7 +421,6 @@ class AreaRegistry
                     $validArea = $area;
                 }
             }
-
 
             if (is_callable($area->showCallback)) {
                 $res = call_user_func_array($area->showCallback, array($environment, $area));
