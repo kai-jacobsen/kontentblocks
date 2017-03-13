@@ -7578,14 +7578,14 @@ var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
     return "            <option value=\"\">Auswählen</option>\n";
 },"3":function(depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+    var stack1, alias1=this.lambda;
 
   return "            <option "
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || helpers.helperMissing).call(depth0,(depth0 != null ? depth0.value : depth0),"==",((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.value : stack1),{"name":"ifCond","hash":{},"fn":this.program(4, data, 0, blockParams, depths),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "    value=\""
-    + alias2(alias1((depth0 != null ? depth0.value : depth0), depth0))
+    + this.escapeExpression(alias1((depth0 != null ? depth0.value : depth0), depth0))
     + "\">"
-    + alias2(alias1((depth0 != null ? depth0.name : depth0), depth0))
+    + ((stack1 = alias1((depth0 != null ? depth0.name : depth0), depth0)) != null ? stack1 : "")
     + "</option>\n";
 },"4":function(depth0,helpers,partials,data) {
     return "selected=\"selected\"";
