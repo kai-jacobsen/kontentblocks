@@ -1,4 +1,4 @@
-var tplModuleView = require('fields/controls/mlayout/templates/module-view.hbs');
+var tplModuleView = require('fields/controls/subarea/templates/module-view.hbs');
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var TinyMCE = require('common/TinyMCE');

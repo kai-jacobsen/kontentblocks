@@ -7,6 +7,7 @@ use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\Helper\SubmoduleRepository;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\SingleModuleRenderer;
+use Kontentblocks\Modules\Module;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -20,9 +21,12 @@ class SubareaRenderer extends StandardFieldReturn
 
     public $slotId = 1;
 
+    /**
+     * @var SubmoduleRepository
+     */
     public $repository;
     /**
-     * @var \Kontentblocks\Fields\Definitions\MLayout
+     * @var \Kontentblocks\Fields\Definitions\Subarea
      */
     protected $field;
 
@@ -54,7 +58,7 @@ class SubareaRenderer extends StandardFieldReturn
                 $module->properties
             );
             $renderer = new SingleModuleRenderer($module, $moduleRenderSettings);
-            $out =  $renderer->render();
+            $out = $renderer->render();
         }
 
         $this->slotId++;
@@ -72,7 +76,7 @@ class SubareaRenderer extends StandardFieldReturn
 
     /**
      * @param $slotId
-     * @return \Kontentblocks\Modules\Module
+     * @return Module
      */
     public function getModule($slotId)
     {
