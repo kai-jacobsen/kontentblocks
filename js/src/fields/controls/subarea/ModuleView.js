@@ -28,6 +28,7 @@ module.exports = Backbone.View.extend({
     var that = this;
     this.$el.append(tplModuleView({module: this.ModuleModel.toJSON()}));
     this.slotView.$el.prepend(this.$el);
+    this.$el.attr('data-kba-mid', this.ModuleModel.get('mid'));
     _.defer(function () {
       that.setupElements();
     });

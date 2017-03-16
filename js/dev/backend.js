@@ -5167,6 +5167,7 @@ module.exports = Backbone.View.extend({
     var that = this;
     this.$el.append(tplModuleView({module: this.ModuleModel.toJSON()}));
     this.slotView.$el.prepend(this.$el);
+    this.$el.attr('data-kba-mid', this.ModuleModel.get('mid'));
     _.defer(function () {
       that.setupElements();
     });
@@ -5270,9 +5271,12 @@ module.exports = Backbone.View.extend({
     this.listenTo(this.model, 'change', this.updateInput);
   },
   setModule: function (module) {
-    if (!_.isNull(module)){
+    if (!_.isNull(module)) {
       this.ModuleModel = new Backbone.Model(module);
     }
+  },
+  updateInputValue: function (val) {
+    this.$input.val(val);
   },
   updateInput: function () {
     if (this.ModuleModel && this.ModuleModel.get('submodule')) {
@@ -5287,7 +5291,7 @@ module.exports = Backbone.View.extend({
     } else {
       this.$el.prepend(tplEmpty({}));
     }
-    this.$input.val(this.model.get('mid'));
+    this.updateInputValue(this.model.get('mid'));
   },
   setup: function () {
     var field = this.controller.model;
@@ -5322,7 +5326,7 @@ module.exports = Backbone.View.extend({
     var module = res.data.module;
     this.setModule(module);
     this.model.set('mid', module.mid);
-    _.defer(function(){
+    _.defer(function () {
       that.trigger('module.created');
     });
   },
@@ -5395,7 +5399,59 @@ module.exports = Backbone.View.extend({
     this.setupSlots(); //slots from layout
     this.setupViews();
     this.subViews = this.setupViewConnections();
+    this.draggable();
+  },
+  draggable: function () {
+    var $source, $target, $sourcecontainer, $targetcontainer;
+    var that = this;
+    this.$('.kbml-slot').draggable({
+      revert: 'invalid',
+      helper: 'clone',
+      revertDuration: 200,
+      start: function () {
+        $source = jQuery(this).find('.kb-submodule');
+        $sourcecontainer = jQuery(this);
+        jQuery(this).addClass('being-dragged');
+      },
+      stop: function () {
+        $source = null;
+        jQuery(this).removeClass('being-dragged');
+      }
+    });
 
+    this.$('.kbml-slot').droppable({
+      hoverClass: 'drop-hover',
+      over: function (event, ui) {
+        $target = jQuery(event.target).find('.kb-submodule');
+        $targetcontainer = jQuery(this);
+      },
+      drop: function (event, ui) {
+
+        $source.detach();
+        $target.detach();
+
+        $sourcecontainer.append($target);
+        $targetcontainer.append($source);
+
+        that.reindex();
+
+        return false;
+      }
+    });
+  },
+  reindex: function () {
+    _.each(this.slots, function (slotView) {
+        var $mid = slotView.$('[data-kba-mid]');
+        if ($mid.length === 1){
+          var mid = $mid.data('kba-mid');
+          if (mid){
+            slotView.updateInputValue(mid);
+          }
+        } else {
+          slotView.updateInputValue('');
+
+        }
+    })
   },
   convertDom: function () {
     this.$el.find('*').each(function (i, el) {
@@ -5460,7 +5516,7 @@ module.exports = Backbone.View.extend({
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<div class=\"kbsm-empty\">\n    add module\n</div>";
+    return "<div class=\"kb-submodule\">\n    <div class=\"kbsm-empty\">\n        add module\n    </div>\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":205}],91:[function(require,module,exports){

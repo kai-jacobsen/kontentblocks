@@ -42,7 +42,59 @@ module.exports = Backbone.View.extend({
     this.setupSlots(); //slots from layout
     this.setupViews();
     this.subViews = this.setupViewConnections();
+    this.draggable();
+  },
+  draggable: function () {
+    var $source, $target, $sourcecontainer, $targetcontainer;
+    var that = this;
+    this.$('.kbml-slot').draggable({
+      revert: 'invalid',
+      helper: 'clone',
+      revertDuration: 200,
+      start: function () {
+        $source = jQuery(this).find('.kb-submodule');
+        $sourcecontainer = jQuery(this);
+        jQuery(this).addClass('being-dragged');
+      },
+      stop: function () {
+        $source = null;
+        jQuery(this).removeClass('being-dragged');
+      }
+    });
 
+    this.$('.kbml-slot').droppable({
+      hoverClass: 'drop-hover',
+      over: function (event, ui) {
+        $target = jQuery(event.target).find('.kb-submodule');
+        $targetcontainer = jQuery(this);
+      },
+      drop: function (event, ui) {
+
+        $source.detach();
+        $target.detach();
+
+        $sourcecontainer.append($target);
+        $targetcontainer.append($source);
+
+        that.reindex();
+
+        return false;
+      }
+    });
+  },
+  reindex: function () {
+    _.each(this.slots, function (slotView) {
+        var $mid = slotView.$('[data-kba-mid]');
+        if ($mid.length === 1){
+          var mid = $mid.data('kba-mid');
+          if (mid){
+            slotView.updateInputValue(mid);
+          }
+        } else {
+          slotView.updateInputValue('');
+
+        }
+    })
   },
   convertDom: function () {
     this.$el.find('*').each(function (i, el) {

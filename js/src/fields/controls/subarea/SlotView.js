@@ -19,9 +19,12 @@ module.exports = Backbone.View.extend({
     this.listenTo(this.model, 'change', this.updateInput);
   },
   setModule: function (module) {
-    if (!_.isNull(module)){
+    if (!_.isNull(module)) {
       this.ModuleModel = new Backbone.Model(module);
     }
+  },
+  updateInputValue: function (val) {
+    this.$input.val(val);
   },
   updateInput: function () {
     if (this.ModuleModel && this.ModuleModel.get('submodule')) {
@@ -36,7 +39,7 @@ module.exports = Backbone.View.extend({
     } else {
       this.$el.prepend(tplEmpty({}));
     }
-    this.$input.val(this.model.get('mid'));
+    this.updateInputValue(this.model.get('mid'));
   },
   setup: function () {
     var field = this.controller.model;
@@ -71,7 +74,7 @@ module.exports = Backbone.View.extend({
     var module = res.data.module;
     this.setModule(module);
     this.model.set('mid', module.mid);
-    _.defer(function(){
+    _.defer(function () {
       that.trigger('module.created');
     });
   },
