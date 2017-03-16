@@ -31,8 +31,6 @@ module.exports = Backbone.View.extend({
   },
   initialSetup: function () {
     var data;
-    console.log('initset');
-    console.trace();
 
     data = this.model.get('value'); // model equals FieldControlModel, value equals parent obj data for this field key
     if (!_.isEmpty(data)) {

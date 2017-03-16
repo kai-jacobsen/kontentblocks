@@ -11,7 +11,9 @@ module.exports = BaseView.extend({
       this.toggleBody();
       this.parent.open = true;
     } else {
-      this.parent.open = false;
+      if (!this.parent.model.get('globalModule')){
+        this.parent.open = false;
+      }
     }
   },
   events: {

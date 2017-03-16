@@ -14,8 +14,11 @@ module.exports = BaseView.extend({
   render: function () {
     var draft = this.model.get('state').draft;
     var $parent = this.model.View.$el;
-    this.$el.append(tplPublishStatus({draft: this.model.get('state').draft, strings: I18n.getString('Modules.tooltips')}));
-    if (draft){
+    this.$el.append(tplPublishStatus({
+      draft: this.model.get('state').draft,
+      strings: I18n.getString('Modules.tooltips')
+    }));
+    if (draft) {
       $parent.addClass('kb-module-draft');
     } else {
       $parent.removeClass('kb-module-draft');
@@ -28,7 +31,6 @@ module.exports = BaseView.extend({
       module: this.model.toJSON(),
       _ajax_nonce: Config.getNonce('update')
     }).done(function () {
-      console.log(that);
       that.model.get('state').draft = !that.model.get('state').draft;
       that.$el.empty();
       that.render();

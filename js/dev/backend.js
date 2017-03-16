@@ -1538,7 +1538,9 @@ module.exports = BaseView.extend({
       this.toggleBody();
       this.parent.open = true;
     } else {
-      this.parent.open = false;
+      if (!this.parent.model.get('globalModule')){
+        this.parent.open = false;
+      }
     }
   },
   events: {
@@ -1626,6 +1628,9 @@ module.exports = Backbone.View.extend({
   initialize: function () {
     // Setup Elements
     this.open = false;
+    if (this.model.get('globalModule') == true){
+      this.open = true;
+    }
     this.$head = jQuery('.kb-module__header', this.$el);
     this.$body = jQuery('.kb-module__body', this.$el);
     this.$inner = jQuery('.kb-module__controls-inner', this.$el);
@@ -2476,7 +2481,6 @@ var Ui = {
      * of the area
      */
     function isValidModule() {
-      console.log(areaOver);
       var limit = areaOver.get('limit');
       var nom = numberOfModulesInArea(areaOver.get('id'));
 
@@ -3717,8 +3721,6 @@ module.exports = BaseView.extend({
     this.FlexFieldsController.derender(); 
   },
   rerender: function () {
-    console.log('rerender',this);
-    console.trace();
     this.FlexFieldsController.derender();
     this.render();
   },
@@ -3812,8 +3814,6 @@ module.exports = Backbone.View.extend({
   },
   initialSetup: function () {
     var data;
-    console.log('initset');
-    console.trace();
 
     data = this.model.get('value'); // model equals FieldControlModel, value equals parent obj data for this field key
     if (!_.isEmpty(data)) {
@@ -4625,7 +4625,6 @@ module.exports = BaseView.extend({
       .done(function () { // attach callback, executes after the ajax call succeeded
         // inside the callback 'this' refers to the result collection
         // there should be only one model, assign it to a var
-        console.log(queryargs);
         // if (queryargs.post__in){
         var attachment = this.first();
         that.attachment = attachment;
@@ -4752,7 +4751,6 @@ module.exports = BaseView.extend({
       alt: attachment.get('alt')
     };
     var oldValue = this.model.get('value');
-    console.log(oldValue, newValue);
     if (!_.isObject(oldValue)) {
       oldValue = {};
     }
@@ -6437,7 +6435,6 @@ module.exports = Backbone.View.extend({
     var first = false;
     this.$el.empty();
     var modules = this.cat.model.get('modules');
-    console.log(modules);
     modules.sort(function(a,b) {return (a.get('settings').name > b.get('settings').name) ? 1 : ((b.get('settings').name > a.get('settings').name) ? -1 : 0);} );
     _.each(modules, function (module) {
       that.subviews[module.cid] = new ListItem({

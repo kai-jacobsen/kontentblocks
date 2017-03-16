@@ -912,7 +912,6 @@ var Ui = {
      * of the area
      */
     function isValidModule() {
-      console.log(areaOver);
       var limit = areaOver.get('limit');
       var nom = numberOfModulesInArea(areaOver.get('id'));
 
@@ -2132,8 +2131,6 @@ module.exports = BaseView.extend({
     this.FlexFieldsController.derender(); 
   },
   rerender: function () {
-    console.log('rerender',this);
-    console.trace();
     this.FlexFieldsController.derender();
     this.render();
   },
@@ -2227,8 +2224,6 @@ module.exports = Backbone.View.extend({
   },
   initialSetup: function () {
     var data;
-    console.log('initset');
-    console.trace();
 
     data = this.model.get('value'); // model equals FieldControlModel, value equals parent obj data for this field key
     if (!_.isEmpty(data)) {
@@ -3040,7 +3035,6 @@ module.exports = BaseView.extend({
       .done(function () { // attach callback, executes after the ajax call succeeded
         // inside the callback 'this' refers to the result collection
         // there should be only one model, assign it to a var
-        console.log(queryargs);
         // if (queryargs.post__in){
         var attachment = this.first();
         that.attachment = attachment;
@@ -3167,7 +3161,6 @@ module.exports = BaseView.extend({
       alt: attachment.get('alt')
     };
     var oldValue = this.model.get('value');
-    console.log(oldValue, newValue);
     if (!_.isObject(oldValue)) {
       oldValue = {};
     }
@@ -8438,7 +8431,6 @@ module.exports = Backbone.View.extend({
     var first = false;
     this.$el.empty();
     var modules = this.cat.model.get('modules');
-    console.log(modules);
     modules.sort(function(a,b) {return (a.get('settings').name > b.get('settings').name) ? 1 : ((b.get('settings').name > a.get('settings').name) ? -1 : 0);} );
     _.each(modules, function (module) {
       that.subviews[module.cid] = new ListItem({
@@ -8610,8 +8602,11 @@ module.exports = BaseView.extend({
   render: function () {
     var draft = this.model.get('state').draft;
     var $parent = this.model.View.$el;
-    this.$el.append(tplPublishStatus({draft: this.model.get('state').draft, strings: I18n.getString('Modules.tooltips')}));
-    if (draft){
+    this.$el.append(tplPublishStatus({
+      draft: this.model.get('state').draft,
+      strings: I18n.getString('Modules.tooltips')
+    }));
+    if (draft) {
       $parent.addClass('kb-module-draft');
     } else {
       $parent.removeClass('kb-module-draft');
@@ -8624,7 +8619,6 @@ module.exports = BaseView.extend({
       module: this.model.toJSON(),
       _ajax_nonce: Config.getNonce('update')
     }).done(function () {
-      console.log(that);
       that.model.get('state').draft = !that.model.get('state').draft;
       that.$el.empty();
       that.render();

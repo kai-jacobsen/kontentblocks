@@ -54,7 +54,6 @@ module.exports = BaseView.extend({
       .done(function () { // attach callback, executes after the ajax call succeeded
         // inside the callback 'this' refers to the result collection
         // there should be only one model, assign it to a var
-        console.log(queryargs);
         // if (queryargs.post__in){
         var attachment = this.first();
         that.attachment = attachment;
@@ -181,7 +180,6 @@ module.exports = BaseView.extend({
       alt: attachment.get('alt')
     };
     var oldValue = this.model.get('value');
-    console.log(oldValue, newValue);
     if (!_.isObject(oldValue)) {
       oldValue = {};
     }
