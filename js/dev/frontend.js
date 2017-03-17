@@ -2843,6 +2843,10 @@ module.exports = Backbone.View.extend({
       that.add(model);
     });
 
+    this._frame.on('ready', function (model) {
+      jQuery('.media-modal').addClass('kb-gallery-frame');
+    });
+
     this._frame.options.selection.on('remove', function (model) {
       that.remove(model);
     });
