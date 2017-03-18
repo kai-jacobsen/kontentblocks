@@ -150,7 +150,6 @@ body.kontentblocks-ready #module-browser{
   .module-browser--poster-wrap {
 
     margin-bottom: 20px;
-    width: 96%;
 
     img {
       max-width: 100%;
@@ -264,4 +263,16 @@ body.kontentblocks-ready #module-browser{
   height: 100%;
   width: 100%;
   background-color: rgba(255,255,255,0.2);
+}
+
+
+.kb-qtip.qtip-default{
+  background-color: #fff !important;
+  border: 1px solid $grey-500;
+  max-width: 550px;
+  @extend .base-box-shadow;
+
+  img{
+    max-width: 100%;
+  }
 }
