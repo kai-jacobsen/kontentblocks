@@ -33,7 +33,6 @@ var Refields = require('fields/RefieldsController');
 var FieldsAPI = require('fieldsAPI/FieldsAPIController');
 
 
-
 /*
  Preperations
  */
@@ -181,7 +180,6 @@ KB.App = function () {
     // create models from already attached modules
     // automatically creates corresponding view
 
-
     _.each(Payload.getPayload('Modules'), function (module) {
       KB.ObjectProxy.add(KB.Modules.add(module));
     });
@@ -262,7 +260,6 @@ KB.App = function () {
   };
 
 }(jQuery);
-
 
 
 jQuery(document).ready(function () {

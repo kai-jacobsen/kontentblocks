@@ -115,10 +115,10 @@ module.exports = Backbone.View.extend({
   },
 
   setupModuleId: function () {
-    var parentObject = this.model.get('parentObject');
-    if (this.model.get('globalModule') && parentObject) {
-      return parentObject.post_name;
-    }
+    // var parentObject = this.model.get('parentObject');
+    // if (this.model.get('globalModule') && parentObject) {
+    //   return parentObject.post_name;
+    // }
     return this.model.get('mid');
   },
   /**
@@ -291,11 +291,21 @@ module.exports = Backbone.View.extend({
         // TODO find better method for this
         if (res.data.json) {
           KB.payload = _.extend(KB.payload, res.data.json);
-          //var parsed = KB.Payload.parseAdditionalJSON(res.data.json);
-          if (res.data.json.Fields) {
-            that.FieldModels.reset();
-            that.FieldModels.add(_.toArray(res.data.json.Fields));
-          }
+          // var parsed = KB.Payload.parseAdditionalJSON(res.data.json);
+
+          // if (res.data.json.Modules){
+          //   _.each(res.data.json.Modules, function (module) {
+          //     KB.ObjectProxy.add(module);
+          //   })
+          // }
+
+          _.defer(function(){
+            if (res.data.json.Fields) {
+              that.FieldModels.reset();
+              that.FieldModels.add(_.toArray(res.data.json.Fields));
+            }
+          });
+
         }
         Ui.initTabs();
         Ui.initToggleBoxes();
@@ -608,7 +618,7 @@ module.exports = Backbone.View.extend({
     }
     //formdata = this.$form.serializeJSON();
     var asd = this.$form.serializeJSON();
-
+    console.log(asd);
 
     if (asd[mid]) {
       return asd[mid];

@@ -9,6 +9,7 @@ module.exports = Backbone.View.extend({
     this.subviews = {}; // image items
     this.ids = [];
     Logger.Debug.log('Fields: Gallery instance created and initialized');
+
     this.renderElements();
     this.initialSetup();
 
@@ -85,7 +86,7 @@ module.exports = Backbone.View.extend({
   },
   initialSetup: function () {
     var that = this;
-    var data = this.model.get('value').images || {};
+    var data = this.model.get('value')._images || {};
     this.setIds(data);
 
 

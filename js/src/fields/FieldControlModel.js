@@ -111,7 +111,6 @@ module.exports = Backbone.Model.extend({
     KB.FieldControls.remove(this);
   },
   rebind: function () {
-
     var that = this;
     _.defer(function () {
       if (_.isUndefined(that.getElement())) {

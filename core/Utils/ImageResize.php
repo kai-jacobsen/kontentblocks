@@ -14,11 +14,11 @@ namespace Kontentblocks\Utils {
      * License       : WTFPL - http://sam.zoy.org/wtfpl/
      * Documentation : https://github.com/sy4mil/Aqua-Resizer/
      *
-     * @param string|int  $attachment    - (required) must be uploaded using wp media uploader
-     * @param int     $width  - (required)
-     * @param int     $height - (optional)
-     * @param bool    $crop   - (optional) default to soft crop
-     * @param bool    $single - (optional) returns an array if false
+     * @param string|int $attachment - (required) must be uploaded using wp media uploader
+     * @param int $width - (required)
+     * @param int $height - (optional)
+     * @param bool $crop - (optional) default to soft crop
+     * @param bool $single - (optional) returns an array if false
      * @uses  wp_upload_dir()
      * @uses  image_resize_dimensions()
      * @uses  wp_get_image_editor()
@@ -26,8 +26,8 @@ namespace Kontentblocks\Utils {
      * @return str|array
      */
 
-    if(!class_exists('ImageResize')) {
-	        class ImageResize
+    if (!class_exists('ImageResize')) {
+        class ImageResize
         {
             /**
              * The singleton instance
@@ -37,18 +37,23 @@ namespace Kontentblocks\Utils {
             /**
              * No initialization allowed
              */
-            private function __construct() {}
+            private function __construct()
+            {
+            }
 
             /**
              * No cloning allowed
              */
-            private function __clone() {}
+            private function __clone()
+            {
+            }
 
             /**
              * For your custom default usage you may want to initialize an Aq_Resize object by yourself and then have own defaults
              */
-            static public function getInstance() {
-                if(self::$instance == null) {
+            static public function getInstance()
+            {
+                if (self::$instance == null) {
                     self::$instance = new self;
                 }
 
@@ -58,22 +63,33 @@ namespace Kontentblocks\Utils {
             /**
              * Run, forest.
              */
-            public function process( $attachment, $width = null, $height = null, $crop = null, $single = true, $upscale = false ) {
+            public function process(
+                $attachment,
+                $width = null,
+                $height = null,
+                $crop = null,
+                $single = true,
+                $upscale = false
+            ) {
                 // Validate inputs.
-                if ( ! $attachment || ( ! $width && ! $height ) ){
+                if (!$attachment || (!$width && !$height)) {
                     return false;
                     // $attachment may be a url or an id
                 }
 
-                if (is_numeric($attachment)){
+
+                $metadata = wp_get_attachment_metadata($attachment);
+
+                if (is_numeric($attachment)) {
                     $url = wp_get_attachment_url(absint($attachment));
                 } else {
                     $url = $attachment;
                 }
 
-
                 // Caipt'n, ready to hook.
-                if ( true === $upscale ) add_filter( 'image_resize_dimensions', array($this, 'upscale'), 10, 6 );
+                if (true === $upscale) {
+                    add_filter('image_resize_dimensions', array($this, 'upscale'), 10, 6);
+                }
                 // Define upload path & dir.
                 $upload_info = wp_upload_dir();
                 $upload_dir = $upload_info['basedir'];
@@ -81,40 +97,42 @@ namespace Kontentblocks\Utils {
 
                 $http_prefix = "http://";
                 $https_prefix = "https://";
-
                 /* if the $url scheme differs from $upload_url scheme, make them match
                    if the schemes differe, images don't show up. */
-                if(!strncmp($url,$https_prefix,strlen($https_prefix))){ //if url begins with https:// make $upload_url begin with https:// as well
-                    $upload_url = str_replace($http_prefix,$https_prefix,$upload_url);
+                if (!strncmp($url, $https_prefix,
+                    strlen($https_prefix))
+                ) { //if url begins with https:// make $upload_url begin with https:// as well
+                    $upload_url = str_replace($http_prefix, $https_prefix, $upload_url);
+                } elseif (!strncmp($url, $http_prefix,
+                    strlen($http_prefix))
+                ) { //if url begins with http:// make $upload_url begin with http:// as well
+                    $upload_url = str_replace($https_prefix, $http_prefix, $upload_url);
                 }
-                elseif(!strncmp($url,$http_prefix,strlen($http_prefix))){ //if url begins with http:// make $upload_url begin with http:// as well
-                    $upload_url = str_replace($https_prefix,$http_prefix,$upload_url);
-                }
-
 
                 // Check if $img_url is local.
                 if ( false === strpos( $url, $upload_url ) ) return false;
 
 
                 // Define path of image.
-                $rel_path = str_replace( $upload_url, '', $url );
+                $rel_path = str_replace($upload_url, '', $url);
                 $img_path = $upload_dir . $rel_path;
-
                 // Check if img path exists, and is an image indeed.
-                if ( ! file_exists( $img_path ) or ! getimagesize( $img_path ) ) return false;
+                if (!file_exists($img_path) or !getimagesize($img_path)) {
+                    return false;
+                }
 
 
                 // Get image info.
-                $info = pathinfo( $img_path );
+                $info = pathinfo($img_path);
                 $ext = $info['extension'];
-                list( $orig_w, $orig_h ) = getimagesize( $img_path );
+                list($orig_w, $orig_h) = getimagesize($img_path);
                 // Get image size after cropping.
-                $dims = image_resize_dimensions( $orig_w, $orig_h, $width, $height, $crop );
+                $dims = image_resize_dimensions($orig_w, $orig_h, $width, $height, $crop);
                 $dst_w = $dims[4];
                 $dst_h = $dims[5];
 
                 // Return the original image only if it exactly fits the needed measures.
-                if ( ! $dims && ( ( ( null === $height && $orig_w == $width ) xor ( null === $width && $orig_h == $height ) ) xor ( $height == $orig_h && $width == $orig_w ) ) ) {
+                if (!$dims && (((null === $height && $orig_w == $width) xor (null === $width && $orig_h == $height)) xor ($height == $orig_h && $width == $orig_w))) {
                     $img_url = $url;
                     $dst_w = $orig_w;
                     $dst_h = $orig_h;
@@ -122,38 +140,43 @@ namespace Kontentblocks\Utils {
                     // Use this to check if cropped image already exists, so we can return that instead.
 
                     $suffix = "{$dst_w}x{$dst_h}";
-                    if (is_array($crop)){
-                        $suffix .="x{$crop[0]}x{$crop[1]}";
+                    if (is_array($crop)) {
+                        $suffix .= "x{$crop[0]}x{$crop[1]}";
                     }
 
-                    $dst_rel_path = str_replace( '.' . $ext, '', $rel_path );
+                    $dst_rel_path = str_replace('.' . $ext, '', $rel_path);
                     $destfilename = "{$upload_dir}{$dst_rel_path}-{$suffix}.{$ext}";
 
-                    if ( ! $dims || ( true == $crop && false == $upscale && ( $dst_w < $width || $dst_h < $height ) ) ) {
+                    if (!$dims || (true == $crop && false == $upscale && ($dst_w < $width || $dst_h < $height))) {
                         // Can't resize, so return false saying that the action to do could not be processed as planned.
-                        if (is_numeric($attachment)){
+                        if (is_numeric($attachment)) {
                             $wpsrc = wp_get_attachment_image_src($attachment, 'full');
                             $src = $wpsrc[0];
                         } else {
                             $src = $attachment;
                         }
                         return $src;
-                    }
-//                    // Else check if cache exists.
-                    elseif ( file_exists( $destfilename ) && getimagesize( $destfilename ) ) {
+                    } //                    // Else check if cache exists.
+                    elseif (file_exists($destfilename) && getimagesize($destfilename)) {
                         $img_url = "{$upload_url}{$dst_rel_path}-{$suffix}.{$ext}";
-                    }
-                    // Else, we resize the image and return the new resized image url.
+                    } // Else, we resize the image and return the new resized image url.
                     else {
-                        $editor = wp_get_image_editor( $img_path );
-                        if ( is_wp_error( $editor ) || is_wp_error( $editor->resize( $width, $height, $crop ) ) ){
+                        $editor = wp_get_image_editor($img_path);
+                        if (is_wp_error($editor) || is_wp_error($editor->resize($width, $height, $crop))) {
                             return false;
                         }
 
                         $resized_file = $editor->save($destfilename);
 
-                        if ( ! is_wp_error( $resized_file ) ) {
-                            $resized_rel_path = str_replace( $upload_dir, '', $resized_file['path'] );
+                        $metadata['sizes']['test'] = array(
+                            'file' => $resized_file['file'],
+                            'width' => $resized_file['width'],
+                            'height' => $resized_file['height'],
+                            'mime-type' => $resized_file['mime-type'],
+                        );
+                        wp_update_attachment_metadata($attachment, $metadata);
+                        if (!is_wp_error($resized_file)) {
+                            $resized_rel_path = str_replace($upload_dir, '', $resized_file['path']);
                             $img_url = $upload_url . $resized_rel_path;
                         } else {
                             return false;
@@ -163,15 +186,17 @@ namespace Kontentblocks\Utils {
                 }
 
                 // Okay, leave the ship.
-                if ( true === $upscale ) remove_filter( 'image_resize_dimensions', array( $this, 'aq_upscale' ) );
+                if (true === $upscale) {
+                    remove_filter('image_resize_dimensions', array($this, 'aq_upscale'));
+                }
 
                 // Return the output.
-                if ( $single ) {
+                if ($single) {
                     // str return.
                     $image = $img_url;
                 } else {
                     // array return.
-                    $image = array (
+                    $image = array(
                         0 => $img_url,
                         1 => $dst_w,
                         2 => $dst_h
@@ -184,20 +209,23 @@ namespace Kontentblocks\Utils {
             /**
              * Callback to overwrite WP computing of thumbnail measures
              */
-            public function upscale( $default, $orig_w, $orig_h, $dest_w, $dest_h, $crop ) {
-                if ( ! $crop ) return null; // Let the wordpress default function handle this.
+            public function upscale($default, $orig_w, $orig_h, $dest_w, $dest_h, $crop)
+            {
+                if (!$crop) {
+                    return null;
+                } // Let the wordpress default function handle this.
 
                 // Here is the point we allow to use larger image size than the original one.
                 $aspect_ratio = $orig_w / $orig_h;
                 $new_w = $dest_w;
                 $new_h = $dest_h;
 
-                if ( ! $new_w ) {
-                    $new_w = (int) round( $new_h * $aspect_ratio );
+                if (!$new_w) {
+                    $new_w = (int)round($new_h * $aspect_ratio);
                 }
 
-                if ( ! $new_h ) {
-                    $new_h = (int) round( $new_w / $aspect_ratio );
+                if (!$new_h) {
+                    $new_h = (int)round($new_w / $aspect_ratio);
                 }
 
                 $size_ratio = max($new_w / $orig_w, $new_h / $orig_h);
@@ -205,27 +233,27 @@ namespace Kontentblocks\Utils {
                 $crop_w = round($new_w / $size_ratio);
                 $crop_h = round($new_h / $size_ratio);
 
-                if ( ! is_array( $crop ) || count( $crop ) !== 2 ) {
-                    $crop = array( 'center', 'center' );
+                if (!is_array($crop) || count($crop) !== 2) {
+                    $crop = array('center', 'center');
                 }
-                list( $x, $y ) = $crop;
-                if ( 'left' === $x ) {
+                list($x, $y) = $crop;
+                if ('left' === $x) {
                     $s_x = 0;
-                } elseif ( 'right' === $x ) {
+                } elseif ('right' === $x) {
                     $s_x = $orig_w - $crop_w;
                 } else {
-                    $s_x = floor( ( $orig_w - $crop_w ) / 2 );
+                    $s_x = floor(($orig_w - $crop_w) / 2);
                 }
 
-                if ( 'top' === $y ) {
+                if ('top' === $y) {
                     $s_y = 0;
-                } elseif ( 'bottom' === $y ) {
+                } elseif ('bottom' === $y) {
                     $s_y = $orig_h - $crop_h;
                 } else {
-                    $s_y = floor( ( $orig_h - $crop_h ) / 2 );
+                    $s_y = floor(($orig_h - $crop_h) / 2);
                 }
 
-                return array( 0, 0, (int) $s_x, (int) $s_y, (int) $new_w, (int) $new_h, (int) $crop_w, (int) $crop_h );
+                return array(0, 0, (int)$s_x, (int)$s_y, (int)$new_w, (int)$new_h, (int)$crop_w, (int)$crop_h);
             }
         }
     }

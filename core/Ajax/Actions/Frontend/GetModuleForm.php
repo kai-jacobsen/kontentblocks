@@ -33,7 +33,11 @@ class GetModuleForm extends AbstractAjaxAction
             define('KB_MODULE_FORM', true);
         }
         $moduleDef = $request->request->filter('module', array(), FILTER_DEFAULT);
+        $omid = $moduleDef['mid']; // @TODO debug
+
         $moduleDef = apply_filters('kb.modify.module.before.frontend.form', $moduleDef);
+
+
         $environment = Utilities::getPostEnvironment($moduleDef['parentObjectId']);
         /** @var \Kontentblocks\Modules\Module $module */
         $workshop = new ModuleWorkshop($environment,
@@ -41,17 +45,17 @@ class GetModuleForm extends AbstractAjaxAction
         $module = $workshop->getModule();
         $module->properties->viewfile = filter_var($moduleDef['viewfile'], FILTER_SANITIZE_STRING);
         $module = apply_filters('kb.module.before.factory', $module);
+        $module->properties->setId($omid); // @TODO debug
         $module->setupFields();
-
         $currentData = wp_unslash($request->request->filter('entityData', array(), FILTER_DEFAULT));
         $oldData = $module->model->export();
         $merged = Utilities::arrayMergeRecursive($currentData, $oldData);
         $module->updateModuleData($merged);
+//        Kontentblocks::getService('utility.jsontransport')->registerModule($module->toJSON());
         $html = "<div class='kb-module--status-bar'></div>";
         $html .= $module->form();
         $return = array(
             'html' => $html,
-//            'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )
             'json' => Kontentblocks::getService('utility.jsontransport')->getJSON()
         );
         new AjaxSuccessResponse('serving module form', $return);

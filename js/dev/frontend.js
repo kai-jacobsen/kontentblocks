@@ -1415,7 +1415,6 @@ module.exports = Backbone.Model.extend({
     KB.FieldControls.remove(this);
   },
   rebind: function () {
-
     var that = this;
     _.defer(function () {
       if (_.isUndefined(that.getElement())) {
@@ -2781,6 +2780,7 @@ module.exports = Backbone.View.extend({
     this.subviews = {}; // image items
     this.ids = [];
     Logger.Debug.log('Fields: Gallery instance created and initialized');
+
     this.renderElements();
     this.initialSetup();
 
@@ -2857,7 +2857,7 @@ module.exports = Backbone.View.extend({
   },
   initialSetup: function () {
     var that = this;
-    var data = this.model.get('value').images || {};
+    var data = this.model.get('value')._images || {};
     this.setIds(data);
 
 
@@ -4451,7 +4451,6 @@ var Refields = require('fields/RefieldsController');
 var FieldsAPI = require('fieldsAPI/FieldsAPIController');
 
 
-
 /*
  Preperations
  */
@@ -4599,7 +4598,6 @@ KB.App = function () {
     // create models from already attached modules
     // automatically creates corresponding view
 
-
     _.each(Payload.getPayload('Modules'), function (module) {
       KB.ObjectProxy.add(KB.Modules.add(module));
     });
@@ -4680,7 +4678,6 @@ KB.App = function () {
   };
 
 }(jQuery);
-
 
 
 jQuery(document).ready(function () {
@@ -6222,10 +6219,10 @@ module.exports = Backbone.View.extend({
   },
 
   setupModuleId: function () {
-    var parentObject = this.model.get('parentObject');
-    if (this.model.get('globalModule') && parentObject) {
-      return parentObject.post_name;
-    }
+    // var parentObject = this.model.get('parentObject');
+    // if (this.model.get('globalModule') && parentObject) {
+    //   return parentObject.post_name;
+    // }
     return this.model.get('mid');
   },
   /**
@@ -6398,11 +6395,21 @@ module.exports = Backbone.View.extend({
         // TODO find better method for this
         if (res.data.json) {
           KB.payload = _.extend(KB.payload, res.data.json);
-          //var parsed = KB.Payload.parseAdditionalJSON(res.data.json);
-          if (res.data.json.Fields) {
-            that.FieldModels.reset();
-            that.FieldModels.add(_.toArray(res.data.json.Fields));
-          }
+          // var parsed = KB.Payload.parseAdditionalJSON(res.data.json);
+
+          // if (res.data.json.Modules){
+          //   _.each(res.data.json.Modules, function (module) {
+          //     KB.ObjectProxy.add(module);
+          //   })
+          // }
+
+          _.defer(function(){
+            if (res.data.json.Fields) {
+              that.FieldModels.reset();
+              that.FieldModels.add(_.toArray(res.data.json.Fields));
+            }
+          });
+
         }
         Ui.initTabs();
         Ui.initToggleBoxes();
@@ -6715,7 +6722,7 @@ module.exports = Backbone.View.extend({
     }
     //formdata = this.$form.serializeJSON();
     var asd = this.$form.serializeJSON();
-
+    console.log(asd);
 
     if (asd[mid]) {
       return asd[mid];
