@@ -23,7 +23,7 @@ module.exports = Backbone.View.extend({
   events: {
     'click .kb-gallery2--js-add-images': 'addImages'
   },
-  derender: function(){
+  derender: function () {
 
   },
   renderElements: function () {
@@ -32,7 +32,7 @@ module.exports = Backbone.View.extend({
     // add button dynamically
     jQuery('<a class="button button-primary kb-gallery2--js-add-images">' + KB.i18n.Refields.image.addButton + '</a>').appendTo(this.$el);
   },
-  setupElements: function(){
+  setupElements: function () {
     this.$list = this.$('.kb-gallery2--item-list');
     this.$list.sortable({revert: true, delay: 300, stop: _.bind(this.resortSelection, this)});
   },
@@ -86,7 +86,7 @@ module.exports = Backbone.View.extend({
   },
   initialSetup: function () {
     var that = this;
-    var data = this.model.get('value')._images || {};
+    var data = this.model.get('value').images || {};
     this.setIds(data);
 
 
@@ -158,11 +158,11 @@ module.exports = Backbone.View.extend({
   },
   resortToSelection: function () {
     var ids = _.pluck(this.selection.models, 'id');
-    _.each(this.subviews, function(view){
-        view.$el.detach();
-    },this);
+    _.each(this.subviews, function (view) {
+      view.$el.detach();
+    }, this);
 
-    _.each(ids, function(imgId){
+    _.each(ids, function (imgId) {
       var view = this.subviews[imgId];
       view.$el.appendTo(this.$list);
     }, this);
