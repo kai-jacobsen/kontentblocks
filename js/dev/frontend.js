@@ -6397,13 +6397,8 @@ module.exports = Backbone.View.extend({
           KB.payload = _.extend(KB.payload, res.data.json);
           // var parsed = KB.Payload.parseAdditionalJSON(res.data.json);
 
-          // if (res.data.json.Modules){
-          //   _.each(res.data.json.Modules, function (module) {
-          //     KB.ObjectProxy.add(module);
-          //   })
-          // }
 
-          _.defer(function(){
+          _.defer(function () {
             if (res.data.json.Fields) {
               that.FieldModels.reset();
               that.FieldModels.add(_.toArray(res.data.json.Fields));
@@ -6513,7 +6508,6 @@ module.exports = Backbone.View.extend({
       KB.Sidebar.$el.width(cWidth);
       this.$el.addClass('kb-modal-sidebar');
       this.$el.width(cWidth);
-
     }
 
   },
