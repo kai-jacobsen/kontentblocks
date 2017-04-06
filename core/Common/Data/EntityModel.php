@@ -4,6 +4,7 @@ namespace Kontentblocks\Common\Data;
 
 use ArrayAccess;
 use JsonSerializable;
+use Kontentblocks\Utils\Utilities;
 
 
 /**
@@ -35,7 +36,7 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
                 }
                 $this->$key = $v;
             }
-            $this->originalData = $data;
+            $this->originalData = Utilities::arrayMergeRecursive($data,$this->originalData);
         }
         return $this;
     }

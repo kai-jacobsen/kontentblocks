@@ -14,8 +14,6 @@ class UserEditScreen
 {
 
 
-    public $taxonomy;
-
     /**
      * UserEditScreen constructor.
      */
@@ -48,6 +46,7 @@ class UserEditScreen
         if (is_null($userObj)) {
             throw new Exception('No valid WP_User object provided');
         }
+
         return Utilities::getUserEnvironment($userObj->ID, $userObj);
     }
 

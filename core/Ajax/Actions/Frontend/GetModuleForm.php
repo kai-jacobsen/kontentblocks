@@ -33,10 +33,9 @@ class GetModuleForm extends AbstractAjaxAction
             define('KB_MODULE_FORM', true);
         }
         $moduleDef = $request->request->filter('module', array(), FILTER_DEFAULT);
-        $omid = $moduleDef['mid']; // @TODO debug
 
+        $omid = $moduleDef['mid'];
         $moduleDef = apply_filters('kb.modify.module.before.frontend.form', $moduleDef);
-
 
         $environment = Utilities::getPostEnvironment($moduleDef['parentObjectId']);
         /** @var \Kontentblocks\Modules\Module $module */
@@ -45,8 +44,11 @@ class GetModuleForm extends AbstractAjaxAction
         $module = $workshop->getModule();
         $module->properties->viewfile = filter_var($moduleDef['viewfile'], FILTER_SANITIZE_STRING);
         $module = apply_filters('kb.module.before.factory', $module);
+
+        // reset to original module id
         $module->properties->setId($omid); // @TODO debug
         $module->setupFields();
+
         $currentData = wp_unslash($request->request->filter('entityData', array(), FILTER_DEFAULT));
         $oldData = $module->model->export();
         $merged = Utilities::arrayMergeRecursive($currentData, $oldData);

@@ -64,18 +64,15 @@ class ScreenContext
      * @param $areas
      * @param PostEnvironment $environment
      * @param bool $sidebars
-     * @throws Exception
      * @since 0.1.0
      */
-    public function __construct($args, $areas, PostEnvironment $environment, $sidebars = false)
+    public function __construct($args, $areas, PostEnvironment $environment)
     {
-
         $this->id = $args['id'];
         $this->title = $args['title'];
         $this->description = $args['description'];
         $this->environment = $environment;
         $this->areas = $areas;
-        $this->editScreenHasSidebar = $sidebars;
 
         if (!empty($areas)) {
             $this->toJSON();
@@ -86,6 +83,9 @@ class ScreenContext
 
     }
 
+    /**
+     *  Export this to clientland
+     */
     private function toJSON()
     {
         $json = array(
@@ -93,7 +93,7 @@ class ScreenContext
             'title' => $this->title
         );
         Kontentblocks::getService('utility.jsontransport')->registerContext($json);
-
+        return $json;
     }
 
     /**
@@ -123,9 +123,8 @@ class ScreenContext
      */
     public function openContext()
     {
-        $side = $this->editScreenHasSidebar ? 'has-sidebar' : 'no-sidebar';
 
-        echo "<div id='context_{$this->id}' data-kbcontext='{$this->id}' class='area-{$this->id} kb-context-container {$side}'>
+        echo "<div id='context_{$this->id}' data-kbcontext='{$this->id}' class='area-{$this->id} kb-context-container'>
                     <div class='kb-context__inner'>
                     <div class='kb-context__header'>
                         <h2>{$this->title}</h2>
