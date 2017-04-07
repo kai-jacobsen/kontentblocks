@@ -84,7 +84,6 @@ class BackupDataStorage2
         );
 
 
-        $now = time();
 
         $value = json_encode(wp_slash($value));
 

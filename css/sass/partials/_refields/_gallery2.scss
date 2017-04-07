@@ -1,9 +1,17 @@
+.kb-gallery-frame{
+  .collection-settings.gallery-settings{
+    display: none !important;
+  }
+}
+
+
 .kb-gallery2__stage {
 
   .kb-gallery--image-wrapper {
     box-sizing: border-box;
     display: inline-block;
     width: 150px;
+    height: 150px;
     margin-right: 15px;
     border: 1px solid #ccc;
     background: #f2f2f2;

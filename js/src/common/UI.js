@@ -117,7 +117,6 @@ var Ui = {
      * of the area
      */
     function isValidModule() {
-      console.log(areaOver);
       var limit = areaOver.get('limit');
       var nom = numberOfModulesInArea(areaOver.get('id'));
 

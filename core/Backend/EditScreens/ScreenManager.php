@@ -5,8 +5,6 @@ namespace Kontentblocks\Backend\EditScreens;
 use Exception;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayout;
-use Kontentblocks\Kontentblocks;
-use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\_K;
 
 /**
@@ -59,13 +57,6 @@ class ScreenManager
     protected $contexts;
 
     /**
-     * Indicates if sidebars exists or not
-     * @var boolean
-     * @since 0.1.0
-     */
-    protected $hasSidebar;
-
-    /**
      * @var array
      */
     protected $screenLayouts;
@@ -89,13 +80,12 @@ class ScreenManager
         $this->contexts = $this->areasSortedByContext();
         // test if final context layout includes an sidebar
         // e.g. if an non-dynamic area is assigned to 'side'
-        $this->hasSidebar = (!empty($this->contexts['side']) && !empty($this->contexts['normal']));
-        $this->setupLayout();
+        $this->selectedLayout = $this->setupLayout();
 
     }
 
     /**
-     * @return mixed|void
+     * @return array
      */
     private function setupContextLayout()
     {
@@ -106,7 +96,6 @@ class ScreenManager
      * Default Context Layout
      *
      * @return array default context layout
-     * @filter kb_default_context_layout
      * @since 0.1.0
      */
     public static function getDefaultContextLayout()
@@ -141,6 +130,7 @@ class ScreenManager
 
         // plugins may change this
         $filtered = apply_filters('kb.default.context.layout', $defaults);
+        // old filter for bc
         return apply_filters('kb_default_context_layout', $filtered);
 
     }
@@ -184,13 +174,17 @@ class ScreenManager
         return $areas;
     }
 
+    /**
+     * @return EditScreenLayout
+     */
     private function setupLayout()
     {
         $screenLayouts = \Kontentblocks\EditScreenLayoutsRegistry()->layouts;
         $lyt = apply_filters('kb.screenLayout', 'default-boxes', $this->environment, $screenLayouts);
         _K::info("Screenlayout found: {$lyt}");
-        $this->selectedLayout = (isset($screenLayouts[$lyt])) ? $screenLayouts[$lyt] : $screenLayouts['default-boxes'];
+        $selectedLayout = (isset($screenLayouts[$lyt])) ? $screenLayouts[$lyt] : $screenLayouts['default-boxes'];
         \Kontentblocks\JSONTransport()->registerPublicData('config', 'layoutMode', $lyt);
+        return $selectedLayout;
     }
 
     /**
@@ -200,14 +194,12 @@ class ScreenManager
     public function render()
     {
         _K::info("ScreenManager will render");
-
         foreach ($this->contextLayout as $args) {
             // delegate the actual output to ScreenContext
             $this->contextRenderer[$args['id']] = new ScreenContext(
                 $args,
                 $this->getContextAreas($args['id']),
-                $this->environment,
-                $this->hasSidebar()
+                $this->environment
             );
         }
 
@@ -238,15 +230,6 @@ class ScreenManager
 
     }
 
-    /**
-     * Get sidebar indicator flag
-     * @return bool
-     * @since 0.1.0
-     */
-    public function hasSidebar()
-    {
-        return $this->hasSidebar;
-    }
 
     /**
      * Getter for all areas

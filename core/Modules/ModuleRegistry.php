@@ -124,24 +124,26 @@ class ModuleRegistry
     private function setupFilePaths($args, $classname)
     {
 
-        if (file_exists(trailingslashit($args['path']) . $classname . '.jpg')) {
+        $args['poster'] = false;
+
+        if (file_exists(trailingslashit($args['path']) . 'screenshot.jpg')) {
             $args['poster'] = content_url(
                                   str_replace(
                                       WP_CONTENT_DIR,
                                       '',
                                       $args['path']
                                   )
-                              ) . $classname . '.jpg';
+                              ) . 'screenshot.jpg';
         }
 
-        if (file_exists(trailingslashit($args['path']) . $classname . '.png')) {
+        if (file_exists(trailingslashit($args['path']) . 'screenshot.png')) {
             $args['poster'] = content_url(
                                   str_replace(
                                       WP_CONTENT_DIR,
                                       '',
                                       $args['path']
                                   )
-                              ) . $classname . '.png';
+                              ) . 'screenshot.png';
         }
 
         return $args;

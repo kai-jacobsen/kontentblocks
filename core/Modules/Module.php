@@ -57,6 +57,11 @@ abstract class Module implements EntityInterface
      */
     public $context;
 
+    /**
+     * @var ModuleModel
+     */
+    protected $frontendModel;
+
 
     /**
      * @param ModuleProperties $properties
@@ -201,10 +206,11 @@ abstract class Module implements EntityInterface
      */
     final public function module()
     {
+        $model = $this->model;
         if (isset($this->fields)) {
-            $this->setupFrontendData();
+            $model = $this->setupFrontendData();
         }
-        $this->view = $this->getView();
+        $this->view = $this->getView($model);
         return $this->render();
 
     }
@@ -213,27 +219,40 @@ abstract class Module implements EntityInterface
      * Pass the raw module data to the fields, where the data
      * may be modified, depends on field configuration
      * frontend / output only
+     * @param bool $forcenew
+     * @return ModuleModel
      */
-    private function setupFrontendData()
+    private function setupFrontendData($forcenew = false)
     {
+        if (!is_null($this->frontendModel)) {
+            if ($forcenew === false) {
+                return $this->frontendModel;
+            }
+        }
+
+        $prepData = [];
         if ($this->model->hasData()) {
             foreach ($this->model as $key => $v) {
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $this->fields->getFieldByKey($key);
-                $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue(
+                $prepData['_' . $key] = $v;
+                $prepData[$key] = (!is_null($field)) ? $field->getFrontendValue(
                     $this->properties->postId
                 ) : $v;
             }
         }
 
+        $this->frontendModel = new ModuleModel($prepData, $this);
+        return $this->frontendModel;
     }
 
     /**
      * Setup a prepared Twig template instance if viewLoader is used
+     * @param ModuleModel $model
      * @return ModuleView|null
      * @since 0.1.0
      */
-    private function getView()
+    private function getView(ModuleModel $model)
     {
         if (!class_exists('Kontentblocks\Templating\ModuleTemplate')) {
             class_alias('Kontentblocks\Templating\ModuleView', 'Kontentblocks\Templating\ModuleTemplate');
@@ -247,7 +266,7 @@ abstract class Module implements EntityInterface
                 return null;
             }
 
-            $moduleView = new ModuleView($this, $full);
+            $moduleView = new ModuleView($this, $full,$model);
             $this->view = $moduleView;
             return $this->view;
         } else if ($this->view) {

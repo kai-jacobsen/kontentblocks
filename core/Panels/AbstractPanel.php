@@ -53,6 +53,11 @@ abstract class AbstractPanel implements EntityInterface
     protected $baseId;
 
     /**
+     * @var PanelModel
+     */
+    protected $frontendModel;
+
+    /**
      * @param $args
      */
     public static function run($args)
@@ -174,19 +179,30 @@ abstract class AbstractPanel implements EntityInterface
     /**
      * @return PanelModel
      */
-    public function setupFrontendData()
+    public function setupFrontendData($forcenew = false)
     {
+
+        if (!is_null($this->frontendModel)) {
+            if ($forcenew === false) {
+                return $this->frontendModel;
+            }
+        }
+
+        $prepData = [];
         foreach ($this->model as $key => $v) {
             /** @var \Kontentblocks\Fields\Field $field */
             $field = $this->fields->getFieldByKey($key);
             if (!is_null($field)) {
                 $field->setValue($v);
-                $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue() : $v;
+                $prepData['_' . $key] = $v;
+                $prepData[$key] = (!is_null($field)) ? $field->getFrontendValue() : $v;
             } else {
                 unset($this->model[$key]);
             }
         }
-        return $this->model;
+        $fModel = new PanelModel($prepData, $this);
+        $this->frontendModel = $fModel;
+        return $this->frontendModel;
     }
 
     /**

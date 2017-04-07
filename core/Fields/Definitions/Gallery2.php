@@ -26,23 +26,23 @@ Class Gallery2 extends Field
      */
     public function setValue($data)
     {
-        $forJSON = null;
-        if (!empty($data['images']) && is_array($data['images'])) {
-            foreach ($data['images'] as &$image) {
-                if (isset($image['id'])) {
-                    $image['file'] = wp_prepare_attachment_for_js($image['id']);
-                }
-            }
-            $forJSON = $data;
-        }
-        $jsonTransport = Kontentblocks::getService('utility.jsontransport');
-        $jsonTransport->registerFieldData(
-            $this->getFieldId(),
-            $this->type,
-            $forJSON,
-            $this->getKey(),
-            $this->getArg('arrayKey')
-        );
+//        $forJSON = null;
+//        if (!empty($data['images']) && is_array($data['images'])) {
+//            foreach ($data['images'] as &$image) {
+//                if (isset($image['id'])) {
+//                    $image['file'] = wp_prepare_attachment_for_js($image['id']);
+//                }
+//            }
+//            $forJSON = $data;
+//        }
+//        $jsonTransport = Kontentblocks::getService('utility.jsontransport');
+//        $jsonTransport->registerFieldData(
+//            $this->getFieldId(),
+//            $this->type,
+//            $forJSON,
+//            $this->getKey(),
+//            $this->getArg('arrayKey')
+//        );
         return $data;
     }
 

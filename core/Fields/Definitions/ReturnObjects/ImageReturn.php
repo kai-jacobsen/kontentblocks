@@ -127,6 +127,8 @@ class ImageReturn extends StandardFieldReturn
             'upscale' => $this->upscale
         );
 
+
+
         $resizeargs = wp_parse_args($args, $defaults);
         $processed = ImageResize::getInstance()->process(
             $this->attId,
@@ -283,6 +285,12 @@ class ImageReturn extends StandardFieldReturn
         return $this;
     }
 
+    public function reset()
+    {
+        $this->src = null;
+        return $this;
+    }
+
     /**
      * @param $value
      * @return mixed
@@ -312,10 +320,5 @@ class ImageReturn extends StandardFieldReturn
         }
 
         return $value;
-    }
-
-    public function reset(){
-        $this->src = null;
-        return $this;
     }
 }
