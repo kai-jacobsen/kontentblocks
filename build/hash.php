@@ -3,5 +3,5 @@
 // either returns the current git hash or a random string
 // this will invalidate the local storage upon changes
 function getGitHash(){
-	return "d31921eec4369442b77444e4daf5b0865dcc795a";
+	return "edde15bc8f1eeb3ed472862c4ae2e1fae6b9335a";
 };

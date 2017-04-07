@@ -90,6 +90,7 @@ namespace Kontentblocks\Utils {
                             return $exists[0];
                         } else {
                             unset($exists[3]);
+                            $exists[3] = $sizedesc;
                             return $exists;
                         }
                     }
@@ -220,7 +221,8 @@ namespace Kontentblocks\Utils {
                     $image = array(
                         0 => $img_url,
                         1 => $dst_w,
-                        2 => $dst_h
+                        2 => $dst_h,
+                        3 => $sizedesc
                     );
                 }
 
