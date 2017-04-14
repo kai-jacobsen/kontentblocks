@@ -72,6 +72,13 @@ class ModuleModel extends EntityModel
     public function jsonSerialize()
     {
         $vars = get_object_vars($this);
+
+        foreach (array_keys($vars) as $key) {
+            if ($key[0] === '_') {
+                unset($vars[$key]);
+            }
+        }
+
         unset($vars['module']);
         unset($vars['_initialized']);
         unset($vars['originalData']);

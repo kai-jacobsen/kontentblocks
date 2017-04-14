@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Modules;
 
 use DirectoryIterator;
@@ -109,7 +110,6 @@ class ModuleViewFilesystem
     }
 
 
-
     public function getPreview()
     {
         return $this->preview;
@@ -196,7 +196,7 @@ class ModuleViewFilesystem
                 return $full;
             }
         }
-        return 'peter';
+        return false;
 
     }
 

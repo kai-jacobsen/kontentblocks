@@ -177,9 +177,10 @@ abstract class AbstractPanel implements EntityInterface
     }
 
     /**
+     * @param bool $forcenew
      * @return PanelModel
      */
-    public function setupFrontendData($forcenew = false)
+    public function setupViewModel($forcenew = false)
     {
 
         if (!is_null($this->frontendModel)) {

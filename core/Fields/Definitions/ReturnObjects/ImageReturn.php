@@ -68,59 +68,6 @@ class ImageReturn extends StandardFieldReturn
     private $valid = false;
 
     /**
-     * @return string
-     */
-    public function getSrc()
-    {
-        if (is_null($this->src)) {
-            $this->resize();
-        }
-        return $this->src;
-    }
-
-    /**
-     * @param array $args
-     * @return $this
-     */
-    public function resize($args = array())
-    {
-        $defaults = array(
-            'width' => $this->size[0],
-            'height' => $this->size[1],
-            'crop' => $this->crop,
-            'upscale' => $this->upscale
-        );
-
-
-        $resizeargs = wp_parse_args($args, $defaults);
-        $processed = ImageResize::getInstance()->process(
-            $this->attId,
-            $resizeargs['width'],
-            $resizeargs['height'],
-            $resizeargs['crop'],
-            false,
-            $resizeargs['upscale']
-        );
-
-
-        if (is_array($processed) && count($processed) === 4) {
-            $this->src = $processed[0];
-            $this->setSize($processed[1], $processed[2]);
-        }
-        return $this;
-    }
-
-    /**
-     * @return $this|bool
-     */
-    public function setSize($width, $height)
-    {
-        $this->size = array($width, $height);
-        return $this;
-
-    }
-
-    /**
      * @param $size
      * @return $this
      */
@@ -168,6 +115,48 @@ class ImageReturn extends StandardFieldReturn
 
         $img .= ">";
         return $img;
+    }
+
+    /**
+     * @param array $args
+     * @return $this
+     */
+    public function resize($args = array())
+    {
+        $defaults = array(
+            'width' => $this->size[0],
+            'height' => $this->size[1],
+            'crop' => $this->crop,
+            'upscale' => $this->upscale
+        );
+
+
+        $resizeargs = wp_parse_args($args, $defaults);
+        $processed = ImageResize::getInstance()->process(
+            $this->attId,
+            $resizeargs['width'],
+            $resizeargs['height'],
+            $resizeargs['crop'],
+            false,
+            $resizeargs['upscale']
+        );
+
+
+        if (is_array($processed) && count($processed) === 4) {
+            $this->src = $processed[0];
+            $this->setSize($processed[1], $processed[2]);
+        }
+        return $this;
+    }
+
+    /**
+     * @return $this|bool
+     */
+    public function setSize($width, $height)
+    {
+        $this->size = array($width, $height);
+        return $this;
+
     }
 
     /**
@@ -259,6 +248,26 @@ class ImageReturn extends StandardFieldReturn
             return $processed[0];
         }
         return false;
+    }
+
+    /**
+     * @return string
+     * @deprecated
+     */
+    public function src()
+    {
+        return $this->getSrc();
+    }
+
+    /**
+     * @return string
+     */
+    public function getSrc()
+    {
+        if (is_null($this->src)) {
+            $this->resize();
+        }
+        return $this->src;
     }
 
     /**

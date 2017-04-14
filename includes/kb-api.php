@@ -269,7 +269,7 @@ function getTermPanelModel($panelId, $termId, $taxonomy = null)
 {
     $panel = getTermPanel($panelId, $termId, $taxonomy);
     if (!is_wp_error($panel)) {
-        return $panel->setupFrontendData();
+        return $panel->setupViewModel();
     }
 }
 
@@ -282,7 +282,7 @@ function getPostPanelModel($panelId = null, $postId = null)
 {
     $panel = getPostPanel($panelId, $postId);
     if (is_a($panel, '\Kontentblocks\Panels\PostPanel')) {
-        return $panel->setupFrontendData();
+        return $panel->setupViewModel();
     }
     return null;
 }
@@ -304,7 +304,7 @@ function getPostPanelData($panelId = null, $postId = null, $raw = false)
     $panel = getPostPanel($panelId, $postId);
     if (is_a($panel, '\Kontentblocks\Panels\PostPanel')) {
         if (!$raw) {
-            $data = $panel->setupFrontendData()->export();
+            $data = $panel->setupViewModel()->export();
         } else {
             $data = $panel->setupRawData()->export();
         }
@@ -350,7 +350,7 @@ function getOptionsPanelModel($panelId)
 {
     $panel = getOptionsPanel($panelId);
     if (is_a($panel, '\Kontentblocks\Panels\OptionPanel')) {
-        return $panel->setupFrontendData();
+        return $panel->setupViewModel();
     }
 }
 

@@ -456,7 +456,7 @@ class Utilities
         }
 
         if (post_type_supports($postType, 'editor')) {
-            if (!apply_filters('kb.remote.concat.ignore.editor', '__return_false')){
+            if (!apply_filters('kb.remote.concat.ignore.editor', '__return_false')) {
                 return null;
             }
         }
@@ -603,5 +603,16 @@ class Utilities
         }
 
         return implode('_', $parts);
+    }
+
+    public static function trackSize($size)
+    {
+        $kbimagesizes = get_option('kbimagesizes');
+
+        if (!is_array($kbimagesizes)) {
+            $kbimagesizes = [];
+        }
+        $kbimagesizes[$size] = $size;
+        update_option('kbimagesizes', $kbimagesizes, false);
     }
 }

@@ -77,12 +77,11 @@ namespace Kontentblocks\Utils {
                     // $attachment may be a url or an id
                 }
 
-                $dwidth = ($width) ? $width : '';
-                $dheight = ($height) ? $height : '';
+                $dwidth = ($width) ? $width : 'autow';
+                $dheight = ($height) ? $height : 'autoh';
                 $dcrop = ($crop) ? '_c' : '';
                 $dupscale = ($upscale) ? '_us' : '';
-                $sizedesc = 'kb-' . $attachment . '_' . $dwidth . 'x' . $dheight . $dcrop . $dupscale;
-
+                $sizedesc = 'kb-' . '_' . $dwidth . 'x' . $dheight . $dcrop . $dupscale;
                 $exists = wp_get_attachment_image_src($attachment, $sizedesc, false);
                 if (is_array($exists) && isset($exists[3])) {
                     if ($exists[3] === true) {
@@ -95,9 +94,7 @@ namespace Kontentblocks\Utils {
                         }
                     }
                 }
-
                 $metadata = wp_get_attachment_metadata($attachment);
-
                 if (is_numeric($attachment)) {
                     $url = wp_get_attachment_url(absint($attachment));
                 } else {
@@ -179,6 +176,15 @@ namespace Kontentblocks\Utils {
                     } //                    // Else check if cache exists.
                     elseif (file_exists($destfilename) && getimagesize($destfilename)) {
                         $img_url = "{$upload_url}{$dst_rel_path}-{$suffix}.{$ext}";
+                        $metadata['sizes'][$sizedesc] = array(
+                            'file' => basename($destfilename),
+                            'width' => $dst_w,
+                            'height' => $dst_h,
+                            'mime-type' => get_post_mime_type($attachment),
+                        );
+                        Utilities::trackSize($sizedesc);
+                        wp_update_attachment_metadata($attachment, $metadata);
+
                     } // Else, we resize the image and return the new resized image url.
                     else {
                         $editor = wp_get_image_editor($img_path);
@@ -187,15 +193,14 @@ namespace Kontentblocks\Utils {
                         }
 
                         $resized_file = $editor->save($destfilename);
-                        if (!isset($metadata['sizes'][$sizedesc])) {
-                            $metadata['sizes'][$sizedesc] = array(
-                                'file' => $resized_file['file'],
-                                'width' => $resized_file['width'],
-                                'height' => $resized_file['height'],
-                                'mime-type' => $resized_file['mime-type'],
-                            );
-                            wp_update_attachment_metadata($attachment, $metadata);
-                        }
+                        $metadata['sizes'][$sizedesc] = array(
+                            'file' => $resized_file['file'],
+                            'width' => $resized_file['width'],
+                            'height' => $resized_file['height'],
+                            'mime-type' => $resized_file['mime-type'],
+                        );
+                        Utilities::trackSize($sizedesc);
+                        wp_update_attachment_metadata($attachment, $metadata);
 
                         if (!is_wp_error($resized_file)) {
                             $resized_rel_path = str_replace($upload_dir, '', $resized_file['path']);

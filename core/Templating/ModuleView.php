@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Templating;
 
 use Exception;
@@ -145,6 +146,14 @@ class ModuleView implements \JsonSerializable
     }
 
     /**
+     * @return ModuleModel
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
      * @param $data
      * @return bool
      */
@@ -159,11 +168,14 @@ class ModuleView implements \JsonSerializable
     }
 
     /**
-     * @param $file
+     * @param $viewFile
      */
-    public function setTplFile(ModuleViewFile $file)
+    public function setTplFile($viewFile)
     {
-        $this->tplFile = $file;
+        if (is_string($viewFile)) {
+            $viewFile = $this->module->getViewManager()->getViewByName($viewFile);
+        }
+        $this->tplFile = $viewFile;
     }
 
     /**
