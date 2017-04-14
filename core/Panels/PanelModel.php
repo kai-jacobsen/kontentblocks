@@ -7,8 +7,10 @@ use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Utils\Utilities;
 
+
 /**
- * Class BaseModel
+ * Class PanelModel
+ * @package Kontentblocks\Panels
  */
 class PanelModel extends EntityModel
 {
@@ -68,6 +70,11 @@ class PanelModel extends EntityModel
     public function jsonSerialize()
     {
         $vars = get_object_vars($this);
+        foreach (array_keys($vars) as $key) {
+            if ($key[0] === '_') {
+                unset($vars[$key]);
+            }
+        }
         unset($vars['_initialized']);
         unset($vars['originalData']);
         unset($vars['entity']);
@@ -91,11 +98,14 @@ class PanelModel extends EntityModel
      */
     public function reset()
     {
-        $keys = array_keys($this->export());
+        $keys = array_keys(get_object_vars($this));
         foreach ($keys as $key) {
-            unset($this->$key);
+            if ($key !== 'entity') {
+                unset($this->$key);
+            }
         }
         $this->originalData = array();
+        $this->_initialized = false;
         return $this;
     }
 }

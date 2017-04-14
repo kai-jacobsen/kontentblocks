@@ -37,7 +37,6 @@ class ModuleModel extends EntityModel
     /**
      * @param bool $addslashes
      * @return bool
-     * @since 0.2.0
      */
     public function sync($addslashes = false)
     {
@@ -53,7 +52,6 @@ class ModuleModel extends EntityModel
     /**
      *
      * @return mixed
-     * @since 0.1.0
      */
     public function export()
     {

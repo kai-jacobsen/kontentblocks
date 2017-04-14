@@ -265,7 +265,7 @@ abstract class Module implements EntityInterface
                 return null;
             }
 
-            $moduleView = new ModuleView($this, $full,$model);
+            $moduleView = new ModuleView($this, $full, $model);
             $this->view = $moduleView;
             return $this->view;
         } else if ($this->view) {
@@ -299,6 +299,15 @@ abstract class Module implements EntityInterface
     }
 
     abstract public function render();
+
+    /**
+     * @return ModuleModel
+     * @deprecated
+     */
+    public function setuFrontendData()
+    {
+        return $this->setupViewModel();
+    }
 
     /**
      * @param ModuleView $view
