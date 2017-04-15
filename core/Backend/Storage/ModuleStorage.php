@@ -348,36 +348,36 @@ class ModuleStorage implements \Countable
         return $this->dataProvider->delete('kb_kontentblocks');
     }
 
-    /**
-     * Handle data restore
-     * @param $data
-     */
-    public function restoreBackup($data)
-    {
-        if (is_null($data)) {
-            return;
-        }
-
-        $index = $data['index'];
-        $modules = $data['modules'];
-
-        // delete old data
-        if (!empty($modules)) {
-            foreach ($modules as $k => $value) {
-                $this->dataProvider->delete($k);
-
-            }
-        }
-        $this->dataProvider->delete('kb_kontentblocks');
-        //set new old data from backup;
-        $this->dataProvider->update('kb_kontentblocks', $index);
-
-        if (!empty($modules)) {
-            foreach ($modules as $k => $value) {
-                $this->dataProvider->update($k, $value);
-            }
-        }
-    }
+//    /**
+//     * Handle data restore
+//     * @param $data
+//     */
+//    public function restoreBackup($data)
+//    {
+//        if (is_null($data)) {
+//            return;
+//        }
+//
+//        $index = $data['index'];
+//        $modules = $data['modules'];
+//
+//        // delete old data
+//        if (!empty($modules)) {
+//            foreach ($modules as $k => $value) {
+//                $this->dataProvider->delete($k);
+//
+//            }
+//        }
+//        $this->dataProvider->delete('kb_kontentblocks');
+//        //set new old data from backup;
+//        $this->dataProvider->update('kb_kontentblocks', $index);
+//
+//        if (!empty($modules)) {
+//            foreach ($modules as $k => $value) {
+//                $this->dataProvider->update($k, $value);
+//            }
+//        }
+//    }
 
     /**
      * (PHP 5 &gt;= 5.1.0)<br/>

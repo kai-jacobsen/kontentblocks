@@ -12,7 +12,6 @@ use Kontentblocks\Utils\Utilities;
  * Class BackupDataStorage
  * @package Kontentblocks
  * @subpackage Backend
- * @since 0.1.0
  *
  * Interact with custom backup table
  */
@@ -192,17 +191,17 @@ class BackupDataStorage2
 
 
     /**
-     * @param $id
+     * @param $backupId
      * @return bool
      */
-    public function restoreBackup($id)
+    public function restoreBackup($backupId)
     {
         if (!apply_filters('kb.backups.enabled', '__return_true')) {
             return false;
         }
 
         global $wpdb;
-        $row = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}kb_backups WHERE id = '{$id}'");
+        $row = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}kb_backups WHERE id = '{$backupId}'");
         if (!empty($row)) {
             $preped = $this->prepareResults(array($row));
             $prow = array_shift($preped);
