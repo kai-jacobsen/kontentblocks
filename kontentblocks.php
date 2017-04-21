@@ -169,7 +169,7 @@ Class Kontentblocks
                 if (!$ajax) {
                     $logger->pushHandler(new BrowserConsoleHandler());
                     $logger->addInfo(
-                        'Hey there! Kontentblocks is running in debug mode but don\'t worry. Have a great day'
+                        'Kontentblocks is running in debug mode.'
                     );
                 }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Common\Data;
 
 
@@ -9,15 +10,15 @@ namespace Kontentblocks\Common\Data;
 class ValueObject implements ValueObjectInterface, \ArrayAccess
 {
 
+    protected $data = [];
+
     /**
      * ValueObject constructor.
      * @param array $data
      */
     public function __construct($data = [])
     {
-        foreach ($data as $k => $val) {
-            $this->$k = $val;
-        }
+        $this->data = $data;
     }
 
     /**
@@ -32,12 +33,23 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess
     /**
      * @param $key
      * @param null $default
+     * @param null $group
      * @return mixed
      */
-    public function get($key, $default = null)
+    public function get($key, $default = null, $group = null)
     {
-        if (isset($this->$key)) {
-            return $this->$key;
+        if (!is_null($group)) {
+            if (array_key_exists($group, $this->data)) {
+                if (!empty($this->data[$group][$key])) {
+                    return $this->data[$group][$key];
+                } else {
+                    return $default;
+                }
+            }
+        }
+
+        if (isset($this->data[$key])) {
+            return $this->data[$key];
         }
 
         return $default;
@@ -48,7 +60,7 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess
      */
     public function toArray()
     {
-        return get_object_vars($this);
+        return $this->data;
     }
 
     /**
@@ -65,7 +77,7 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return isset($this->$offset);
+        return isset($this->data[$offset]);
     }
 
     /**
@@ -79,7 +91,7 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return $this->$offset;
+        return $this->data[$offset];
     }
 
     /**

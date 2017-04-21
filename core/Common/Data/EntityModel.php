@@ -36,7 +36,7 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
                 }
                 $this->$key = $v;
             }
-            $this->originalData = Utilities::arrayMergeRecursive($data,$this->originalData);
+            $this->originalData = Utilities::arrayMergeRecursive($data, $this->originalData);
         }
         return $this;
     }
@@ -131,7 +131,7 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-            $this->$offset = $value;
+        $this->$offset = $value;
     }
 
     /**
@@ -145,7 +145,7 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      */
     public function offsetUnset($offset)
     {
-            unset($this->$offset);
+        unset($this->$offset);
     }
 
     /**

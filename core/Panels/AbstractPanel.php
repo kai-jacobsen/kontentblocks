@@ -180,7 +180,7 @@ abstract class AbstractPanel implements EntityInterface
      * @return PanelModel
      * @deprecated
      */
-    public function setuFrontendData()
+    public function setupFrontendData()
     {
         return $this->setupViewModel();
     }

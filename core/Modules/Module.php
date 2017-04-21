@@ -304,7 +304,7 @@ abstract class Module implements EntityInterface
      * @return ModuleModel
      * @deprecated
      */
-    public function setuFrontendData()
+    public function setupFrontendData()
     {
         return $this->setupViewModel();
     }
