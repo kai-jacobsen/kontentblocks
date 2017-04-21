@@ -612,7 +612,6 @@ module.exports = Backbone.View.extend({
     }
     //formdata = this.$form.serializeJSON();
     var asd = this.$form.serializeJSON();
-    console.log(asd);
 
     if (asd[mid]) {
       return asd[mid];

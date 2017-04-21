@@ -2,11 +2,7 @@
 
 namespace Kontentblocks\Fields;
 
-use Kontentblocks\Common\Data\EntityModel;
-use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Modules\Module;
-use Kontentblocks\Utils\Utilities;
-use Reframe\Kontentblocks\Kontentblocks;
 
 /**
  * ModuleFieldController

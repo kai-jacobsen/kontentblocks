@@ -4,7 +4,7 @@ namespace Kontentblocks\Fields;
 
 use Exception;
 use Kontentblocks\Common\Data\EntityModel;
-use Kontentblocks\Common\Exportable;
+use Kontentblocks\Common\ExportableFieldInterface;
 use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
@@ -13,7 +13,7 @@ use Kontentblocks\Utils\Utilities;
  * Class StandardFieldSection
  * @package Kontentblocks\Fields
  */
-class StandardFieldSection implements Exportable
+class StandardFieldSection implements ExportableFieldInterface
 {
 
     /**

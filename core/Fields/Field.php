@@ -3,7 +3,7 @@
 
 namespace Kontentblocks\Fields;
 
-use Kontentblocks\Common\Exportable;
+use Kontentblocks\Common\ExportableFieldInterface;
 use Kontentblocks\Fields\Definitions\ReturnObjects\StandardFieldReturn;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
@@ -21,7 +21,7 @@ use Kontentblocks\Fields\Returnobjects;
  * 2. subkey, if fields are grouped resp. nested under one subkey in $POST data(see class FieldSubGroup)
  * 3. key, the actual storage key in the $POST data
  */
-abstract class Field implements Exportable
+abstract class Field implements ExportableFieldInterface
 {
 
     /**

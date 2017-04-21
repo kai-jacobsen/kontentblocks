@@ -3,13 +3,12 @@
 namespace Kontentblocks\Common\Data;
 
 
-
 /**
- * Class EntityModel
+ * Interface SyncableInterface
  * @package Kontentblocks\Common\Data
  */
-class EntityModel extends ValueObject
+interface SyncableInterface
 {
-
+    public function sync();
 
 }

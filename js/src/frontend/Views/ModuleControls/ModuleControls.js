@@ -15,7 +15,6 @@ module.exports = Backbone.View.extend({
   initialize: function (options) {
     // assign parent View
     this.ModuleView = options.ModuleView;
-    console.log(this);
   },
   derender: function(){
     this.$el.detach();

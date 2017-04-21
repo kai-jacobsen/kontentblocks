@@ -6809,7 +6809,6 @@ module.exports = Backbone.View.extend({
     }
     //formdata = this.$form.serializeJSON();
     var asd = this.$form.serializeJSON();
-    console.log(asd);
 
     if (asd[mid]) {
       return asd[mid];
@@ -6858,7 +6857,6 @@ module.exports = Backbone.View.extend({
   initialize: function (options) {
     // assign parent View
     this.ModuleView = options.ModuleView;
-    console.log(this);
   },
   derender: function(){
     this.$el.detach();
@@ -8682,7 +8680,6 @@ module.exports = Backbone.View.extend({
 module.exports = Backbone.Model.extend({
   initialize: function () {
     var that = this;
-    console.log(this);
     this.id = (function () {
       if (that.get('settings').category === 'template') {
         return that.get('mid');

@@ -5,7 +5,7 @@ namespace Kontentblocks\Common;
 
 use Kontentblocks\Fields\FieldExport;
 
-interface Exportable
+interface ExportableFieldInterface
 {
 
     public function export(FieldExport $exporter);

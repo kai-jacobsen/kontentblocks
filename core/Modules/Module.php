@@ -378,7 +378,7 @@ abstract class Module implements EntityInterface
             'id' => $this->getId(), // only for backbone compatibility
             'entityData' => apply_filters(
                 'kb.module.modify.data',
-                $this->model->getOriginalData(),
+                $this->model->export(),
                 $this
             ),
             'validator' => $this->properties->getValidator(),
