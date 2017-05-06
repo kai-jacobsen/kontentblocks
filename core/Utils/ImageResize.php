@@ -168,7 +168,11 @@ namespace Kontentblocks\Utils {
                         // Can't resize, so return false saying that the action to do could not be processed as planned.
                         if (is_numeric($attachment)) {
                             $wpsrc = wp_get_attachment_image_src($attachment, 'full');
-                            $src = $wpsrc[0];
+                            if ($single) {
+                                $src = $wpsrc[0];
+                            } else {
+                                $src = $wpsrc;
+                            }
                         } else {
                             $src = $attachment;
                         }
