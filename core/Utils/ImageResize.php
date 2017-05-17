@@ -188,7 +188,6 @@ namespace Kontentblocks\Utils {
                         );
                         Utilities::trackSize($sizedesc);
                         wp_update_attachment_metadata($attachment, $metadata);
-
                     } // Else, we resize the image and return the new resized image url.
                     else {
                         $editor = wp_get_image_editor($img_path);

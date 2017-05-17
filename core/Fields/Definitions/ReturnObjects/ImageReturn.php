@@ -320,12 +320,19 @@ class ImageReturn extends StandardFieldReturn
         return $this;
     }
 
+    /**
+     * @param $string
+     * @return $this
+     */
     public function mq($string)
     {
         $this->mediaQueries[] = $string;
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function reset()
     {
         $this->src = null;
