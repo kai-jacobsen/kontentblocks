@@ -130,6 +130,9 @@ class StandardFieldSection implements ExportableFieldInterface
     public function addField($type, $key, $args = array())
     {
 
+        if (is_string($key) && $key[0] === '_') {
+            return $this;
+        }
 
         /** @var \Kontentblocks\Fields\FieldRegistry $registry */
         $registry = Kontentblocks::getService('registry.fields');
@@ -141,7 +144,7 @@ class StandardFieldSection implements ExportableFieldInterface
             }
         }
 
-        if (!$registry->validType($type)){
+        if (!$registry->validType($type)) {
             return $this;
         }
 
