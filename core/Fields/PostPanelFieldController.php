@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Fields;
 
+use Kontentblocks\Backend\EditScreens\ScreenContext;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Panels\PostPanel;
 
 /**
@@ -25,7 +27,7 @@ class PostPanelFieldController extends StandardFieldController
      * @return object
      * @since 0.1.0
      */
-    public function addSection($sectionId, $args = array())
+    public function addSection($sectionId, $args = [])
     {
         if (!$this->idExists($sectionId)) {
             $this->sections[$sectionId] = new PostPanelFieldSection(
@@ -37,5 +39,27 @@ class PostPanelFieldController extends StandardFieldController
         return $this->sections[$sectionId];
 
     }
+
+    public function addContext($contextId, $args = [], PostEnvironment $environment)
+    {
+        $areas = $environment->getAreasForContext($contextId);
+        if (empty($areas)) {
+            return $this;
+        }
+
+        $defaults = [
+            'title' => 'Context',
+            'description' => ''
+        ];
+
+        $args = wp_parse_args($args,$defaults);
+        $args['id'] = $contextId;
+        $context = new ScreenContext($args,$areas,$environment);
+        $context->render();
+        return $this;
+
+
+    }
+
 
 }
