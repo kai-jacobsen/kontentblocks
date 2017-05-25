@@ -25,24 +25,8 @@ class EditScreenTest extends \WP_UnitTestCase
         $pagenow = 'post.php';
         parent::setUp();
         $this->EditScreen = new PostEditScreen();
+        add_post_type_support( 'post', 'kontentblocks' );
 
-        \Kontentblocks\registerArea(
-            array(
-                'id' => 'demo-content', // unique id of area used in do_action('area',...) call
-                'name' => 'Demo Page Content', // public shown name
-                'description' => 'A single demo area', // public description
-                'postTypes' => array( 'post' ), // array of post types where this area is available to
-                'pageTemplates' => array( 'default' ), // array of page template names where this area is available to
-                'assignedModules' => array(), // array of classnames
-                'layouts' => array( 'default', '2-columns', '3-columns' ),
-                'dynamic' => false, // whether this is an dynamic area
-                'manual' => true, // true if set by code
-                'limit' => 0, // how many modules are allowed
-                'order' => 0, // order index for sorting
-                'context' => 'normal', // location on the edit screen,
-                'sortable' => true
-            )
-        );
     }
 
     public function testHooksSetup()
@@ -58,9 +42,9 @@ class EditScreenTest extends \WP_UnitTestCase
     public function testUserInterface()
     {
         $post = $this->factory->post->create_and_get();
-        add_post_type_support( 'post', 'kontentblocks' );
         $this->EditScreen->renderUserInterface( $post->post_type, $post );
         $out = $this->EditScreen->userInterface();
+
         $this->assertContains( "id='kontentblocks-core-ui'", $out );
         $this->assertContains( "</div> <!--end ks -->", $out );
         $this->assertContains( "id='demo-content'", $out );

@@ -40,26 +40,5 @@ class PostPanelFieldController extends StandardFieldController
 
     }
 
-    public function addContext($contextId, $args = [], PostEnvironment $environment)
-    {
-        $areas = $environment->getAreasForContext($contextId);
-        if (empty($areas)) {
-            return $this;
-        }
-
-        $defaults = [
-            'title' => 'Context',
-            'description' => ''
-        ];
-
-        $args = wp_parse_args($args,$defaults);
-        $args['id'] = $contextId;
-        $context = new ScreenContext($args,$areas,$environment);
-        $context->render();
-        return $this;
-
-
-    }
-
 
 }

@@ -387,7 +387,7 @@ abstract class Field implements ExportableFieldInterface
      * Prepare Args for JSON
      * @TODO hacky
      */
-    private function cleanedArgs()
+    protected function cleanedArgs()
     {
         if (method_exists($this, 'argsToJson')) {
             return $this->argsToJson();
@@ -455,7 +455,7 @@ abstract class Field implements ExportableFieldInterface
      * used by js code to lookup data from entityData
      * @return string
      */
-    private function createKPath()
+    protected function createKPath()
     {
         $path = '';
         if ($this->getArg('arrayKey', false)) {

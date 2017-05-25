@@ -104,7 +104,6 @@ Class PostEditScreen
         if (!$areas || empty($areas)) {
             $hasAreas = false;
         }
-
         $screenManager = new ScreenManager($areas, $this->environment);
         $view = new CoreView(
             '/edit-screen/user-interface.twig', array(

@@ -103,17 +103,19 @@ class ScreenContext
      */
     public function render()
     {
+        $out = '';
         if (!empty($this->areas)) {
             // print outer wrapper markup
-            $this->openContext();
+            $out .= $this->openContext();
             //render actual areas
-            $this->renderAreas();
+            $out .= $this->renderAreas();
             //close wrapper markup
-            $this->closeContext();
+            $out .=$this->closeContext();
         } else {
             // call the hook anyway
-            do_action("context_box_{$this->id}", $this->id, $this->environment);
+            do_action("context_box_{$this->id}", $this->id, $this->environment, $out);
         }
+        return $out;
 
     }
 
@@ -124,7 +126,7 @@ class ScreenContext
     public function openContext()
     {
 
-        echo "<div id='context_{$this->id}' data-kbcontext='{$this->id}' class='area-{$this->id} kb-context-container'>
+        return "<div id='context_{$this->id}' data-kbcontext='{$this->id}' class='area-{$this->id} kb-context-container'>
                     <div class='kb-context__inner'>
                     <div class='kb-context__header'>
                         <h2>{$this->title}</h2>
@@ -159,11 +161,13 @@ class ScreenContext
                 $areaHTML = new AreaBackendRenderer($area, $this->environment, $this->id);
             }
             // do area header markup
-            $areaHTML->header();
-            // render modules for the area
-            $areaHTML->render();
-            //render area footer
-            $areaHTML->footer();
+//            $areaHTML->header();
+//            // render modules for the area
+//            $areaHTML->render();
+//            //render area footer
+//            $areaHTML->footer();
+
+            return $areaHTML->build();
         }
     }
 
@@ -193,10 +197,11 @@ class ScreenContext
      */
     public function closeContext()
     {
-        echo "</div>"; // end inner
+        $out = "</div>"; // end inner
         // hook to add custom stuff after areas
-        do_action("context_box_{$this->id}", $this->id, $this->environment);
-        echo "</div>";
+        do_action("context_box_{$this->id}", $this->id, $this->environment, $out);
+        $out .= "</div>";
+        return $out;
     }
 
     /**

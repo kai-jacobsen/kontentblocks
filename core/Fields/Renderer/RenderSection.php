@@ -33,11 +33,14 @@ class RenderSection
         $this->fields = $fields;
     }
 
+    /**
+     * @return string
+     */
     public function renderFields()
     {
         $out = '';
         foreach ($this->fields as $field) {
-           $out .= $field->build();
+            $out .= $field->build();
         }
         return $out;
     }

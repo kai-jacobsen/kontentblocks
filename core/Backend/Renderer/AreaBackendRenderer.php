@@ -89,9 +89,11 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
      */
     public function build()
     {
-        $this->header();
-        $this->render();
-        $this->footer();
+        $out = '';
+        $out .= $this->header();
+        $out .= $this->render();
+        $out .= $this->footer();
+        return $out;
     }
 
     /**
@@ -103,7 +105,7 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
     public function header()
     {
         $active = $this->area->settings->get('active') ? 'active' : 'inactive';
-        echo "<div id='{$this->area->id}-container' class='kb-area__wrap klearfix cf kb-area-status-{$active}' >";
+        $out = "<div id='{$this->area->id}-container' class='kb-area__wrap klearfix cf kb-area-status-{$active}' >";
         $headerClass = ($this->context == 'side' or $this->context == 'normal') ? 'minimized reduced' : null;
 
         $tpl = new CoreView(
@@ -113,7 +115,8 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
                 'headerClass' => $headerClass
             )
         );
-        $tpl->render(true);
+        $out .= $tpl->render();
+        return $out;
 
     }
 
@@ -123,7 +126,7 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
      * @param bool $echo
      * @return string
      */
-    public function render($echo = true)
+    public function render($echo = false)
     {
         $out = "<div class='kb-area--body'>";
         // list items for this area, block limit gets stored here
@@ -149,14 +152,12 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
     }
 
 
-
-
     /**
      * Area Footer markup
      */
     public function footer()
     {
-        echo "</div><!-- close area wrap -->";
+        return "</div><!-- close area wrap -->";
     }
 
     /**
