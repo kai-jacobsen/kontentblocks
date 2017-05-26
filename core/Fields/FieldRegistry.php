@@ -36,7 +36,7 @@ class FieldRegistry
         include_once($file);
         $classname = '\Kontentblocks\Fields\Definitions\\' . str_replace('.php', '', basename($file));
 
-        if (!is_subclass_of($classname, '\Kontentblocks\Fields\Field')) {
+        if (!is_subclass_of($classname, Field::class)) {
             throw new \Exception('Field MUST extend Kontentblocks Field Class');
         }
 
@@ -56,14 +56,14 @@ class FieldRegistry
 
     /**
      * Register field
-     * @param string $id
+     * @param string $type
      * @param object $class
      * @return $this
      * @since 0.1.0
      */
-    public function registerField($id, $class)
+    public function registerField($type, $class)
     {
-        $this->fields[$id] = $class;
+        $this->fields[$type] = $class;
         return $this;
 
     }
@@ -88,6 +88,10 @@ class FieldRegistry
         return null;
     }
 
+    /**
+     * @param $type
+     * @return bool
+     */
     public function validType($type)
     {
         return isset($this->fields[$type]);
