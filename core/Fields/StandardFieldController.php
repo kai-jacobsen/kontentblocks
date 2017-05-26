@@ -303,7 +303,7 @@ class StandardFieldController
     }
 
     /**
-     * @return AbstractFieldRenderer
+     * @return InterfaceFieldRenderer
      */
     public function getFieldRenderClass()
     {

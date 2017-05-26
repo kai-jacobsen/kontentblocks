@@ -5,7 +5,6 @@ namespace Kontentblocks\Fields\Definitions;
 use Kontentblocks\Areas\AreaProperties;
 use Kontentblocks\Backend\EditScreens\ScreenContext;
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Customizer\CustomizerIntegration;
 use Kontentblocks\Fields\FieldExport;
 use Kontentblocks\Modules\Module;
 use Kontentblocks\Panels\PostPanel;
@@ -19,7 +18,8 @@ Class Context extends Field
 
     // Defaults
     public static $settings = array(
-        'type' => 'context'
+        'type' => 'context',
+        'restriction' => array('post')
     );
 
     /**

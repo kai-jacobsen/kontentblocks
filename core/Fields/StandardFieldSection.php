@@ -130,6 +130,7 @@ class StandardFieldSection implements ExportableFieldInterface
     public function addField($type, $key, $args = array())
     {
 
+
         if (is_string($key) && $key[0] === '_') {
             return $this;
         }
@@ -156,6 +157,14 @@ class StandardFieldSection implements ExportableFieldInterface
             }
 
             $field = $registry->getField($type, $this->baseId, $groupkey, $key, $args);
+
+            // a field might only work for certain entities
+            if (is_array($field->getSetting('restriction'))) {
+                if (!in_array($this->entity->getType(), $field->getSetting('restriction'))) {
+                    return $this;
+                }
+            }
+
             $field->setController($this->controller);
             if (!$field) {
                 throw new Exception("Field of type: $type does not exist");
