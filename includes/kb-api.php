@@ -11,6 +11,7 @@ use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
 use Kontentblocks\Panels\PanelModel;
 use Kontentblocks\Panels\TermPanel;
+use Kontentblocks\Templating\TemplatePart;
 use Kontentblocks\Utils\CommonTwig\SimpleView;
 use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\RuntimeCache;
@@ -399,4 +400,17 @@ function getFromPostPanel($panelId, $key, $default = '', $postId = null)
     }
 
     return $panelModel->get($key, $default);
+}
+
+
+/**
+ * @param $slug
+ * @param string $name
+ * @param array $data
+ */
+function templatePart($slug, $name = '', $data = array()){
+
+    $part = new TemplatePart($slug,$name,$data);
+    echo $part->render();
+
 }

@@ -35,6 +35,11 @@ class SimpleTwig
     {
         $paths = array();
         $paths[] = trailingslashit(get_stylesheet_directory());
+
+        if (is_child_theme()){
+            $paths[] = trailingslashit(get_template_directory());
+        }
+
         $paths = apply_filters( 'kb.theme.twig.paths', $paths );
         $Loader = new Twig_Loader_Filesystem( $paths );
         self::$Loader = $Loader;
