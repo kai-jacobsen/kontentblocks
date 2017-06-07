@@ -130,7 +130,6 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
         // Iterate over modules (ModuleIterator)
         foreach ($this->modules as $module) {
             $this->moduleRenderer = new SingleModuleRenderer($module, $this->moduleSettings);
-
             if (!is_a($module, '\Kontentblocks\Modules\Module') || !$module->verifyRender()) {
                 continue;
             }
