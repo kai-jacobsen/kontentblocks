@@ -278,7 +278,6 @@ class AreaRegistry
     {
         $setting = $args['settings']['connect'];
         $postTypes = get_post_types(array('public' => true, '_builtin' => false), 'names', 'and');
-
         if (empty($setting)) {
             return false;
         }
@@ -355,7 +354,7 @@ class AreaRegistry
         return array_filter(
             $this->areas,
             function ($area) use ($tpl) {
-                return (in_array($tpl, $area->pageTemplates));
+                return Utilities::strposa($area->pageTemplates, $tpl);
             }
         );
     }
