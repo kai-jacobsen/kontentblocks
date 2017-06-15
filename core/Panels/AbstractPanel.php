@@ -203,7 +203,7 @@ abstract class AbstractPanel implements EntityInterface
             /** @var \Kontentblocks\Fields\Field $field */
             $field = $this->fields->getFieldByKey($key);
             if (!is_null($field)) {
-                $field->setValue($v);
+                $field->setData($v);
                 $prepData['_' . $key] = $v;
                 $prepData[$key] = (!is_null($field)) ? $field->getFrontendValue() : $v;
             } else {
