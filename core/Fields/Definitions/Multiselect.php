@@ -18,6 +18,21 @@ Class Multiselect extends Field
 
     );
 
+    public function prepareTemplateData($data)
+    {
+        $options = $this->getArg('options', []);
+
+        if (is_callable($options)) {
+            $options = call_user_func($options, $this);
+
+            if (!is_array($options)) {
+                $options = [];
+            }
+
+            $this->setArgs(['options' => $options]);
+        }
+        return $data;
+    }
 
     /**
      * @param $val

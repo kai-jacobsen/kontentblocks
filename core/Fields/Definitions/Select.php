@@ -16,6 +16,21 @@ Class Select extends Field
         'forceSave' => true,
     );
 
+    public function prepareTemplateData($data)
+    {
+        $options = $this->getArg('options', []);
+        if (is_callable($options)) {
+            $options = call_user_func($options, $this);
+
+            if (!is_array($options)) {
+                $options = [];
+            }
+            $this->setArgs(array('options' => $options));
+
+        }
+
+        return $data;
+    }
 
     /**
      * @param $val
@@ -31,9 +46,9 @@ Class Select extends Field
         }
 
         $options = $this->getArg('options', []);
-
         if (is_callable($options)) {
             $options = call_user_func($options, $this);
+
             if (!is_array($options)) {
                 $options = [];
             }
@@ -42,7 +57,6 @@ Class Select extends Field
 
         if ($this->getArg('select2', false) && is_array($val)) {
             $collect = array();
-
 
             $toValue = $this->sortToValue($options);
 
