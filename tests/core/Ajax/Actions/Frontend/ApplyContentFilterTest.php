@@ -3,7 +3,6 @@
 namespace Kontentblocks\tests\core\Ajax\Actions\Frontend;
 
 use Kontentblocks\Ajax\Actions\Frontend\ApplyContentFilter;
-use Kontentblocks\Common\Data\ValueStorage;
 use Symfony\Component\HttpFoundation\Request;
 
 

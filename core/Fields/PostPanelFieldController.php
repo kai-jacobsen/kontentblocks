@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Fields;
 
+use Kontentblocks\Backend\EditScreens\ScreenContext;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Panels\PostPanel;
 
 /**
@@ -25,7 +27,7 @@ class PostPanelFieldController extends StandardFieldController
      * @return object
      * @since 0.1.0
      */
-    public function addSection($sectionId, $args = array())
+    public function addSection($sectionId, $args = [])
     {
         if (!$this->idExists($sectionId)) {
             $this->sections[$sectionId] = new PostPanelFieldSection(
@@ -37,5 +39,6 @@ class PostPanelFieldController extends StandardFieldController
         return $this->sections[$sectionId];
 
     }
+
 
 }

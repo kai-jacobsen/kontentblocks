@@ -3,7 +3,8 @@
 
 namespace Kontentblocks\Fields;
 
-use Kontentblocks\Common\Exportable;
+use Kontentblocks\Common\ExportableFieldInterface;
+use Kontentblocks\Fields\Definitions\ReturnObjects\InterfaceFieldReturn;
 use Kontentblocks\Fields\Definitions\ReturnObjects\StandardFieldReturn;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
@@ -21,7 +22,7 @@ use Kontentblocks\Fields\Returnobjects;
  * 2. subkey, if fields are grouped resp. nested under one subkey in $POST data(see class FieldSubGroup)
  * 3. key, the actual storage key in the $POST data
  */
-abstract class Field implements Exportable
+abstract class Field implements ExportableFieldInterface
 {
 
     /**
@@ -82,7 +83,7 @@ abstract class Field implements Exportable
     protected $userValue;
     /**
      * Return Object
-     * @var \Kontentblocks\Fields\InterfaceFieldReturn
+     * @var InterfaceFieldReturn
      *
      */
     private $returnObj;
@@ -130,6 +131,9 @@ abstract class Field implements Exportable
         // nothing to do if not overridden
     }
 
+    /**
+     * @param StandardFieldController $controller
+     */
     public function setController(StandardFieldController $controller)
     {
         $this->controller = $controller;
@@ -235,7 +239,6 @@ abstract class Field implements Exportable
             'i18n' => I18n::getPackages('Refields.common', "Refields.{$type}")
         );
 
-
         /**
          * Field may alter the injected data array
          */
@@ -256,10 +259,10 @@ abstract class Field implements Exportable
      * @TODO this method is used on several occasions
      *
      * @param string $arrKey
-     * @param string $return
-     * @return mixed|null returns null if data does not exist
+     * @param string $default
+     * @return mixed
      */
-    public function getValue($arrKey = null, $return = '')
+    public function getValue($arrKey = null, $default = '')
     {
         $data = $this->value;
 
@@ -275,8 +278,7 @@ abstract class Field implements Exportable
             return $data[$arrKey];
         }
 
-
-        return $this->getArg('std', $return);
+        return $this->getArg('std', $default);
     }
 
     /**
@@ -321,7 +323,8 @@ abstract class Field implements Exportable
     }
 
     /**
-     *
+     * Before the data is injected into the field/form twig template
+     * Used to further manipulate or extend the data for the form
      * @param array $data
      * @return array
      */
@@ -332,7 +335,6 @@ abstract class Field implements Exportable
 
     /**
      * Just before form output
-     * and optional 'hooks"
      * @since 0.1.0
      */
     public function build()
@@ -389,7 +391,7 @@ abstract class Field implements Exportable
      * Prepare Args for JSON
      * @TODO hacky
      */
-    private function cleanedArgs()
+    protected function cleanedArgs()
     {
         if (method_exists($this, 'argsToJson')) {
             return $this->argsToJson();
@@ -457,7 +459,7 @@ abstract class Field implements Exportable
      * used by js code to lookup data from entityData
      * @return string
      */
-    private function createKPath()
+    protected function createKPath()
     {
         $path = '';
         if ($this->getArg('arrayKey', false)) {
@@ -472,6 +474,9 @@ abstract class Field implements Exportable
         return $path;
     }
 
+    /**
+     * @param $section
+     */
     public function setSection($section)
     {
         $this->section = $section;
@@ -596,7 +601,6 @@ abstract class Field implements Exportable
      * Prepare output
      * Runs when data is requested by getFrontendValue
      * which is the recommended method to get frontend data
-     * an optional returnObj
      *
      * @param $value
      *

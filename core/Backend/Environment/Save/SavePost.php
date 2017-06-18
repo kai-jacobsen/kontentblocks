@@ -5,6 +5,7 @@ namespace Kontentblocks\Backend\Environment\Save;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\BackupDataStorage2;
 use Kontentblocks\Modules\Module;
+use Kontentblocks\Panels\PostPanel;
 use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -42,13 +43,21 @@ class SavePost
      * Save method for post related modules
      * @return false    if auth fails or areas are empty
      */
-    public function save()
+    public function save($postId, $postObj)
     {
         // mic check one two, one two
         if ($this->auth() === false) {
             return false;
         }
         $areas = $this->environment->getAreas();
+
+        $panels = $this->environment->getPanels();
+
+        /** @var PostPanel $panel */
+        foreach ($panels as $panel){
+            $panel->saveCallback($postId, $postObj);
+        }
+
 
         // Bail out if no areas are set
         if (empty($areas)) {
@@ -64,6 +73,8 @@ class SavePost
                 continue;
             }
         }
+
+
         $this->concat();
         $this->saveAreaContextMap();
         $this->saveEditLayouts();

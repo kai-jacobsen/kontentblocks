@@ -67,7 +67,6 @@ class EditScreenLayoutsRegistry
      */
     public function addPath($path){
         Twig::setPath($path);
-
     }
 
     /**

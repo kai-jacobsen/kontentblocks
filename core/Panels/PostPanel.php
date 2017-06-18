@@ -34,6 +34,12 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public $context;
     /**
+     * Flag indicates if data should be stored as single key => value pairs
+     * in the meta table
+     * @var bool
+     */
+    public $saveAsSingle = false;
+    /**
      * meta box args
      * @var array|null
      */
@@ -54,12 +60,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     protected $pageTemplates = array();
     /**
-     * Flag indicates if data should be stored as single key => value pairs
-     * in the meta table
-     * @var bool
-     */
-    public $saveAsSingle = false;
-    /**
      * unique identifier
      * @var string
      */
@@ -72,6 +72,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function __construct($args, PostEnvironment $environment)
     {
+
         $this->environment = $environment;
         $this->context = new PostPanelContext($environment->export(), $this);
         $this->dataProvider = $environment->getDataProvider();
@@ -125,7 +126,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
                 add_action($this->hook, array($this, 'prepForm'), $this->args['priority']);
             }
         }
-        add_action("save_post", array($this, 'saveCallback'), 9, 2);
         add_action('wp_footer', array($this, 'toJSON'));
     }
 

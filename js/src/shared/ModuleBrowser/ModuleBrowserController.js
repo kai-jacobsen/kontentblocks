@@ -206,7 +206,7 @@ module.exports = Backbone.View.extend({
     data = res.data;
     this.options.area.$modulesList.append(data.html);
     model = KB.ObjectProxy.add(KB.Modules.add(data.module));
-    this.options.area.attachModuleView(model);
+    this.options.area.attachModule(model);
     this.parseAdditionalJSON(data.json);
     model.View.trigger('toggle.open');
 

@@ -25,7 +25,7 @@ Class Tagsinput extends Field
      *
      * @return string
      */
-    public function prepareFrontendValue( $val )
+    public function prepareFrontendValue($val)
     {
 
         return $val;
@@ -37,13 +37,19 @@ Class Tagsinput extends Field
      *
      * @return mixed
      */
-    public function prepareFormValue( $val )
+    public function prepareFormValue($val)
     {
         return $val;
 
     }
 
-    public function prepareTemplateData($data){
+    /**
+     *
+     * @param array $data
+     * @return array
+     */
+    public function prepareTemplateData($data)
+    {
 
         $post = get_post(get_the_ID());
         $args = array(

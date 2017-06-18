@@ -3,7 +3,6 @@
 namespace Kontentblocks\tests\core\Ajax\Actions;
 
 use Kontentblocks\Ajax\Actions\RemoteGetEditor;
-use Kontentblocks\Common\Data\ValueStorage;
 use Symfony\Component\HttpFoundation\Request;
 
 

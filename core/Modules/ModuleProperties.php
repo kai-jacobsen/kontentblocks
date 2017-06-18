@@ -294,7 +294,6 @@ class ModuleProperties
         if (is_array($var) && array_key_exists('id', $var)) {
             $var = $var['id'];
         }
-
         /** @var \Kontentblocks\Areas\AreaRegistry $areaRegistry */
         $areaRegistry = Kontentblocks::getService('registry.areas');
         $area = $areaRegistry->getArea($var);

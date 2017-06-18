@@ -4,13 +4,17 @@ namespace Kontentblocks\Panels;
 
 
 use Kontentblocks\Common\Data\EntityModel;
+use Kontentblocks\Common\Data\SyncableInterface;
+use Kontentblocks\Common\Data\ValueObject;
 use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Utils\Utilities;
 
+
 /**
  * Class PanelModel
+ * @package Kontentblocks\Panels
  */
-class PanelModel extends EntityModel
+class PanelModel extends ValueObject implements SyncableInterface
 {
 
     protected $originalData;
@@ -27,10 +31,8 @@ class PanelModel extends EntityModel
      */
     public function __construct($data = array(), AbstractPanel $entity)
     {
-        $this->originalData = $data;
-        $this->set($data);
-        $this->_initialized = true;
         $this->entity = $entity;
+        parent::__construct($data);
     }
 
     /**
@@ -47,32 +49,6 @@ class PanelModel extends EntityModel
         return $provider->update($key, $this->export());
     }
 
-    /**
-     * @return mixed
-     */
-    public function export()
-    {
-        return $this->jsonSerialize();
-
-    }
-
-    /**
-     * (PHP 5 &gt;= 5.4.0)<br/>
-     * Specify data which should be serialized to JSON
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @return array
-     * @since 0.1.0
-     */
-    public function jsonSerialize()
-    {
-        $vars = get_object_vars($this);
-        unset($vars['_initialized']);
-        unset($vars['originalData']);
-        unset($vars['entity']);
-        return $vars;
-    }
 
     public function saveAsSingle()
     {
@@ -86,16 +62,4 @@ class PanelModel extends EntityModel
         }
     }
 
-    /**
-     * @return $this
-     */
-    public function reset()
-    {
-        $keys = array_keys($this->export());
-        foreach ($keys as $key) {
-            unset($this->$key);
-        }
-        $this->originalData = array();
-        return $this;
-    }
 }

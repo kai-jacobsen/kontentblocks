@@ -52,7 +52,7 @@ module.exports = BaseView.extend({
 
     var ModuleModel = KB.ObjectProxy.add(KB.Modules.add(module));
     //var ModuleView = KB.Views.Modules.get(res.data.id);
-    this.model.Area.View.attachModuleView(ModuleModel);
+    this.model.Area.View.attachModule(ModuleModel);
     // update the reference counter, used as base number
     // for new modules
     Notice.notice('Module Duplicated', 'success');

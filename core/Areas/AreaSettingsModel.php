@@ -35,7 +35,6 @@ class AreaSettingsModel implements \JsonSerializable
      * It's like "we are on post x but get the data from post y"
      *
      * @param AreaProperties $area
-     * @param $postId
      * @param DataProviderInterface $dataProvider
      */
     public function __construct(AreaProperties $area, DataProviderInterface $dataProvider)
@@ -77,6 +76,9 @@ class AreaSettingsModel implements \JsonSerializable
         );
     }
 
+    /**
+     * @param $settings
+     */
     public function import($settings)
     {
         foreach ($settings as $k => $v) {
@@ -138,7 +140,6 @@ class AreaSettingsModel implements \JsonSerializable
             $meta = array();
         }
         $meta[$this->area->id] = $this->settings;
-        //we've got unslashed data from post meta, update will add wp_slash before adding to post meta
         return $this->dataProvider->update($this->key, $meta);
     }
 

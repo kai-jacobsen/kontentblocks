@@ -109,7 +109,7 @@ module.exports = Backbone.View.extend({
   findHelperSize: function (scope) {
     var widths = [];
     var heights = [];
-    _.each(scope.attachedModuleViews, function (ModuleView) {
+    _.each(scope.attachedModules, function (ModuleView) {
       widths.push(ModuleView.View.$el.width());
       heights.push(ModuleView.View.$el.height());
 

@@ -15,7 +15,7 @@ class StandardPanelRepository
     /**
      * @var array
      */
-    protected $panels;
+    protected $panels = array();
 
     /**
      * @return array

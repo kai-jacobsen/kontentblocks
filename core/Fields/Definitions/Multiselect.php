@@ -18,6 +18,21 @@ Class Multiselect extends Field
 
     );
 
+    public function prepareTemplateData($data)
+    {
+        $options = $this->getArg('options', []);
+
+        if (is_callable($options)) {
+            $options = call_user_func($options, $this);
+
+            if (!is_array($options)) {
+                $options = [];
+            }
+
+            $this->setArgs(['options' => $options]);
+        }
+        return $data;
+    }
 
     /**
      * @param $val
@@ -29,22 +44,36 @@ Class Multiselect extends Field
         if (is_null($val)) {
             return null;
         }
+
+        $options = $this->getArg('options', []);
+
+        if (is_callable($options)) {
+            $options = call_user_func($options, $this);
+
+            if (!is_array($options)) {
+                $options = [];
+            }
+
+            $this->setArgs(['options' => $options]);
+        }
+
+
         return $val;
     }
 
     public function save($new, $old)
     {
-        if (!is_array($new)){
+        if (!is_array($new)) {
             $new = array();
         }
 
         if (is_array($old)) {
             foreach ($old as $index => $val) {
-                if (!isset($new[$index])){
+                if (!isset($new[$index])) {
                     $new[$index] = null;
                 }
             }
-        return $new;
+            return $new;
         }
 
 

@@ -1,7 +1,6 @@
 //KB.Backbone.ModuleBrowserModuleDescription
 var tplModuleTemplateDescription = require('templates/backend/modulebrowser/module-template-description.hbs');
 var tplModuleDescription = require('templates/backend/modulebrowser/module-description.hbs');
-var tplModulePoster = require('templates/backend/modulebrowser/poster.hbs');
 module.exports = Backbone.View.extend({
   initialize: function (options) {
     this.options = options || {};
@@ -19,9 +18,7 @@ module.exports = Backbone.View.extend({
     } else {
       this.$el.html(tplModuleDescription({module: this.model.toJSON(), i18n: KB.i18n}));
     }
-    if (this.model.get('settings').poster !== false) {
-      this.$el.append(tplModulePoster({module: this.model.toJSON()}));
-    }
+
     if (this.model.get('settings').helptext !== false) {
       this.$el.append(this.model.get('settings').helptext);
     } 

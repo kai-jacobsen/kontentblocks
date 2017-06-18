@@ -43,7 +43,7 @@ module.exports = Backbone.Model.extend({
       AreaModel = KB.Areas.get(this.get('area'));
     }
     if (AreaModel) {
-      AreaModel.View.attachModuleView(this);
+      AreaModel.View.attachModule(this);
       this.Area = AreaModel;
     }
   },

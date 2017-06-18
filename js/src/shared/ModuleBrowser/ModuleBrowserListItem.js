@@ -1,6 +1,8 @@
 //KB.Backbone.ModuleBrowserListItem
 var tplTemplateListItem = require('templates/backend/modulebrowser/module-template-list-item.hbs');
 var tplListItem = require('templates/backend/modulebrowser/module-list-item.hbs');
+var tplModulePoster = require('templates/backend/modulebrowser/poster.hbs');
+
 module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'modules-list-item',
@@ -17,9 +19,30 @@ module.exports = Backbone.View.extend({
     if (this.model.get('globalModule')) {
       this.$el.html(tplTemplateListItem({module: this.model.toJSON(), i18n: KB.i18n}));
     } else {
-      this.$el.html(tplListItem({module: this.model.toJSON(),i18n: KB.i18n}));
+      this.$el.html(tplListItem({module: this.model.toJSON(), i18n: KB.i18n}));
     }
     el.append(this.$el);
+
+    if (this.model.get('settings').poster !== false) {
+      this.$el.qtip({
+        content: {
+          text: tplModulePoster({module: this.model.toJSON()}),
+        },
+        style: {
+          classes: 'kb-qtip'
+        },
+        position:{
+          my: 'top left',
+          at: 'bottom right',
+          target: 'mouse',
+          adjust:{
+            x: 80,
+            y: 20
+          }
+        }
+      });
+    }
+
   },
   events: {
     'click': 'handleClick',

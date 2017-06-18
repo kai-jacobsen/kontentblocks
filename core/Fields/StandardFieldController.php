@@ -1,9 +1,11 @@
 <?php
+
 namespace Kontentblocks\Fields;
 
 use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Fields\Renderer\AbstractFieldRenderer;
+use Kontentblocks\Fields\Renderer\FieldRendererTabs;
 use Kontentblocks\Fields\Renderer\InterfaceFieldRenderer;
 
 /**
@@ -43,7 +45,7 @@ class StandardFieldController
     /**
      * @var string
      */
-    public $formRenderClass = '\Kontentblocks\Fields\FieldFormRenderer';
+    public $formRenderClass = FieldFormRenderer::class;
 
     /**
      * @var FieldsYamlLoader
@@ -59,7 +61,7 @@ class StandardFieldController
      * Default field renderer
      * @var InterfaceFieldRenderer
      */
-    protected $fieldRenderClass = 'Kontentblocks\Fields\Renderer\FieldRendererTabs';
+    protected $fieldRenderClass = FieldRendererTabs::class;
     /**
      * registered fields in one flat array
      * @var array
@@ -87,13 +89,13 @@ class StandardFieldController
     public function parseArgs($args)
     {
         $defaults = array(
-            'fieldRenderClass' => 'Kontentblocks\Fields\Renderer\FieldRendererTabs',
-            'formRenderClass' => '\Kontentblocks\Fields\FieldFormRenderer'
+            'fieldRenderClass' => FieldRendererTabs::class,
+            'formRenderClass' => FieldFormRenderer::class
         );
 
         $args = wp_parse_args($args, $defaults);
 
-        foreach ($defaults as $key => $value) {
+        foreach (array_keys($defaults) as $key) {
             $this->$key = $args[$key];
         }
 
@@ -173,7 +175,7 @@ class StandardFieldController
         $coll = $this->collectAllFields();
 
         foreach ($coll as $field) {
-            if (is_a($field, '\Kontentblocks\Fields\FieldSubGroup')) {
+            if (is_a($field, FieldSubGroup::class)) {
                 $coll[$field->getKey()] = array();
                 foreach ($field->getFields() as $subfield) {
                     $coll[$field->getKey()][$subfield->getKey()] = new FieldFormRenderer($subfield);
@@ -301,13 +303,13 @@ class StandardFieldController
     }
 
     /**
-     * @return AbstractFieldRenderer
+     * @return InterfaceFieldRenderer
      */
     public function getFieldRenderClass()
     {
 
         if (is_null($this->fieldRenderClass)) {
-            $this->fieldRenderClass = '\Kontentblocks\Fields\Renderer\FieldRendererTabs';
+            $this->fieldRenderClass = FieldRendererTabs::class;
         }
 
         if (is_null($this->renderEngine)) {
@@ -323,7 +325,7 @@ class StandardFieldController
     {
         if (is_string($classname) && is_a(
                 $classname,
-                '\Kontentblocks\Fields\Renderer\InterfaceFieldRenderer',
+                InterfaceFieldRenderer::class,
                 true
             )
         ) {
@@ -345,7 +347,7 @@ class StandardFieldController
      */
     public function setFormRenderClass($string)
     {
-        if (is_a($string, '\Kontentblocks\Fields\FieldFormRenderer', true)) {
+        if (is_a($string, FieldFormRenderer::class, true)) {
             $this->formRenderClass = $string;
         }
     }

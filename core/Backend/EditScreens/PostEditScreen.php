@@ -72,6 +72,7 @@ Class PostEditScreen
     public function renderUserInterface($postType, $post)
     {
         $this->environment = Utilities::getPostEnvironment($post->ID);
+        $this->environment->initUi();
         add_action(
             'edit_form_after_editor',
             function () use ($post) {
@@ -105,7 +106,6 @@ Class PostEditScreen
         if (!$areas || empty($areas)) {
             $hasAreas = false;
         }
-
         $screenManager = new ScreenManager($areas, $this->environment);
         $view = new CoreView(
             '/edit-screen/user-interface.twig', array(
@@ -145,7 +145,7 @@ Class PostEditScreen
      *
      * @param int $postId The current post id
      */
-    function save($postId)
+    function save($postId, $postObj)
     {
         $request = Request::createFromGlobals();
 
@@ -158,7 +158,7 @@ Class PostEditScreen
 
         if (post_type_supports(get_post_type($postId), 'kontentblocks')) {
             $environment = Utilities::getPostEnvironment($postId);
-            $environment->save();
+            $environment->save($postId, $postObj);
         }
 
     }

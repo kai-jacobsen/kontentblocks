@@ -115,28 +115,18 @@ module.exports = Backbone.View.extend({
   },
 
   setupModuleId: function () {
-    var parentObject = this.model.get('parentObject');
-    if (this.model.get('globalModule') && parentObject) {
-      return parentObject.post_name;
-    }
+    // var parentObject = this.model.get('parentObject');
+    // if (this.model.get('globalModule') && parentObject) {
+    //   return parentObject.post_name;
+    // }
     return this.model.get('mid');
   },
   /**
    * Attach events to Module View
    */
   attach: function () {
-    var that = this;
     //when update gets called from module controls, notify this view
     this.listenTo(this.ModuleView, 'kb.frontend.module.inline.saved', this.frontendViewUpdated);
-    /**
-     * when the viewfile select changed,
-     * reload to account for a different input form
-     */
-    this.listenTo(this.model, 'change:viewfile', function () {
-      that.serialize(false, true);
-      that.reload();
-    });
-
     this.listenTo(this.model, 'data.updated', this.preview);
     this.listenTo(this.model, 'remove', this.destroy);
   },
@@ -217,7 +207,12 @@ module.exports = Backbone.View.extend({
    * Calls serialize in preview mode
    * No data gets saved
    */
-  preview: function () {
+  preview: function (options) {
+    if (options && options.hasOwnProperty('silent')) {
+      if (options.silent == true) {
+        return;
+      }
+    }
     this.serialize(false, false);
   },
   /**
@@ -259,6 +254,7 @@ module.exports = Backbone.View.extend({
         that.LoadingAnimation.show();
       },
       success: function (res) {
+
         // indicate working state
         //that.$el.fadeTo(300, 0.1);
         // clear form content
@@ -295,11 +291,16 @@ module.exports = Backbone.View.extend({
         // TODO find better method for this
         if (res.data.json) {
           KB.payload = _.extend(KB.payload, res.data.json);
-          //var parsed = KB.Payload.parseAdditionalJSON(res.data.json);
-          if (res.data.json.Fields) {
-            that.FieldModels.reset();
-            that.FieldModels.add(_.toArray(res.data.json.Fields));
-          }
+          // var parsed = KB.Payload.parseAdditionalJSON(res.data.json);
+
+
+          _.defer(function () {
+            if (res.data.json.Fields) {
+              that.FieldModels.reset();
+              that.FieldModels.add(_.toArray(res.data.json.Fields));
+            }
+          });
+
         }
         Ui.initTabs();
         Ui.initToggleBoxes();
@@ -314,6 +315,7 @@ module.exports = Backbone.View.extend({
             KB.Events.trigger('modal.reload');
           }
         }
+        Logger.User.info('Frontend modal.reload triggered.');
 
         // delayed fields update
         // keep, but isn't used
@@ -324,7 +326,6 @@ module.exports = Backbone.View.extend({
         // delayed recalibration
         setTimeout(function () {
           that.$el.show();
-
           that.recalibrate();
           that.LoadingAnimation.hide();
           that.ModuleView.renderStatusBar(that.$el);
@@ -340,8 +341,6 @@ module.exports = Backbone.View.extend({
             }
           });
         }, 550);
-
-
       },
       error: function () {
         Notice.notice('There went something wrong', 'error');
@@ -405,7 +404,6 @@ module.exports = Backbone.View.extend({
       KB.Sidebar.$el.width(cWidth);
       this.$el.addClass('kb-modal-sidebar');
       this.$el.width(cWidth);
-
     }
 
   },
@@ -512,7 +510,10 @@ module.exports = Backbone.View.extend({
       current: this.ModuleView.model.get('viewfile'),
       target: e.currentTarget.value
     };
-    this.model.set('viewfile', e.currentTarget.value);
+
+    this.model.set('viewfile', e.currentTarget.value, {silent: true});
+    this.preview();
+    this.reload();
   },
   /**
    * Update modules element class to new view to
@@ -520,11 +521,9 @@ module.exports = Backbone.View.extend({
    * @param viewfile string
    */
   updateContainerClass: function (viewfile) {
-
     if (!viewfile || !viewfile.current || !viewfile.target) {
       return false;
     }
-
     this.ModuleView.$el.removeClass(this._classifyView(viewfile.current));
     this.ModuleView.$el.addClass(this._classifyView(viewfile.target));
     this.updateViewClassTo = false;
@@ -613,7 +612,6 @@ module.exports = Backbone.View.extend({
     }
     //formdata = this.$form.serializeJSON();
     var asd = this.$form.serializeJSON();
-
 
     if (asd[mid]) {
       return asd[mid];

@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 abstract class AbstractPanel implements EntityInterface
 {
 
+    public $saveAsSingle;
     /**
      * Form data
      * @var array
@@ -29,7 +30,7 @@ abstract class AbstractPanel implements EntityInterface
      */
     public $type;
     /**
-     * @var EntityModel
+     * @var PanelModel
      */
     public $model;
     /**
@@ -52,6 +53,11 @@ abstract class AbstractPanel implements EntityInterface
     protected $baseId;
 
     /**
+     * @var PanelModel
+     */
+    protected $frontendModel;
+
+    /**
      * @param $args
      */
     public static function run($args)
@@ -62,7 +68,7 @@ abstract class AbstractPanel implements EntityInterface
 
     public function preRender()
     {
-
+        return '';
     }
 
     /**
@@ -171,24 +177,46 @@ abstract class AbstractPanel implements EntityInterface
     }
 
     /**
-     * @return mixed
-     * @throws \Exception
+     * @return PanelModel
+     * @deprecated
      */
     public function setupFrontendData()
     {
-        foreach ($this->model as $key => $v) {
-            /** @var \Kontentblocks\Fields\Field $field */
-            $field = $this->fields->getFieldByKey($key);
-            if (!is_null($field)) {
-                $field->setValue($v);
-            }
-            $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue() : $v;
-        }
-        return $this->model;
+        return $this->setupViewModel();
     }
 
     /**
-     * @return EntityModel
+     * @param bool $forcenew
+     * @return PanelModel
+     */
+    public function setupViewModel($forcenew = false)
+    {
+
+        if (!is_null($this->frontendModel)) {
+            if ($forcenew === false) {
+                return $this->frontendModel;
+            }
+        }
+
+        $prepData = [];
+        foreach ($this->model->export() as $key => $v) {
+            /** @var \Kontentblocks\Fields\Field $field */
+            $field = $this->fields->getFieldByKey($key);
+            if (!is_null($field)) {
+                $field->setData($v);
+                $prepData['_' . $key] = $v;
+                $prepData[$key] = (!is_null($field)) ? $field->getFrontendValue() : $v;
+            } else {
+                unset($this->model[$key]);
+            }
+        }
+        $fModel = new PanelModel($prepData, $this);
+        $this->frontendModel = $fModel;
+        return $this->frontendModel;
+    }
+
+    /**
+     * @return PanelModel
      */
     public function setupRawData()
     {

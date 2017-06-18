@@ -52,13 +52,10 @@ class AreaProperties
      * layouts set to this area
      * @var array
      */
-    public $layouts;
+    public $layout;
 
-    /**
-     * default layout if not otherwise stored
-     * @var string
-     */
-    public $defaultLayout;
+    public $layoutArea;
+
 
     /**
      * whether created sitewide or not
@@ -114,6 +111,8 @@ class AreaProperties
      */
     public $showCallback;
 
+    public $public;
+
     /**
      * Construct and setup properties
      * @param $properties
@@ -143,9 +142,8 @@ class AreaProperties
             'postTypes' => array(), // array of post types where this area is available to
             'pageTemplates' => array(), // array of page template names where this area is available to
             'assignedModules' => array(), // array of classnames
-            'layouts' => array(), // array of area template ids
-            'defaultLayout' => 'default', // default Tpl to use, if none is set
-            'layout' => 'default', // stored layout, overriden when storage object is available (later)
+            'layout' => array(), // default Tpl to use, if none is set
+            'layoutArea' => false, // stored layout, overriden when storage object is available (later)
             'dynamic' => false, // whether this is an dynamic area
             'manual' => $manual, // true if set by code
             'limit' => 0, // how many blocks are allowed
@@ -155,7 +153,8 @@ class AreaProperties
             'sortable' => false,
             'internal' => false,
             'settings' => null,
-            'showCallback' => null
+            'showCallback' => null,
+            'public' => true
         );
     }
 

@@ -97,8 +97,7 @@ class AreaRegistry
      *
      * @param array $args
      * @param bool $manual
-     *
-     * @return void
+     * @return AreaProperties
      * @since 0.1.0
      */
     public function addArea($args, $manual = true)
@@ -120,6 +119,7 @@ class AreaRegistry
 
         $this->areas[$area->id] = $area;
         $this->preFilterAreas($this->areas[$area->id]);
+        return $area;
     }
 
     /**
@@ -267,7 +267,7 @@ class AreaRegistry
      * assigned modules array of the area
      *
      * A Module can be added to all registered areas by setting connect to 'any'
-     * A Module can be added to all registered areas of an specific context by settint connect
+     * A Module can be added to all registered areas of an specific context by setting connect
      * to one or more of the following words : 'top', 'normal', 'side', 'bottom'
      *
      * @param string $classname
@@ -278,7 +278,6 @@ class AreaRegistry
     {
         $setting = $args['settings']['connect'];
         $postTypes = get_post_types(array('public' => true, '_builtin' => false), 'names', 'and');
-
         if (empty($setting)) {
             return false;
         }
@@ -355,7 +354,7 @@ class AreaRegistry
         return array_filter(
             $this->areas,
             function ($area) use ($tpl) {
-                return (in_array($tpl, $area->pageTemplates));
+                return Utilities::strposa($area->pageTemplates, $tpl);
             }
         );
     }
@@ -421,7 +420,6 @@ class AreaRegistry
                     $validArea = $area;
                 }
             }
-
 
             if (is_callable($area->showCallback)) {
                 $res = call_user_func_array($area->showCallback, array($environment, $area));

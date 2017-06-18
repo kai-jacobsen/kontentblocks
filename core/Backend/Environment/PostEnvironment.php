@@ -45,7 +45,7 @@ class PostEnvironment implements JsonSerializable, EnvironmentInterface
 
     /**
      * Access object to all env related panels
-     * @var ModuleRepository
+     * @var PostPanelRepository
      */
     protected $panelRepository;
 
@@ -190,6 +190,22 @@ class PostEnvironment implements JsonSerializable, EnvironmentInterface
         }
     }
 
+    public function initUi()
+    {
+        $panels = $this->getPanels();
+        foreach ($panels as $panel) {
+            $panel->init();
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getPanels()
+    {
+        return $this->panels;
+    }
+
     /**
      * returns the DataProvider instance
      * @return DataProvider
@@ -210,13 +226,6 @@ class PostEnvironment implements JsonSerializable, EnvironmentInterface
             return $this->panels[$panelId];
         }
         return null;
-    }
-
-    /**
-     * @return array
-     */
-    public function getPanels(){
-        return $this->panels;
     }
 
     /**
@@ -298,10 +307,10 @@ class PostEnvironment implements JsonSerializable, EnvironmentInterface
      * @return void
      * @since 0.1.0
      */
-    public function save()
+    public function save($postId, $postObj)
     {
         $saveHandler = new SavePost($this);
-        $saveHandler->save();
+        $saveHandler->save($postId, $postObj);
 
     }
 

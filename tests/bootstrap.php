@@ -38,7 +38,6 @@ function _manually_load_plugin()
 
     add_action('kb.configphp.setup', function () {
         require dirname(__FILE__) . '/assets/kontentblocks.php';
-
     }, 11);
 
 }

@@ -54,7 +54,6 @@ module.exports = BaseView.extend({
       .done(function () { // attach callback, executes after the ajax call succeeded
         // inside the callback 'this' refers to the result collection
         // there should be only one model, assign it to a var
-        console.log(queryargs);
         // if (queryargs.post__in){
         var attachment = this.first();
         that.attachment = attachment;
@@ -148,10 +147,10 @@ module.exports = BaseView.extend({
       that.retrieveImage(args, id);
     }
     this.$saveId.val(attachment.get('id'));
-    this.$description.val(attachment.get('caption'));
-    this.$title.val(attachment.get('title'));
+    this.$description.val(value.caption);
+    this.$title.val(value.title);
     //KB.Events.trigger('modal.preview');
-    this.model.get('ModuleModel').trigger('data.updated');
+    this.model.get('ModuleModel').trigger('data.updated', {silent: true});
   },
   retrieveImage: function (args, id) {
     var that = this;
@@ -176,12 +175,11 @@ module.exports = BaseView.extend({
   prepareValue: function (attachment) {
     var newValue = {
       id: attachment.get('id'),
-      title: attachment.get('title'),
-      caption: attachment.get('caption'),
+      // title: attachment.get('title'),
+      // caption: attachment.get('caption'),
       alt: attachment.get('alt')
     };
     var oldValue = this.model.get('value');
-
     if (!_.isObject(oldValue)) {
       oldValue = {};
     }

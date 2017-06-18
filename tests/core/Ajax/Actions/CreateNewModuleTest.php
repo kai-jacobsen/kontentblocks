@@ -2,9 +2,7 @@
 namespace Kontentblocks\tests\core\Ajax\Actions;
 
 use Kontentblocks\Ajax\Actions\CreateNewModule;
-use Kontentblocks\Ajax\Actions\UpdateModuleData;
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Symfony\Component\HttpFoundation\Request;
 

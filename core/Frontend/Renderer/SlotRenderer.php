@@ -6,6 +6,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Frontend\AreaRenderSettings;
 use Kontentblocks\Frontend\ModuleIterator;
 use Kontentblocks\Frontend\ModuleRenderSettings;
+use Kontentblocks\Modules\Module;
 use Kontentblocks\Modules\ModuleNode;
 use Kontentblocks\Utils\Utilities;
 
@@ -92,7 +93,7 @@ class SlotRenderer
             $pos = $this->position;
         }
         $module = $this->iterator->setPosition($pos);
-        if (is_a($module, '\Kontentblocks\Modules\Module')) {
+        if (is_a($module, Module::class)) {
             if (in_array($module->getId(), $this->done)) {
                 return null;
             }

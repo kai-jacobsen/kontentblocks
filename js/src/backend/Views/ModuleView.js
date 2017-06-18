@@ -52,6 +52,9 @@ module.exports = Backbone.View.extend({
   initialize: function () {
     // Setup Elements
     this.open = false;
+    if (this.model.get('globalModule') == true){
+      this.open = true;
+    }
     this.$head = jQuery('.kb-module__header', this.$el);
     this.$body = jQuery('.kb-module__body', this.$el);
     this.$inner = jQuery('.kb-module__controls-inner', this.$el);
@@ -94,10 +97,9 @@ module.exports = Backbone.View.extend({
           return state.text;
         }
         var desc = state.element.dataset.tpldesc;
-        var $state = jQuery(
+        return jQuery(
           '<span>' + state.text + '<br><span class="kb-tpl-desc">' + desc + '</span></span>'
         );
-        return $state;
       }
     });
   },

@@ -1,6 +1,6 @@
 language: php
 
-php: '5.5'
+php: '5.6'
 
 sudo: false
 addons:
@@ -11,8 +11,6 @@ env:
 
 matrix:
   include:
-    - php: '5.5'
-      env: WP_VERSION=4.7 WP_MULTISITE=0
     - php: '7.0'
       env: WP_VERSION=4.7 WP_MULTISITE=0
     - php: '7.0'
@@ -33,7 +31,7 @@ before_script:
   - export CODECLIMATE_REPO_TOKEN=7f1b407be97ef1daa00d48b2ff2237ba79752c18d8cf8bdb887b780db2d7a384
   - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /tmp/wordpress
   - composer self-update
-  - composer install --dev
+  - composer install
   - cd ..
   - cp -r "$PLUGIN_SLUG" "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
   - cd /tmp/wordpress/
@@ -42,8 +40,9 @@ before_script:
   - sed -i "s/yourusernamehere/travis/" wp-tests-config.php
   - sed -i "s/yourpasswordhere//" wp-tests-config.php
   - mysql -e "CREATE DATABASE wordpress_tests;" -uroot
+  - phpunit --version
   - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
 
 script:
-  - phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml
+  - php vendor/bin/phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml
   - CODECLIMATE_REPO_TOKEN=7f1b407be97ef1daa00d48b2ff2237ba79752c18d8cf8bdb887b780db2d7a384 php vendor/bin/test-reporter

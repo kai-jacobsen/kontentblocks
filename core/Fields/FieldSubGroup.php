@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Fields;
 
-use Kontentblocks\Common\Exportable;
+use Kontentblocks\Common\ExportableFieldInterface;
 use Kontentblocks\Fields\Definitions\ReturnObjects\FieldCollection;
 
 /**
@@ -11,7 +11,7 @@ use Kontentblocks\Fields\Definitions\ReturnObjects\FieldCollection;
  * works like an adapter to a normal field
  * @package Kontentblocks\Fields
  */
-class FieldSubGroup implements Exportable
+class FieldSubGroup implements ExportableFieldInterface
 {
 
     /**

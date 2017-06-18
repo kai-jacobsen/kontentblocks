@@ -2,7 +2,6 @@
 namespace Kontentblocks\tests\core\Ajax\Actions;
 
 use Kontentblocks\Ajax\Actions\UpdateContextAreaOrder;
-use Kontentblocks\Common\Data\ValueStorage;
 use Symfony\Component\HttpFoundation\Request;
 
 

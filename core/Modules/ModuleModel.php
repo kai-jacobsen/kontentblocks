@@ -3,6 +3,8 @@
 namespace Kontentblocks\Modules;
 
 use Kontentblocks\Common\Data\EntityModel;
+use Kontentblocks\Common\Data\SyncableInterface;
+use Kontentblocks\Common\Data\ValueObject;
 use Kontentblocks\Utils\Utilities;
 
 
@@ -12,7 +14,7 @@ use Kontentblocks\Utils\Utilities;
  *
  * @package Kontentblocks\Modules
  */
-class ModuleModel extends EntityModel
+class ModuleModel extends ValueObject implements SyncableInterface
 {
 
     /**
@@ -29,15 +31,12 @@ class ModuleModel extends EntityModel
     public function __construct($data = array(), Module $module)
     {
         $this->module = $module;
-        $this->originalData = $data;
-        $this->set($data);
-        $this->_initialized = true;
+        parent::__construct($data);
     }
 
     /**
      * @param bool $addslashes
      * @return bool
-     * @since 0.2.0
      */
     public function sync($addslashes = false)
     {
@@ -50,31 +49,4 @@ class ModuleModel extends EntityModel
         return $result;
     }
 
-    /**
-     *
-     * @return mixed
-     * @since 0.1.0
-     */
-    public function export()
-    {
-        return $this->jsonSerialize();
-    }
-
-    /**
-     * (PHP 5 &gt;= 5.4.0)<br/>
-     * Specify data which should be serialized to JSON
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @return array
-     * @since 0.1.0
-     */
-    public function jsonSerialize()
-    {
-        $vars = get_object_vars($this);
-        unset($vars['module']);
-        unset($vars['_initialized']);
-        unset($vars['originalData']);
-        return $vars;
-    }
 }

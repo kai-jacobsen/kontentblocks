@@ -67,6 +67,113 @@ class ImageReturn extends StandardFieldReturn
      */
     private $valid = false;
 
+    /**
+     * @param $size
+     * @return $this
+     */
+    public function srcSet($size)
+    {
+        $this->srcSets[] = $size;
+        return $this;
+    }
+
+    public function html($withsizes = false, $alt = false)
+    {
+        return $this->imageTag($withsizes, $alt);
+    }
+
+    /**
+     * @param bool $withsizes
+     * @param bool $alt
+     * @return string
+     */
+    public function imageTag($withsizes = false, $alt = false)
+    {
+        if (is_null($this->src)) {
+            $this->resize();
+        }
+
+        $img = "<img src='{$this->src}' ";
+        if (!empty($this->getTitle())) {
+            $img .= "title='{$this->title}' ";
+        }
+
+        if ($withsizes) {
+            $img .= "width='{$this->size[0]}' ";
+            $img .= "height='{$this->size[1]}' ";
+        }
+
+        if (is_string($alt)) {
+            $alttext = esc_attr($alt);
+            $img .= "alt='{$alttext}' ";
+        }
+
+        if (is_bool($alt) && $alt) {
+            $alttext = esc_attr($this->getCaption());
+            $img .= "alt='{$alttext}' ";
+        }
+
+        $img .= ">";
+        return $img;
+    }
+
+    /**
+     * @param array $args
+     * @return $this
+     */
+    public function resize($args = array())
+    {
+        $defaults = array(
+            'width' => $this->size[0],
+            'height' => $this->size[1],
+            'crop' => $this->crop,
+            'upscale' => $this->upscale
+        );
+
+
+        $resizeargs = wp_parse_args($args, $defaults);
+        $processed = ImageResize::getInstance()->process(
+            $this->attId,
+            $resizeargs['width'],
+            $resizeargs['height'],
+            $resizeargs['crop'],
+            false,
+            $resizeargs['upscale']
+        );
+
+
+        if (is_array($processed) && count($processed) === 4) {
+            $this->src = $processed[0];
+            $this->setSize($processed[1], $processed[2]);
+        }
+        return $this;
+    }
+
+    /**
+     * @return $this|bool
+     */
+    public function setSize($width, $height)
+    {
+        $this->size = array($width, $height);
+        return $this;
+
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCaption()
+    {
+        return $this->caption;
+    }
 
     /**
      * @return int
@@ -90,100 +197,10 @@ class ImageReturn extends StandardFieldReturn
     /**
      * @return string
      */
-    public function getCaption()
+    public function customSrcSet()
     {
-        return $this->caption;
-    }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSrc()
-    {
-        if (is_null($this->src)) {
-            $this->resize();
-        }
-        return $this->src;
-    }
-
-    /**
-     * @param array $args
-     * @return $this
-     */
-    public function resize($args = array())
-    {
-        $defaults = array(
-            'width' => $this->size[0],
-            'height' => $this->size[1],
-            'crop' => $this->crop,
-            'upscale' => $this->upscale
-        );
-
-        $resizeargs = wp_parse_args($args, $defaults);
-        $processed = ImageResize::getInstance()->process(
-            $this->attId,
-            $resizeargs['width'],
-            $resizeargs['height'],
-            $resizeargs['crop'],
-            false,
-            $resizeargs['upscale']
-        );
-
-        if (is_array($processed) && count($processed) === 3) {
-            $this->src = $processed[0];
-            $this->setSize($processed[1], $processed[2]);
-        }
-        return $this;
-    }
-
-    /**
-     * @return $this|bool
-     */
-    public function setSize($width, $height)
-    {
-        $this->size = array($width, $height);
-        return $this;
-
-    }
-
-    /**
-     * @param $size
-     * @return $this
-     */
-    public function srcSet($size)
-    {
-        $this->srcSets[] = $size;
-        return $this;
-    }
-
-    public function html($withsizes = false)
-    {
-        return $this->imageTag($withsizes);
-    }
-
-    public function imageTag($withsizes = false)
-    {
-        if (is_null($this->src)) {
-            $this->resize();
-        }
-
-
-        $img = "<img src='{$this->src}' ";
-        $img .= "title='{$this->title}' ";
-
-        if ($withsizes) {
-            $img .= "width='{$this->size[0]}' ";
-            $img .= "height='{$this->size[1]}' ";
-        }
-
+        $img = '';
         $sets = array();
         if (!empty($this->srcSets)) {
             foreach ($this->srcSets as $srcSet) {
@@ -202,11 +219,13 @@ class ImageReturn extends StandardFieldReturn
             $mString = implode(', ', $this->mediaQueries);
             $img .= "\nsizes='{$mString}' ";
         }
-
-        $img .= ">";
         return $img;
     }
 
+    /**
+     * @param $srcSet
+     * @return bool|mixed
+     */
     private function getImageForWidth($srcSet)
     {
         $resizeargs = array(
@@ -232,6 +251,40 @@ class ImageReturn extends StandardFieldReturn
     }
 
     /**
+     * @return string
+     * @deprecated
+     */
+    public function src()
+    {
+        return $this->getSrc();
+    }
+
+    /**
+     * @return string
+     */
+    public function getSrc()
+    {
+        if (is_null($this->src)) {
+            $this->resize();
+        }
+        return $this->src;
+    }
+
+    /**
+     * @param $width
+     * @param $height
+     * @return bool|ImageReturn
+     */
+    public function size($width, $height = null)
+    {
+        if (is_string($width) && is_null($height)) {
+            return $this->nsize($width);
+        }
+
+        return $this->setSize($width, $height);
+    }
+
+    /**
      * @param $string
      * @return $this
      */
@@ -244,16 +297,6 @@ class ImageReturn extends StandardFieldReturn
         }
         return $this;
 
-    }
-
-    /**
-     * @param $width
-     * @param $height
-     * @return bool|ImageReturn
-     */
-    public function size($width, $height)
-    {
-        return $this->setSize($width, $height);
     }
 
     /**
@@ -277,9 +320,22 @@ class ImageReturn extends StandardFieldReturn
         return $this;
     }
 
+    /**
+     * @param $string
+     * @return $this
+     */
     public function mq($string)
     {
         $this->mediaQueries[] = $string;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function reset()
+    {
+        $this->src = null;
         return $this;
     }
 
@@ -298,7 +354,7 @@ class ImageReturn extends StandardFieldReturn
             $att = wp_prepare_attachment_for_js($value['id']);
             if (is_array($att)) {
                 $this->attachment = $att;
-                $this->valid;
+                $this->valid = true;
             }
 
             if (array_key_exists('caption', $value)) {
@@ -312,10 +368,5 @@ class ImageReturn extends StandardFieldReturn
         }
 
         return $value;
-    }
-
-    public function reset(){
-        $this->src = null;
-        return $this;
     }
 }

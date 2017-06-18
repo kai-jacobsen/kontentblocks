@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Modules;
 
 use DirectoryIterator;
@@ -109,7 +110,6 @@ class ModuleViewFilesystem
     }
 
 
-
     public function getPreview()
     {
         return $this->preview;
@@ -124,8 +124,31 @@ class ModuleViewFilesystem
     }
 
     /**
-     * @param $areaContext
-     * @param $postType
+     * Finds all possible views for the given context
+     * $this->views reflects the directory/file structure of the modules root folder
+     * Always returns views from the root folder
+     * -- looks for context directories (e.g. normal,side...) and returns matching views
+     * -- looks for directories named like the basename of a pagetemplate like template-sidebar.php
+     * --- looks further for specific contexts for that pagetemplate
+     * -- looks for directories named like posttypes
+     * --- looks futher for contexts for that posttype
+     *
+     * for example, with this directory structure, and context of side for the posttype page:
+     * - ModuleName[d]
+     * -- page[d]
+     * --- side[d]
+     * ---- default.twig[f]
+     * -- side[d]
+     * --- another-default.twig[f]
+     * -- default.twig[f]
+     *
+     * returns two selectable views:
+     *  page/side/default.twig
+     *  side/another-default.twig
+     *
+     * Views get merged on name, so a more specific view will override a less specific one
+     *
+     * @param ModuleContext $context
      * @return array
      */
     public function getTemplatesforContext(ModuleContext $context)
@@ -141,17 +164,6 @@ class ModuleViewFilesystem
         if (array_key_exists($areaContext, $this->views)) {
             $collection = array_merge($collection, $this->getSingles($this->views[$areaContext]));
         }
-        if ($postType === 'page' && !is_null($pageTemplate && !empty($pageTemplate))) {
-            if (array_key_exists($pageTemplate, $this->views)) {
-                $ptvs = $this->views[$pageTemplate];
-                $collection = array_merge($collection, $this->getSingles($ptvs));
-
-                if (array_key_exists($areaContext, $ptvs)) {
-                    $collection = array_merge($collection, $ptvs[$areaContext]);
-                }
-
-            }
-        }
 
         if (array_key_exists($postType, $this->views)) {
             $ptvs = $this->views[$postType];
@@ -161,11 +173,25 @@ class ModuleViewFilesystem
                 $collection = array_merge($collection, $ptvs[$areaContext]);
             }
         }
+
+        if (!is_null($pageTemplate && !empty($pageTemplate))) {
+            if (array_key_exists($pageTemplate, $this->views)) {
+                $ptvs = $this->views[$pageTemplate];
+                $collection = array_merge($collection, $this->getSingles($ptvs));
+
+                if (array_key_exists($areaContext, $ptvs)) {
+                    $collection = array_merge($collection, $ptvs[$areaContext]);
+                }
+            }
+        }
+
+
         return $collection;
 
     }
 
     /**
+     * extracts only files in the given array of dir/files
      * @param $files
      * @return array
      */
@@ -196,7 +222,7 @@ class ModuleViewFilesystem
                 return $full;
             }
         }
-        return 'peter';
+        return false;
 
     }
 

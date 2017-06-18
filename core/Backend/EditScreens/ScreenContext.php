@@ -64,18 +64,15 @@ class ScreenContext
      * @param $areas
      * @param PostEnvironment $environment
      * @param bool $sidebars
-     * @throws Exception
      * @since 0.1.0
      */
-    public function __construct($args, $areas, PostEnvironment $environment, $sidebars = false)
+    public function __construct($args, $areas, PostEnvironment $environment)
     {
-
         $this->id = $args['id'];
         $this->title = $args['title'];
         $this->description = $args['description'];
         $this->environment = $environment;
         $this->areas = $areas;
-        $this->editScreenHasSidebar = $sidebars;
 
         if (!empty($areas)) {
             $this->toJSON();
@@ -86,6 +83,9 @@ class ScreenContext
 
     }
 
+    /**
+     *  Export this to clientland
+     */
     private function toJSON()
     {
         $json = array(
@@ -93,7 +93,7 @@ class ScreenContext
             'title' => $this->title
         );
         Kontentblocks::getService('utility.jsontransport')->registerContext($json);
-
+        return $json;
     }
 
     /**
@@ -103,17 +103,19 @@ class ScreenContext
      */
     public function render()
     {
+        $out = '';
         if (!empty($this->areas)) {
             // print outer wrapper markup
-            $this->openContext();
+            $out .= $this->openContext();
             //render actual areas
-            $this->renderAreas();
+            $out .= $this->renderAreas();
             //close wrapper markup
-            $this->closeContext();
+            $out .=$this->closeContext();
         } else {
             // call the hook anyway
-            do_action("context_box_{$this->id}", $this->id, $this->environment);
+            do_action("context_box_{$this->id}", $this->id, $this->environment, $out);
         }
+        return $out;
 
     }
 
@@ -123,9 +125,8 @@ class ScreenContext
      */
     public function openContext()
     {
-        $side = $this->editScreenHasSidebar ? 'has-sidebar' : 'no-sidebar';
 
-        echo "<div id='context_{$this->id}' data-kbcontext='{$this->id}' class='area-{$this->id} kb-context-container {$side}'>
+        return "<div id='context_{$this->id}' data-kbcontext='{$this->id}' class='area-{$this->id} kb-context-container'>
                     <div class='kb-context__inner'>
                     <div class='kb-context__header'>
                         <h2>{$this->title}</h2>
@@ -140,7 +141,6 @@ class ScreenContext
      */
     public function renderAreas()
     {
-
         foreach ($this->areas as $area) {
 
             if (is_user_logged_in()) {
@@ -161,11 +161,13 @@ class ScreenContext
                 $areaHTML = new AreaBackendRenderer($area, $this->environment, $this->id);
             }
             // do area header markup
-            $areaHTML->header();
-            // render modules for the area
-            $areaHTML->render();
-            //render area footer
-            $areaHTML->footer();
+//            $areaHTML->header();
+//            // render modules for the area
+//            $areaHTML->render();
+//            //render area footer
+//            $areaHTML->footer();
+
+            return $areaHTML->build();
         }
     }
 
@@ -195,10 +197,11 @@ class ScreenContext
      */
     public function closeContext()
     {
-        echo "</div>"; // end inner
+        $out = "</div>"; // end inner
         // hook to add custom stuff after areas
-        do_action("context_box_{$this->id}", $this->id, $this->environment);
-        echo "</div>";
+        do_action("context_box_{$this->id}", $this->id, $this->environment, $out);
+        $out .= "</div>";
+        return $out;
     }
 
     /**

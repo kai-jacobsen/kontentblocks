@@ -4,28 +4,29 @@ namespace Kontentblocks;
 
 use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayoutsRegistry;
 use Kontentblocks\Common\Data\EntityModel;
+use Kontentblocks\Common\Data\ValueObject;
 use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
-use Kontentblocks\Modules\ModuleFactory;
-use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Panels\PanelModel;
-use Kontentblocks\Panels\PostPanel;
 use Kontentblocks\Panels\TermPanel;
+use Kontentblocks\Templating\TemplatePart;
 use Kontentblocks\Utils\CommonTwig\SimpleView;
 use Kontentblocks\Utils\JSONTransport;
+use Kontentblocks\Utils\RuntimeCache;
 use Kontentblocks\Utils\Utilities;
 
 /**
  * Register Area
  * @param $args
+ * @return Areas\AreaProperties
  */
 function registerArea($args)
 {
     /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
     $AreaRegistry = Kontentblocks::getService('registry.areas');
-    $AreaRegistry->addArea($args, true);
+    return $AreaRegistry->addArea($args, true);
 
 }
 
@@ -263,12 +264,13 @@ function getTermPanel($panelId, $termId, $taxonomy = null)
  * @param $termId
  * @param null $taxonomy
  * @return mixed
+ * @deprecated
  */
 function getTermPanelModel($panelId, $termId, $taxonomy = null)
 {
     $panel = getTermPanel($panelId, $termId, $taxonomy);
     if (!is_wp_error($panel)) {
-        return $panel->setupFrontendData();
+        return $panel->setupViewModel();
     }
 }
 
@@ -281,9 +283,34 @@ function getPostPanelModel($panelId = null, $postId = null)
 {
     $panel = getPostPanel($panelId, $postId);
     if (is_a($panel, '\Kontentblocks\Panels\PostPanel')) {
-        return $panel->setupFrontendData();
+        return $panel->setupViewModel();
     }
     return null;
+}
+
+/**
+ * @param null $panelId
+ * @param null $postId
+ * @param bool $raw
+ * @return ValueObject
+ */
+function getPostPanelData($panelId = null, $postId = null, $raw = false)
+{
+    $cached = RuntimeCache::get(func_get_args());
+    if ($cached) {
+        return $cached;
+    }
+
+    $data = [];
+    $panel = getPostPanel($panelId, $postId);
+    if (is_a($panel, '\Kontentblocks\Panels\PostPanel')) {
+        if (!$raw) {
+            $data = $panel->setupViewModel()->export();
+        } else {
+            $data = $panel->setupRawData()->export();
+        }
+    }
+    return RuntimeCache::add(func_get_args(), new ValueObject($data));
 }
 
 /**
@@ -297,7 +324,6 @@ function getPostPanelView($tpl = null, $panelId = null, $postId = null)
     $model = getPostPanelModel($panelId, $postId);
     if (!is_null($model)) {
         return new SimpleView($tpl, $model->export());
-
     }
 
 }
@@ -325,7 +351,7 @@ function getOptionsPanelModel($panelId)
 {
     $panel = getOptionsPanel($panelId);
     if (is_a($panel, '\Kontentblocks\Panels\OptionPanel')) {
-        return $panel->setupFrontendData();
+        return $panel->setupViewModel();
     }
 }
 
@@ -374,4 +400,18 @@ function getFromPostPanel($panelId, $key, $default = '', $postId = null)
     }
 
     return $panelModel->get($key, $default);
+}
+
+
+
+/**
+ * @param $slug
+ * @param string $name
+ * @param array $data
+ */
+function templatePart($slug, $name = '', $data = array()){
+
+    $part = new TemplatePart($slug,$name,$data);
+    echo $part->render();
+
 }

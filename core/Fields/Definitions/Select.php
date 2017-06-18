@@ -16,6 +16,21 @@ Class Select extends Field
         'forceSave' => true,
     );
 
+    public function prepareTemplateData($data)
+    {
+        $options = $this->getArg('options', []);
+        if (is_callable($options)) {
+            $options = call_user_func($options, $this);
+
+            if (!is_array($options)) {
+                $options = [];
+            }
+            $this->setArgs(array('options' => $options));
+
+        }
+
+        return $data;
+    }
 
     /**
      * @param $val
@@ -30,13 +45,23 @@ Class Select extends Field
             return filter_var($val, FILTER_SANITIZE_STRING);
         }
 
+        $options = $this->getArg('options', []);
+        if (is_callable($options)) {
+            $options = call_user_func($options, $this);
+
+            if (!is_array($options)) {
+                $options = [];
+            }
+        }
+
+
         if ($this->getArg('select2', false) && is_array($val)) {
             $collect = array();
-            $options = $this->getArg('options', array());
+
             $toValue = $this->sortToValue($options);
 
-            foreach ($val as $someValue){
-                if (isset($toValue[$someValue])){
+            foreach ($val as $someValue) {
+                if (isset($toValue[$someValue])) {
                     $collect[$someValue] = $toValue[$someValue];
                     unset($toValue[$someValue]);
                 }
@@ -50,6 +75,15 @@ Class Select extends Field
         }
 
         return $val;
+    }
+
+    private function sortToValue($options)
+    {
+        $collect = array();
+        foreach ($options as $option) {
+            $collect[$option['value']] = $option;
+        }
+        return $collect;
     }
 
     /**
@@ -77,19 +111,9 @@ Class Select extends Field
             }
         }
 
-        if (!$new) {
+        if (is_null($new)) {
             return null;
         }
-
         return $new;
-    }
-
-    private function sortToValue($options)
-    {
-        $collect = array();
-        foreach ($options as $option) {
-            $collect[$option['value']] = $option;
-        }
-        return $collect;
     }
 }

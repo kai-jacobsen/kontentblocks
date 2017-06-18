@@ -456,7 +456,7 @@ class Utilities
         }
 
         if (post_type_supports($postType, 'editor')) {
-            if (!apply_filters('kb.remote.concat.ignore.editor', '__return_false')){
+            if (!apply_filters('kb.remote.concat.ignore.editor', '__return_false')) {
                 return null;
             }
         }
@@ -531,9 +531,19 @@ class Utilities
             $needle = array($needle);
         }
         foreach ($needle as $query) {
-            if (strpos($haystack, $query, $offset) !== false) {
-                return true;
-            } // stop on first true result
+            if (is_array($haystack)) {
+                foreach ($haystack as $hay) {
+                    if (strpos($hay, $query, $offset) !== false) {
+                        return true;
+                    } // stop on first true result
+                }
+            } else {
+                if (strpos($haystack, $query, $offset) !== false) {
+                    return true;
+                } // stop on first true result
+
+            }
+
         }
         return false;
     }
@@ -590,14 +600,29 @@ class Utilities
     }
 
 
+    /**
+     * @return string
+     */
     public static function getCacheGroup()
     {
         $parts = array();
         $parts[] = 'kontentblocks';
+
         if (defined('ICL_LANGUAGE_CODE')) {
             $parts[] = ICL_LANGUAGE_CODE;
         }
 
         return implode('_', $parts);
+    }
+
+    public static function trackSize($size)
+    {
+        $kbimagesizes = get_option('kbimagesizes');
+
+        if (!is_array($kbimagesizes)) {
+            $kbimagesizes = [];
+        }
+        $kbimagesizes[$size] = $size;
+        update_option('kbimagesizes', $kbimagesizes, false);
     }
 }
