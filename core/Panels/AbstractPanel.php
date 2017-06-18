@@ -68,7 +68,7 @@ abstract class AbstractPanel implements EntityInterface
 
     public function preRender()
     {
-
+        return '';
     }
 
     /**

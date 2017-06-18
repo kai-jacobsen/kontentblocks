@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Panels;
 
 
@@ -93,13 +94,14 @@ abstract class TermPanel extends AbstractPanel
 
     public function init()
     {
+
+
         if (is_admin()) {
             add_action("edited_{$this->args['taxonomy']}", array($this, 'saveCallback'), 10, 2);
             if ($this->args['insideTable']) {
                 add_action("{$this->args['taxonomy']}_edit_form_fields", array($this, 'form'));
             } else {
                 add_action("{$this->args['taxonomy']}_edit_form", array($this, 'form'));
-
             }
             add_action('admin_footer', array($this, 'toJSON'), 5);
             add_action('admin_footer', array($this, 'changeUi'), 5);
@@ -119,13 +121,16 @@ abstract class TermPanel extends AbstractPanel
         Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
     }
 
+    /**
+     * @return array
+     */
     public function getProperties()
     {
         return array(
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
             'id' => $this->getBaseId(),
-            'entityData' => $this->model->getOriginalData(),
+            'entityData' => $this->model->export(),
             'area' => '_internal',
             'type' => 'term',
             'settings' => $this->args
@@ -158,17 +163,19 @@ abstract class TermPanel extends AbstractPanel
 
         $this->renderer = $this->fields->getFieldRenderClass();
 
+        $html = '';
 
         if (!$this->args['insideTable']) {
-            echo $this->beforeForm();
+            $html .= $this->beforeForm();
         }
-        $this->preRender();
-
-        echo $this->renderFields();
+        $html .= $this->preRender();
+        $html .= $this->renderFields();
 
         if (!$this->args['insideTable']) {
-            echo $this->afterForm();
+            $html .= $this->afterForm();
         }
+
+        echo $html;
     }
 
     /**

@@ -112,6 +112,10 @@ class ModuleRegistry
             $args['slug'] = sanitize_title($args['class']);
         }
 
+        if (substr($args['slug'], 0, 3) != "mod") {
+            $args['slug'] = 'mod-' . $args['slug'];
+        }
+
         return $args;
 
     }
