@@ -126,6 +126,11 @@ class PostMetaDataProvider implements DataProviderInterface
     public function update($key, $value)
     {
         $this->meta[$key] = $value;
+        $parent_id = wp_is_post_revision( $this->postId );
+        if($parent_id){
+            ddd($parent_id);
+        }
+
         return update_post_meta($this->postId, $key, $value);
     }
 

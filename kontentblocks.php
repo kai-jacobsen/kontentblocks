@@ -297,7 +297,6 @@ Class Kontentblocks
             $this->initInterface();
 
             add_post_type_support('page', 'kontentblocks');
-            add_post_type_support('revision', 'kontentblocks');
             remove_post_type_support('page', 'revisions');
         }
 

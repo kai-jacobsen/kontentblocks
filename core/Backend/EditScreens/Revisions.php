@@ -3,7 +3,9 @@
 namespace Kontentblocks\Backend\EditScreens;
 
 
+use Kontentblocks\Fields\Field;
 use Kontentblocks\Modules\Module;
+use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 
 class Revisions
@@ -67,44 +69,41 @@ class Revisions
         $environment = Utilities::getPostEnvironment($post_id);
         $panels = $environment->getPanels();
 
-        $home = $panels['hero'];
-
-        $fields = $home->fields->export()->getFields();
         $modules = $environment->getModuleRepository()->getModules();
-        if ($fields) {
-            foreach ($fields as $field) {
-
-
-                // Add field key / label
-                $return[$field['key']] = $field['args']['label'];
-                // load value
-                add_filter('_wp_post_revision_field_' . $field['key'], array($this, 'wp_post_revision_field'), 10, 4);
-
-
-                // WP 3.5: left vs right
-                // Add a value of the revision ID (as there is no way to determine this within the '_wp_post_revision_field_' filter!)
-                if (isset($_GET['action'], $_GET['left'], $_GET['right']) && $_GET['action'] == 'diff') {
-                    global $left_revision, $right_revision;
-
-                    $left_revision->$field['key'] = 'revision_id=' . $_GET['left'];
-                    $right_revision->$field['key'] = 'revision_id=' . $_GET['right'];
-                }
-
-            }
-        }
+//        if ($fields) {
+//            foreach ($fields as $field) {
+//
+//
+//                // Add field key / label
+//                $return[$field['key']] = $field['args']['label'];
+//                // load value
+//                add_filter('_wp_post_revision_field_' . $field['key'], array($this, 'wp_post_revision_field'), 10, 4);
+//
+//
+//                // WP 3.5: left vs right
+//                // Add a value of the revision ID (as there is no way to determine this within the '_wp_post_revision_field_' filter!)
+//                if (isset($_GET['action'], $_GET['left'], $_GET['right']) && $_GET['action'] == 'diff') {
+//                    global $left_revision, $right_revision;
+//
+//                    $left_revision->$field['key'] = 'revision_id=' . $_GET['left'];
+//                    $right_revision->$field['key'] = 'revision_id=' . $_GET['right'];
+//                }
+//
+//            }
+//        }
 
         /** @var Module $module */
         foreach ($modules as $module) {
             $fields = $module->fields->export()->getFields();
             if ($fields) {
                 foreach ($fields as $field) {
-
-                    $keyname = $module->properties->settings['name'] . ':' . $field['args']['label'];
-                    $key = $module->getId() . '::' . $field['key'];
+                    $label = (!empty($field['args']['label'])) ? $field['args']['label'] : 'Untitled';
+                    $keyname = $module->properties->settings['name'] . ':' . $label;
+                    $key = $module->getId() . ':rv:' . $field['key'];
                     // Add field key / label
                     $return[$key] = $keyname;
                     // load value
-                    add_filter('_wp_post_revision_field_' . $key, array($this, 'wp_post_revision_field'), 10,
+                    add_filter('_wp_post_revision_field_' . $key, array($this, 'revisionField'), 10,
                         4);
 
 
@@ -126,9 +125,54 @@ class Revisions
 
     }
 
-    function wp_post_revision_field($value, $field_name, $post = null, $direction = false)
+    /**
+     * @param $value
+     * @param $field_name
+     * @param null $post
+     * @param bool $direction
+     * @return mixed|string
+     */
+    function revisionField($value, $field_name, $post = null, $direction = false)
     {
-        return uniqid();
+        $split = explode(':rv:', $field_name);
+        $mid = $split[0];
+        $field = $split[1];
+        $value = $this->getValueForFieldOfModule($mid, $field, $post, $direction);
+        return $value;
+    }
+
+    /**
+     * @param $mid
+     * @param $field
+     * @param $post
+     * @param $direction
+     * @return mixed|string
+     */
+    private function getValueForFieldOfModule($mid, $field, $post, $direction)
+    {
+
+        $environment = Utilities::getPostEnvironment($post->ID);
+        $storage = $environment->getStorage();
+        $moduleDef = $storage->getModuleDefinition($mid);
+
+        if (!$moduleDef) {
+            return '';
+        }
+
+        $workshop = new ModuleWorkshop($environment, $moduleDef);
+        $module = $workshop->getModule();
+        $fieldController = $module->fields;
+        $fields = $fieldController->collectAllFields();
+
+        if (isset($fields[$field])) {
+            /** @var Field $field */
+            $field = $fields[$field];
+            $value = $field->getValue();
+            return var_export($value, true);
+        }
+
+        return '';
+
     }
 
 

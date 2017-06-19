@@ -3,6 +3,7 @@
 namespace Kontentblocks\Backend\EditScreens;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Save\SaveRevision;
 use Kontentblocks\Helper;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\CoreView;
@@ -47,7 +48,7 @@ Class PostEditScreen
             // register save callback
             add_action('save_post', array($this, 'save'), 5, 2);
             add_filter('_wp_post_revision_fields', array($this, 'revisionFields'));
-            add_filter('wp_save_post_revision_check_for_changes', '__return_true', 10, 3);
+            add_filter('wp_save_post_revision_check_for_changes', '__return_false', 10, 3);
             // expose data to the document
             add_action('admin_footer', array($this, 'toJSON'), 1);
         }
@@ -156,6 +157,14 @@ Class PostEditScreen
             $postId = get_the_ID();
         }
 
+        $parentId = wp_is_post_revision($postId);
+        if ($parentId) {
+            if (post_type_supports(get_post_type($parentId), 'kontentblocks')) {
+                $saveRevision = new SaveRevision($postId, $parentId);
+                $saveRevision->save();
+            }
+        }
+
         if (post_type_supports(get_post_type($postId), 'kontentblocks')) {
             $environment = Utilities::getPostEnvironment($postId);
             $environment->save($postId, $postObj);
@@ -186,7 +195,6 @@ Class PostEditScreen
         $fields["kb_preview"] = "kb_preview";
         return $fields;
     }
-
 
 
 }

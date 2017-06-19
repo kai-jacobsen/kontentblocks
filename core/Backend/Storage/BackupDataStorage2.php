@@ -75,14 +75,7 @@ class BackupDataStorage2
 
         $user = wp_get_current_user();
 
-        $value = array(
-            'index' => $this->storage->getIndex(),
-            'modules' => $this->storage->getModules(),
-            'panels' => $this->compactPanels(),
-
-        );
-
-
+        $value = $this->prepareData();
 
         $value = json_encode(wp_slash($value));
 
@@ -100,6 +93,18 @@ class BackupDataStorage2
         $this->cleanUp();
         update_post_meta($this->storage->getStorageId(), 'kb_last_backup', $insertRecord);
         return $insertRecord;
+    }
+
+    /**
+     * @return array
+     */
+    public function prepareData()
+    {
+        return array(
+            'index' => $this->storage->getIndex(),
+            'modules' => $this->storage->getModules(),
+            'panels' => $this->compactPanels(),
+        );
     }
 
     /**
