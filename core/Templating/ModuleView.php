@@ -3,10 +3,12 @@
 namespace Kontentblocks\Templating;
 
 use Exception;
+use Kontentblocks\Fields\ModuleFieldValueProxy;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\Module;
 use Kontentblocks\Modules\ModuleModel;
 use Kontentblocks\Modules\ModuleViewFile;
+use Kontentblocks\Modules\ModuleViewModel;
 use Kontentblocks\Utils\MobileDetect;
 
 /**
@@ -82,8 +84,8 @@ class ModuleView implements \JsonSerializable
      */
     public function render($echo = false)
     {
-        $this->data = $this->setupData($this->model->export(), $this->addData);
 
+        $this->data = $this->setupData($this->model->export(), $this->addData);
         if ($echo) {
             $this->engine->display($this->tplFile->filename, $this->data);
         } else {
@@ -129,7 +131,13 @@ class ModuleView implements \JsonSerializable
             );
         }
 
+        $data['_f'] = $this->module->fields;
+        $data['_fc'] = $this->module->fields;
+        if (is_a($this->model, ModuleViewModel::class)){
+            $data['_f'] = new ModuleFieldValueProxy($this->model);
+        }
         $data['_utils'] = $this->setupUtilities();
+        $data['Module'] = $this->module;
         $data = apply_filters('kb.module.view.data', $data, $this->module);
         return $data;
 
@@ -192,5 +200,7 @@ class ModuleView implements \JsonSerializable
             'data' => $this->data
         );
     }
+
+
 }
 

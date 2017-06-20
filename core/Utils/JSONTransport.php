@@ -139,6 +139,7 @@ class JSONTransport
                 $this->registerModule($module);
             }
         }
+
     }
 
     /**
@@ -214,6 +215,8 @@ class JSONTransport
         if (!is_admin() && !$filter) {
             return;
         }
+
+
 
         $this->data['Modules'] = $this->modules;
         $this->data['Areas'] = $this->areas;

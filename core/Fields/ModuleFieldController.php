@@ -28,6 +28,27 @@ class ModuleFieldController extends StandardFieldController
     public $entity;
 
     /**
+     * @param null $file
+     * @return FieldsYamlLoader
+     */
+    public function yamlLoader($file = null)
+    {
+        if (is_null($file)) {
+            $file = trailingslashit($this->entity->getProperties()->getSetting('path')) . 'fields.yml';
+        }
+        parent::yamlLoader($file);
+    }
+
+    public function __call($name, $arguments)
+    {
+        $general = $this->addSection('general', ['label' => 'General']);
+        $general->addField($name, $arguments[0], array(
+            'label' => $arguments[1],
+            'description' => $arguments[2]
+        ));
+    }
+
+    /**
      * Creates a new section if there is not already one with the same id
      * or returns the section if exists
      * @param string $sectionId
@@ -47,18 +68,6 @@ class ModuleFieldController extends StandardFieldController
         }
         return $this->sections[$sectionId];
 
-    }
-
-    /**
-     * @param null $file
-     * @return FieldsYamlLoader
-     */
-    public function yamlLoader($file = null)
-    {
-        if (is_null($file)) {
-            $file = trailingslashit($this->entity->getProperties()->getSetting('path')) . 'fields.yml';
-        }
-        parent::yamlLoader($file);
     }
 
 }
