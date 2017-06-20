@@ -47,10 +47,6 @@ class StandardFieldController
      */
     public $formRenderClass = FieldFormRenderer::class;
 
-    /**
-     * @var FieldsYamlLoader
-     */
-    public $yamlLoader;
 
     /**
      * @var bool
@@ -352,17 +348,6 @@ class StandardFieldController
         }
     }
 
-    /**
-     * @param null $file
-     * @return FieldsYamlLoader
-     */
-    public function yamlLoader($file = null)
-    {
-        if (!is_null($file) && file_exists($file)) {
-            return $this->yamlLoader = new FieldsYamlLoader($file, $this);
-        }
-
-    }
 
 
 }

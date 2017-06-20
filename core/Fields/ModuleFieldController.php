@@ -27,16 +27,10 @@ class ModuleFieldController extends StandardFieldController
      */
     public $entity;
 
-    /**
-     * @param null $file
-     * @return FieldsYamlLoader
-     */
-    public function yamlLoader($file = null)
+
+    public function templateLoader()
     {
-        if (is_null($file)) {
-            $file = trailingslashit($this->entity->getProperties()->getSetting('path')) . 'fields.yml';
-        }
-        parent::yamlLoader($file);
+
     }
 
     public function __call($name, $arguments)
