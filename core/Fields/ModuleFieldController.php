@@ -58,7 +58,6 @@ class ModuleFieldController extends StandardFieldController
         if (is_null($file)) {
             $file = trailingslashit($this->entity->getProperties()->getSetting('path')) . 'fields.yml';
         }
-
         parent::yamlLoader($file);
     }
 
