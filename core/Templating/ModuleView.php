@@ -131,8 +131,6 @@ class ModuleView implements \JsonSerializable
             );
         }
 
-        $data['_f'] = $this->module->fields;
-        $data['_fc'] = $this->module->fields;
         if (is_a($this->model, ModuleViewModel::class)){
             $data['_f'] = new ModuleFieldValueProxy($this->model);
         }
@@ -146,7 +144,7 @@ class ModuleView implements \JsonSerializable
     /**
      * @return array
      */
-    private function setupUtilities()
+    protected function setupUtilities()
     {
         return array(
             'MobileDetect' => Kontentblocks::getService('utility.mobileDetect')

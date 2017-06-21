@@ -21,22 +21,18 @@ class StandardFieldController
      * @since 0.1.0
      */
     public $sections = array();
-
     /**
      * @var EntityModel
      */
     public $model;
-
     /**
      * @var EntityInterface
      */
     public $entity;
-
     /**
      * @var InterfaceFieldRenderer
      */
     public $renderEngine;
-
     /**
      * Baseid, as passed to fields
      * @var string
@@ -46,13 +42,14 @@ class StandardFieldController
      * @var string
      */
     public $formRenderClass = FieldFormRenderer::class;
-
-
     /**
      * @var bool
      */
     public $fileLoaded = false;
-
+    /**
+     * @var string
+     */
+    protected $currentSectionId = 'generic';
     /**
      * Default field renderer
      * @var InterfaceFieldRenderer
@@ -277,6 +274,41 @@ class StandardFieldController
     }
 
     /**
+     * @param $sectionId
+     * @param array $args
+     * @return StandardFieldSection
+     */
+    public function setSection($sectionId, $args = [])
+    {
+        $this->currentSectionId = $sectionId;
+        return $this->addSection($sectionId, $args);
+    }
+
+    /**
+     * @param $type
+     * @param $key
+     * @param array $args
+     * @return StandardFieldSection
+     */
+    public function addField($type, $key, $args = array())
+    {
+        $section = $this->getSection();
+        return $section->addField($type, $key, $args);
+    }
+
+    /**
+     * @param null $sectionId
+     * @return StandardFieldSection
+     */
+    public function getSection($sectionId = null)
+    {
+        if (!$sectionId) {
+            $sectionId = $this->currentSectionId;
+        }
+        return $this->addSection($sectionId);
+    }
+
+    /**
      * @return FieldExport
      */
     public function export()
@@ -347,7 +379,6 @@ class StandardFieldController
             $this->formRenderClass = $string;
         }
     }
-
 
 
 }

@@ -28,19 +28,18 @@ class ModuleFieldController extends StandardFieldController
     public $entity;
 
 
+    /**
+     * @return ModuleFieldController
+     */
     public function templateLoader()
     {
-
+        $tplLoader = new ModuleFieldsTemplateLoader($this->entity);
+        $view = $tplLoader->getView();
+        $view->evaluate();
+        return $this->entity->fields;
     }
 
-    public function __call($name, $arguments)
-    {
-        $general = $this->addSection('general', ['label' => 'General']);
-        $general->addField($name, $arguments[0], array(
-            'label' => $arguments[1],
-            'description' => $arguments[2]
-        ));
-    }
+
 
     /**
      * Creates a new section if there is not already one with the same id

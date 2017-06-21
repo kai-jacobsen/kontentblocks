@@ -21,8 +21,6 @@ class StandardFieldSection implements ExportableFieldInterface
      * @var array
      */
     public static $defaults = array(
-        'label' => 'Fieldgroup',
-        'title' => 'Fieldgrouptitle',
         'attributes' => array('class' => 'kbf-section-wrap')
     );
 
@@ -87,7 +85,7 @@ class StandardFieldSection implements ExportableFieldInterface
     public function __construct($sectionId, $args, StandardFieldController $controller)
     {
         $this->sectionId = $sectionId;
-        $this->args = Utilities::arrayMergeRecursive($args, self::$defaults);
+        $this->args = $this->setupArgs($args);
         $this->controller = $controller;
         $this->baseId = $controller->getId();
         $this->uid = $this->prepareUid();
@@ -462,6 +460,23 @@ class StandardFieldSection implements ExportableFieldInterface
     {
         $this->numberOfVisibleFields--;
 
+    }
+
+    /**
+     * @param $args
+     * @return array
+     */
+    private function setupArgs($args)
+    {
+        $args = Utilities::arrayMergeRecursive($args, self::$defaults);
+        if (!isset($args['label'])){
+            $args['label'] = strtoupper(str_replace('-',' ',$this->sectionId));
+        }
+        if (!isset($args['description'])){
+            $args['description'] = '';
+        }
+
+        return $args;
     }
 
 
