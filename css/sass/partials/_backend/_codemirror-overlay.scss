@@ -1,0 +1,25 @@
+.kb-codemirror-overlay {
+  background-color: #fff;
+  height: 600px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid $grey-400;
+  padding: 12px;
+  z-index: 500;
+}
+
+.kb-template-editor-inner {
+  overflow: hidden;
+}
+
+.kb-template-editor-sidebar {
+  width: 20%;
+  float: left;
+}
+
+.kb-template-editor-content {
+  width: 80%;
+  float: right;
+}

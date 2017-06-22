@@ -5,8 +5,6 @@ namespace Kontentblocks\Frontend;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Frontend\AreaLayoutIterator;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Utils\JSONTransport;
-use Kontentblocks\Utils\Utilities;
 
 /**
  * Class AreaHtmlNode

@@ -51,7 +51,7 @@ class AjaxCallbackHandler
      * Core Actions
      *
      * @uses filter kb.ajax.core.actions
-     * @return mixed|void
+     * @return mixed
      */
     private function getCoreActions()
     {
@@ -87,7 +87,8 @@ class AjaxCallbackHandler
                 'getModuleBackendForm' => array('Kontentblocks\Ajax\Actions\GetModuleBackendForm', 'run'),
                 'updateFieldModel' => array('Kontentblocks\Ajax\Actions\Frontend\UpdateFieldModel', 'run'),
                 'getOembed' => array('Kontentblocks\Ajax\Actions\GetOembed', 'run'),
-                'cropImage' => array('Kontentblocks\Ajax\Actions\CropImage', 'run')
+                'cropImage' => array('Kontentblocks\Ajax\Actions\CropImage', 'run'),
+                'getTemplateString' => array('Kontentblocks\Ajax\Actions\GetTemplateString', 'run')
 
             )
         );
