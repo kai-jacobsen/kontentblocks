@@ -209,7 +209,7 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess, \JsonSerializab
     {
         $data = $this->data;
         foreach ($data as $key => $value) {
-            if ($key[0] === '_') {
+            if (!empty($key) && $key[0] === '_') {
                 unset($data[$key]);
             }
         }
