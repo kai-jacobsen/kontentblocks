@@ -385,8 +385,6 @@ class ImageReturn extends StandardFieldReturn
 
         }
 
-        d($this);
-
         return $value;
     }
 }
