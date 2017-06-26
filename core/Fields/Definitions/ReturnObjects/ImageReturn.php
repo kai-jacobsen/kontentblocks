@@ -65,7 +65,7 @@ class ImageReturn extends StandardFieldReturn
     /**
      * @var
      */
-    protected $isSVG = false;
+    public $isSVG = false;
 
     /**
      * @var bool
