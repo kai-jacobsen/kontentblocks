@@ -29,7 +29,9 @@ class EntityContext implements \JsonSerializable
     {
         if (is_array($attributes)) {
             foreach ($attributes as $k => $v) {
-                $this->$k = $v;
+                if (property_exists($this, $k)) {
+                    $this->$k = $v;
+                }
             }
         }
         return $this;

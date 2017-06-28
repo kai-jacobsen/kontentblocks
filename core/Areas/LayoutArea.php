@@ -44,6 +44,7 @@ class LayoutArea
     {
 
 
+        $this->modules = $this->submoduleRepository->getModules();
 //        $submoduleRepository = new SubmoduleRepository($this->environment);
         $regged = \Kontentblocks\registerArea(
             array(
@@ -56,11 +57,11 @@ class LayoutArea
                 'manual' => false,
                 'public' => false,
                 'layoutArea' => true,
+                'layout' => $this->setupModulesForConfig()
 
             )
         );
-        $this->modules = $this->submoduleRepository->getModules();
-        $regged->layout = $this->setupModulesForConfig();
+//        $regged->layout = $this->setupModulesForConfig();
 
         Kontentblocks::getService('utility.jsontransport')->registerArea($regged);
     }
@@ -79,7 +80,6 @@ class LayoutArea
         foreach ($config as $slot => $mid) {
             $layout['modules'][$slot] = $this->submoduleRepository->getModule($slot);
         }
-
         return $layout;
 
     }

@@ -1514,7 +1514,7 @@ module.exports = FieldControlModel.extend({
     return jQuery('*[data-kbfuid="' + this.get('uid') + '"]');
   },
   testData: function(){
-    console.log(this);
+    console.log(this); 
   }
 });
 },{"./FieldControlModel":21}],23:[function(require,module,exports){
@@ -3743,6 +3743,7 @@ module.exports = Backbone.View.extend({
     this.parentView = options.parentView;
     this.listenTo(this.model.ModuleModel.View, 'modal.before.nodeupdate', this.disposeSubviews);
     this.listenTo(this.model.ModuleModel.View, 'modal.after.nodeupdate', this.updateSubviews);
+
   },
 
   setupViewConnections: function () {
@@ -3866,6 +3867,7 @@ module.exports = Backbone.View.extend({
   },
   getSlotModule: function (slotId) {
     var value = this.subarea.get('layout').modules;
+    console.log(this.subarea);
     var module = value[slotId];
     if (module) {
       if (module.mid) {
