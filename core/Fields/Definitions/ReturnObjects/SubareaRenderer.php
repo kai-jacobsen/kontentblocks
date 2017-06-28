@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions\ReturnObjects;
 
 
+use Kontentblocks\Areas\LayoutArea;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\Helper\SubmoduleRepository;
 use Kontentblocks\Frontend\ModuleRenderSettings;
@@ -18,13 +19,14 @@ class SubareaRenderer extends StandardFieldReturn
 {
 
     public $modules;
-
     public $slotId = 1;
+    public $slotdata = [];
 
     /**
      * @var SubmoduleRepository
      */
     public $repository;
+    public $layoutView;
     /**
      * @var \Kontentblocks\Fields\Definitions\Subarea
      */
@@ -38,7 +40,23 @@ class SubareaRenderer extends StandardFieldReturn
     public function __construct($value, Field $field, $salt = null)
     {
         $this->field = $field;
+        $file = $this->field->getArg('layoutFile');
+        $environment = Utilities::getPostEnvironment($this->field->controller->getEntity()->getProperties()->parentObjectId);
+        $repository = new SubmoduleRepository($environment, $this->field->getValue('slots', []));
+        if ($file) {
+            $this->layoutView = new LayoutArea($file, $this->field->getBaseId(), $this->field->getKey(), $repository);
+        }
         parent::__construct($value, $field, $salt);
+    }
+
+
+    /**
+     * @param array $data
+     */
+    public function slotData($data = [])
+    {
+        $this->slotdata[$this->slotId] = $data;
+        return $this;
     }
 
     /**
@@ -58,6 +76,9 @@ class SubareaRenderer extends StandardFieldReturn
                 $module->properties
             );
             $renderer = new SingleModuleRenderer($module, $moduleRenderSettings);
+            $module->context->renderer = $renderer;
+            $module->context->set(array('renderPosition' => $this->slotId, 'areaId' => $this->layoutView->areaid));
+            $module->context->set($this->getSlotData($slotId));
             $out = $renderer->render();
         }
 
@@ -83,10 +104,8 @@ class SubareaRenderer extends StandardFieldReturn
         if ($this->hasModule($slotId)) {
             return $this->modules['slot-' . $slotId];
         }
-
         return false;
     }
-
 
     /**
      * @param $value
@@ -98,6 +117,14 @@ class SubareaRenderer extends StandardFieldReturn
         $this->repository = new SubmoduleRepository($environment, $this->field->getValue('slots', []));
         $this->modules = $this->repository->getModules();
         return $value;
+    }
+
+    private function getSlotData($slotId)
+    {
+        if ($slotId && isset($this->slotdata[$slotId])) {
+            return $this->slotdata[$slotId];
+        }
+        return [];
     }
 
 

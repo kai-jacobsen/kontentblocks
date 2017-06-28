@@ -1500,6 +1500,7 @@ module.exports = FieldControlModel.extend({
   bindHandlers: function () {
     this.listenToOnce(this.ModuleModel, 'remove', this.remove);
     this.listenTo(this.ModuleModel, 'change:entityData', this.setData);
+    this.listenTo(this.ModuleModel, 'change:entityData', this.testData);
     this.listenTo(KB.Events, 'modal.reload', this.rebind);
     this.listenTo(KB.Events, 'modal.close', this.remove);
   },
@@ -1511,6 +1512,9 @@ module.exports = FieldControlModel.extend({
   },
   getElement: function () {
     return jQuery('*[data-kbfuid="' + this.get('uid') + '"]');
+  },
+  testData: function(){
+    console.log(this);
   }
 });
 },{"./FieldControlModel":21}],23:[function(require,module,exports){
@@ -6406,7 +6410,7 @@ module.exports = Backbone.View.extend({
    */
   preview: function (options) {
     if (options && options.hasOwnProperty('silent')) {
-      if (options.silent == true) {
+      if (options.silent === true) {
         return;
       }
     }

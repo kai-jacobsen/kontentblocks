@@ -209,7 +209,7 @@ module.exports = Backbone.View.extend({
    */
   preview: function (options) {
     if (options && options.hasOwnProperty('silent')) {
-      if (options.silent == true) {
+      if (options.silent === true) {
         return;
       }
     }
