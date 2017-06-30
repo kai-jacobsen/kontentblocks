@@ -5,8 +5,8 @@ namespace Kontentblocks\Backend\Renderer;
 
 class LayoutAreaRenderer
 {
+    public $slotsDone = 0;
     private $slot = 1;
-
 
     public function slotData($data = [])
     {
@@ -27,6 +27,12 @@ class LayoutAreaRenderer
     {
         $html = "<div data-kbml-slot='{$this->slot}' data-kba-el='kbml-slot'></div>";
         $this->slot++;
+        $this->slotsDone++;
         return $html;
+    }
+
+    public function reset(){
+        $this->slotsDone = 0;
+        $this->slot = 1;
     }
 }

@@ -1649,7 +1649,7 @@ module.exports = Backbone.View.extend({
   initialize: function () {
     // Setup Elements
     this.open = false;
-    if (this.model.get('globalModule') == true){
+    if (this.model.get('globalModule') == true) {
       this.open = true;
     }
     this.$head = jQuery('.kb-module__header', this.$el);
@@ -1740,6 +1740,7 @@ module.exports = Backbone.View.extend({
     }
     if (response.data.json.Fields) {
       KB.payload.Fields = _.extend(Payload.getPayload('Fields'), response.data.json.Fields);
+      KB.payload.fieldData = _.extend(Payload.getPayload('fieldData'), response.data.json.fieldData);
       KB.FieldControls.add(_.toArray(KB.payload.Fields));
     }
     // re-init UI listeners
@@ -1798,7 +1799,7 @@ module.exports = Backbone.View.extend({
   getClean: function () {
 
   },
-  isOpen: function(){
+  isOpen: function () {
     return this.open;
   }
 });
@@ -3132,7 +3133,6 @@ module.exports = FieldControlModel.extend({
   bindHandlers: function () {
     this.listenToOnce(this.ModuleModel, 'remove', this.remove);
     this.listenTo(this.ModuleModel, 'change:entityData', this.setData);
-    this.listenTo(this.ModuleModel, 'change:entityData', this.testData);
     this.listenTo(KB.Events, 'modal.reload', this.rebind);
     this.listenTo(KB.Events, 'modal.close', this.remove);
   },
@@ -3144,9 +3144,6 @@ module.exports = FieldControlModel.extend({
   },
   getElement: function () {
     return jQuery('*[data-kbfuid="' + this.get('uid') + '"]');
-  },
-  testData: function(){
-    console.log(this); 
   }
 });
 },{"./FieldControlModel":52}],54:[function(require,module,exports){
@@ -5087,8 +5084,8 @@ module.exports = BaseView.extend({
     this.SubareaConroller.derender();
   },
   rerender: function () {
+    this.model.setData();
     this.render();
-
   },
   createController: function () {
     var that = this;
@@ -5178,7 +5175,7 @@ module.exports = Backbone.View.extend({
   render: function () {
     var that = this;
     this.$el.append(tplModuleView({module: this.ModuleModel.toJSON()}));
-    this.slotView.$el.prepend(this.$el);
+    this.slotView.$container.prepend(this.$el);
     this.$el.attr('data-kba-mid', this.ModuleModel.get('mid'));
     _.defer(function () {
       that.setupElements();
@@ -5233,19 +5230,6 @@ module.exports = Backbone.View.extend({
     UI.repaint(this.fsControl.$el);
   },
   saveModule: function () {
-    //if (KB.EditModalModules) {
-    //  tinyMCE.triggerSave();
-    //  var $form = KB.EditModalModules.$form;
-    //  var formdata = $form.serializeJSON();
-    //  var moddata = formdata[this.ModuleModel.get('mid')];
-    //  if (moddata) {
-    //    //delete moddata.viewfile;
-    //    //delete moddata.overrides;
-    //    //delete moddata.areaContext;
-    //    this.ModuleModel.set('entityData', moddata);
-    //    this.ModuleModel.sync(true);
-    //  }
-    //}
     this.ModuleModel.sync();
     this.getClean();
   },
@@ -5291,6 +5275,7 @@ module.exports = Backbone.View.extend({
     this.$input.val(val);
   },
   updateInput: function () {
+    this.$container.empty();
     if (this.ModuleModel && this.ModuleModel.get('submodule')) {
       this.ModuleView = new ModuleView({
         slotView: this,
@@ -5301,7 +5286,7 @@ module.exports = Backbone.View.extend({
       this.ModuleView.render();
       this.$('.kbsm-empty').remove();
     } else {
-      this.$el.prepend(tplEmpty({}));
+      this.$container.prepend(tplEmpty({}));
     }
     this.updateInputValue(this.model.get('mid'));
   },
@@ -5313,8 +5298,10 @@ module.exports = Backbone.View.extend({
     }
     this.basename = this.basename + '[' + field.get('fieldkey') + ']' + '[slots]' + '[' + this.slotId + '][mid]';
     this.$input = jQuery("<input type='hidden' name='" + this.basename + "'>");
+    this.$container = jQuery("<div></div>");
   },
   render: function () {
+    this.$el.append(this.$container);
     this.$el.append(this.$input);
   },
   click: function () {
@@ -5325,6 +5312,7 @@ module.exports = Backbone.View.extend({
       });
       this.listenTo(this.ModuleBrowser, 'browser.module.created', this.moduleCreated);
     }
+
     if (!this.ModuleView) {
       this.ModuleBrowser.render();
     }
@@ -5336,15 +5324,15 @@ module.exports = Backbone.View.extend({
     var that = this;
     var res = data.res;
     var module = res.data.module;
-    this.setModule(module);
-    this.model.set('mid', module.mid);
     _.defer(function () {
+      that.setModule(module);
+      that.model.set('mid', '');
+      that.model.set('mid', module.mid);
       that.trigger('module.created');
     });
   },
   removeModuleView: function (event) {
     event.stopPropagation();
-
     Ajax.send({
       action: 'removeModules',
       _ajax_nonce: Config.getNonce('delete'),
@@ -5352,22 +5340,27 @@ module.exports = Backbone.View.extend({
     }, this.removeSuccess, this);
   },
   removeSuccess: function (res) {
+    var that = this;
     if (res.success) {
       //console.log(this.controller.model);
       //this.controller.model.ModuleModel.View.ModuleMenu.getView('save').saveData();
       this.ModuleView.stopListening();
       this.ModuleView.remove();
-      this.ModuleView.model = null;
       this.ModuleView = null;
-      this.model.clear();
+      delete this.ModuleView;
       this.ModuleModel = null;
-      this.updateInput();
+      _.defer(function () {
+        that.model.set({mid: ''});
+      });
+
       this.trigger('module.removed');
     }
   }
 });
 },{"common/Ajax":39,"common/Config":41,"fields/controls/subarea/ModuleBrowser":86,"fields/controls/subarea/ModuleView":87,"fields/controls/subarea/templates/empty.hbs":90}],89:[function(require,module,exports){
 var SlotView = require('fields/controls/subarea/SlotView');
+var Logger = require('common/Logger');
+
 module.exports = Backbone.View.extend({
   initialize: function (options) {
     this.area = options.area;
@@ -5375,16 +5368,17 @@ module.exports = Backbone.View.extend({
     this.parentView = options.parentView;
     this.listenTo(this.model.ModuleModel.View, 'modal.before.nodeupdate', this.disposeSubviews);
     this.listenTo(this.model.ModuleModel.View, 'modal.after.nodeupdate', this.updateSubviews);
+    Logger.Debug.log('Fields: SubareaController created'); // tell the developer that I'm here
 
   },
 
   setupViewConnections: function () {
     var views = {};
-    _.each(this.slots, function (slot) {
-      if (slot.model.get('mid') !== '') {
-        var moduleModel = KB.Modules.get(slot.model.get('mid'));
+    _.each(this.slotViews, function (slotView) {
+      if (slotView.model.get('mid') !== '') {
+        var moduleModel = KB.Modules.get(slotView.model.get('mid'));
         if (moduleModel && moduleModel.View) {
-          views[slot.model.get('mid')] = moduleModel.View;
+          views[slotView.model.get('mid')] = moduleModel.View;
         }
       }
     });
@@ -5400,19 +5394,21 @@ module.exports = Backbone.View.extend({
       subview.derender();
     })
   },
-  setupSlots: function () {
-    this.$slots = this.$('[data-kbml-slot]');
-  },
   derender: function () {
-    //console.log('derender');
+    Logger.Debug.log('Fields: SubareaController removed'); // tell the developer that I'm here
+
   },
   render: function () {
+    Logger.Debug.log('Fields: SubareaController render'); // tell the developer that I'm here
     this.convertDom(); // clean up the layout
-    this.slots = {};
-    this.setupSlots(); //slots from layout
-    this.setupViews();
+    this.slotViews = {};
+    this.$slotContainers = this.setupSlotContainers(); //slots from layout
+    this.slotViews = this.setupViews();
     this.subViews = this.setupViewConnections();
     this.draggable();
+  },
+  setupSlotContainers: function () {
+    return this.$('[data-kbml-slot]');
   },
   draggable: function () {
     var $source, $target, $sourcecontainer, $targetcontainer;
@@ -5453,17 +5449,16 @@ module.exports = Backbone.View.extend({
     });
   },
   reindex: function () {
-    _.each(this.slots, function (slotView) {
-        var $mid = slotView.$('[data-kba-mid]');
-        if ($mid.length === 1){
-          var mid = $mid.data('kba-mid');
-          if (mid){
-            slotView.updateInputValue(mid);
-          }
-        } else {
-          slotView.updateInputValue('');
-
+    _.each(this.slotViews, function (slotView) {
+      var $mid = slotView.$('[data-kba-mid]');
+      if ($mid.length === 1) {
+        var mid = $mid.data('kba-mid');
+        if (mid) {
+          slotView.updateInputValue(mid);
         }
+      } else {
+        slotView.updateInputValue('');
+      }
     })
   },
   convertDom: function () {
@@ -5477,7 +5472,9 @@ module.exports = Backbone.View.extend({
     });
   },
   setupViews: function () {
-    _.each(this.$slots, function (el) {
+    var that = this;
+    var views = {};
+    _.each(this.$slotContainers, function (el) {
       var $el = jQuery(el);
       var slotId = $el.data('kbml-slot');
       var fullId = this.createSlotId(slotId);
@@ -5487,23 +5484,25 @@ module.exports = Backbone.View.extend({
         controller: this,
         slotId: fullId
       });
-      this.slots[fullId] = view;
+      views[fullId] = view;
       view.setModule(this.getSlotModule(fullId));
-      view.model.set(this.getSlotData(fullId)); // this will trigger the view to update
+      _.defer(function(){
+        view.model.set(that.getSlotData(fullId));
+      });
       this.listenTo(view, 'module.created', this.updateParent);
       this.listenTo(view, 'module.removed', this.updateParent);
-    }, this)
+    }, this);
+    return views;
   },
   createSlotId: function (slotId) {
     return 'slot-' + slotId;
   },
   getSlotModule: function (slotId) {
-    var value = this.subarea.get('layout').modules;
-    console.log(this.subarea);
+    var value = this.model.get('value').modules;
     var module = value[slotId];
     if (module) {
       if (module.mid) {
-        if (module.mid != '') {
+        if (module.mid !== '') {
           return module;
         }
       }
@@ -5511,7 +5510,7 @@ module.exports = Backbone.View.extend({
     return null;
   },
   getSlotData: function (slotId) {
-    var value = this.subarea.get('layout').slots;
+    var value = this.model.get('value').slots;
     if (!_.isObject(value)) {
       value = {};
     }
@@ -5526,11 +5525,11 @@ module.exports = Backbone.View.extend({
   }
 
 });
-},{"fields/controls/subarea/SlotView":88}],90:[function(require,module,exports){
+},{"common/Logger":44,"fields/controls/subarea/SlotView":88}],90:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<div class=\"kb-submodule\">\n    <div class=\"kbsm-empty\">\n        add module\n    </div>\n</div>";
+    return "<div class=\"kb-submodule\">\n    <div class=\"kbsm-empty add-modules\">\n        <div>Modul auswählen</div>\n    </div>\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":205}],91:[function(require,module,exports){

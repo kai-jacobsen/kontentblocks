@@ -6,35 +6,68 @@ namespace Kontentblocks\Areas;
 use Kontentblocks\Backend\Environment\EnvironmentInterface;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Renderer\LayoutAreaRenderer;
+use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\Helper\SubmoduleRepository;
+use function Kontentblocks\JSONTransport;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
 
 class LayoutArea
 {
 
+    /**
+     * @var string
+     */
     public $areaid;
+
+    /**
+     * @var string
+     */
     private $file;
+
+    /**
+     * @var string
+     */
     private $baseId;
+
+    /**
+     * @var Field
+     */
+    private $field;
+
+    /**
+     * @var SubmoduleRepository
+     */
     private $submoduleRepository;
+
+    /**
+     * @var array
+     */
     private $modules;
+
+    /**
+     * @var string
+     */
     private $rendererName;
 
     /**
      * LayoutArea constructor.
      * @param string $file path of twig file
-     * @param string $baseId
+     * @param Field $field
      * @param $rendererName
      * @param SubmoduleRepository $repository
      */
-    public function __construct($file, $baseId, $rendererName, SubmoduleRepository $repository)
+    public function __construct($file, Field $field, $rendererName, SubmoduleRepository $repository)
     {
         $this->file = $file;
-        $this->baseId = $baseId;
-        $this->areaid = $this->baseId . 'subarea';
+        $this->field = $field;
+        $this->baseId = $field->getBaseId();
+        $this->areaid = $field->getBaseId() . 'subarea';
         $this->submoduleRepository = $repository;
         $this->rendererName = $rendererName;
+        $this->renderer = new LayoutAreaRenderer();
         $this->register();
+
     }
 
     /**
@@ -42,7 +75,6 @@ class LayoutArea
      */
     private function register()
     {
-
 
         $this->modules = $this->submoduleRepository->getModules();
 //        $submoduleRepository = new SubmoduleRepository($this->environment);
@@ -56,32 +88,11 @@ class LayoutArea
                 'internal' => true,
                 'manual' => false,
                 'public' => false,
-                'layoutArea' => true,
-                'layout' => $this->setupModulesForConfig()
-
+                'layoutArea' => true
             )
         );
-//        $regged->layout = $this->setupModulesForConfig();
 
         Kontentblocks::getService('utility.jsontransport')->registerArea($regged);
-    }
-
-    /**
-     * @return array
-     */
-    private function setupModulesForConfig()
-    {
-
-        $layout = array();
-        $config = $this->submoduleRepository->getConfig();
-        $layout['slots'] = $config;
-        $layout['modules'] = array();
-
-        foreach ($config as $slot => $mid) {
-            $layout['modules'][$slot] = $this->submoduleRepository->getModule($slot);
-        }
-        return $layout;
-
     }
 
     /**
@@ -89,9 +100,46 @@ class LayoutArea
      */
     public function render()
     {
+        $view = $this->setupView();
+        $html = $view->render();
+        JSONTransport()->registerFieldData($this->field->getBaseId(), $this->field->type,
+            array('renderer' => $this->renderer), $this->field->getKey(), $this->field->getArg('arrayKey', null));
+        return $html;
+    }
+
+    /**
+     * @return CoreView
+     */
+    private function setupView()
+    {
+        $this->renderer->reset();
         $view = new CoreView($this->file, array(
-            $this->rendererName => new LayoutAreaRenderer()
+            $this->rendererName => $this->renderer
         ));
-        return $view->render();
+        return $view;
+    }
+
+    /**
+     * @return array
+     */
+    public function setupModulesForConfig()
+    {
+
+        $layout = array();
+        $config = $this->submoduleRepository->getConfig();
+        $layout['slots'] = $config;
+        $layout['modules'] = array();
+
+        $this->setupView()->render();
+        $slotsDone = $this->renderer->slotsDone;
+        $layout['slotsDone'] = $slotsDone;
+        if ($slotsDone > 0) {
+            for ($i = 1; $i <= $slotsDone; $i++) {
+                $layout['modules']['slot-' . $i] = $this->submoduleRepository->getModule('slot-' . $i);
+            }
+        }
+
+        return $layout;
+
     }
 }

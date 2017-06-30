@@ -27,6 +27,7 @@ module.exports = Backbone.View.extend({
     this.$input.val(val);
   },
   updateInput: function () {
+    this.$container.empty();
     if (this.ModuleModel && this.ModuleModel.get('submodule')) {
       this.ModuleView = new ModuleView({
         slotView: this,
@@ -37,7 +38,7 @@ module.exports = Backbone.View.extend({
       this.ModuleView.render();
       this.$('.kbsm-empty').remove();
     } else {
-      this.$el.prepend(tplEmpty({}));
+      this.$container.prepend(tplEmpty({}));
     }
     this.updateInputValue(this.model.get('mid'));
   },
@@ -49,8 +50,10 @@ module.exports = Backbone.View.extend({
     }
     this.basename = this.basename + '[' + field.get('fieldkey') + ']' + '[slots]' + '[' + this.slotId + '][mid]';
     this.$input = jQuery("<input type='hidden' name='" + this.basename + "'>");
+    this.$container = jQuery("<div></div>");
   },
   render: function () {
+    this.$el.append(this.$container);
     this.$el.append(this.$input);
   },
   click: function () {
@@ -61,6 +64,7 @@ module.exports = Backbone.View.extend({
       });
       this.listenTo(this.ModuleBrowser, 'browser.module.created', this.moduleCreated);
     }
+
     if (!this.ModuleView) {
       this.ModuleBrowser.render();
     }
@@ -72,15 +76,15 @@ module.exports = Backbone.View.extend({
     var that = this;
     var res = data.res;
     var module = res.data.module;
-    this.setModule(module);
-    this.model.set('mid', module.mid);
     _.defer(function () {
+      that.setModule(module);
+      that.model.set('mid', '');
+      that.model.set('mid', module.mid);
       that.trigger('module.created');
     });
   },
   removeModuleView: function (event) {
     event.stopPropagation();
-
     Ajax.send({
       action: 'removeModules',
       _ajax_nonce: Config.getNonce('delete'),
@@ -88,16 +92,19 @@ module.exports = Backbone.View.extend({
     }, this.removeSuccess, this);
   },
   removeSuccess: function (res) {
+    var that = this;
     if (res.success) {
       //console.log(this.controller.model);
       //this.controller.model.ModuleModel.View.ModuleMenu.getView('save').saveData();
       this.ModuleView.stopListening();
       this.ModuleView.remove();
-      this.ModuleView.model = null;
       this.ModuleView = null;
-      this.model.clear();
+      delete this.ModuleView;
       this.ModuleModel = null;
-      this.updateInput();
+      _.defer(function () {
+        that.model.set({mid: ''});
+      });
+
       this.trigger('module.removed');
     }
   }

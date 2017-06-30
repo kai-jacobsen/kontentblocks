@@ -14,6 +14,10 @@ module.exports = Backbone.View.extend({
       model: this.model
     });
 
+    if (this.$el.length === 0){
+      return;
+    }
+
     // don't init if cap is missing for current user
     if (!Check.userCan('edit_kontentblocks')) {
       return;

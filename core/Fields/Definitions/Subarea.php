@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Fields\Definitions;
 
 
@@ -6,6 +7,7 @@ use Kontentblocks\Areas\LayoutArea;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\Helper\SubmoduleRepository;
 use Kontentblocks\Modules\Module;
+use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -100,8 +102,14 @@ class Subarea extends Field
         $environment = Utilities::getPostEnvironment($this->controller->getEntity()->getProperties()->parentObjectId);
         $repository = new SubmoduleRepository($environment, $this->getValue('slots', []));
         if ($file) {
-            $data['layoutView'] = new LayoutArea($file, $this->baseId, $this->getKey(), $repository);
+            $renderer = new LayoutArea($file, $this, $this->getKey(), $repository);
+            $data['layoutView'] = $renderer;
+
+            $jsonTansport = \Kontentblocks\JSONTransport();
+            $jsonTansport->registerFieldData($this->baseId,$this->type,$renderer->setupModulesForConfig(),$this->key, $this->getArg('arrayKey',null));
         }
+
+
         return $data;
     }
 

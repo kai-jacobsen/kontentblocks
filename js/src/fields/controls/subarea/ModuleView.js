@@ -27,7 +27,7 @@ module.exports = Backbone.View.extend({
   render: function () {
     var that = this;
     this.$el.append(tplModuleView({module: this.ModuleModel.toJSON()}));
-    this.slotView.$el.prepend(this.$el);
+    this.slotView.$container.prepend(this.$el);
     this.$el.attr('data-kba-mid', this.ModuleModel.get('mid'));
     _.defer(function () {
       that.setupElements();
@@ -82,19 +82,6 @@ module.exports = Backbone.View.extend({
     UI.repaint(this.fsControl.$el);
   },
   saveModule: function () {
-    //if (KB.EditModalModules) {
-    //  tinyMCE.triggerSave();
-    //  var $form = KB.EditModalModules.$form;
-    //  var formdata = $form.serializeJSON();
-    //  var moddata = formdata[this.ModuleModel.get('mid')];
-    //  if (moddata) {
-    //    //delete moddata.viewfile;
-    //    //delete moddata.overrides;
-    //    //delete moddata.areaContext;
-    //    this.ModuleModel.set('entityData', moddata);
-    //    this.ModuleModel.sync(true);
-    //  }
-    //}
     this.ModuleModel.sync();
     this.getClean();
   },

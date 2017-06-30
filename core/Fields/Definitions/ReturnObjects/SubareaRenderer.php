@@ -37,6 +37,11 @@ class SubareaRenderer extends StandardFieldReturn
     protected $field;
 
     /**
+     * @var \Kontentblocks\Backend\Environment\PostEnvironment
+     */
+    protected $environment;
+
+    /**
      * @param $value
      * @param Field $field
      * @param $salt
@@ -48,7 +53,7 @@ class SubareaRenderer extends StandardFieldReturn
         $this->environment = Utilities::getPostEnvironment($this->field->controller->getEntity()->getProperties()->parentObjectId);
         $repository = new SubmoduleRepository($this->environment, $this->field->getValue('slots', []));
         if ($file) {
-            $this->layoutView = new LayoutArea($file, $this->field->getBaseId(), $this->field->getKey(), $repository);
+            $this->layoutView = new LayoutArea($file, $this->field, $this->field->getKey(), $repository);
         }
         parent::__construct($value, $field, $salt);
     }
