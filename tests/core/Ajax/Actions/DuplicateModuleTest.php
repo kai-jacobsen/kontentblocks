@@ -49,7 +49,7 @@ class DuplicateModuleTest extends \WP_UnitTestCase
 
         $workshop = new ModuleWorkshop(
             new PostEnvironment($post->ID, $post), array(
-                'class' => 'ModuleCTA',
+                'class' => 'ModuleText',
                 'area' => 'dump'
             )
         );

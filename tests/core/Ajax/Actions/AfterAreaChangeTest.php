@@ -58,7 +58,7 @@ class AfterAreaChangeTest extends \WP_UnitTestCase
         $post = $this->factory->post->create_and_get();
         $workshop = new ModuleWorkshop(
             new PostEnvironment($post->ID, $post), array(
-                'class' => 'ModuleCTA',
+                'class' => 'ModuleText',
                 'area' => 'dump'
             )
         );
