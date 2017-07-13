@@ -57,6 +57,7 @@ module.exports = Backbone.View.extend({
   },
   handleFrontend: function () {
     var model = KB.Modules.get(this.model.get('mid'));
+    console.log(model);
     KB.EditModalModules.openView(model.View, false, true);
   },
   success: function (res) {

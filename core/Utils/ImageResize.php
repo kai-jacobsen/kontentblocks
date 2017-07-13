@@ -77,6 +77,7 @@ namespace Kontentblocks\Utils {
                     // $attachment may be a url or an id
                 }
 
+
                 $dwidth = ($width) ? $width : 'autow';
                 $dheight = ($height) ? $height : 'autoh';
                 $dcrop = ($crop) ? '_c' : '';
@@ -126,7 +127,6 @@ namespace Kontentblocks\Utils {
                 ) { //if url begins with http:// make $upload_url begin with http:// as well
                     $upload_url = str_replace($https_prefix, $http_prefix, $upload_url);
                 }
-
                 // Check if $img_url is local.
                 if (false === strpos($url, $upload_url)) {
                     return false;

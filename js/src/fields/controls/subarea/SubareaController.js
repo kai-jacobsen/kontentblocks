@@ -1,6 +1,7 @@
 var SlotView = require('fields/controls/subarea/SlotView');
 var Logger = require('common/Logger');
-
+var ModuleView = require('frontend/Views/ModuleView');
+var Config = require('common/Config');
 module.exports = Backbone.View.extend({
   initialize: function (options) {
     this.area = options.area;
@@ -8,10 +9,22 @@ module.exports = Backbone.View.extend({
     this.parentView = options.parentView;
     this.listenTo(this.model.ModuleModel.View, 'modal.before.nodeupdate', this.disposeSubviews);
     this.listenTo(this.model.ModuleModel.View, 'modal.after.nodeupdate', this.updateSubviews);
+    this.listenTo(this.model.ModuleModel, 'modal.serialize.before', this.unbindFields);
+    this.listenTo(this.model.ModuleModel, 'modal.serialize', this.rebindFields);
     Logger.Debug.log('Fields: SubareaController created'); // tell the developer that I'm here
 
-  },
 
+  },
+  unbindFields: function () {
+    _.each(this.subViews, function (subview) {
+      subview.model.trigger('modal.serialize.before');
+    });
+  },
+  rebindFields: function () {
+    _.each(this.subViews, function (subview) {
+      subview.model.trigger('modal.serialize');
+    });
+  },
   setupViewConnections: function () {
     var views = {};
     _.each(this.slotViews, function (slotView) {
@@ -19,12 +32,22 @@ module.exports = Backbone.View.extend({
         var moduleModel = KB.Modules.get(slotView.model.get('mid'));
         if (moduleModel && moduleModel.View) {
           views[slotView.model.get('mid')] = moduleModel.View;
+        } else if (moduleModel) {
+          _.defer(function () {
+            KB.Views.Modules.add(moduleModel.get('mid'), new ModuleView({
+              model: moduleModel,
+              el: '#' + moduleModel.get('mid')
+            }));
+          });
+
         }
+
       }
     });
     return views;
   },
   updateSubviews: function () {
+    this.setupViewConnections();
     _.each(this.subViews, function (subview) {
       subview.rerender();
     })
@@ -35,18 +58,21 @@ module.exports = Backbone.View.extend({
     })
   },
   derender: function () {
-    Logger.Debug.log('Fields: SubareaController removed'); // tell the developer that I'm here
-
+    Logger.Debug.log('Fields: SubareaController derender'); // tell the developer that I'm here
   },
   render: function () {
+    var that = this;
     Logger.Debug.log('Fields: SubareaController render'); // tell the developer that I'm here
     this.convertDom(); // clean up the layout
     this.slotViews = {};
     this.$slotContainers = this.setupSlotContainers(); //slots from layout
     this.slotViews = this.setupViews();
-    this.subViews = this.setupViewConnections();
-    this.draggable();
-  },
+    _.defer(function () {
+      that.subViews = that.setupViewConnections();
+      that.draggable();
+    });
+
+    },
   setupSlotContainers: function () {
     return this.$('[data-kbml-slot]');
   },
@@ -126,7 +152,7 @@ module.exports = Backbone.View.extend({
       });
       views[fullId] = view;
       view.setModule(this.getSlotModule(fullId));
-      _.defer(function(){
+      _.defer(function () {
         view.model.set(that.getSlotData(fullId));
       });
       this.listenTo(view, 'module.created', this.updateParent);
@@ -138,7 +164,8 @@ module.exports = Backbone.View.extend({
     return 'slot-' + slotId;
   },
   getSlotModule: function (slotId) {
-    var value = this.model.get('value').modules;
+    var value = this.model.get('value').modules || {};
+
     var module = value[slotId];
     if (module) {
       if (module.mid) {
@@ -150,7 +177,7 @@ module.exports = Backbone.View.extend({
     return null;
   },
   getSlotData: function (slotId) {
-    var value = this.model.get('value').slots;
+    var value = this.model.get('value').slots || {};
     if (!_.isObject(value)) {
       value = {};
     }

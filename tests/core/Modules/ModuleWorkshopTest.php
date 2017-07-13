@@ -111,14 +111,14 @@ class ModuleWorkshopTest extends \WP_UnitTestCase
     private function getWorkshop( $cArgs = array() )
     {
         $oldargs = array(
-            'class' => 'ModuleText',
+            'class' => 'ModuleCTA',
             'mid' => 'some_old_id',
             'overrides' => array(
                 'name' => 'Oldname'
             )
         );
         $args = array(
-            'class' => 'ModuleText',
+            'class' => 'ModuleCTA',
             'overrides' => array(
                 'name' => 'Newname'
             ),

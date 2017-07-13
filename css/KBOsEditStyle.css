@@ -1344,3 +1344,8 @@ body.kontentblocks-ready .kb-status-public.kb-button-small {
 body.kontentblocks-ready .kb-status-draft.kb-button-small {
   background-color: #F44336;
 }
+
+/* line 561, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
+.admin-bar.kontentblocks-ready .mce-tinymce-inline {
+  margin-top: -45px;
+}

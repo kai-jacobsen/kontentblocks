@@ -3,7 +3,9 @@
 namespace Kontentblocks\Fields\Definitions\ReturnObjects;
 
 
+use Kontentblocks\Areas\AreaProperties;
 use Kontentblocks\Areas\AreaRegistry;
+use Kontentblocks\Areas\AreaSettingsModel;
 use Kontentblocks\Areas\LayoutArea;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\Helper\SubmoduleRepository;
@@ -42,6 +44,11 @@ class SubareaRenderer extends StandardFieldReturn
     protected $environment;
 
     /**
+     * @var AreaProperties
+     */
+    protected $area;
+
+    /**
      * @param $value
      * @param Field $field
      * @param $salt
@@ -61,6 +68,7 @@ class SubareaRenderer extends StandardFieldReturn
 
     /**
      * @param array $data
+     * @return $this
      */
     public function slotData($data = [])
     {
@@ -72,9 +80,14 @@ class SubareaRenderer extends StandardFieldReturn
     {
         /** @var AreaRegistry $areas */
         $areas = Kontentblocks::getService('registry.areas');
-        $area = $areas->getArea($this->layoutView->areaid);
+        $this->area = $areas->getArea($this->layoutView->areaid);
 
-        $this->node = new AreaNode($this->environment, new AreaRenderSettings([], $area));
+        if (is_null($this->area->settings)) {
+            $this->area->set('settings',
+                new AreaSettingsModel($this->area, $this->environment->getDataProvider()));
+        }
+
+        $this->node = new AreaNode($this->environment, new AreaRenderSettings([], $this->area));
         return $this->node->openArea();
     }
 
@@ -90,20 +103,21 @@ class SubareaRenderer extends StandardFieldReturn
      */
     public function render($slotId = null)
     {
+
         if (is_null($slotId)) {
             $slotId = $this->slotId;
         }
         $out = '';
         if ($this->hasModule($slotId)) {
             $module = $this->getModule($slotId);
+            $settings = wp_parse_args($this->field->getArg('moduleRenderSettings', []), $this->getSlotData($slotId));
             $moduleRenderSettings = new ModuleRenderSettings(
-                $this->field->getArg('moduleRenderSettings', array()),
-                $module->properties
+                $settings, $module->properties
             );
+            $module->properties->area = $this->area;
             $renderer = new SingleModuleRenderer($module, $moduleRenderSettings);
             $module->context->renderer = $this;
             $module->context->set(array('renderPosition' => $this->slotId));
-            $module->context->set($this->getSlotData($slotId));
             $out = $renderer->render();
         }
 

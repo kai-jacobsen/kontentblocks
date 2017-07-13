@@ -81,6 +81,13 @@ module.exports = Backbone.View.extend({
       that.model.set('mid', '');
       that.model.set('mid', module.mid);
       that.trigger('module.created');
+      that.listenToOnce(that.controller.model.ModuleModel.View, 'modal.after.nodeupdate', function () {
+        _.defer(function () {
+          KB.ObjectProxy.add(KB.Modules.add(module));
+          that.controller.setupViewConnections();
+        })
+      });
+      KB.Events.trigger('modal.preview');
     });
   },
   removeModuleView: function (event) {

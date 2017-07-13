@@ -47,7 +47,7 @@ class RemoveModulesTest extends \WP_UnitTestCase
 
         $workshop = new ModuleWorkshop(
             new PostEnvironment( $post->ID, $post ), array(
-                'class' => 'ModuleText',
+                'class' => 'ModuleCTA',
                 'area' => 'dump'
             )
         );

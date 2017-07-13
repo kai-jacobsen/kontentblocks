@@ -25,7 +25,6 @@ Class Image extends Field
     public function prepareTemplateData($data)
     {
 
-
         $image = new AttachmentHandler($this->getValue('id'));
         if (isset($data['value']['crop']) && !is_array($data['value']['crop'])) {
             $int = absint($data['value']['crop']);

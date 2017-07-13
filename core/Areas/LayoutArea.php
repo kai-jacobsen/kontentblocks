@@ -88,35 +88,12 @@ class LayoutArea
                 'internal' => true,
                 'manual' => false,
                 'public' => false,
-                'layoutArea' => true
+                'layoutArea' => true,
+                'layoutData' => $this->setupModulesForConfig(),
             )
         );
 
         Kontentblocks::getService('utility.jsontransport')->registerArea($regged);
-    }
-
-    /**
-     * @return string
-     */
-    public function render()
-    {
-        $view = $this->setupView();
-        $html = $view->render();
-        JSONTransport()->registerFieldData($this->field->getBaseId(), $this->field->type,
-            array('renderer' => $this->renderer), $this->field->getKey(), $this->field->getArg('arrayKey', null));
-        return $html;
-    }
-
-    /**
-     * @return CoreView
-     */
-    private function setupView()
-    {
-        $this->renderer->reset();
-        $view = new CoreView($this->file, array(
-            $this->rendererName => $this->renderer
-        ));
-        return $view;
     }
 
     /**
@@ -141,5 +118,29 @@ class LayoutArea
 
         return $layout;
 
+    }
+
+    /**
+     * @return CoreView
+     */
+    private function setupView()
+    {
+        $this->renderer->reset();
+        $view = new CoreView($this->file, array(
+            $this->rendererName => $this->renderer
+        ));
+        return $view;
+    }
+
+    /**
+     * @return string
+     */
+    public function render()
+    {
+        $view = $this->setupView();
+        $html = $view->render();
+        JSONTransport()->registerFieldData($this->field->getBaseId(), $this->field->type,
+            array('renderer' => $this->renderer), $this->field->getKey(), $this->field->getArg('arrayKey', null));
+        return $html;
     }
 }
