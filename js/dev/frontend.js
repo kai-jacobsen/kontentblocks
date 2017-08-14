@@ -705,6 +705,7 @@ module.exports =
         tinyMCE.execCommand('mceAddEditor', true, id);
         //tinymce.init(tinyMCEPreInit.mceInit[id]);
         switchEditors.go(id, 'tmce');
+
       }
 
     });
@@ -2357,7 +2358,6 @@ module.exports = Backbone.View.extend({
         TinyMCE.restoreEditors(jQuery(this));
 
       }
-
       KB.Events.trigger('modal.recalibrate');
     });
   },
@@ -6276,10 +6276,6 @@ module.exports = Backbone.View.extend({
     this.setupElements();
     this.bindHandlers();
 
-    // attach event listeners on observable input fields
-    jQuery(document).on('change', '.kb-observe', function () {
-      that.serialize(false, true);
-    });
 
     return this;
   },
@@ -6313,7 +6309,6 @@ module.exports = Backbone.View.extend({
     this.$draft = jQuery('.kb-modal__draft-notice', this.$el);
   },
   events: {
-    'keyup': 'delayInput',
     'click .close-controls': 'destroy',
     'click .kb-save-form': 'update',
     'click .kb-preview-form': 'preview',
@@ -6420,11 +6415,12 @@ module.exports = Backbone.View.extend({
       this.$el.css('position', 'fixed').draggable({
         handle: '._controls-title',
         containment: 'window',
+        helper: 'clone',
         stop: function (eve, ui) {
           // fit modal to window in size and position
           that.recalibrate(ui.position);
         }
-      });
+      }).resizable();
     }
   },
 
@@ -6586,7 +6582,6 @@ module.exports = Backbone.View.extend({
     // calculate if the modal contents overlap the window height
     // i.e. if part of the modal is out of view
     winDiff = (conH + position.top) - winH;
-
     // if the modal overlaps the height of the window
     // calculate possible height and set
     // nanoScroller needs an re-init after every change
@@ -6605,6 +6600,8 @@ module.exports = Backbone.View.extend({
     // TODO maybe check if admin bar is around
     if (position.top < 32) {
       this.$el.css('top', '32px');
+      this.$el.css('right', '20px');
+
     }
 
     //if (KB.Sidebar.visible) {
@@ -6757,12 +6754,8 @@ module.exports = Backbone.View.extend({
       that.serialize(false, false);
     }, 750);
   },
-// TODO handling events changed in TinyMce 4 to 'on'
   attachEditorEvents: function (ed) {
-    var that = this;
-    ed.onKeyUp.add(function () {
-      that.delayInput();
-    });
+
   },
 
 
@@ -9215,11 +9208,11 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
     + "[_meta][uid]\" value=\""
     + alias3(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"uid","hash":{},"data":data}) : helper)))
-    + "\">\n<div class=\"flexible-fields--toggle-title\">\n    <h3>\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"genericon genericon-expand flexible-fields--js-toggle\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n\n        <input type=\"text\" value=\""
+    + "\">\n<div class=\"flexible-fields--toggle-title\">\n    <h3>\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"genericon genericon-expand flexible-fields--js-toggle\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n        <input type=\"text\" value=\""
     + alias3(this.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.title : stack1), depth0))
     + "\" name=\""
     + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
-    + "[_meta][title] \">\n    </h3>\n</div>\n<div class=\"flexible-fields--toggle-box kb-hide\">\n    <div class=\"kb-field--tabs\">\n        <ul class=\"flexible-field--tab-nav\">\n\n        </ul>\n    </div>\n\n</div>";
+    + "[_meta][title]\">\n    </h3>\n</div>\n<div class=\"flexible-fields--toggle-box kb-hide\">\n    <div class=\"kb-field--tabs\">\n        <ul class=\"flexible-field--tab-nav\">\n\n        </ul>\n    </div>\n\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":214}],155:[function(require,module,exports){

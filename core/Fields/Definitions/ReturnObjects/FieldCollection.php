@@ -7,18 +7,17 @@ use Kontentblocks\Fields\Field;
 /**
  * @todo: finish
  */
-class FieldCollection implements \ArrayAccess
+class FieldCollection implements \ArrayAccess, InterfaceFieldReturn
 {
 
-    protected $fields;
     public $value;
-
+    protected $fields;
 
     /**
      *
      * @param $fields
      */
-    public function __construct( $fields )
+    public function __construct($fields)
     {
         $this->fields = $fields;
         $this->setupFields();
@@ -42,7 +41,7 @@ class FieldCollection implements \ArrayAccess
      * @param $key
      * @return mixed
      */
-    public function get( $key )
+    public function get($key)
     {
         return $this->$key;
     }
@@ -67,9 +66,9 @@ class FieldCollection implements \ArrayAccess
      * <p>
      * The return value will be casted to boolean if non-boolean was returned.
      */
-    public function offsetExists( $offset )
+    public function offsetExists($offset)
     {
-        return property_exists( $this, $offset );
+        return property_exists($this, $offset);
     }
 
     /**
@@ -81,7 +80,7 @@ class FieldCollection implements \ArrayAccess
      * </p>
      * @return mixed Can return all value types.
      */
-    public function offsetGet( $offset )
+    public function offsetGet($offset)
     {
         return $this->$offset;
     }
@@ -98,7 +97,7 @@ class FieldCollection implements \ArrayAccess
      * </p>
      * @return void
      */
-    public function offsetSet( $offset, $value )
+    public function offsetSet($offset, $value)
     {
         $this->$offset = $value;
     }
@@ -112,8 +111,22 @@ class FieldCollection implements \ArrayAccess
      * </p>
      * @return void
      */
-    public function offsetUnset( $offset )
+    public function offsetUnset($offset)
     {
-        unset( $this->$offset );
+        unset($this->$offset);
+    }
+
+    /**
+     * @return array
+     */
+    public function getValue()
+    {
+        $export = [];
+        foreach ($this->value as $key => $field) {
+            if (is_a($field, InterfaceFieldReturn::class)) {
+                $export[$key] = $field->getValue();
+            }
+        }
+        return $export;
     }
 }

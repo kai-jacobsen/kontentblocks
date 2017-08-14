@@ -6,6 +6,9 @@
         <p>Please set options to show</p>
     {% endif %}
     <select id='{{ Form.getInputFieldId() }}'
+            {% for attr, value in Field.getArg('attributes', []) %}
+                {{ attr }}="{{ value|esc_attr }}"
+            {% endfor %}
             {% if Field.getArg('select2', false) %} data-kbselect2="true" {% endif %}
             {% if Field.getArg('multiple', false) %} multiple="multiple" {% endif %}
             {% if Field.getArg('multiple') %}

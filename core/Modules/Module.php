@@ -235,7 +235,6 @@ abstract class Module implements EntityInterface
             foreach ($this->model as $key => $v) {
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $this->fields->getFieldByKey($key);
-                $prepData['_' . $key] = $v;
                 $prepData[$key] = (!is_null($field)) ? $field->getFrontendValue(
                     $this->properties->postId
                 ) : $v;
@@ -295,10 +294,6 @@ abstract class Module implements EntityInterface
         return $moduleView;
     }
 
-    public function buildViewWithViewfile(ModuleViewFile $viewfile){
-        return new ModuleView($this, $viewfile, $this->setupViewModel());
-    }
-
     /**
      * Gets the assigned viewfile (.twig) filename
      * Property is empty upon module creation, in that case we find the file to use
@@ -323,6 +318,11 @@ abstract class Module implements EntityInterface
     }
 
     abstract public function render();
+
+    public function buildViewWithViewfile(ModuleViewFile $viewfile)
+    {
+        return new ModuleView($this, $viewfile, $this->setupViewModel());
+    }
 
     /**
      * @return ModuleModel

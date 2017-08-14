@@ -43,10 +43,6 @@ module.exports = Backbone.View.extend({
     this.setupElements();
     this.bindHandlers();
 
-    // attach event listeners on observable input fields
-    jQuery(document).on('change', '.kb-observe', function () {
-      that.serialize(false, true);
-    });
 
     return this;
   },
@@ -80,7 +76,6 @@ module.exports = Backbone.View.extend({
     this.$draft = jQuery('.kb-modal__draft-notice', this.$el);
   },
   events: {
-    'keyup': 'delayInput',
     'click .close-controls': 'destroy',
     'click .kb-save-form': 'update',
     'click .kb-preview-form': 'preview',
@@ -187,11 +182,12 @@ module.exports = Backbone.View.extend({
       this.$el.css('position', 'fixed').draggable({
         handle: '._controls-title',
         containment: 'window',
+        helper: 'clone',
         stop: function (eve, ui) {
           // fit modal to window in size and position
           that.recalibrate(ui.position);
         }
-      });
+      }).resizable();
     }
   },
 
@@ -353,7 +349,6 @@ module.exports = Backbone.View.extend({
     // calculate if the modal contents overlap the window height
     // i.e. if part of the modal is out of view
     winDiff = (conH + position.top) - winH;
-
     // if the modal overlaps the height of the window
     // calculate possible height and set
     // nanoScroller needs an re-init after every change
@@ -372,6 +367,8 @@ module.exports = Backbone.View.extend({
     // TODO maybe check if admin bar is around
     if (position.top < 32) {
       this.$el.css('top', '32px');
+      this.$el.css('right', '20px');
+
     }
 
     //if (KB.Sidebar.visible) {
@@ -524,12 +521,8 @@ module.exports = Backbone.View.extend({
       that.serialize(false, false);
     }, 750);
   },
-// TODO handling events changed in TinyMce 4 to 'on'
   attachEditorEvents: function (ed) {
-    var that = this;
-    ed.onKeyUp.add(function () {
-      that.delayInput();
-    });
+
   },
 
 

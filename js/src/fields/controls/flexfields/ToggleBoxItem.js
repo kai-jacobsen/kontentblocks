@@ -24,7 +24,6 @@ module.exports = Backbone.View.extend({
         TinyMCE.restoreEditors(jQuery(this));
 
       }
-
       KB.Events.trigger('modal.recalibrate');
     });
   },
