@@ -40,7 +40,7 @@ class ModuleFieldTemplateController
         $key = null;
         $args = wp_parse_args([], [
             'label' => strtoupper($name),
-            'desscription' => '',
+            'description' => '',
             'section' => 'generic',
             'key' => null
         ]);
