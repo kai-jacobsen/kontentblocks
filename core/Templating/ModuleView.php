@@ -43,7 +43,7 @@ class ModuleView implements \JsonSerializable
     protected $engine;
 
     /**
-     * @var ModuleModel
+     * @var ModuleViewModel
      */
     protected $model;
 
@@ -55,7 +55,7 @@ class ModuleView implements \JsonSerializable
      * @param array $addData
      *
      */
-    public function __construct(Module $module, ModuleViewFile $tpl, ModuleModel $model, $addData = array())
+    public function __construct(Module $module, ModuleViewFile $tpl, ModuleViewModel $model, $addData = array())
     {
         $this->addData = $addData;
         $this->module = $module;

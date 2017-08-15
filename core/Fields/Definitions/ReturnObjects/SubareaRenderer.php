@@ -103,7 +103,6 @@ class SubareaRenderer extends StandardFieldReturn
      */
     public function render($slotId = null)
     {
-
         if (is_null($slotId)) {
             $slotId = $this->slotId;
         }
