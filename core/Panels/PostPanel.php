@@ -226,7 +226,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
             'id' => $this->getBaseId(),
-            'entityData' => $this->model->getOriginalData(),
+            'entityData' => $this->model->export(),
             'area' => '_internal',
             'type' => 'static',
             'settings' => $this->args,
@@ -242,7 +242,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function getData()
     {
-        return $this->model->getOriginalData();
+        return $this->model->export();
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Panels;
 
 
@@ -110,7 +111,7 @@ abstract class UserPanel extends AbstractPanel
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
             'id' => $this->getBaseId(),
-            'entityData' => $this->model->getOriginalData(),
+            'entityData' => $this->model->export(),
             'area' => '_internal',
             'type' => 'user',
             'settings' => $this->args

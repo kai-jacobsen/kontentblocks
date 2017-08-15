@@ -21,10 +21,6 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess, \JsonSerializab
      */
     protected $data = [];
 
-    /**
-     * @var array
-     */
-    protected $originalData = [];
 
     /**
      * ValueObject constructor.
@@ -33,7 +29,6 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess, \JsonSerializab
     public function __construct($data = [])
     {
         $this->set($data);
-        $this->originalData = $data;
     }
 
     /**
@@ -49,9 +44,16 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess, \JsonSerializab
                 }
                 $this->data[$key] = $v;
             }
-            $this->originalData = Utilities::arrayMergeRecursive($data, $this->originalData);
         }
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAll()
+    {
+        return $this->data;
     }
 
     /**
@@ -199,22 +201,6 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess, \JsonSerializab
      */
     public function getOriginalData()
     {
-        return $this->originalData;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasData()
-    {
-        return !empty($this->data);
-    }
-
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
-    {
         return $this->export();
     }
 
@@ -239,12 +225,27 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess, \JsonSerializab
     }
 
     /**
+     * @return bool
+     */
+    public function hasData()
+    {
+        return !empty($this->data);
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->export();
+    }
+
+    /**
      * @return $this
      */
     public function reset()
     {
         $this->data = [];
-        $this->originalData = [];
         return $this;
     }
 
