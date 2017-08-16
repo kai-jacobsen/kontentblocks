@@ -179,12 +179,12 @@ KB.App = (function () {
    * @returns void
    */
   function createAreaViews(area) {
-    if (area.get('public')){
+    if (area.get('public')) {
       KB.Views.Areas.add(area.get('id'), new AreaView({
         model: area,
         el: '#' + area.get('id') + '-container'
       }));
-    } else{
+    } else {
       KB.Views.Areas.add(area.get('id'), new SystemAreaView({
         model: area,
         el: '#' + area.get('id') + '-container'
@@ -227,6 +227,13 @@ KB.App = (function () {
 
 jQuery(document).ready(function () {
 
+
+  jQuery(document).ajaxSend(function (event, jqhxr, settings) {
+    var data = settings.data;
+    console.log(data.indexOf('wp_autosave'));
+    if (data.indexOf('wp_autosave') !== -1){
+    }
+  });
 
 // get started
   KB.App.init();

@@ -79,6 +79,9 @@ class ConcatContent
     public function save($postId)
     {
         remove_action('save_post', array($this, 'save'), 999);
+        add_filter('wp_save_post_revision_post_has_changed', function(){
+            return false;
+        },99999);
         global $post;
         if (is_a($post, '\WP_Post')) {
             $postArgs = array(

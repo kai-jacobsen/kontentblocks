@@ -26,7 +26,6 @@ class Revisions
     public function wp_post_revision_fields($return)
     {
 
-
         //globals
         global $post, $pagenow;
 
@@ -163,11 +162,11 @@ class Revisions
         $module = $workshop->getModule();
         $fieldController = $module->fields;
         $fields = $fieldController->collectAllFields();
-
         if (isset($fields[$field])) {
             /** @var Field $field */
             $field = $fields[$field];
             $value = $field->getValue();
+
             return var_export($value, true);
         }
 

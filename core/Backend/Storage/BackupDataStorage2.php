@@ -100,6 +100,7 @@ class BackupDataStorage2
      */
     public function prepareData()
     {
+        $this->storage->reset();
         return array(
             'index' => $this->storage->getIndex(),
             'modules' => $this->storage->getModules(),

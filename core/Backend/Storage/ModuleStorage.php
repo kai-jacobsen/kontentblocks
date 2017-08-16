@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Backend\Storage;
 
 use Kontentblocks\Backend\DataProvider\DataProvider;
