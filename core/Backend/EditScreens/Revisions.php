@@ -45,6 +45,9 @@ class Revisions
             $data = $revEnvironment->getStorage()->getModuleData($mid);
             $postEnvironment->getStorage()->saveModule($mid, $data);
         }
+
+        Utilities::remoteConcatGet($postId, true);
+
     }
 
     public function wp_post_revision_fields($return)

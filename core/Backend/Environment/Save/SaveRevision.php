@@ -30,10 +30,13 @@ class SaveRevision
         $this->postId = $postId;
         $this->index = [];
         $this->savedModules = [];
+
+        $getRev = filter_input(INPUT_GET, 'revision', FILTER_SANITIZE_NUMBER_INT);
+        $this->refId = ($this->isRevisionScreen && is_numeric($getRev)) ? $getRev : $postId;
+
         $this->originalEnv = Utilities::getPostEnvironment($postId);
         $this->environment = Utilities::getPostEnvironment($revisionId);
         $this->postdata = $this->setupRequestData();
-
 
     }
 
@@ -47,7 +50,7 @@ class SaveRevision
             return Request::createFromGlobals();
         }
 
-        $cloner = new PostCloner($this->originalEnv);
+        $cloner = new PostCloner(Utilities::getPostEnvironment($this->refId));
         $kbdata = $cloner->prepareData();
         $modules = $this->unprefixModules($kbdata['modules']);
         return new Request([], $modules);
@@ -86,7 +89,6 @@ class SaveRevision
 
         $areas = $this->originalEnv->getAreas();
 //        $panels = $this->originalEnv->getPanels();
-
         // Bail out if no areas are set
         if (empty($areas)) {
             return false;
@@ -105,7 +107,6 @@ class SaveRevision
      */
     private function auth()
     {
-
 
         // if a revision gets restored, a new revision is created but everything from the normal edit screen is missing
         if ($this->isRevisionScreen === true) {
