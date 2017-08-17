@@ -17,10 +17,34 @@ class Revisions
     function __construct()
     {
         global $pagenow;
-//        if ($pagenow === 'revision.php') {
-        // add UI
         add_filter('_wp_post_revision_fields', array($this, 'wp_post_revision_fields'));
-//        }
+        add_action('wp_restore_post_revision', array($this, 'restoreRevision'), 10, 2);
+    }
+
+    /**
+     * @param $postId
+     * @param $revisionId
+     * @return bool
+     */
+    public function restoreRevision($postId, $revisionId)
+    {
+        $revEnvironment = Utilities::getPostEnvironment($revisionId);
+        $postEnvironment = Utilities::getPostEnvironment($postId);
+
+        if (is_null($revEnvironment) || is_null($postEnvironment)) {
+            return false;
+        }
+
+        $revIndex = $revEnvironment->getStorage()->getIndex();
+        $postEnvironment->getStorage()->deleteAll();
+        $postEnvironment->getStorage()->saveIndex($revIndex);
+
+
+        foreach ($revIndex as $module) {
+            $mid = $module['mid'];
+            $data = $revEnvironment->getStorage()->getModuleData($mid);
+            $postEnvironment->getStorage()->saveModule($mid, $data);
+        }
     }
 
     public function wp_post_revision_fields($return)

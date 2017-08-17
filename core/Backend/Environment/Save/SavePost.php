@@ -67,8 +67,6 @@ class SavePost
         // create backup
         $this->createBackup();
 
-
-
             foreach ($areas as $area) {
                 if (!$this->saveByArea($area)) {
                     continue;

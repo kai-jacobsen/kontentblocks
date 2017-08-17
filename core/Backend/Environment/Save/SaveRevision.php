@@ -4,6 +4,7 @@ namespace Kontentblocks\Backend\Environment\Save;
 
 
 use Kontentblocks\Backend\Storage\BackupDataStorage2;
+use Kontentblocks\Backend\Storage\PostCloner;
 use Kontentblocks\Modules\Module;
 use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,13 +23,54 @@ class SaveRevision
      */
     public function __construct($revisionId, $postId)
     {
+        global $pagenow;
+        $this->isRevisionScreen = (filter_input(INPUT_GET, 'action',
+                FILTER_SANITIZE_STRING) === 'restore' && $pagenow === 'revision.php');
         $this->revisionId = $revisionId;
         $this->postId = $postId;
         $this->index = [];
         $this->savedModules = [];
         $this->originalEnv = Utilities::getPostEnvironment($postId);
         $this->environment = Utilities::getPostEnvironment($revisionId);
-        $this->postdata = Request::createFromGlobals();
+        $this->postdata = $this->setupRequestData();
+
+
+    }
+
+    /**
+     * Either use real request data or fake request data
+     * @return Request
+     */
+    private function setupRequestData()
+    {
+        if (!$this->isRevisionScreen) {
+            return Request::createFromGlobals();
+        }
+
+        $cloner = new PostCloner($this->originalEnv);
+        $kbdata = $cloner->prepareData();
+        $modules = $this->unprefixModules($kbdata['modules']);
+        return new Request([], $modules);
+
+    }
+
+    /**
+     * @param $modules
+     * @return array
+     */
+    private function unprefixModules($modules)
+    {
+
+        $unprefixed = [];
+        foreach ($modules as $mid => $value) {
+
+            if (is_string($mid) && $mid[0] === '_') {
+                $key = ltrim($mid, '_');
+                $unprefixed[$key] = $value;
+            }
+        }
+
+        return $unprefixed;
     }
 
     /**
@@ -56,20 +98,6 @@ class SaveRevision
             }
         }
 
-//        $backupHandler = new BackupDataStorage2($this->originalEnv);
-//        $data = $backupHandler->prepareData();
-//
-//        if (!isset($data['index']) || empty($data['index'])) {
-//            return false;
-//        }
-//
-//        update_metadata('post', $this->revisionId, 'kb_kontentblocks', $data['index']);
-//
-//        if (isset($data['modules']) && !empty($data['modules'])) {
-//            foreach ($data['modules'] as $mid => $module) {
-//                update_metadata('post', $this->revisionId, $mid, $module);
-//            }
-//        }
     }
 
     /**
@@ -77,6 +105,13 @@ class SaveRevision
      */
     private function auth()
     {
+
+
+        // if a revision gets restored, a new revision is created but everything from the normal edit screen is missing
+        if ($this->isRevisionScreen === true) {
+            return true;
+        }
+
         if (is_null($this->postdata->request->getInt('blog_id', null))) {
             return false;
         } else {
@@ -148,7 +183,6 @@ class SaveRevision
             if (!$this->postdata->request->has($module->getId())) {
                 continue;
             }
-
             $data = wp_unslash($this->postdata->request->get($module->getId()));
             /** @var $old array */
             $old = $this->environment->getStorage()->getModuleData($module->getId());
@@ -188,7 +222,6 @@ class SaveRevision
 
 
     }
-
 
     /**
      * @param $module

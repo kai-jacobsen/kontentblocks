@@ -32,7 +32,7 @@ class ModuleStorage implements \Countable
      * modules to handle
      * @var array
      */
-    protected $modules;
+    protected $modules = [];
 
 
     /**
