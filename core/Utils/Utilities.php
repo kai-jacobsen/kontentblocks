@@ -170,6 +170,9 @@ class Utilities
             $plugins[] = 'wptextpattern';
             $plugins[] = 'wpemoji';
         }
+        if (version_compare($wp_version, '4.8', '>=')) {
+            $plugins[] = 'lists';
+        }
 
         $settings = array(
             'wpautop' => true,

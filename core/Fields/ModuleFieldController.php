@@ -27,6 +27,20 @@ class ModuleFieldController extends StandardFieldController
      */
     public $entity;
 
+
+    /**
+     * @return ModuleFieldController
+     */
+    public function templateLoader()
+    {
+        $tplLoader = new ModuleFieldsTemplateLoader($this->entity);
+        $view = $tplLoader->getView();
+        $view->evaluate();
+        return $this->entity->fields;
+    }
+
+
+
     /**
      * Creates a new section if there is not already one with the same id
      * or returns the section if exists
@@ -47,18 +61,6 @@ class ModuleFieldController extends StandardFieldController
         }
         return $this->sections[$sectionId];
 
-    }
-
-    /**
-     * @param null $file
-     * @return FieldsYamlLoader
-     */
-    public function yamlLoader($file = null)
-    {
-        if (is_null($file)) {
-            $file = trailingslashit($this->entity->getProperties()->getSetting('path')) . 'fields.yml';
-        }
-        parent::yamlLoader($file);
     }
 
 }

@@ -224,7 +224,7 @@ abstract class OptionPanel extends AbstractPanel
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
             'id' => $this->getBaseId(),
-            'entityData' => $this->model->getOriginalData(),
+            'entityData' => $this->model->export(),
             'area' => '_internal',
             'type' => 'option',
             'settings' => $this->args

@@ -21,6 +21,8 @@ body.kb-editcontrols-show {
     display: block;
     text-align: center;
     cursor: pointer;
+    font-size: 12px !important;
+    font-family: 'Open Sans', sans-serif !important;
     outline: 1px dotted $lowgrey;
     outline-offset: -2px;
     opacity: 0.5;
@@ -28,7 +30,6 @@ body.kb-editcontrols-show {
 
     &:hover{
       opacity: 1;
-      padding: 16px 8px;
     }
   }
 

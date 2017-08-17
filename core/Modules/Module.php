@@ -235,14 +235,13 @@ abstract class Module implements EntityInterface
             foreach ($this->model as $key => $v) {
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $this->fields->getFieldByKey($key);
-                $prepData['_' . $key] = $v;
                 $prepData[$key] = (!is_null($field)) ? $field->getFrontendValue(
                     $this->properties->postId
                 ) : $v;
             }
         }
 
-        $this->viewModel = new ModuleModel($prepData, $this);
+        $this->viewModel = new ModuleViewModel($prepData, $this);
         return $this->viewModel;
     }
 
@@ -252,27 +251,47 @@ abstract class Module implements EntityInterface
      * @return ModuleView|null
      * @since 0.1.0
      */
-    private function getView(ModuleModel $model)
+    protected function getView(ModuleModel $model)
     {
         if (!class_exists('Kontentblocks\Templating\ModuleTemplate')) {
             class_alias('Kontentblocks\Templating\ModuleView', 'Kontentblocks\Templating\ModuleTemplate');
         }
 
         if ($this->properties->getSetting('views') && is_null($this->view)) {
-            $tpl = $this->getViewfile();
-            $full = $this->viewManager->getViewByName($tpl);
-            if (is_null($full)) {
-                return null;
+            $view = $this->buildView($model);
+            if (!is_null($view)) {
+                $this->view = $view;
             }
-
-            $moduleView = new ModuleView($this, $full, $model);
-            $this->view = $moduleView;
             return $this->view;
         } else if ($this->view) {
             return $this->view;
         }
 
         return null;
+    }
+
+    /**
+     * @param ModuleView $view
+     */
+    public function setView(ModuleView $view)
+    {
+        $this->view = $view;
+    }
+
+    /**
+     * @param ModuleModel $model
+     * @return null
+     */
+    protected function buildView(ModuleModel $model)
+    {
+        $tpl = $this->getViewfile();
+        $full = $this->viewManager->getViewByName($tpl);
+        if (is_null($full)) {
+            return null;
+        }
+
+        $moduleView = new ModuleView($this, $full, $model);
+        return $moduleView;
     }
 
     /**
@@ -300,6 +319,19 @@ abstract class Module implements EntityInterface
 
     abstract public function render();
 
+    public function buildViewWithViewfile(ModuleViewFile $viewfile)
+    {
+        return new ModuleView($this, $viewfile, $this->setupViewModel());
+    }
+
+    /**
+     * @return ModuleModel
+     */
+    public function getViewModel()
+    {
+        return $this->setupViewModel();
+    }
+
     /**
      * @return ModuleModel
      * @deprecated
@@ -307,14 +339,6 @@ abstract class Module implements EntityInterface
     public function setupFrontendData()
     {
         return $this->setupViewModel();
-    }
-
-    /**
-     * @param ModuleView $view
-     */
-    public function setView(ModuleView $view)
-    {
-        $this->view = $view;
     }
 
     /**

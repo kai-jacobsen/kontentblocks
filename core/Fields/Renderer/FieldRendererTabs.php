@@ -26,15 +26,12 @@ class FieldRendererTabs extends AbstractFieldRenderer
     protected $data;
 
 
-
-
     /**
      * Wrapper to output methods
-     * @return mixed|void
      */
-    public function render( )
+    public function render()
     {
-        if (!is_array( $this->renderSections )) {
+        if (!is_array($this->renderSections)) {
             return null;
         }
         $view = new CoreView(
@@ -42,7 +39,6 @@ class FieldRendererTabs extends AbstractFieldRenderer
                 'structure' => $this->renderSections,
             )
         );
-
         return $view->render();
     }
 

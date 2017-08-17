@@ -262,7 +262,7 @@ body.onsite-editing {
   background: #fff;
   position: fixed;
   top: 32px;
-  right: 0px;
+  right: 20px;
   //  bottom: 30px;
   //  @include box-shadow(1px 1px 8px #333);
   border: 1px solid $grey-500;
@@ -555,4 +555,10 @@ body.kontentblocks-ready{
     background-color: $red;
   }
 
+}
+
+.admin-bar.kontentblocks-ready{
+  .mce-tinymce-inline{
+    margin-top: -45px;
+  }
 }

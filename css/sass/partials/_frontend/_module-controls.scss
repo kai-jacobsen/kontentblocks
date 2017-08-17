@@ -9,7 +9,7 @@
   transition: all .3s linear;
   z-index: 1990;
   line-height: 30px;
-
+  opacity: 0.3;
   .kb-controls-wrap {
     line-height: 30px;
     position: relative;
@@ -21,14 +21,14 @@
   .kb-module-control {
     width: 30px;
     height: 30px;
-    background-color: $grey-900;
+    background-color: $grey-100;
     border-radius: 100%;
     border: 1px solid #fff;
     display: inline-block;
     position: absolute;
     text-align: center;
     line-height: 28px;
-    color: #fff;
+    color: $grey-600;
     @extend .base-box-shadow;
     top: 0;
     opacity: 0;
@@ -51,6 +51,7 @@
   .kb-module-control--update {
     left: 0;
     z-index: 2003;
+    color: $grey-600;
 
     &:before {
       content: "\f463";
@@ -96,7 +97,10 @@
     .kb-module-control--move {
       left: 96px;
       opacity: 1;
+    }
 
+    .kb-inline-control{
+      opacity: 1;
     }
   }
 }
@@ -110,6 +114,7 @@
     left: 32px;
     opacity: 1;
     background-color: $red;
+    color: #fff;
   }
 }
 
@@ -139,12 +144,16 @@
 .kb-inline--edit-text {
   left: 32px;
   z-index: 2004;
-  opacity: 1;
+  opacity: 0.6;
 
   &:before {
     content: "\f464";
     font-family: dashicons;
     cursor: pointer;
+  }
+
+  &:hover{
+    opacity: 1;
   }
 }
 
@@ -175,6 +184,7 @@
 .kb-inline--update {
   left: 0;
   z-index: 2003;
+  color: $grey-600;
 
   &:before {
     content: "\f463";
@@ -195,6 +205,7 @@
     left: 32px;
     opacity: 1;
     background-color: $red;
+    color: #fff;
   }
 }
 
@@ -219,7 +230,13 @@ body.kb-editcontrols-show {
 
   .os-edit-container:hover {
     outline: black 1px dotted;
-    outline-offset: 4px;
-    background: rgba(0, 0, 0, 0.1);
+    outline-offset: 1px;
+    //background: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.kb-inline-text--active {
+  .kb-controls-wrap{
+    display: none;
   }
 }

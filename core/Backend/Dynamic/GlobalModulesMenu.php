@@ -286,7 +286,7 @@ class GlobalModulesMenu
                 wp_die('Nonce verification failed');
             }
             // update existing
-            $old = $module->model->getOriginalData();
+            $old = $module->model->export();
             $data = $value->request->get($module->getId());
             $new = $module->save($data, $old);
             $toSave = Utilities::arrayMergeRecursive($new, $old);

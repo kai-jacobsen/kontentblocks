@@ -4,7 +4,7 @@ var Payload = require('common/Payload');
 var Config = require('common/Config');
 var Logger = require('common/Logger');
 module.exports = Backbone.Model.extend({
-  idAttribute: "uid",
+  // idAttribute: "uid",
   initialize: function () {
     this.cleanUp(); //remove self from linked fields
     var module = this.get('fieldId'); // fieldId equals baseId equals the parent object id (Panel or Module)
@@ -85,8 +85,9 @@ module.exports = Backbone.Model.extend({
       }
     }
     // the parent obj data
-    mData = Utilities.getIndex(ModuleModel.get('entityData'), this.get('kpath'));
+    mData = _.clone(Utilities.getIndex(ModuleModel.get('entityData'), this.get('kpath')));
     this.set('value', _.extend(mData, addData)); // set merged data to this.value
+
   },
   // since this data is only the data of a specific field we can upstream this data to the whole module data
   upstreamData: function () {

@@ -403,15 +403,15 @@ function getFromPostPanel($panelId, $key, $default = '', $postId = null)
 }
 
 
-
 /**
  * @param $slug
  * @param string $name
  * @param array $data
  */
-function templatePart($slug, $name = '', $data = array()){
+function templatePart($slug, $name = '', $data = array())
+{
 
-    $part = new TemplatePart($slug,$name,$data);
+    $part = new TemplatePart($slug, $name, $data);
     echo $part->render();
 
 }

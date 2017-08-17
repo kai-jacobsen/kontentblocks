@@ -410,6 +410,7 @@ abstract class Field implements ExportableFieldInterface
     {
         $def = array();
         $def['uid'] = $this->createUID();
+        $def['id'] = $this->createUID();
         $def['type'] = $this->type;
         $def['baseId'] = $this->getBaseId();
         $def['fieldId'] = $this->fieldId;

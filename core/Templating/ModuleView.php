@@ -3,10 +3,12 @@
 namespace Kontentblocks\Templating;
 
 use Exception;
+use Kontentblocks\Fields\ModuleFieldValueProxy;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\Module;
 use Kontentblocks\Modules\ModuleModel;
 use Kontentblocks\Modules\ModuleViewFile;
+use Kontentblocks\Modules\ModuleViewModel;
 use Kontentblocks\Utils\MobileDetect;
 
 /**
@@ -41,7 +43,7 @@ class ModuleView implements \JsonSerializable
     protected $engine;
 
     /**
-     * @var ModuleModel
+     * @var ModuleViewModel
      */
     protected $model;
 
@@ -53,7 +55,7 @@ class ModuleView implements \JsonSerializable
      * @param array $addData
      *
      */
-    public function __construct(Module $module, ModuleViewFile $tpl, ModuleModel $model, $addData = array())
+    public function __construct(Module $module, ModuleViewFile $tpl, ModuleViewModel $model, $addData = array())
     {
         $this->addData = $addData;
         $this->module = $module;
@@ -82,8 +84,8 @@ class ModuleView implements \JsonSerializable
      */
     public function render($echo = false)
     {
-        $this->data = $this->setupData($this->model->export(), $this->addData);
 
+        $this->data = $this->setupData($this->model->getAll(), $this->addData);
         if ($echo) {
             $this->engine->display($this->tplFile->filename, $this->data);
         } else {
@@ -129,7 +131,11 @@ class ModuleView implements \JsonSerializable
             );
         }
 
+        if (is_a($this->model, ModuleViewModel::class)){
+            $data['_f'] = new ModuleFieldValueProxy($this->model);
+        }
         $data['_utils'] = $this->setupUtilities();
+        $data['Module'] = $this->module;
         $data = apply_filters('kb.module.view.data', $data, $this->module);
         return $data;
 
@@ -138,7 +144,7 @@ class ModuleView implements \JsonSerializable
     /**
      * @return array
      */
-    private function setupUtilities()
+    protected function setupUtilities()
     {
         return array(
             'MobileDetect' => Kontentblocks::getService('utility.mobileDetect')
@@ -192,5 +198,7 @@ class ModuleView implements \JsonSerializable
             'data' => $this->data
         );
     }
+
+
 }
 

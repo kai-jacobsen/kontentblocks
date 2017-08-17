@@ -1,14 +1,12 @@
 {{#if show }}
     <div class="kb-template-selector--wrapper">
         <div class="kb-selectbox">
-            <label>
-                Modultemplate
-                <select class="kb-template-select" data-kb-rel="{{ module.mid }}" name="{{ module.mid }}[viewfile]">
-                    {{#each views }}
-                        <option {{ this.selected }} value="{{ this.filename }}"
-                                                    data-tpldesc="{{ this.description }}">{{ this.name }}</option>
-                    {{/each}}
-                </select></label>
+            <select class="kb-template-select" data-kb-rel="{{ module.mid }}" name="{{ module.mid }}[viewfile]">
+                {{#each views }}
+                    <option {{ this.selected }} value="{{ this.filename }}"
+                                                data-tpldesc="{{ this.description }}">{{ this.name }}</option>
+                {{/each}}
+            </select>
         </div>
     </div>
 {{else}}

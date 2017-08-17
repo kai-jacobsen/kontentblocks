@@ -52,7 +52,7 @@ module.exports = Backbone.View.extend({
   initialize: function () {
     // Setup Elements
     this.open = false;
-    if (this.model.get('globalModule') == true){
+    if (this.model.get('globalModule') == true) {
       this.open = true;
     }
     this.$head = jQuery('.kb-module__header', this.$el);
@@ -143,6 +143,7 @@ module.exports = Backbone.View.extend({
     }
     if (response.data.json.Fields) {
       KB.payload.Fields = _.extend(Payload.getPayload('Fields'), response.data.json.Fields);
+      KB.payload.fieldData = _.extend(Payload.getPayload('fieldData'), response.data.json.fieldData);
       KB.FieldControls.add(_.toArray(KB.payload.Fields));
     }
     // re-init UI listeners
@@ -201,7 +202,7 @@ module.exports = Backbone.View.extend({
   getClean: function () {
 
   },
-  isOpen: function(){
+  isOpen: function () {
     return this.open;
   }
 });

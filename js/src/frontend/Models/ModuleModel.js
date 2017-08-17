@@ -14,6 +14,7 @@ module.exports = Backbone.Model.extend({
     if (this.get('globalModule')) {
       this.linkModules();
     }
+
   },
   subscribeToArea: function (AreaModel) {
     if (!AreaModel) {

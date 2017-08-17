@@ -98,14 +98,51 @@ class JSONTransport
     public function registerFieldData($modid, $type, $data, $key, $arrayKey)
     {
 
+        $existingData = $this->createOrGetFieldDataArray($modid, $type, $key, $arrayKey);
+        $merged = Utilities::arrayMergeRecursive($data, $existingData);
         if (!empty($arrayKey)) {
-            $this->fieldData[$type][$modid][$arrayKey][$key] = $data;
+            $this->fieldData[$type][$modid][$arrayKey][$key] = $merged;
         } else {
-            $this->fieldData[$type][$modid][$key] = $data;
+            $this->fieldData[$type][$modid][$key] = $merged;
+        }
+        return $this;
+    }
 
+    /**
+     * @param $modid
+     * @param $type
+     * @param $key
+     * @param $arrayKey
+     * @return mixed
+     */
+    private function createOrGetFieldDataArray($modid, $type, $key, $arrayKey = null)
+    {
+
+
+        if (!isset($this->fieldData[$type])) {
+            $this->fieldData[$type] = [];
         }
 
-        return $this;
+        if (!isset($this->fieldData[$type][$modid])) {
+            $this->fieldData[$type][$modid] = [];
+        }
+
+        if (!is_null($arrayKey)) {
+            if (!isset($this->fieldData[$type][$modid][$arrayKey][$key])) {
+                $this->fieldData[$type][$modid][$arrayKey][$key] = [];
+            }
+            if (!isset($this->fieldData[$type][$modid][$arrayKey][$key])) {
+                $this->fieldData[$type][$modid][$arrayKey][$key] = [];
+            }
+            return $this->fieldData[$type][$modid][$arrayKey][$key];
+        } else {
+            if (!isset($this->fieldData[$type][$modid][$key])) {
+                $this->fieldData[$type][$modid][$key] = [];
+            }
+            return $this->fieldData[$type][$modid][$key];
+        }
+
+
     }
 
     /**
@@ -139,6 +176,7 @@ class JSONTransport
                 $this->registerModule($module);
             }
         }
+
     }
 
     /**
@@ -214,6 +252,7 @@ class JSONTransport
         if (!is_admin() && !$filter) {
             return;
         }
+
 
         $this->data['Modules'] = $this->modules;
         $this->data['Areas'] = $this->areas;

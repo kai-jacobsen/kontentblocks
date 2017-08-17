@@ -63,6 +63,11 @@ class ImageReturn extends StandardFieldReturn
     protected $mediaQueries = array();
 
     /**
+     * @var
+     */
+    public $isSVG = false;
+
+    /**
      * @var bool
      */
     private $valid = false;
@@ -123,6 +128,12 @@ class ImageReturn extends StandardFieldReturn
      */
     public function resize($args = array())
     {
+
+        if ($this->isSVG){
+            $this->src = $this->attachment['url'];
+            return $this;
+        }
+
         $defaults = array(
             'width' => $this->size[0],
             'height' => $this->size[1],
@@ -349,12 +360,19 @@ class ImageReturn extends StandardFieldReturn
             return $value;
         }
 
+
+
         if (array_key_exists('id', $value)) {
             $this->attId = $value['id'];
             $att = wp_prepare_attachment_for_js($value['id']);
             if (is_array($att)) {
                 $this->attachment = $att;
                 $this->valid = true;
+
+                if (strpos($att['mime'],'svg') !== false){
+                    $this->isSVG = true;
+                }
+
             }
 
             if (array_key_exists('caption', $value)) {

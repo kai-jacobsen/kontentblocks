@@ -235,10 +235,20 @@ KB.App = function () {
    */
   function createAreaViews(AreaModel) {
     var AreaView = require('./Views/AreaView');
-    KB.Views.Areas.add(AreaModel.get('id'), new AreaView({
-      model: AreaModel,
-      el: '#' + AreaModel.get('id')
-    }));
+    var LayoutAreaView = require('./Views/LayoutAreaView');
+
+    if (AreaModel.get('layoutArea')) {
+      KB.Views.Areas.add(AreaModel.get('id'), new LayoutAreaView({
+        model: AreaModel,
+        el: '#' + AreaModel.get('id')
+      }));
+    } else {
+      KB.Views.Areas.add(AreaModel.get('id'), new AreaView({
+        model: AreaModel,
+        el: '#' + AreaModel.get('id')
+      }));
+    }
+
 
   }
 

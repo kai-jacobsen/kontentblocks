@@ -77,9 +77,13 @@ namespace Kontentblocks\Utils {
                     // $attachment may be a url or an id
                 }
 
+
                 $dwidth = ($width) ? $width : 'autow';
                 $dheight = ($height) ? $height : 'autoh';
                 $dcrop = ($crop) ? '_c' : '';
+                if (is_array($crop)) {
+                    $dcrop .= "_c_x{$crop[0]}x{$crop[1]}";
+                }
                 $dupscale = ($upscale) ? '_us' : '';
                 $sizedesc = 'kb-' . '_' . $dwidth . 'x' . $dheight . $dcrop . $dupscale;
                 $exists = wp_get_attachment_image_src($attachment, $sizedesc, false);
@@ -123,7 +127,6 @@ namespace Kontentblocks\Utils {
                 ) { //if url begins with http:// make $upload_url begin with http:// as well
                     $upload_url = str_replace($https_prefix, $http_prefix, $upload_url);
                 }
-
                 // Check if $img_url is local.
                 if (false === strpos($url, $upload_url)) {
                     return false;

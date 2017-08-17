@@ -24,10 +24,11 @@ class FieldGetImage extends AbstractAjaxAction
     {
         $crop = false;
         $args = $request->request->get('args');
-        $width = (!isset($args['width'])) ? 150 : absint($args['width']);
-        $height = (!isset($args['height'])) ? null : absint($args['height']);
+        $width = (!isset($args['width']) || empty($args['width'])) ? 150 : absint($args['width']);
+        $height = (!isset($args['height']) || empty($args['height'])) ? 150 : absint($args['height']);
         $upscale = filter_var($args['upscale'], FILTER_VALIDATE_BOOLEAN);
         $attachmentid = $request->request->getInt('id');
+
 
         if (isset($args['crop'])) {
             $crop = $args['crop'];
@@ -35,6 +36,7 @@ class FieldGetImage extends AbstractAjaxAction
                 $crop = Image::getCropValue(absint($crop));
             }
         }
+
 
         return new AjaxSuccessResponse(
             'Image resized', array(

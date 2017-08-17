@@ -36,7 +36,6 @@ class UpdateModuleData extends AbstractAjaxAction
         // setup global post
         $post = get_post($postId);
         setup_postdata($post);
-
         $environment = Utilities::getPostEnvironment($postId);
         $workshop = new ModuleWorkshop($environment, $moduleArgs);
         $module = $workshop->getModule();
