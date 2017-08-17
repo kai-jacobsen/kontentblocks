@@ -6,6 +6,8 @@ namespace Kontentblocks\Backend\Environment\Save;
 use Kontentblocks\Backend\Storage\BackupDataStorage2;
 use Kontentblocks\Backend\Storage\PostCloner;
 use Kontentblocks\Modules\Module;
+use Kontentblocks\Panels\PanelModel;
+use Kontentblocks\Panels\PostPanel;
 use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -99,6 +101,10 @@ class SaveRevision
                 continue;
             }
         }
+
+
+        $this->savePanels();
+
 
     }
 
@@ -236,6 +242,30 @@ class SaveRevision
         $module->properties->overrides = (!empty($data['overrides'])) ? $data['overrides'] : array();
         $module->properties->state['draft'] = false;
         return $module;
+    }
+
+    private function savePanels()
+    {
+
+        $panels = $this->originalEnv->getPanels();
+
+        /** @var PostPanel $panel */
+        foreach ($panels as $panel) {
+            $model = $panel->getModel();
+            $key = $panel->getId();
+            $provider = $this->environment->getDataProvider();
+            $provider->update($key, $model->export());
+
+            if ($panel->saveAsSingle) {
+                foreach ($model->export() as $k => $v) {
+                    if (empty($v)) {
+                        $provider->delete($panel->getId() . '_' . $k);
+                    } else {
+                        $provider->update($panel->getId() . '_' . $k, $v);
+                    }
+                }
+            }
+        }
     }
 
 }
