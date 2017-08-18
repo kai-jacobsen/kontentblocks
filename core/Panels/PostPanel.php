@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Panels;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;

@@ -139,9 +139,23 @@ class PostEnvironment implements JsonSerializable, EnvironmentInterface
     public function getPostType()
     {
         if (!$this->postType) {
-            return $this->postType = get_post_type($this->storageId);
+            $postObj = $this->getPostObject();
+            if (wp_is_post_revision($postObj)) {
+                $this->postType = get_post_type($postObj->post_parent);
+            } else {
+                $this->postType = get_post_type($this->storageId);
+            }
         }
         return $this->postType;
+    }
+
+    /**
+     * @return \WP_Post
+     * @since 0.1.0
+     */
+    public function getPostObject()
+    {
+        return $this->postObj;
     }
 
     /**
@@ -238,16 +252,6 @@ class PostEnvironment implements JsonSerializable, EnvironmentInterface
     {
         return absint($this->storageId);
     }
-
-    /**
-     * @return \WP_Post
-     * @since 0.1.0
-     */
-    public function getPostObject()
-    {
-        return $this->postObj;
-    }
-
 
     /**
      * @return ModuleRepository

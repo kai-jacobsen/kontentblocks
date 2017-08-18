@@ -129,7 +129,6 @@ abstract class AbstractPanel implements EntityInterface
         $new = $this->fields->save($postData->request->get($this->baseId), $old);
         $merged = Utilities::arrayMergeRecursive($new, $old);
         $this->model->set($merged)->sync();
-
         if ($this->saveAsSingle) {
             $this->model->saveasSingle();
         }
@@ -159,6 +158,14 @@ abstract class AbstractPanel implements EntityInterface
             }
         }
     }
+
+    /**
+     * @return array
+     */
+    public function getArgs(){
+        return $this->args;
+    }
+
 
     /**
      * @return string

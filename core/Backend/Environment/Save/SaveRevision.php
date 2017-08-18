@@ -3,6 +3,7 @@
 namespace Kontentblocks\Backend\Environment\Save;
 
 
+use App\Models\Post;
 use Kontentblocks\Backend\Storage\BackupDataStorage2;
 use Kontentblocks\Backend\Storage\PostCloner;
 use Kontentblocks\Modules\Module;
@@ -52,10 +53,15 @@ class SaveRevision
             return Request::createFromGlobals();
         }
 
+        /*
+         * Mock postdata when restoring a revision
+         */
         $cloner = new PostCloner(Utilities::getPostEnvironment($this->refId));
         $kbdata = $cloner->prepareData();
         $modules = $this->unprefixModules($kbdata['modules']);
-        return new Request([], $modules);
+        $panels = $kbdata['panels'];
+        $merged = array_merge($modules, $panels);
+        return new Request([], $merged);
 
     }
 
@@ -248,23 +254,13 @@ class SaveRevision
     {
 
         $panels = $this->originalEnv->getPanels();
-
         /** @var PostPanel $panel */
         foreach ($panels as $panel) {
-            $model = $panel->getModel();
-            $key = $panel->getId();
-            $provider = $this->environment->getDataProvider();
-            $provider->update($key, $model->export());
-
-            if ($panel->saveAsSingle) {
-                foreach ($model->export() as $k => $v) {
-                    if (empty($v)) {
-                        $provider->delete($panel->getId() . '_' . $k);
-                    } else {
-                        $provider->update($panel->getId() . '_' . $k, $v);
-                    }
-                }
-            }
+            $args = $panel->getArgs();
+            $class = get_class($panel);
+            /** @var PostPanel $newPanel */
+            $newPanel = new $class($args, $this->environment);
+            $newPanel->save($this->postdata);
         }
     }
 

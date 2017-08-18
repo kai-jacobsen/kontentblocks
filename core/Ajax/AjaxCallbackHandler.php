@@ -87,7 +87,8 @@ class AjaxCallbackHandler
                 'getModuleBackendForm' => array('Kontentblocks\Ajax\Actions\GetModuleBackendForm', 'run'),
                 'updateFieldModel' => array('Kontentblocks\Ajax\Actions\Frontend\UpdateFieldModel', 'run'),
                 'getOembed' => array('Kontentblocks\Ajax\Actions\GetOembed', 'run'),
-                'cropImage' => array('Kontentblocks\Ajax\Actions\CropImage', 'run')
+                'cropImage' => array('Kontentblocks\Ajax\Actions\CropImage', 'run'),
+                'autosave' => array('Kontentblocks\Ajax\Actions\Autosave', 'run')
 
             )
         );

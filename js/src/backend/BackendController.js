@@ -14,6 +14,7 @@ var AreasCollection = require('backend/Collections/AreasCollection');
 var Payload = require('common/Payload');
 var Index = require('common/Index');
 var UI = require('common/UI');
+var Autosave = require('common/Autosave');
 var Config = require('common/Config');
 var ModuleView = require('backend/Views/ModuleView');
 var ModuleModel = require('backend/Models/ModuleModel');
@@ -70,7 +71,7 @@ KB.Contexts = new Backbone.Collection([], {
 KB.ObjectProxy = new Backbone.Collection();
 
 KB.ChangeObserver = new ChangeObserver();
-
+// KB.Autosave = new Autosave();
 
 /*
  * Init function
@@ -227,12 +228,6 @@ KB.App = (function () {
 jQuery(document).ready(function () {
 
 
-  jQuery(document).ajaxSend(function (event, jqhxr, settings) {
-    var data = settings.data;
-    console.log(data.indexOf('wp_autosave'));
-    if (data.indexOf('wp_autosave') !== -1){
-    }
-  });
 
 // get started
   KB.App.init();
