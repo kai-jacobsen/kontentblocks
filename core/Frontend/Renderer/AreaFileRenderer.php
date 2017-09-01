@@ -66,7 +66,7 @@ abstract class AreaFileRenderer
         $this->areaNode = new AreaNode($environment, $areaSettings);
         $this->environment = $environment;
         $moduleRepository = $environment->getModuleRepository();
-        $this->moduleIterator = new ModuleIterator( $moduleRepository->getModulesForArea( $this->area->id ), $environment );
+        $this->moduleIterator = new ModuleIterator( $moduleRepository->getModulesForArea( $this->area->id ) );
         $this->slotRenderer = new SlotRenderer( $this->moduleIterator, $areaSettings, $moduleSettings );
 
     }
