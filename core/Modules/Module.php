@@ -319,6 +319,10 @@ abstract class Module implements EntityInterface
 
     abstract public function render();
 
+    /**
+     * @param ModuleViewFile $viewfile
+     * @return ModuleView
+     */
     public function buildViewWithViewfile(ModuleViewFile $viewfile)
     {
         return new ModuleView($this, $viewfile, $this->setupViewModel());
