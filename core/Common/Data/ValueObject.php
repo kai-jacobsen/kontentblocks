@@ -199,7 +199,7 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess, \JsonSerializab
     /**
      * @return array
      */
-    public function getOriginalData()
+    public function gVCardetOriginalData()
     {
         return $this->export();
     }

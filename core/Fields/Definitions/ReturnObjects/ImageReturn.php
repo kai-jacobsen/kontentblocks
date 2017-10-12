@@ -141,8 +141,8 @@ class ImageReturn extends StandardFieldReturn
             'upscale' => $this->upscale
         );
 
-
         $resizeargs = wp_parse_args($args, $defaults);
+
         $processed = ImageResize::getInstance()->process(
             $this->attId,
             $resizeargs['width'],
@@ -151,6 +151,7 @@ class ImageReturn extends StandardFieldReturn
             false,
             $resizeargs['upscale']
         );
+
 
 
         if (is_array($processed) && count($processed) === 4) {

@@ -87,7 +87,8 @@ namespace Kontentblocks\Utils {
                 $dupscale = ($upscale) ? '_us' : '';
                 $sizedesc = 'kb-' . '_' . $dwidth . 'x' . $dheight . $dcrop . $dupscale;
                 $exists = wp_get_attachment_image_src($attachment, $sizedesc, false);
-                if (is_array($exists) && isset($exists[3])) {
+                $forcenew = apply_filters('kb.force.image.resize', false);
+                if (is_array($exists) && isset($exists[3]) && !$forcenew) {
                     if ($exists[3] === true) {
                         if ($single) {
                             return $exists[0];
@@ -98,6 +99,7 @@ namespace Kontentblocks\Utils {
                         }
                     }
                 }
+
                 $metadata = wp_get_attachment_metadata($attachment);
                 if (is_numeric($attachment)) {
                     $url = wp_get_attachment_url(absint($attachment));
