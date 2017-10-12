@@ -2829,7 +2829,7 @@ module.exports = Backbone.View.extend({
   },
   setupElements: function () {
     this.$list = this.$('.kb-gallery2--item-list');
-    this.$list.sortable({revert: true, delay: 300, stop: _.bind(this.resortSelection, this)});
+    this.$list.sortable({revert: true, delay: 300, helper: 'clone', stop: _.bind(this.resortSelection, this)});
   },
   addImages: function () {
     this.openModal();
@@ -2943,8 +2943,12 @@ module.exports = Backbone.View.extend({
       this.ids.splice(index, 1);
     }
     var view = this.subviews[model.get('id')];
-    view.remove();
-    delete this.subviews[model.get('id')];
+
+    if (view && view.remove){
+      view.remove();
+      delete this.subviews[model.get('id')];
+    }
+
   },
   getIdsFromInputs: function () {
     return this.$('.kb-gallery--image-holder input').map(function (idx, ele) {
