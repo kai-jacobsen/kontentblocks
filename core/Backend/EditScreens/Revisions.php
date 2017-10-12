@@ -4,6 +4,7 @@ namespace Kontentblocks\Backend\EditScreens;
 
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Modules\Module;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Panels\PostPanel;
@@ -158,6 +159,11 @@ class Revisions
 
         /** @var Module $module */
         foreach ($modules as $module) {
+
+            if (!is_a($module->fields, StandardFieldController::class)) {
+                continue;
+            }
+
             $fields = $module->fields->export()->getFields();
             if ($fields) {
                 foreach ($fields as $field) {
