@@ -66,7 +66,7 @@ class EditScreenTest extends \WP_UnitTestCase
         $out = $this->EditScreen->userInterface();
         $this->assertContains("id='kontentblocks-core-ui'", $out);
         $this->assertContains("</div> <!--end ks -->", $out);
-        $this->assertContains("id='demo-content'", $out);
+        $this->assertContains("id='demo-content-container'", $out);
 
     }
 
