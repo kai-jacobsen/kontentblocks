@@ -30,12 +30,16 @@ class EditScreenTest extends \WP_UnitTestCase
         \Kontentblocks\Hooks\Capabilities::setup();
         \Kontentblocks\registerArea(array(
             'id' => 'dump',
-            'postTypes' => array('post')
+            'postTypes' => array('post'),
+            'context' => 'normal',
+            'order' => 5
         ));
 
         \Kontentblocks\registerArea(array(
             'id' => 'demo-content',
-            'postTypes' => array('post')
+            'postTypes' => array('post'),
+            'context' => 'normal',
+            'order' => 10
         ));
     }
 

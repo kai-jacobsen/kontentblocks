@@ -19,7 +19,7 @@
         'assignedModules' => array(), // array of classnames
         'dynamic' => false, // whether this is an dynamic area
         'limit' => 0, // how many modules are allowed
-        'order' => 0, // order index for sorting
+        'order' => 10, // order index for sorting
         'context' => 'normal', // location on the edit screen,
         'sortable' => true
     )
