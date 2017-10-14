@@ -18,7 +18,6 @@
         'postTypes' => array( 'post' ), // array of post types where this area is available to
         'assignedModules' => array(), // array of classnames
         'dynamic' => false, // whether this is an dynamic area
-        'manual' => true, // true if set by code
         'limit' => 0, // how many modules are allowed
         'order' => 0, // order index for sorting
         'context' => 'normal', // location on the edit screen,
