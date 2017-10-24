@@ -96,8 +96,7 @@ module.exports = Backbone.Model.extend({
       var cdata = _.clone(this.get('ModuleModel').get('entityData'));
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
       ModuleModel.set('entityData', cdata, {silent: false});
-      ModuleModel.View.getDirty();
-
+      // ModuleModel.View.getDirty();
     }
   },
   /**

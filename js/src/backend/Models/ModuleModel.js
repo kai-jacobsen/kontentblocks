@@ -67,7 +67,7 @@ module.exports = Backbone.Model.extend({
     if (!res || !res.data.newModuleData) {
       _K.error('Failed to save module data.');
     }
-    this.set('entityData', res.data.newModuleData);
+    this.set('entityData', res.data.newModuleData, {silent:true});
     this.trigger('module.model.updated', this);
     Notice.notice('Data saved', 'success');
   }

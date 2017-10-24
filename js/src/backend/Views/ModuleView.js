@@ -32,7 +32,6 @@ module.exports = Backbone.View.extend({
     // actual module actions are outsourced to individual files
     'mouseenter': 'setFocusedModule',
     'change .kb-template-select': 'viewfileChange',
-    'change input,textarea,select': 'handleChange',
     'tinymce.change': 'handleChange'
 
   },

@@ -33,6 +33,9 @@
             'description' => __( 'Description', 'Kontentblocks' ),
             'addButton' => __('add images', 'Kontentblocks')
         ),
+        'gallery' => array(
+            'addButton' => __('edit gallery', 'Kontentblocks')
+        ),
         // Field:: choseTaxonomy
         'chosetaxonomy' => array(
             'noTaxonomySet' => __( 'Please provide a Taxonomy identifier', 'Kontentblocks' ),
