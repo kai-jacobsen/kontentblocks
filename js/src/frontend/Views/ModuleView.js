@@ -14,7 +14,7 @@ module.exports = Backbone.View.extend({
       model: this.model
     });
 
-    if (this.$el.length === 0){
+    if (this.$el.length === 0) {
       return;
     }
 
@@ -46,7 +46,7 @@ module.exports = Backbone.View.extend({
     "click .editable": "reloadModal",
     "mouseenter.first": "setActive"
   },
-  renderStatusBar: function($el){
+  renderStatusBar: function ($el) {
     this.ModuleStatusBar = new ModuleStatusBarView({
       el: $el,
       parent: this
@@ -64,11 +64,11 @@ module.exports = Backbone.View.extend({
   rerender: function () {
     var that = this;
     this.setElement(jQuery('#' + this.model.get('mid')));
-    _.defer(function(){
+    _.defer(function () {
       that.Controls.rerender();
     });
   },
-  derender:function(){
+  derender: function () {
     this.Controls.derender();
     this.$el.remove();
   },

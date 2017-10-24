@@ -80,6 +80,32 @@
     }
   }
 
+  .kb-module-control.kb-module-control--draft {
+    width: auto;
+    min-width: 150px;
+    height: auto;
+    padding: 1px 6px;
+    background-color: $orange;
+    border-radius: 3px;
+    border: 1px solid #fff;
+    display: inline-block;
+    position: absolute;
+    text-align: center;
+    color: #fff;
+    font-size: 12px !important;
+    line-height: 16px;
+    @extend .base-box-shadow;
+    top: 40px;
+    opacity: 0.5;
+    transition: left .3s, opacity .6s;
+    @extend .base-transition-timiing;
+    cursor: pointer;
+
+    &:hover{
+      opacity: 1;
+    }
+  }
+
   /*------------------------------------*\
       controls hover
   \*------------------------------------*/

@@ -7,6 +7,7 @@ var ModuleEdit = require('./modulecontrols/EditControl');
 var ModuleUpdate = require('./modulecontrols/UpdateControl');
 var ModuleDelete = require('./modulecontrols/DeleteControl');
 var ModuleMove = require('./modulecontrols/MoveControl');
+var DraftMove = require('./modulecontrols/DraftControl');
 
 var tplModuleControls = require('templates/frontend/module-controls.hbs');
 module.exports = Backbone.View.extend({
@@ -51,6 +52,10 @@ module.exports = Backbone.View.extend({
       parent: this.ModuleView
     }));
     this.MoveControl = this.addItem(new ModuleMove({
+      model: this.ModuleView.model,
+      parent: this.ModuleView
+    }));
+    this.DraftControl = this.addItem(new DraftMove({
       model: this.ModuleView.model,
       parent: this.ModuleView
     }));
