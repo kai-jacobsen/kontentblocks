@@ -52,7 +52,7 @@ Class Kontentblocks
     const DEVMODE = true;
     const TABLEVERSION = '1.0.16';
     const DEBUG = true;
-    const DEBUG_LOG = false;
+    const DEBUG_LOG = true;
     static $instance;
     static $ajaxhandler;
     public $services;
@@ -166,6 +166,9 @@ Class Kontentblocks
 
             $ajax = defined('DOING_AJAX') && DOING_AJAX;
             $logger = new Logger('kontentblocks');
+            if (is_dir($path) && Kontentblocks::DEBUG_LOG) {
+                $logger->pushHandler(new StreamHandler($path . '/debug.log'));
+            }
             if (is_user_logged_in() && apply_filters('kb.use.logger.console', false)) {
                 if (!$ajax) {
                     $logger->pushHandler(new BrowserConsoleHandler());
@@ -174,11 +177,9 @@ Class Kontentblocks
                     );
                 }
 
-                if (is_dir($path) && Kontentblocks::DEBUG_LOG) {
-                    $logger->pushHandler(new StreamHandler($path . '/debug.log'));
-                }
+
             } else {
-                $logger->pushHandler(new NullHandler());
+//                $logger->pushHandler(new NullHandler());
             }
             return $logger;
         };

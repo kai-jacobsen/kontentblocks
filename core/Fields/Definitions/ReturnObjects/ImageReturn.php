@@ -3,6 +3,9 @@
 namespace Kontentblocks\Fields\Definitions\ReturnObjects;
 
 
+use Kontentblocks\Fields\Definitions\Image;
+use Kontentblocks\Fields\Field;
+use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\ImageResize;
 
 /**
@@ -51,26 +54,33 @@ class ImageReturn extends StandardFieldReturn
      * @var
      */
     public $src;
-
-    /**
-     * @var array
-     */
-    protected $srcSets = array();
-
-    /**
-     * @var array
-     */
-    protected $mediaQueries = array();
-
     /**
      * @var
      */
     public $isSVG = false;
-
+    /**
+     * @var array
+     */
+    protected $srcSets = array();
+    /**
+     * @var array
+     */
+    protected $mediaQueries = array();
     /**
      * @var bool
      */
     private $valid = false;
+
+    /**
+     * @param $value
+     * @param Field $field
+     * @param $salt
+     */
+    public function __construct($value, Field $field, $salt)
+    {
+        parent::__construct($value, $field, $salt);
+
+    }
 
     /**
      * @param $size
@@ -82,6 +92,11 @@ class ImageReturn extends StandardFieldReturn
         return $this;
     }
 
+    /**
+     * @param bool $withsizes
+     * @param bool $alt
+     * @return string
+     */
     public function html($withsizes = false, $alt = false)
     {
         return $this->imageTag($withsizes, $alt);
@@ -129,10 +144,11 @@ class ImageReturn extends StandardFieldReturn
     public function resize($args = array())
     {
 
-        if ($this->isSVG){
+        if ($this->isSVG) {
             $this->src = $this->attachment['url'];
             return $this;
         }
+
 
         $defaults = array(
             'width' => $this->size[0],
@@ -142,6 +158,11 @@ class ImageReturn extends StandardFieldReturn
         );
 
         $resizeargs = wp_parse_args($args, $defaults);
+
+        if ($this->field->getArg('showcrop', false)) {
+            $resizeargs['crop'] = $this->setupCropFromSetting();
+        }
+
 
         $processed = ImageResize::getInstance()->process(
             $this->attId,
@@ -153,12 +174,29 @@ class ImageReturn extends StandardFieldReturn
         );
 
 
-
         if (is_array($processed) && count($processed) === 4) {
             $this->src = $processed[0];
             $this->setSize($processed[1], $processed[2]);
         }
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function setupCropFromSetting()
+    {
+        $crop = 5;
+        if (is_array($this->value) && isset($this->value['crop'])) {
+            $maybecrop = $this->value['crop'];
+            if (is_numeric($maybecrop)) {
+                $crop = absint($maybecrop);
+            }
+        }
+
+        $croparray = Image::getCropValue($crop);
+        return $croparray;
+
     }
 
     /**
@@ -362,7 +400,6 @@ class ImageReturn extends StandardFieldReturn
         }
 
 
-
         if (array_key_exists('id', $value)) {
             $this->attId = $value['id'];
             $att = wp_prepare_attachment_for_js($value['id']);
@@ -370,7 +407,7 @@ class ImageReturn extends StandardFieldReturn
                 $this->attachment = $att;
                 $this->valid = true;
 
-                if (strpos($att['mime'],'svg') !== false){
+                if (strpos($att['mime'], 'svg') !== false) {
                     $this->isSVG = true;
                 }
 

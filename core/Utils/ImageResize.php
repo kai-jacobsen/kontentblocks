@@ -5,6 +5,9 @@ namespace Kontentblocks\Utils {
     /*
      * All Props to the original!
      */
+
+    use Kontentblocks\Kontentblocks;
+
     /**
      * Title         : Aqua Resizer
      * Description   : Resizes WordPress images on the fly
@@ -71,6 +74,8 @@ namespace Kontentblocks\Utils {
                 $single = true,
                 $upscale = false
             ) {
+
+
                 // Validate inputs.
                 if (!$attachment || (!$width && !$height)) {
                     return false;
