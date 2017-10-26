@@ -4,6 +4,7 @@ namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Customizer\CustomizerIntegration;
 use Kontentblocks\Fields\Customizer\Settings\ImageSetting;
+use Kontentblocks\Fields\Definitions\ReturnObjects\ImageReturn;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Utils\AttachmentHandler;
 use WP_Customize_Media_Control;
@@ -22,9 +23,15 @@ Class CropImage extends Field
     );
 
 
+    /**
+     * Before the data is injected into the field/form twig template
+     * Used to further manipulate or extend the data for the form
+     * @param array $data
+     * @return array
+     */
     public function prepareTemplateData($data)
     {
-        $image = new AttachmentHandler($this->getValue('id'));
+        $image = new ImageReturn($this->value, $this, null);
         $data['image'] = $image;
         return $data;
     }
@@ -63,18 +70,6 @@ Class CropImage extends Field
             return null;
         }
 
-        $caption = (isset($new['caption']) && !empty($new['caption'])) ? $new['caption'] : '';
-        $title = (isset($new['title']) && !empty($new['title'])) ? $new['title'] : '';
-
-        if (isset($new['id']) && !empty($new['id'])) {
-            wp_update_post(
-                array(
-                    'ID' => absint($new['id']),
-                    'post_excerpt' => $caption,
-                    'post_title' => $title
-                )
-            );
-        }
         return $new;
     }
 

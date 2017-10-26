@@ -3,9 +3,9 @@
     <div class='kb-field-image-wrapper' data-kbfield="image">
         <div class='kb-js-add-image kb-field-image-container'>
             {% if (Field.getArg('width')) %}
-                <img src='{{ image.getSize([Field.getArg('width'),Field.getArg('height')]) }}'>
+                <img src='{{ image.size(Field.getArg('width'),Field.getArg('height')).src() }}'>
             {% else %}
-                <img src='{{ image.getSize('thumbnail') }}'>
+                <img src='{{ image.size('thumbnail').src() }}'>
             {% endif %}
         </div>
         <div class="kb-field-image-meta {% if Field.getArg('hideMeta') %} kb-hide {% endif %}">

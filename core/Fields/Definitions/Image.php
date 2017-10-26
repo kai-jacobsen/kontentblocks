@@ -4,6 +4,7 @@ namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Customizer\CustomizerIntegration;
 use Kontentblocks\Fields\Customizer\Settings\ImageSetting;
+use Kontentblocks\Fields\Definitions\ReturnObjects\ImageReturn;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Utils\AttachmentHandler;
 use WP_Customize_Media_Control;
@@ -25,10 +26,10 @@ Class Image extends Field
     public function prepareTemplateData($data)
     {
 
-        $image = new AttachmentHandler($this->getValue('id'));
+        $image = new ImageReturn($this->value,$this,null);
         if (isset($data['value']['crop']) && !is_array($data['value']['crop'])) {
             $int = absint($data['value']['crop']);
-            $image->setCropPosition(self::getCropValue($int));
+            $image->crop(self::getCropValue($int));
         }
 
         $data['cropOptions'] = $this->getCropSelectNode();
@@ -61,6 +62,9 @@ Class Image extends Field
         return $values[5];
     }
 
+    /**
+     * @return array
+     */
     private function getCropSelectNode()
     {
 

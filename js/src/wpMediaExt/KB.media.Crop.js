@@ -212,8 +212,6 @@
       this.cropperView.remove();
     },
     createCropToolbar: function () {
-
-
       var canSkipCrop, toolbarOptions;
       canSkipCrop = this.get('canSkipCrop') || false;
       toolbarOptions = {

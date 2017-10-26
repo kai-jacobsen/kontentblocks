@@ -2,15 +2,13 @@
 {% block fieldmarkup %}
     <div class='kb-field-image-wrapper' data-kbfield="image">
         <div class='kb-js-add-image kb-field-image-container'>
-
             {% if Field.getArg('previewWidth') and Field.getArg('previewHeight') %}
-                <img src='{{ image.getSize([Field.getArg('previewWidth'), Field.getArg('previewHeight')]) }}'>
+                <img src='{{ image.size(Field.getArg('previewWidth'), Field.getArg('previewHeight')).src() }}'>
             {% else %}
-                <img src='{{ image.getSize('full') }}'>
+                <img src='{{ image.size('full').src() }}'>
             {% endif %}
-
-
         </div>
+        <p class="description">Target Size = W:{{ Field.getArg('width') }}px, H:{{ Field.getArg('height') }}px</p>
         <div class="kb-field-image-meta kb-hide ">
             <div class="kb-field-image-title">
                 <label>{{ i18n.title }}</label>
@@ -20,8 +18,8 @@
             </div>
             <div class="kb-field-image-description">
                 <label>{{ i18n.description }}</label>
-        <textarea readonly class='kb-js-image-description kb-observe' type="text"
-                  name='{{ Form.getFieldName( 'caption') }}'>{{ value.caption }}</textarea>
+                <textarea readonly class='kb-js-image-description kb-observe' type="text"
+                          name='{{ Form.getFieldName( 'caption') }}'>{{ value.caption }}</textarea>
             </div>
         </div>
         <input class='kb-js-image-id' type='hidden' name='{{ Form.getFieldName('id') }}' value='{{ value.id }}'>
