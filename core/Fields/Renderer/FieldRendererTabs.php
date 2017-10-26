@@ -10,7 +10,7 @@ use Kontentblocks\Templating\CoreView;
  *
  * There may be different ways to organize in future releases
  * Instantiated by:
- * @see Kontentblocks\Fields\FieldManager::render()
+ * @see \Kontentblocks\Fields\FieldManager::render()
  *
  * @package Fields
  * @since 0.1.0

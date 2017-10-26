@@ -248,7 +248,7 @@ abstract class Field implements ExportableFieldInterface
             $data = call_user_func($this->getCallback('template.data'), $data);
         }
         $view = new FieldView(
-            $type . '/' . $tpl . '.twig', $data
+            $type . DIRECTORY_SEPARATOR . $tpl . '.twig', $data
         );
         return $view->render(false);
     }
