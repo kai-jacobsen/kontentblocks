@@ -4,6 +4,7 @@ namespace Kontentblocks\Ajax\Actions;
 
 use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
+use Kontentblocks\Backend\Storage\PostCloner;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,8 +55,19 @@ class UpdateModuleData extends AbstractAjaxAction
         $module->model->sync(true);
         $module->properties->viewfile = (!empty($data['viewfile'])) ? $data['viewfile'] : '';
 
+        $cloner = new PostCloner($environment);
+
+
         $environment->getStorage()->reset();
         $environment->getStorage()->addToIndex($module->getId(), $module->properties->export());
+
+        try {
+            $revid = _wp_put_post_revision($post, false);
+            $targetEnv = Utilities::getPostEnvironment($revid);
+            $cloner->cloneData($targetEnv);
+        } catch (\Exception $exception) {
+            wp_send_json_error($exception->getMessage());
+        }
 
         $return = array(
             'newModuleData' => $mergedData

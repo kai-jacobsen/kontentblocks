@@ -4,6 +4,7 @@ namespace Kontentblocks\Ajax\Actions\Frontend;
 
 use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
+use Kontentblocks\Backend\Storage\PostCloner;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
@@ -51,8 +52,20 @@ class UpdateModule extends AbstractAjaxAction
         // save slashed data, *_post_meta will add remove slashes again...
         $module->updateModuleData($mergedData);
 
+        $cloner = new PostCloner($environment);
+
+
         if ($postdata->update) {
             $module->model->sync(true);
+
+            try {
+                $revid = _wp_put_post_revision($post, false);
+                $targetEnv = Utilities::getPostEnvironment($revid);
+                $cloner->cloneData($targetEnv);
+            } catch (\Exception $exception) {
+                wp_send_json_error($exception->getMessage());
+            }
+
         }
         $return = array(
             'html' => $module->module(),

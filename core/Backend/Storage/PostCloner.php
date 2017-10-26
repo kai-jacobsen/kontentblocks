@@ -4,7 +4,12 @@ namespace Kontentblocks\Backend\Storage;
 
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Panels\PostPanel;
 
+/**
+ * Class PostCloner
+ * @package Kontentblocks\Backend\Storage
+ */
 class PostCloner
 {
 

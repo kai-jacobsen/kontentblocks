@@ -35,6 +35,11 @@ class BackupDataStorage2
     protected $package;
 
     /**
+     * @var PostCloner
+     */
+    protected $cloner;
+
+    /**
      * Class Constructor
      * @param PostEnvironment $environment
      */
