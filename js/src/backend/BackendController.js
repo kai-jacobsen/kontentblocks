@@ -103,6 +103,7 @@ KB.App = (function () {
       new TabbedEditScreen();
     }
 
+
     KB.Index = Index;
 
   }

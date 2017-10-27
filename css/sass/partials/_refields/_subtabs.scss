@@ -1,0 +1,39 @@
+@media screen and (min-width: 1200px) {
+  .kbf-subtabs-container {
+    display: flex;
+    min-height: 180px;
+  }
+
+  .kbf-fields-tabnav {
+    width: 17%;
+    background-color: $grey-100;
+  }
+
+  .kbf-fields-tabscontainer {
+    flex: 1;
+  }
+
+}
+
+.kbf-fields-tabnav ul.ui-tabs-nav {
+  background-color: $grey-100;
+  padding-top: 0;
+
+  li {
+    display: block;
+    float: none;
+    background-color: $grey-100;
+
+    a {
+      color: #333;
+      padding: 0 12px;
+      display: block;
+      top: 0;
+    }
+
+    &.ui-tabs-active a {
+      border-bottom: 0;
+    }
+  }
+
+}

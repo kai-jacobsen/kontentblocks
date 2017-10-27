@@ -79,7 +79,6 @@ class ImageReturn extends StandardFieldReturn
     public function __construct($value, Field $field, $salt)
     {
         parent::__construct($value, $field, $salt);
-
     }
 
     /**
@@ -143,7 +142,6 @@ class ImageReturn extends StandardFieldReturn
      */
     public function resize($args = array())
     {
-
         if ($this->isSVG) {
             $this->src = $this->attachment['url'];
             return $this;

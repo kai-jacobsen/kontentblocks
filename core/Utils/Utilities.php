@@ -6,6 +6,8 @@ use Detection\MobileDetect;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\TermEnvironment;
 use Kontentblocks\Backend\Environment\UserEnvironment;
+use Kontentblocks\Fields\Definitions\Null;
+use Kontentblocks\Fields\Field;
 use Kontentblocks\Kontentblocks;
 use Symfony\Component\HttpFoundation\Request;
 use XHProfRuns_Default;
@@ -289,7 +291,7 @@ class Utilities
      */
     public static function getHighestId($index)
     {
-        $collect = '';
+        $collect = [];
         if (!empty($index)) {
             foreach ($index as $module) {
                 $module = maybe_unserialize($module);
@@ -627,5 +629,15 @@ class Utilities
         }
         $kbimagesizes[$size] = $size;
         update_option('kbimagesizes', $kbimagesizes, false);
+    }
+
+
+    /**
+     * @param array $args
+     * @return Null
+     */
+    public static function getNullField($args = [])
+    {
+        return new Null('nullfield', null, 'nullkey', $args);
     }
 }

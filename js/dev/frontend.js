@@ -913,6 +913,10 @@ var Ui = {
         $(this).find('.ui-tabs-nav').css('display', 'none');
       }
     });
+
+    var $subtabs = $('[data-kbfsubtabs]', $context).tabs();
+
+
   },
   initToggleBoxes: function () {
     $('.kb-togglebox-header').on('click', function () {
