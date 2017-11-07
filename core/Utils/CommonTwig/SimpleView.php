@@ -3,6 +3,7 @@
 namespace Kontentblocks\Utils\CommonTwig;
 
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
+use Kontentblocks\Templating\Twig;
 
 
 /**
@@ -39,12 +40,13 @@ class SimpleView
      * @param array $data
      * @param bool $concat
      */
-    public function __construct($tpl = null, $data = array(), $concat = false)
+    public function __construct($tpl = null, $data = array(), $concat = false, $path = null)
     {
         $this->data = $data;
         $this->tplFile = $tpl;
         $this->concat = $concat;
         $this->engine = Kontentblocks()->getService('templating.twig.common');
+        $this->path = $path;
     }
 
     public function addData($data)
@@ -64,6 +66,13 @@ class SimpleView
     public function render($echo = false)
     {
         $concater = ConcatContent::getInstance();
+
+        if (!is_null($this->path)) {
+            if (!empty($this->path) && is_dir($this->path)) {
+                Twig::setPath($this->path);
+            }
+        }
+
         $out = $this->engine->render($this->tplFile, $this->data);
 
         if (current_theme_supports('kb.area.concat') && filter_input(
@@ -72,7 +81,7 @@ class SimpleView
                 FILTER_SANITIZE_STRING
             )
         ) {
-            if ($this->concat){
+            if ($this->concat) {
                 $concater->addString(wp_kses_post($out));
             }
         }
@@ -84,6 +93,11 @@ class SimpleView
         }
 
         return false;
+    }
+
+    public function setPath($path)
+    {
+        $this->path = $path;
     }
 
 }

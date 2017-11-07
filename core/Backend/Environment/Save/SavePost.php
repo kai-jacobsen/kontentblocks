@@ -67,11 +67,11 @@ class SavePost
         // create backup
         $this->createBackup();
 
-            foreach ($areas as $area) {
-                if (!$this->saveByArea($area)) {
-                    continue;
-                }
+        foreach ($areas as $area) {
+            if (!$this->saveByArea($area)) {
+                continue;
             }
+        }
 
 
         $this->concat();
@@ -147,8 +147,7 @@ class SavePost
     private function createBackup()
     {
 
-        // Backup data, not for Previews
-        if (isset($_POST['wp-preview']) && !empty($_POST['wp-preview'])) {
+        if (Utilities::isPreview()) {
             return;
         }
         $backupManager = new BackupDataStorage2($this->environment);
@@ -165,7 +164,6 @@ class SavePost
 
         $moduleRepository = $this->environment->getModuleRepository();
         $modules = $moduleRepository->getModulesforArea($area->id);
-        $savedData = null;
 
         if (empty($modules)) {
             return false;
