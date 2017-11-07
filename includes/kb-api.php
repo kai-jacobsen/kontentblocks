@@ -410,7 +410,6 @@ function getFromPostPanel($panelId, $key, $default = '', $postId = null)
  */
 function templatePart($slug, $name = '', $data = array())
 {
-
     $part = new TemplatePart($slug, $name, $data);
     echo $part->render();
 
