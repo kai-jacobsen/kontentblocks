@@ -62,7 +62,9 @@ class ModuleViewFile implements \JsonSerializable
 
     /**
      * ModuleViewFile constructor.
+     * @param SplFileInfo $node
      * @param $rootPath
+     * @param ModuleViewsMeta $meta
      */
     public function __construct(SplFileInfo $node, $rootPath, ModuleViewsMeta $meta)
     {
