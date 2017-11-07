@@ -40,8 +40,8 @@ class RenderSection
     public function renderFields()
     {
         $out = '';
-
-        if (!empty($this->fields)) {
+        $subtabs = apply_filters('kb.fields.subtabs', false);
+        if (!empty($this->fields) && $subtabs) {
             $container = new CoreView(
                 'renderer/sections-subtabs.twig', array(
                     'fields' => $this->fields,
@@ -49,12 +49,12 @@ class RenderSection
                 )
             );
             $out .= $container->render();
+        } else {
+            foreach ($this->fields as $field) {
+                $out .= $field->build();
+            }
         }
 
-//
-//        foreach ($this->fields as $field) {
-//            $out .= $field->build();
-//        }
 
         return $out;
     }

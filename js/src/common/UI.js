@@ -95,7 +95,11 @@ var Ui = {
       }
     });
 
-    var $subtabs = $('[data-kbfsubtabs]', $context).tabs();
+    var $subtabs = $('[data-kbfsubtabs]', $context).tabs({
+      activate: function(){
+        KB.Events.trigger('modal.recalibrate');
+      }
+    });
 
 
   },

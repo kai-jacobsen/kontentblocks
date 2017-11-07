@@ -2,12 +2,10 @@
 
 namespace Kontentblocks\Utils;
 
-use Detection\MobileDetect;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\TermEnvironment;
 use Kontentblocks\Backend\Environment\UserEnvironment;
-use Kontentblocks\Fields\Definitions\Null;
-use Kontentblocks\Fields\Field;
+use Kontentblocks\Fields\Definitions\NullField;
 use Kontentblocks\Kontentblocks;
 use Symfony\Component\HttpFoundation\Request;
 use XHProfRuns_Default;
@@ -638,6 +636,6 @@ class Utilities
      */
     public static function getNullField($args = [])
     {
-        return new Null('nullfield', null, 'nullkey', $args);
+        return new NullField('nullfield', null, 'nullkey', $args);
     }
 }

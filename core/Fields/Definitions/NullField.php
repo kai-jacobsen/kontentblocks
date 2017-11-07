@@ -11,7 +11,7 @@ use Kontentblocks\Customizer\CustomizerIntegration;
  * type - specific html5 input type e.g. number, email... .
  *
  */
-Class Null extends Field
+Class NullField extends Field
 {
 
     // Defaults
