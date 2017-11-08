@@ -157,6 +157,7 @@ class ImageReturn extends StandardFieldReturn
 
         $resizeargs = wp_parse_args($args, $defaults);
 
+
         if (isset($this->field) && $this->field->getArg('showcrop', false)) {
             $resizeargs['crop'] = $this->setupCropFromSetting();
         }
@@ -203,6 +204,7 @@ class ImageReturn extends StandardFieldReturn
     public function setSize($width, $height)
     {
         $this->size = array($width, $height);
+
         return $this;
 
     }
@@ -325,6 +327,7 @@ class ImageReturn extends StandardFieldReturn
      */
     public function size($width, $height = null)
     {
+
         if (is_string($width) && is_null($height)) {
             return $this->nsize($width);
         }
