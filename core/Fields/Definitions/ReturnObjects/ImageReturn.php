@@ -157,7 +157,7 @@ class ImageReturn extends StandardFieldReturn
 
         $resizeargs = wp_parse_args($args, $defaults);
 
-        if ($this->field->getArg('showcrop', false)) {
+        if (isset($this->field) && $this->field->getArg('showcrop', false)) {
             $resizeargs['crop'] = $this->setupCropFromSetting();
         }
 
