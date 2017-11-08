@@ -35,7 +35,6 @@ use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\CommonTwig\SimpleTwig;
 use Kontentblocks\Utils\JSONTransport;
 use Monolog\Handler\BrowserConsoleHandler;
-use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple;
@@ -161,6 +160,8 @@ Class Kontentblocks
      */
     private function setupUtilities()
     {
+
+
         $this->services['utility.logger'] = function ($container) {
             $path = KB_PLUGIN_PATH . '/logs';
 
@@ -169,14 +170,13 @@ Class Kontentblocks
             if (is_dir($path) && Kontentblocks::DEBUG_LOG) {
                 $logger->pushHandler(new StreamHandler($path . '/debug.log'));
             }
-            if (is_user_logged_in() && apply_filters('kb.use.logger.console', false)) {
+            if (is_user_logged_in() && (apply_filters('kb.use.logger.console', false))) {
                 if (!$ajax) {
                     $logger->pushHandler(new BrowserConsoleHandler());
                     $logger->addInfo(
                         'Kontentblocks is running in debug mode.'
                     );
                 }
-
 
             } else {
 //                $logger->pushHandler(new NullHandler());
@@ -218,10 +218,7 @@ Class Kontentblocks
                 mkdir(get_stylesheet_directory() . '/module-templates', 0755, true);
             }
         }
-
-
         Capabilities::setup();
-
 
     }
 
