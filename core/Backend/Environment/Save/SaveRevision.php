@@ -257,6 +257,7 @@ class SaveRevision
             $class = get_class($panel);
             /** @var PostPanel $newPanel */
             $newPanel = new $class($args, $this->environment);
+            $newPanel->model->reset()->set($this->postdata->request->get($newPanel->getBaseId()));
             $newPanel->save($this->postdata);
         }
     }

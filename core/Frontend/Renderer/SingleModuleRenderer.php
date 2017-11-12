@@ -117,7 +117,7 @@ class SingleModuleRenderer implements RendererInterface
                 $this->renderSettings->get('wrapperClass', ''),
                 'view-' . str_replace('.twig', '', $this->module->properties->viewfile)
             );
-
+ 
     }
 
     /**

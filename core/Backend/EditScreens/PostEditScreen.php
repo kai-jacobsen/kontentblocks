@@ -148,6 +148,7 @@ Class PostEditScreen
      */
     function save($postId, $postObj)
     {
+
         $request = Request::createFromGlobals();
 
         // get the real postId
