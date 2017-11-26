@@ -235,7 +235,6 @@ abstract class Module implements EntityInterface
             foreach ($this->model as $key => $v) {
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $this->fields->getFieldByKey($key);
-                $prepData['_' . $key] = $v;
                 $prepData[$key] = (!is_null($field)) ? $field->getFrontendValue(
                     $this->properties->postId
                 ) : $v;
@@ -319,6 +318,23 @@ abstract class Module implements EntityInterface
     }
 
     abstract public function render();
+
+    /**
+     * @param ModuleViewFile $viewfile
+     * @return ModuleView
+     */
+    public function buildViewWithViewfile(ModuleViewFile $viewfile)
+    {
+        return new ModuleView($this, $viewfile, $this->setupViewModel());
+    }
+
+    /**
+     * @return ModuleModel
+     */
+    public function getViewModel()
+    {
+        return $this->setupViewModel();
+    }
 
     /**
      * @return ModuleModel

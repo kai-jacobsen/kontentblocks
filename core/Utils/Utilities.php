@@ -2,10 +2,10 @@
 
 namespace Kontentblocks\Utils;
 
-use Detection\MobileDetect;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\TermEnvironment;
 use Kontentblocks\Backend\Environment\UserEnvironment;
+use Kontentblocks\Fields\Definitions\NullField;
 use Kontentblocks\Kontentblocks;
 use Symfony\Component\HttpFoundation\Request;
 use XHProfRuns_Default;
@@ -170,6 +170,9 @@ class Utilities
             $plugins[] = 'wptextpattern';
             $plugins[] = 'wpemoji';
         }
+        if (version_compare($wp_version, '4.8', '>=')) {
+            $plugins[] = 'lists';
+        }
 
         $settings = array(
             'wpautop' => true,
@@ -286,7 +289,7 @@ class Utilities
      */
     public static function getHighestId($index)
     {
-        $collect = '';
+        $collect = [];
         if (!empty($index)) {
             foreach ($index as $module) {
                 $module = maybe_unserialize($module);
@@ -624,5 +627,15 @@ class Utilities
         }
         $kbimagesizes[$size] = $size;
         update_option('kbimagesizes', $kbimagesizes, false);
+    }
+
+
+    /**
+     * @param array $args
+     * @return Null
+     */
+    public static function getNullField($args = [])
+    {
+        return new NullField('nullfield', null, 'nullkey', $args);
     }
 }

@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Returnobjects\Utilities;
 
 use Kontentblocks\Fields\Definitions\ReturnObjects\ImageReturn;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class ImageObject
@@ -21,7 +22,9 @@ class ImageObject extends ImageReturn
         if (!is_array($value) && is_numeric($value)) {
             $value = array('id' => $value);
         }
-        $this->value = $this->prepareValue($value);
+        $field = Utilities::getNullField();
+        parent::__construct($value, $field, null);
+
     }
 
 }

@@ -32,6 +32,7 @@ module.exports =
         tinyMCE.execCommand('mceAddEditor', true, id);
         //tinymce.init(tinyMCEPreInit.mceInit[id]);
         switchEditors.go(id, 'tmce');
+
       }
 
     });

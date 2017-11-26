@@ -51,7 +51,7 @@ class UpdateModuleDataTest extends \WP_UnitTestCase
 
         $workshop = new ModuleWorkshop(
             new PostEnvironment($post->ID, $post), array(
-                'class' => 'ModuleHomeEvent',
+                'class' => 'ModuleText',
                 'area' => 'dump'
             )
         );

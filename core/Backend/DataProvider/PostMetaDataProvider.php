@@ -61,6 +61,7 @@ class PostMetaDataProvider implements DataProviderInterface
      */
     public function reset()
     {
+        clean_post_cache($this->postId);
         $this->getPostCustom();
         return $this;
     }
@@ -75,7 +76,6 @@ class PostMetaDataProvider implements DataProviderInterface
     private function getPostCustom()
     {
         $meta = get_post_custom($this->postId);
-
         if (!empty($meta) && is_array($meta)) {
             $this->meta = array_map(
                 function ($entry) {
@@ -126,9 +126,9 @@ class PostMetaDataProvider implements DataProviderInterface
     public function update($key, $value)
     {
         $this->meta[$key] = $value;
-        $parent_id = wp_is_post_revision( $this->postId );
-        if($parent_id){
-            ddd($parent_id);
+        $parent_id = wp_is_post_revision($this->postId);
+        if ($parent_id) {
+            return update_metadata('post',$this->postId,$key,$value);
         }
 
         return update_post_meta($this->postId, $key, $value);

@@ -35,6 +35,11 @@ class BackupDataStorage2
     protected $package;
 
     /**
+     * @var PostCloner
+     */
+    protected $cloner;
+
+    /**
      * Class Constructor
      * @param PostEnvironment $environment
      */
@@ -42,6 +47,7 @@ class BackupDataStorage2
     {
         $this->environment = $environment;
         $this->storage = $environment->getStorage();
+        $this->cloner = new PostCloner($environment);
     }
 
     /**
@@ -75,7 +81,7 @@ class BackupDataStorage2
 
         $user = wp_get_current_user();
 
-        $value = $this->prepareData();
+        $value = $this->cloner->prepareData();
 
         $value = json_encode(wp_slash($value));
 
@@ -95,33 +101,6 @@ class BackupDataStorage2
         return $insertRecord;
     }
 
-    /**
-     * @return array
-     */
-    public function prepareData()
-    {
-        return array(
-            'index' => $this->storage->getIndex(),
-            'modules' => $this->storage->getModules(),
-            'panels' => $this->compactPanels(),
-        );
-    }
-
-    /**
-     * @return array
-     */
-    private function compactPanels()
-    {
-        $panels = $this->environment->getPanels();
-        $data = [];
-        if (!empty($panels)) {
-            /** @var PostPanel $panel */
-            foreach ($panels as $panel) {
-                $data[$panel->getId()] = $panel->model->export();
-            }
-        }
-        return $data;
-    }
 
     private function cleanUp()
     {

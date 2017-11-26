@@ -69,12 +69,11 @@ var EditableText = Backbone.View.extend({
     var defaults = {
       theme: 'inlite',
       skin: false,
-      menubar: false,
+      menubar: true,
       add_unload_trigger: false,
       entity_encoding: "raw",
       fixed_toolbar_container: null,
       insert_toolbar: '',
-      // fixed_toolbar_container: '#kb-toolbar',
       schema: 'html5',
       inline: true,
       selection_toolbar: 'bold italic | quicklink h2 h3 blockquote',
@@ -82,7 +81,6 @@ var EditableText = Backbone.View.extend({
       statusbar: false,
       preview_styles: false,
       paste_as_text: true,
-
       setup: function (ed) {
         ed.on('init', function () {
           that.editor = ed;
@@ -98,9 +96,6 @@ var EditableText = Backbone.View.extend({
 
         });
 
-        ed.on('selectionchange mouseup', function (e) {
-          // that.getSelection(ed, e);
-        });
 
         ed.on('NodeChange', function (e) {
           // that.getSelection(ed, e);
@@ -115,39 +110,21 @@ var EditableText = Backbone.View.extend({
             ed.setContent(switchEditors.wpautop(con));
           }
           ed.previousContent = ed.getContent();
-
-          that.$el.addClass('kb-inline-text--active');
+          ed.module.View.$el.addClass('kb-inline-text--active');
         });
 
-        //ed.addButton('kbcancleinline', {
-        //  title: 'Stop inline Edit',
-        //  onClick: function () {
-        //    if (tinymce.activeEditor.isDirty()) {
-        //      tinymce.activeEditor.module.View.getDirty();
-        //    }
-        //    tinymce.activeEditor.fire('blur');
-        //    tinymce.activeEditor = null;
-        //    tinymce.focusedEditor = null;
-        //    document.activeElement.blur();
-        //    jQuery('#kb-toolbar').hide();
-        //  }
-        //});
         ed.on('blur', function (e) {
           var content;
-          that.$el.removeClass('kb-inline-text--active');
+          ed.module.View.$el.removeClass('kb-inline-text--active');
           content = ed.getContent();
-
           // apply filter
           if (ed.kfilter) {
             content = switchEditors._wp_Nop(ed.getContent());
           }
-
           // get a copy of module data
           //entityData = _.clone(ed.module.get('entityData'));
           //path = that.model.get('kpath');
           //Utilities.setIndex(entityData, path, content);
-
-
           // && ed.kfilter set
           if (ed.isDirty()) {
             if (ed.kfilter) {
@@ -158,7 +135,6 @@ var EditableText = Backbone.View.extend({
               that.model.trigger('external.change', that.model);
               that.model.trigger('field.model.dirty', that.model);
               KB.Events.trigger('content.change');
-
             }
           } else {
             ed.setContent(ed.previousContent);

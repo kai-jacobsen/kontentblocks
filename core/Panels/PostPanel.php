@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Panels;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
@@ -226,7 +227,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
             'id' => $this->getBaseId(),
-            'entityData' => $this->model->getOriginalData(),
+            'entityData' => $this->model->export(),
             'area' => '_internal',
             'type' => 'static',
             'settings' => $this->args,
@@ -242,7 +243,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function getData()
     {
-        return $this->model->getOriginalData();
+        return $this->model->export();
     }
 
     /**
@@ -320,5 +321,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         $this->model->reset()->set($postData->request->get($this->baseId));
         $this->save($postData);
     }
+
 
 }

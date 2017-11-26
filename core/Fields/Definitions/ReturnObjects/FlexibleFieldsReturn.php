@@ -9,7 +9,7 @@ use Kontentblocks\Fields\Definitions\FlexibleFields;
  * @package Kontentblocks\Fields\Utilities
  * @since 0.1.0
  */
-class FlexibleFieldsReturn
+class FlexibleFieldsReturn implements InterfaceFieldReturn
 {
 
     public $value;
@@ -157,12 +157,6 @@ class FlexibleFieldsReturn
         return $items;
     }
 
-    public function shuffle(){
-
-        shuffle($this->items);
-        return $this;
-    }
-
     /**
      * Validate if all necessary props are set
      * @since 0.1.0
@@ -190,5 +184,18 @@ class FlexibleFieldsReturn
         return true;
     }
 
+    public function shuffle()
+    {
 
+        shuffle($this->items);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 }

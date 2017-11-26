@@ -56,13 +56,15 @@ class ModuleViewFile implements \JsonSerializable
      */
     public $meta;
     /**
-     * @var \DirectoryIterator
+     * @var \SplFileInfo
      */
     private $node;
 
     /**
      * ModuleViewFile constructor.
+     * @param SplFileInfo $node
      * @param $rootPath
+     * @param ModuleViewsMeta $meta
      */
     public function __construct(SplFileInfo $node, $rootPath, ModuleViewsMeta $meta)
     {
@@ -70,6 +72,14 @@ class ModuleViewFile implements \JsonSerializable
         $this->node = $node;
         $this->meta = $meta;
         $this->prepareNode();
+
+    }
+
+    /**
+     * @return SplFileInfo
+     */
+    public function getNode(){
+        return $this->node;
     }
 
     /**

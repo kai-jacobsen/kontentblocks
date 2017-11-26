@@ -1,10 +1,12 @@
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var ViewsList = require('./ViewsList');
+var Controls = require('./Controls');
 var tplEDitor = require('templates/backend/template-editor/wrap.hbs');
 
 module.exports = Backbone.View.extend({
   className: 'kb-codemirror-overlay',
+  currentView: null,
   initialize: function (options) {
     this.viewfile = options.viewfile;
     this.$wrap = jQuery(tplEDitor()).appendTo(this.$el);
@@ -13,6 +15,9 @@ module.exports = Backbone.View.extend({
     this.moduleModel = options.module;
     this.views = options.views;
     this.open();
+  },
+  events: {
+    'click .kb-template-editor-close': 'close'
   },
   open: function () {
     this.$backdrop = jQuery('<div class="kb-fullscreen-backdrop"></div>').appendTo('body');
@@ -27,10 +32,21 @@ module.exports = Backbone.View.extend({
     });
     this.render();
   },
+  close: function () {
+    this.$backdrop.remove();
+    jQuery('#wpwrap').removeClass('module-browser-open');
+    this.$el.detach();
+    this.trigger('close');
+
+  },
   render: function () {
     var list = new ViewsList({
-      $container: this.$sidebar,
+      $container: this.$('[data-views]'),
       views: this.views,
+      controller: this
+    }).render();
+    var controls = new Controls({
+      $container: this.$('[data-controls]'),
       controller: this
     }).render();
     this.load(list.getActiveView());
@@ -38,12 +54,23 @@ module.exports = Backbone.View.extend({
   },
   load: function (viewfile) {
     var that = this;
+
+    if (this.currentView) {
+      this.currentView.deselect();
+    }
+
     Ajax.send({
       viewfile: viewfile.model.toJSON(),
       action: 'getTemplateString',
       _ajax_nonce: Config.getNonce('read')
     }, function (res) {
       that.editor.setValue(res);
+      that.currentView = viewfile;
+      that.currentView.select();
     }, this);
+  },
+  getCurrentView: function(){
+    return this.currentView;
   }
+
 });

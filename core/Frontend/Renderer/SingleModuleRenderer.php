@@ -7,6 +7,7 @@ use Kontentblocks\Common\Interfaces\RendererInterface;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\Module;
+use Kontentblocks\Modules\ModuleViewFile;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -43,10 +44,11 @@ class SingleModuleRenderer implements RendererInterface
      */
     public function __construct(Module $module, ModuleRenderSettings $renderSettings)
     {
-        $this->module = $module;
         $this->renderSettings = $this->setupRenderSettings($renderSettings);
+        $this->module = $this->prepareModule($module, $renderSettings);
         $this->classes = $this->setupClasses();
         $this->module->context->set($this->renderSettings->export());
+
 
         // @TODO other properties?
         if (isset($this->renderSettings['areaContext'])) {
@@ -80,7 +82,27 @@ class SingleModuleRenderer implements RendererInterface
     }
 
     /**
-     * @return string
+     * @param Module $module
+     * @param $renderSettings
+     * @return Module
+     */
+    private function prepareModule(Module $module, $renderSettings)
+    {
+        if (isset($renderSettings['template'])) {
+            $tpl = $renderSettings['template'];
+            $current = pathinfo($module->getViewfile());
+            $newname = $current['filename'] . '-' . $tpl . '.' . $current['extension'];
+            $viewfile = $module->getViewManager()->getViewByName($newname);
+            if (is_a($viewfile, ModuleViewFile::class)) {
+                $view = $module->buildViewWithViewfile($viewfile);
+                $module->setView($view);
+            }
+        }
+        return $module;
+    }
+
+    /**
+     * @return array
      */
     private function setupClasses()
     {
@@ -90,11 +112,12 @@ class SingleModuleRenderer implements RendererInterface
                 'module',
                 'single-module',
                 $this->module->properties->getSetting('slug'),
+                str_replace('mod-', '', $this->module->properties->getSetting('slug')),
                 $this->wrapperClassesFromOVerrides(),
                 $this->renderSettings->get('wrapperClass', ''),
                 'view-' . str_replace('.twig', '', $this->module->properties->viewfile)
             );
-
+ 
     }
 
     /**
@@ -173,6 +196,17 @@ class SingleModuleRenderer implements RendererInterface
     /**
      * @return string
      */
+    public function getModuleOutput()
+    {
+        if (!is_null($this->moduleOutput)) {
+            return $this->moduleOutput;
+        }
+        return $this->module->module();
+    }
+
+    /**
+     * @return string
+     */
     public function afterModule()
     {
         return sprintf('</%s>', $this->renderSettings['element']);
@@ -193,17 +227,6 @@ class SingleModuleRenderer implements RendererInterface
     {
         $this->classes = array_merge($this->classes, $classes);
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getModuleOutput()
-    {
-        if (!is_null($this->moduleOutput)){
-            return $this->moduleOutput;
-        }
-        return $this->module->module();
     }
 
 }

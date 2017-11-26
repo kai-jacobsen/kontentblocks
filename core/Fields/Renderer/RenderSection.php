@@ -4,6 +4,7 @@ namespace Kontentblocks\Fields\Renderer;
 
 
 use Kontentblocks\Fields\StandardFieldSection;
+use Kontentblocks\Templating\CoreView;
 
 /**
  * Class RenderSection
@@ -27,7 +28,7 @@ class RenderSection
      * @param StandardFieldSection $section
      * @param array $fields
      */
-    public function __construct( StandardFieldSection $section, $fields = array() )
+    public function __construct(StandardFieldSection $section, $fields = array())
     {
         $this->section = $section;
         $this->fields = $fields;
@@ -39,9 +40,22 @@ class RenderSection
     public function renderFields()
     {
         $out = '';
-        foreach ($this->fields as $field) {
-            $out .= $field->build();
+        $subtabs = apply_filters('kb.fields.subtabs', false);
+        if (!empty($this->fields) && $subtabs) {
+            $container = new CoreView(
+                'renderer/sections-subtabs.twig', array(
+                    'fields' => $this->fields,
+                    'section' => $this->section
+                )
+            );
+            $out .= $container->render();
+        } else {
+            foreach ($this->fields as $field) {
+                $out .= $field->build();
+            }
         }
+
+
         return $out;
     }
 

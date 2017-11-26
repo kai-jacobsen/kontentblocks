@@ -83,7 +83,7 @@ class AreaNode
     {
         $this->area->renderSettings = $this->renderSettings->export();
         $this->area->envVars = $this->environment;
-        $this->area->layout = $this->renderSettings['layout'];
+//        $this->area->layout = $this->renderSettings['layout'];
         Kontentblocks::getService('utility.jsontransport')->registerArea($this->area);
     }
 

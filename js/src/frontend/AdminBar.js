@@ -3,6 +3,7 @@ var Config = require('common/Config');
 module.exports = {
   _active: false,
   init: function () {
+    var that = this;
     jQuery('#wpadminbar').on('click', 'li.kb-edit-switch a', function (e) {
       e.preventDefault();
     });
@@ -11,6 +12,19 @@ module.exports = {
       var $a = jQuery('.kb-edit-switch a');
       this.control($a);
     }
+
+    var enterCounter = 0;
+
+    jQuery(window).keydown(function(e) {
+      var key = e.which;
+      if(key === 17) { // the enter key code
+        if (++enterCounter >= 3){
+          that.control();
+          enterCounter = 0;
+        }
+        setTimeout(function(){enterCounter = 0;}, 1000);
+      }
+    });
 
     // Heartbeat send data
     jQuery(document).on('heartbeat-send', function (e, data) {

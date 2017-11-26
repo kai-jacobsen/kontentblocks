@@ -2,12 +2,14 @@ var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
     this.defaults = {
-      sortable: false
+      sortable: false,
+      placeholder: 'Click here to add options'
     };
     this.settings = this.model.get('settings') || {};
     this.render();
   },
   render: function () {
+    var that = this;
     var settings = _.extend(this.defaults, this.settings);
     if (settings.sortable){
       this.$el.addClass('select-sortable');
@@ -16,6 +18,10 @@ module.exports = BaseView.extend({
       this.$el.removeClass('select-sortable');
       this.$("[data-kbselect2='true']").select2(settings);
     }
+    that.$('.select2-search__field').attr('placeholder', settings.placeholder);
+    this.$el.on('change', function () {
+      that.$('.select2-search__field').attr('placeholder', settings.placeholder);
+    })
   },
   rerender: function () {
     this.render();  

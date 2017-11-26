@@ -9,6 +9,16 @@
   margin-bottom: 20px;
   padding: $halfpadding;
   position: relative;
+
+  .add-modules {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    div {
+      color: #0073aa;
+    }
+  }
+
 }
 
 .kbsm--name {
@@ -46,11 +56,10 @@
   padding: $halfpadding;
 }
 
+.kb-submodule {
 
-.kb-submodule{
-
-  &.is-dirty{
-    .kbms-action--update .dashicons{
+  &.is-dirty {
+    .kbms-action--update .dashicons {
       color: red;
     }
   }

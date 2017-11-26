@@ -43,7 +43,7 @@ class ModuleView implements \JsonSerializable
     protected $engine;
 
     /**
-     * @var ModuleModel
+     * @var ModuleViewModel
      */
     protected $model;
 
@@ -75,7 +75,6 @@ class ModuleView implements \JsonSerializable
         if (!empty($path) && is_dir($path)) {
             Twig::setPath($path);
         }
-
     }
 
     /**
@@ -85,7 +84,7 @@ class ModuleView implements \JsonSerializable
     public function render($echo = false)
     {
 
-        $this->data = $this->setupData($this->model->export(), $this->addData);
+        $this->data = $this->setupData($this->model->getAll(), $this->addData);
         if ($echo) {
             $this->engine->display($this->tplFile->filename, $this->data);
         } else {

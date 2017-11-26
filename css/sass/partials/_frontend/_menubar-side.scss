@@ -9,6 +9,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
 
   .dashicons{
     font-family: 'dashicons';
+    color: #000;
   }
 }
 
@@ -35,6 +36,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
     border-top: 0;
     border: none !important;
     overflow: hidden;
+    position: absolute !important;
 
     .kb-nano{
       height: 100% !important;

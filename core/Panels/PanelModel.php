@@ -17,7 +17,6 @@ use Kontentblocks\Utils\Utilities;
 class PanelModel extends ValueObject implements SyncableInterface
 {
 
-    protected $originalData;
 
     /**
      * @var EntityInterface

@@ -34,6 +34,7 @@ module.exports = BaseView.extend({
       that.model.get('state').draft = !that.model.get('state').draft;
       that.$el.empty();
       that.render();
+      that.model.trigger('change:state', that.model.get('state'));
     });
   }
 

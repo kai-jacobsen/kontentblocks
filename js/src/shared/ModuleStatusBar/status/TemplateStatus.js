@@ -7,7 +7,6 @@ module.exports = BaseView.extend({
   initialize: function (options) {
     this.moduleView = options.parent;
     this.views = this.prepareViews();
-    this.openEditor();
   },
   events: {
     'dblclick': 'openEditor'
@@ -30,5 +29,4 @@ module.exports = BaseView.extend({
     }, this);
 
   }
-
 });

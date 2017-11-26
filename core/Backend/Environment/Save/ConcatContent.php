@@ -79,6 +79,9 @@ class ConcatContent
     public function save($postId)
     {
         remove_action('save_post', array($this, 'save'), 999);
+        add_filter('wp_save_post_revision_post_has_changed', function () {
+            return false;
+        }, 99999);
         global $post;
         if (is_a($post, '\WP_Post')) {
             $postArgs = array(
@@ -86,6 +89,17 @@ class ConcatContent
                 'post_content' => $this->content
             );
             wp_update_post($postArgs);
+
+            $rev = wp_get_post_revisions($post);
+            if (!empty($rev)) {
+                $last = current($rev);
+                $postArgs = array(
+                    'ID' => $last->ID,
+                    'post_content' => $this->content
+                );
+                wp_update_post($postArgs);
+            }
+
             do_action('kb.concat.save', $postArgs);
         }
 

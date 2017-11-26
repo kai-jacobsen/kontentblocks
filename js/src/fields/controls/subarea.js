@@ -14,8 +14,9 @@ module.exports = BaseView.extend({
     this.SubareaConroller.derender();
   },
   rerender: function () {
+    this.SubareaConroller.derender();
+    this.model.setData();
     this.render();
-
   },
   createController: function () {
     var that = this;

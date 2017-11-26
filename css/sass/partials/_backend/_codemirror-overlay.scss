@@ -10,16 +10,45 @@
   z-index: 500;
 }
 
-.kb-template-editor-inner {
-  overflow: hidden;
+.kb-template-editor-wrap{
+  height: 100%;
 }
+
+.kb-template-editor-inner {
+  align-items: stretch;
+  height: 100%;
+
+  .CodeMirror, #codemirror{
+    height: 450px;
+  }
+}
+
+
 
 .kb-template-editor-sidebar {
   width: 20%;
-  float: left;
+  background-color: $grey-100;
+
+  ul{
+
+    margin: 0;
+    padding: 0;
+
+    li{
+      background-color: $grey-100;
+      margin-bottom: 0;
+      padding: 6px 10px;
+      cursor: pointer;
+
+      &.kb-active-template{
+        background-color: #fff;
+      }
+    }
+
+  }
+
 }
 
 .kb-template-editor-content {
-  width: 80%;
-  float: right;
+  flex-grow: 1;
 }

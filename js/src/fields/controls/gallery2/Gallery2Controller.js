@@ -9,7 +9,6 @@ module.exports = Backbone.View.extend({
     this.subviews = {}; // image items
     this.ids = [];
     Logger.Debug.log('Fields: Gallery instance created and initialized');
-
     this.renderElements();
     this.initialSetup();
 
@@ -30,14 +29,18 @@ module.exports = Backbone.View.extend({
     // Add list element dynamically
     jQuery('<div class="kb-gallery2--item-list"></div>').appendTo(this.$el);
     // add button dynamically
-    jQuery('<a class="button button-primary kb-gallery2--js-add-images">' + KB.i18n.Refields.image.addButton + '</a>').appendTo(this.$el);
+    jQuery('<a class="button button-primary kb-gallery2--js-add-images">' + KB.i18n.Refields.gallery.addButton + '</a>').appendTo(this.$el);
   },
   setupElements: function () {
     this.$list = this.$('.kb-gallery2--item-list');
-    this.$list.sortable({revert: true, delay: 300, stop: _.bind(this.resortSelection, this)});
+    this.$list.sortable({revert: true, delay: 300, helper: 'clone', stop: _.bind(this.updateOrder, this)});
   },
   addImages: function () {
     this.openModal();
+  },
+  updateOrder: function () {
+    this.resortSelection();
+    this.model.set('value', this.ids);
   },
   frame: function () {
     if (this._frame) {
@@ -106,7 +109,6 @@ module.exports = Backbone.View.extend({
           that.selection.props.unset('orderby');
           that.initImages();
           that.resortSelection();
-
         });
       }
     }
@@ -132,6 +134,7 @@ module.exports = Backbone.View.extend({
       }
     });
     this.ids = parsedids;
+
   },
   resortSelection: function () {
     var models = [];
@@ -141,6 +144,7 @@ module.exports = Backbone.View.extend({
     }, this);
     this.selection.reset(models);
     this.setIds(ids);
+
   },
   remove: function (model) {
     var index = this.ids.indexOf(model.get('id'));
@@ -148,8 +152,12 @@ module.exports = Backbone.View.extend({
       this.ids.splice(index, 1);
     }
     var view = this.subviews[model.get('id')];
-    view.remove();
-    delete this.subviews[model.get('id')];
+
+    if (view && view.remove) {
+      view.remove();
+      delete this.subviews[model.get('id')];
+    }
+
   },
   getIdsFromInputs: function () {
     return this.$('.kb-gallery--image-holder input').map(function (idx, ele) {

@@ -94,6 +94,14 @@ var Ui = {
         $(this).find('.ui-tabs-nav').css('display', 'none');
       }
     });
+
+    var $subtabs = $('[data-kbfsubtabs]', $context).tabs({
+      activate: function(){
+        KB.Events.trigger('modal.recalibrate');
+      }
+    });
+
+
   },
   initToggleBoxes: function () {
     $('.kb-togglebox-header').on('click', function () {

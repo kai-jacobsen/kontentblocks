@@ -27,4 +27,6 @@ class ModuleViewModel extends ModuleModel
         parent::__construct($data, $module);
     }
 
+
+
 }

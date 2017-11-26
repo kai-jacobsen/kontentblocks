@@ -25,7 +25,9 @@ class ModuleRepository
     /**
      * @var array
      */
-    protected $modules = array();
+    protected $modules = [];
+
+    protected $modulesByType = [];
 
 
     /**
@@ -37,7 +39,7 @@ class ModuleRepository
         $this->environment = $environment;
         $this->setupModulesFromStorageIndex();
         $this->modulesByArea = $this->sortedByArea();
-
+        $this->modulesByType = $this->sortedByType();
     }
 
     /**
@@ -74,7 +76,7 @@ class ModuleRepository
      */
     public function sortedByArea()
     {
-        $sorted = array();
+        $sorted = [];
         if (is_array($this->modules)) {
             /** @var \Kontentblocks\Modules\Module $module */
             foreach ($this->modules as $module) {
@@ -84,6 +86,24 @@ class ModuleRepository
         }
     }
 
+    /**
+     * @return array
+     */
+    private function sortedByType()
+    {
+        $sorted = [];
+        if (is_array($this->modules)) {
+            /** @var \Kontentblocks\Modules\Module $module */
+            foreach ($this->modules as $module) {
+                $mslug = $module->properties->getSetting('id');
+                if (!isset($sorted[$mslug])) {
+                    $sorted[$mslug] = [];
+                }
+                $sorted[$mslug][] = $module;
+            }
+            return $sorted;
+        }
+    }
 
     /**
      * returns module definitions filtered by area

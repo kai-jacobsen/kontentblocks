@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Backend\Storage;
 
 use Kontentblocks\Backend\DataProvider\DataProvider;
@@ -31,7 +32,7 @@ class ModuleStorage implements \Countable
      * modules to handle
      * @var array
      */
-    protected $modules;
+    protected $modules = [];
 
 
     /**

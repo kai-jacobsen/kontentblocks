@@ -98,9 +98,11 @@ class ModuleViewFilesystem
                 if (is_string($filename) && $filename[0] !== '_') {
                     if ($node->getExtension() == 'twig') {
                         if ($node->getFilename() === 'preview.twig') {
-                            $this->preview = new ModuleViewFile($node, $root, $this->viewsMeta);
+                            $filenode = new \SplFileInfo($node->getRealPath());
+                            $this->preview = new ModuleViewFile($filenode, $root, $this->viewsMeta);
                         } else {
-                            $data[$node->getFilename()] = new ModuleViewFile($node, $root, $this->viewsMeta);
+                            $filenode = new \SplFileInfo($node->getRealPath());
+                            $data[$node->getFilename()] = new ModuleViewFile($filenode, $root, $this->viewsMeta);
                         }
                     }
                 }

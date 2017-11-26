@@ -14,6 +14,7 @@ module.exports = BaseView.extend({
     this.parentView = options.parent;
     this.listenTo(this.parentView, 'kb::module.input.changed', this.getDirty);
     this.listenTo(this.parentView, 'kb::module.data.updated', this.getClean);
+    this.listenTo(this.model, 'change:entityData', this.getDirty);
   },
   attributes: {
     "data-kbtooltip": I18n.getString('Modules.controls.be.tooltips.save')

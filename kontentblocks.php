@@ -3,7 +3,7 @@
   Plugin Name: Kontentblocks
   Plugin URI: https://github.com/kai-jacobsen/kontentblocks
   Description: Content modularization framework
-  Version: 0.9.0
+  Version: 0.9.4
   Author: Kai Jacobsen
   Author URI: https://github.com/kai-jacobsen/kontentblocks-plugin
   Text Domain: Kontentblocks
@@ -35,7 +35,6 @@ use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\CommonTwig\SimpleTwig;
 use Kontentblocks\Utils\JSONTransport;
 use Monolog\Handler\BrowserConsoleHandler;
-use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple;
@@ -48,11 +47,11 @@ use Pimple;
 Class Kontentblocks
 {
 
-    const VERSION = '0.9.0';
+    const VERSION = '0.9.4';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.16';
     const DEBUG = true;
-    const DEBUG_LOG = false;
+    const DEBUG_LOG = true;
     static $instance;
     static $ajaxhandler;
     public $services;
@@ -161,12 +160,17 @@ Class Kontentblocks
      */
     private function setupUtilities()
     {
+
+
         $this->services['utility.logger'] = function ($container) {
             $path = KB_PLUGIN_PATH . '/logs';
 
             $ajax = defined('DOING_AJAX') && DOING_AJAX;
             $logger = new Logger('kontentblocks');
-            if (is_user_logged_in() && apply_filters('kb.use.logger.console', false)) {
+            if (is_dir($path) && Kontentblocks::DEBUG_LOG) {
+                $logger->pushHandler(new StreamHandler($path . '/debug.log'));
+            }
+            if (is_user_logged_in() && (apply_filters('kb.use.logger.console', false))) {
                 if (!$ajax) {
                     $logger->pushHandler(new BrowserConsoleHandler());
                     $logger->addInfo(
@@ -174,11 +178,8 @@ Class Kontentblocks
                     );
                 }
 
-                if (is_dir($path) && Kontentblocks::DEBUG_LOG) {
-                    $logger->pushHandler(new StreamHandler($path . '/debug.log'));
-                }
             } else {
-                $logger->pushHandler(new NullHandler());
+//                $logger->pushHandler(new NullHandler());
             }
             return $logger;
         };
@@ -217,10 +218,7 @@ Class Kontentblocks
                 mkdir(get_stylesheet_directory() . '/module-templates', 0755, true);
             }
         }
-
-
         Capabilities::setup();
-
 
     }
 
@@ -458,3 +456,4 @@ add_action(
 register_activation_hook(__FILE__, array('\Kontentblocks\Kontentblocks', 'onActivation'));
 register_deactivation_hook(__FILE__, array('\Kontentblocks\Kontentblocks', 'onDeactivation'));
 register_uninstall_hook(__FILE__, array('\Kontentblocks\Kontentblocks', 'onUninstall'));
+

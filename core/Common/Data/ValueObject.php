@@ -3,6 +3,8 @@
 namespace Kontentblocks\Common\Data;
 
 use ArrayIterator;
+use Kontentblocks\Fields\Definitions\ReturnObjects\InterfaceFieldReturn;
+use Kontentblocks\Fields\Definitions\ReturnObjects\StandardFieldReturn;
 use Kontentblocks\Utils\Utilities;
 use Traversable;
 
@@ -19,10 +21,6 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess, \JsonSerializab
      */
     protected $data = [];
 
-    /**
-     * @var array
-     */
-    protected $originalData = [];
 
     /**
      * ValueObject constructor.
@@ -31,7 +29,6 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess, \JsonSerializab
     public function __construct($data = [])
     {
         $this->set($data);
-        $this->originalData = $data;
     }
 
     /**
@@ -47,9 +44,16 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess, \JsonSerializab
                 }
                 $this->data[$key] = $v;
             }
-            $this->originalData = Utilities::arrayMergeRecursive($data, $this->originalData);
         }
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAll()
+    {
+        return $this->data;
     }
 
     /**
@@ -78,21 +82,35 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess, \JsonSerializab
      */
     public function get($key, $default = null, $group = null)
     {
+        $value = $default;
+
+        $isPrivate = false;
+        if (is_string($key) && !empty($key)) {
+            if ($key[0] === '_') {
+                $isPrivate = true;
+                $key = ltrim($key, '_');
+            }
+        }
+
         if (!is_null($group)) {
             if (array_key_exists($group, $this->data)) {
                 if (!empty($this->data[$group][$key])) {
-                    return $this->data[$group][$key];
+                    $value = $this->data[$group][$key];
                 } else {
-                    return $default;
+                    $value = $default;
                 }
             }
         }
 
         if (isset($this->data[$key])) {
-            return $this->data[$key];
+            $value = $this->data[$key];
         }
 
-        return $default;
+        if (is_a($value, InterfaceFieldReturn::class) && $isPrivate) {
+            $value = $value->getValue();
+        }
+
+        return $value;
     }
 
     /**
@@ -183,7 +201,27 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess, \JsonSerializab
      */
     public function getOriginalData()
     {
-        return $this->originalData;
+        return $this->export();
+    }
+
+    /**
+     * @return array
+     */
+    public function export()
+    {
+        $data = $this->data;
+        $exportData = [];
+        foreach ($data as $key => $value) {
+            if (!empty($key) && $key[0] !== '_') {
+                $exportData[$key] = $value;
+            }
+
+            if (is_object($value) && is_a($value, InterfaceFieldReturn::class)) {
+                $exportData[$key] = $value->getValue();
+            }
+        }
+
+        return $exportData;
     }
 
     /**
@@ -203,26 +241,11 @@ class ValueObject implements ValueObjectInterface, \ArrayAccess, \JsonSerializab
     }
 
     /**
-     * @return array
-     */
-    public function export()
-    {
-        $data = $this->data;
-        foreach ($data as $key => $value) {
-            if ($key[0] === '_') {
-                unset($data[$key]);
-            }
-        }
-        return $data;
-    }
-
-    /**
      * @return $this
      */
     public function reset()
     {
         $this->data = [];
-        $this->originalData = [];
         return $this;
     }
 

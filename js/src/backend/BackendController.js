@@ -14,6 +14,7 @@ var AreasCollection = require('backend/Collections/AreasCollection');
 var Payload = require('common/Payload');
 var Index = require('common/Index');
 var UI = require('common/UI');
+var Autosave = require('common/Autosave');
 var Config = require('common/Config');
 var ModuleView = require('backend/Views/ModuleView');
 var ModuleModel = require('backend/Models/ModuleModel');
@@ -70,7 +71,7 @@ KB.Contexts = new Backbone.Collection([], {
 KB.ObjectProxy = new Backbone.Collection();
 
 KB.ChangeObserver = new ChangeObserver();
-
+// KB.Autosave = new Autosave();
 
 /*
  * Init function
@@ -101,6 +102,7 @@ KB.App = (function () {
     if (Config.getLayoutMode() === 'default-tabs') {
       new TabbedEditScreen();
     }
+
 
     KB.Index = Index;
 
@@ -178,12 +180,12 @@ KB.App = (function () {
    * @returns void
    */
   function createAreaViews(area) {
-    if (area.get('public')){
+    if (area.get('public')) {
       KB.Views.Areas.add(area.get('id'), new AreaView({
         model: area,
         el: '#' + area.get('id') + '-container'
       }));
-    } else{
+    } else {
       KB.Views.Areas.add(area.get('id'), new SystemAreaView({
         model: area,
         el: '#' + area.get('id') + '-container'
@@ -225,6 +227,7 @@ KB.App = (function () {
 
 
 jQuery(document).ready(function () {
+
 
 
 // get started

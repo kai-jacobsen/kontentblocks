@@ -26,26 +26,23 @@ module.exports = Backbone.View.extend({
   initialize: function () {
     var that = this;
     this.FieldModels = new ModalFieldCollection();
+
     // add form skeleton to modal
     this.$el.append(tplModuleEditForm({
       model: {},
       i18n: KB.i18n.jsFrontend
     }));
+
     this.history = new History({modal: this});
 
     // cache elements
     this.LoadingAnimation = new LoadingAnimation({
-      el: this.$form
+      el: this.$el
     });
 
     this.setupElements();
     this.bindHandlers();
 
-
-    // attach event listeners on observable input fields
-    jQuery(document).on('change', '.kb-observe', function () {
-      that.serialize(false, true);
-    });
 
     return this;
   },
@@ -54,8 +51,9 @@ module.exports = Backbone.View.extend({
     var that = this;
     // use this event to refresh the modal on demand
     this.listenTo(KB.Events, 'modal.recalibrate', this.recalibrate);
-    // use this event to tigger preview
+    // use this event to trigger preview
     this.listenTo(KB.Events, 'modal.preview', this.preview);
+    // use this event to trigger update
     this.listenTo(KB.Events, 'modal.update', this.update);
 
     // Attach resize event handler
@@ -78,7 +76,6 @@ module.exports = Backbone.View.extend({
     this.$draft = jQuery('.kb-modal__draft-notice', this.$el);
   },
   events: {
-    'keyup': 'delayInput',
     'click .close-controls': 'destroy',
     'click .kb-save-form': 'update',
     'click .kb-preview-form': 'preview',
@@ -91,6 +88,7 @@ module.exports = Backbone.View.extend({
    * else it's a noop
    * @param ModuleView Backbone View
    * @param force
+   * @param keepinhistory
    * @returns {KB.Backbone.EditModalModules}
    */
   openView: function (ModuleView, force, keepinhistory) {
@@ -115,10 +113,6 @@ module.exports = Backbone.View.extend({
   },
 
   setupModuleId: function () {
-    // var parentObject = this.model.get('parentObject');
-    // if (this.model.get('globalModule') && parentObject) {
-    //   return parentObject.post_name;
-    // }
     return this.model.get('mid');
   },
   /**
@@ -130,19 +124,19 @@ module.exports = Backbone.View.extend({
     this.listenTo(this.model, 'data.updated', this.preview);
     this.listenTo(this.model, 'remove', this.destroy);
   },
-  /**
-   * reload the modal
-   */
-  reload: function () {
-    this.render(true);
-  },
+
   detach: function () {
     // reset listeners and ModuleView
     this.FieldModels.reset();
     this.stopListening();
     KB.Events.trigger('modal.close', this);
   },
-
+  /**
+   * reload the modal
+   */
+  reload: function () {
+    this.render(true);
+  },
   /**
    * Destroy and remove the modal
    */
@@ -155,8 +149,8 @@ module.exports = Backbone.View.extend({
       tinymce.remove('#' + item.id);
     });
     that.ModuleView = null;
-    that.unbind();
     that.initialized = false;
+    that.unbind();
     that.$el.detach();
 
     if (KB.Sidebar.visible) {
@@ -186,13 +180,14 @@ module.exports = Backbone.View.extend({
     // init draggable container and store position in config var
     if (this.mode === 'body') {
       this.$el.css('position', 'fixed').draggable({
-        handle: 'h2',
+        handle: '._controls-title',
         containment: 'window',
+        helper: 'clone',
         stop: function (eve, ui) {
           // fit modal to window in size and position
           that.recalibrate(ui.position);
         }
-      });
+      }).resizable();
     }
   },
 
@@ -209,7 +204,7 @@ module.exports = Backbone.View.extend({
    */
   preview: function (options) {
     if (options && options.hasOwnProperty('silent')) {
-      if (options.silent == true) {
+      if (options.silent === true) {
         return;
       }
     }
@@ -225,7 +220,6 @@ module.exports = Backbone.View.extend({
   },
   /**
    * Main render method of the modal content
-   * @TODO seperate concerns
    */
   render: function (reload) {
     var that = this,
@@ -254,9 +248,6 @@ module.exports = Backbone.View.extend({
         that.LoadingAnimation.show();
       },
       success: function (res) {
-
-        // indicate working state
-        //that.$el.fadeTo(300, 0.1);
         // clear form content
         that.$inner.empty();
         // clear fields on ModuleView
@@ -277,7 +268,6 @@ module.exports = Backbone.View.extend({
         jQuery(document).on('click', function (event) {
           var id, mode,
             target = $$(event.target);
-
           if (target.hasClass('wp-switch-editor')) {
             id = target.attr('data-wp-editor-id');
             mode = target.hasClass('switch-tmce') ? 'tmce' : 'html';
@@ -285,26 +275,20 @@ module.exports = Backbone.View.extend({
           }
         });
 
-        // @TODO Move
-        // ----------------------------------------------
-        // (Re)Init UI widgets
-        // TODO find better method for this
+
         if (res.data.json) {
           KB.payload = _.extend(KB.payload, res.data.json);
-          // var parsed = KB.Payload.parseAdditionalJSON(res.data.json);
-
-
           _.defer(function () {
             if (res.data.json.Fields) {
-              that.FieldModels.reset();
               that.FieldModels.add(_.toArray(res.data.json.Fields));
             }
           });
-
         }
+        // (Re)Init UI widgets
         Ui.initTabs();
         Ui.initToggleBoxes();
         TinyMCE.addEditor(that.$form);
+
         // -----------------------------------------------
         Logger.User.info('Frontend modal done.');
 
@@ -317,16 +301,9 @@ module.exports = Backbone.View.extend({
         }
         Logger.User.info('Frontend modal.reload triggered.');
 
-        // delayed fields update
-        // keep, but isn't used
-        //setTimeout(function () {
-        //  KB.Fields.trigger('frontUpdate', that.ModuleView);
-        //}, 500);
-
         // delayed recalibration
         setTimeout(function () {
           that.$el.show();
-          that.recalibrate();
           that.LoadingAnimation.hide();
           that.ModuleView.renderStatusBar(that.$el);
           that.$('.kb-template-select').select2({
@@ -340,6 +317,7 @@ module.exports = Backbone.View.extend({
               );
             }
           });
+          that.recalibrate();
         }, 550);
       },
       error: function () {
@@ -371,7 +349,6 @@ module.exports = Backbone.View.extend({
     // calculate if the modal contents overlap the window height
     // i.e. if part of the modal is out of view
     winDiff = (conH + position.top) - winH;
-
     // if the modal overlaps the height of the window
     // calculate possible height and set
     // nanoScroller needs an re-init after every change
@@ -390,6 +367,8 @@ module.exports = Backbone.View.extend({
     // TODO maybe check if admin bar is around
     if (position.top < 32) {
       this.$el.css('top', '32px');
+      this.$el.css('right', '20px');
+
     }
 
     //if (KB.Sidebar.visible) {
@@ -422,41 +401,51 @@ module.exports = Backbone.View.extend({
    * @param showNotice show update notice or don't
    */
   serialize: function (mode, showNotice) {
-
-    var that = this, mdata,
+    var that = this, moddata,
       save = mode || false,
-      notice = (showNotice !== false),
-      height;
-
-
+      notice = (showNotice !== false);
     tinymce.triggerSave();
-    var moddata = this.formdataForId(this.realmid);
 
+    moddata = this.formdataForId(this.realmid);
     this.model.set('entityData', moddata);
-    this.LoadingAnimation.show(0.5);
+    this.LoadingAnimation.show();
+    var ViewAnimation = new LoadingAnimation({
+      el: this.ModuleView.$el
+    });
+    ViewAnimation.show();
+
     this.model.sync(save, this).done(function (res, b, c) {
       that.moduleUpdated(res, b, c, save, notice);
+      ViewAnimation.remove();
     });
   },
-  // serialize success callback
+  /**
+   * This will update the actual DOM element of the edited module
+   * @param res
+   * @param b
+   * @param c
+   * @param save
+   * @param notice
+   */
   moduleUpdated: function (res, b, c, save, notice) {
-    var that = this, height;
-    if (res.data.json && res.data.json.Fields) {
-      KB.FieldControls.updateModels(res.data.json.Fields);
-    }
+    var that = this;
 
-    // cache module container height
-    //height = that.ModuleView.$el.height();
     that.model.trigger('modal.serialize.before');
+
+
     // change the container class if viewfile changed
     if (that.updateViewClassTo !== false) {
       that.updateContainerClass(that.updateViewClassTo);
     }
 
-    that.ModuleView.trigger('modal.before.nodeupdate');
     // replace module html with new html
+    that.ModuleView.trigger('modal.before.nodeupdate');
     that.ModuleView.$el.html(res.data.html);
     that.ModuleView.trigger('modal.after.nodeupdate');
+
+    if (res.data.json && res.data.json.Fields) {
+      KB.FieldControls.updateModels(res.data.json.Fields);
+    }
 
 
     that.model.set('entityData', res.data.newModuleData);
@@ -467,21 +456,14 @@ module.exports = Backbone.View.extend({
     jQuery(document).trigger('kb.module-update', that.model.get('settings').id, that.ModuleView);
     jQuery(document).trigger('kb.refresh');
     that.ModuleView.delegateEvents();
-    //that.ModuleView.trigger('kb:frontend::viewUpdated');
-    //KB.Events.trigger('KB::ajax-update');
 
-    //KB.trigger('kb:frontendModalUpdated');
     // (re)attach inline editors and handle module controls
     // delay action to be safe
-    setTimeout(function () {
-      //jQuery('.editable', that.ModuleView.$el).each(function (i, el) {
-      //  KB.IEdit.Text(el);
-      //});
-
+    _.defer(function () {
       that.ModuleView.render();
       that.model.trigger('modal.serialize');
-    }, 400);
-
+      that.recalibrate();
+    });
     //
     if (save) {
       if (notice) {
@@ -497,7 +479,6 @@ module.exports = Backbone.View.extend({
     }
 
     that.ModuleView.trigger('kb.view.module.HTMLChanged');
-
     that.LoadingAnimation.hide();
   },
   /**
@@ -505,12 +486,10 @@ module.exports = Backbone.View.extend({
    * @param e $ event
    */
   viewfileChange: function (e) {
-
     this.updateViewClassTo = {
       current: this.ModuleView.model.get('viewfile'),
       target: e.currentTarget.value
     };
-
     this.model.set('viewfile', e.currentTarget.value, {silent: true});
     this.preview();
     this.reload();
@@ -542,12 +521,8 @@ module.exports = Backbone.View.extend({
       that.serialize(false, false);
     }, 750);
   },
-// TODO handling events changed in TinyMce 4 to 'on'
   attachEditorEvents: function (ed) {
-    var that = this;
-    ed.onKeyUp.add(function () {
-      that.delayInput();
-    });
+
   },
 
 
@@ -584,15 +559,12 @@ module.exports = Backbone.View.extend({
     return 'view-' + str.replace('.twig', '');
   },
   switchDraftOff: function () {
-
     var json = this.model.toJSON();
     var that = this;
 
     if (!this.model.get('state').draft) {
       return;
     }
-
-
     // get the form
     Ajax.send({
       action: 'undraftModule',
@@ -610,13 +582,10 @@ module.exports = Backbone.View.extend({
     if (!mid) {
       return null;
     }
-    //formdata = this.$form.serializeJSON();
-    var asd = this.$form.serializeJSON();
-
-    if (asd[mid]) {
-      return asd[mid];
+    formdata = this.$form.serializeJSON();
+    if (formdata[mid]) {
+      return _.clone(formdata[mid]);
     }
-
     return null;
   }
 });

@@ -40,7 +40,7 @@ class ModuleFieldTemplateController
         $key = null;
         $args = wp_parse_args([], [
             'label' => strtoupper($name),
-            'desscription' => '',
+            'description' => '',
             'section' => 'generic',
             'key' => null
         ]);
@@ -96,7 +96,7 @@ class ModuleFieldTemplateController
         }
 
         if (isset($arguments[2]) && is_string($arguments[2])) {
-            $args['desscription'] = $arguments[2];
+            $args['description'] = $arguments[2];
         }
 
         if (isset($arguments[1]) && is_array($arguments[1])) {
