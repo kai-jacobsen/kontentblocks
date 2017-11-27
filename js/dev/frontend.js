@@ -411,12 +411,17 @@ module.exports = Backbone.View.extend({
       that.currentView = viewfile;
       that.currentView.select();
     }, this);
+  },
+  getCurrentView: function(){
+    return this.currentView;
   }
+
 });
 },{"./Controls":10,"./ViewsList":12,"common/Ajax":14,"common/Config":16,"templates/backend/template-editor/wrap.hbs":157}],10:[function(require,module,exports){
 var Update = require('backend/Views/TemplateEditor/controls/UpdateControl');
 module.exports = Backbone.View.extend({
   tagName: 'ul',
+  className: 'kb-tpl-editor-controls',
   initialize: function (options) {
     this.$container = options.$container;
     this.controller = options.controller;
@@ -427,7 +432,7 @@ module.exports = Backbone.View.extend({
     return this;
   },
   createControls: function () {
-    this.$el.append(Update.render());
+    this.$el.append(new Update({controller: this.controller, controls:this}).render());
   }
 
 });
@@ -489,6 +494,9 @@ module.exports = Backbone.View.extend({
 
 });
 },{"backend/Views/TemplateEditor/ListItem":11}],13:[function(require,module,exports){
+var Ajax = require('common/Ajax');
+var Config = require('common/Config');
+
 module.exports = Backbone.View.extend({
   tagName: 'li',
   initialize: function (options) {
@@ -496,13 +504,26 @@ module.exports = Backbone.View.extend({
     this.controls = options.controls
   },
   events: {
-    'click': 'loadView'
+    'click': 'update'
   },
   render: function () {
-    return this.$el;
+    return this.$el.html('update');
+  },
+  update: function(){
+    var view = this.controller.getCurrentView();
+    Ajax.send({
+      action: 'updateModuleViewTemplate',
+      _ajax_nonce: Config.getNonce('update'),
+      view: view.model.toJSON(),
+      tplstring: this.controller.editor.getValue(),
+      module: this.controller.moduleModel.toJSON()
+    }, this.success, this);
+  },
+  success: function(res){
+    console.log(res);
   }
 });
-},{}],14:[function(require,module,exports){
+},{"common/Ajax":14,"common/Config":16}],14:[function(require,module,exports){
 //KB.Ajax
 var Notice = require('common/Notice');
 module.exports =
@@ -9345,7 +9366,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     var stack1;
 
   return "<div class=\"kb-template-edditor--file-item\">\n    "
-    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.filename : stack1), depth0))
+    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.name : stack1), depth0))
     + "\n</div>";
 },"useData":true});
 

@@ -21,9 +21,10 @@ class GetTemplateString extends AbstractAjaxAction
     protected static function action(Request $request)
     {
         $file = $request->request->get('viewfile');
-        $path = $file['rootPath'] . $file['filename'];
+        $path = $file['rootPath'] . $file['subPath'] . $file['filename'];
         $data = file_get_contents($path);
-        wp_send_json($data);
+
+        new AjaxSuccessResponse('Template String', $data);
     }
 
 

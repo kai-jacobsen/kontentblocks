@@ -64,12 +64,12 @@ module.exports = Backbone.View.extend({
       action: 'getTemplateString',
       _ajax_nonce: Config.getNonce('read')
     }, function (res) {
-      that.editor.setValue(res);
+      that.editor.setValue(res.data);
       that.currentView = viewfile;
       that.currentView.select();
     }, this);
   },
-  getCurrentView: function(){
+  getCurrentView: function () {
     return this.currentView;
   }
 

@@ -141,6 +141,7 @@ class ScreenContext
      */
     public function renderAreas()
     {
+
         foreach ($this->areas as $area) {
 
             if (is_user_logged_in()) {

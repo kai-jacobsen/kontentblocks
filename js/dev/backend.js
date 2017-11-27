@@ -2007,12 +2007,12 @@ module.exports = Backbone.View.extend({
       action: 'getTemplateString',
       _ajax_nonce: Config.getNonce('read')
     }, function (res) {
-      that.editor.setValue(res);
+      that.editor.setValue(res.data);
       that.currentView = viewfile;
       that.currentView.select();
     }, this);
   },
-  getCurrentView: function(){
+  getCurrentView: function () {
     return this.currentView;
   }
 
@@ -8273,7 +8273,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     var stack1;
 
   return "<div class=\"kb-template-edditor--file-item\">\n    "
-    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.filename : stack1), depth0))
+    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.name : stack1), depth0))
     + "\n</div>";
 },"useData":true});
 
