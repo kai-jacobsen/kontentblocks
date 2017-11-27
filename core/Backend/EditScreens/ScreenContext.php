@@ -110,7 +110,7 @@ class ScreenContext
             //render actual areas
             $out .= $this->renderAreas();
             //close wrapper markup
-            $out .=$this->closeContext();
+            $out .= $this->closeContext();
         } else {
             // call the hook anyway
             do_action("context_box_{$this->id}", $this->id, $this->environment, $out);
@@ -141,6 +141,7 @@ class ScreenContext
      */
     public function renderAreas()
     {
+        $out = '';
         foreach ($this->areas as $area) {
 
             if (is_user_logged_in()) {
@@ -167,8 +168,9 @@ class ScreenContext
 //            //render area footer
 //            $areaHTML->footer();
 
-            return $areaHTML->build();
+            $out .= $areaHTML->build();
         }
+        return $out;
     }
 
     /**
