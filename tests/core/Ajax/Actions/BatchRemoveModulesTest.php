@@ -51,14 +51,14 @@ class BatchRemoveModulesTest extends \WP_UnitTestCase
 
         $mod1 = new ModuleWorkshop(
             new PostEnvironment($post->ID, $post), array(
-                'class' => 'ModuleText',
+                'class' => 'ModuleKitas',
                 'area' => 'dump'
             )
         );
 
         $mod2 = new ModuleWorkshop(
             new PostEnvironment($post->ID, $post), array(
-                'class' => 'ModuleText',
+                'class' => 'ModuleKitas',
                 'area' => 'dump'
             )
         );
