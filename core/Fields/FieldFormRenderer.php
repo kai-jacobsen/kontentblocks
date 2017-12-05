@@ -211,7 +211,7 @@ class FieldFormRenderer
         // the current context
         // Checkboxes are an actual use case, checked boxes will render hidden to preserve the value during save
         if (!$this->field->isVisible()) {
-            if ($this->field->getSetting('renderHidden') && method_exists($this->field, 'renderHidden')) {
+            if ($this->field->getSetting('renderHidden')) {
                 return $this->field->renderHidden($this);
             }
             // Full markup

@@ -31,7 +31,9 @@ class RenderSection
     public function __construct(StandardFieldSection $section, $fields = array())
     {
         $this->section = $section;
-        $this->fields = $fields;
+        if (!empty($fields)) {
+            $this->fields = $fields;
+        }
     }
 
     /**
@@ -55,8 +57,8 @@ class RenderSection
             }
         }
 
-
         return $out;
     }
+
 
 }
