@@ -5,7 +5,7 @@ namespace Kontentblocks\Fields\Renderer;
 /**
  * Alternate way to organize fields
  * Instantiated by:
- * @see Kontentblocks\Fields\FieldManager::render()
+ * @see \Kontentblocks\Fields\FieldManager::render()
  *
  * @package Fields
  * @since 0.1.0

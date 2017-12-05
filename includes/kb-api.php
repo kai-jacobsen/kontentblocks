@@ -147,6 +147,11 @@ function renderContext($context, $postId, $areaSettings = array(), $moduleSettin
     global $post;
     $postId = (null === $postId) ? $post->ID : $postId;
     $Environment = Utilities::getPostEnvironment($postId);
+
+    if (is_null($Environment)){
+        return [];
+    }
+
     $areas = $Environment->getAreasForContext($context);
     $contextsOrder = $Environment->getDataProvider()->get('_kbcontexts');
     if (is_array($contextsOrder) && !empty($contextsOrder)) {
