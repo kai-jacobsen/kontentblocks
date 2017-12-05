@@ -37,7 +37,7 @@ class DynamicAreas
         if (is_admin()) {
             add_action('admin_menu', array($this, 'addAdminMenu'), 19);
             add_action('edit_form_after_title', array($this, 'addForm'), 1);
-            add_action('save_post', array($this, 'save'));
+            add_action('save_post', array($this, 'save'),10,2);
             add_action('trash_kb-dyar', array($this, 'flushCache'));
             add_action('wp_insert_post_data', array($this, 'postData'), 10, 2);
             add_filter('post_updated_messages', array($this, 'postTypeMessages'));
@@ -125,6 +125,7 @@ class DynamicAreas
         $registry = Kontentblocks::getService('registry.areas');
         $areaDef = $registry->getArea($area['id']);
 
+
         Kontentblocks::getService('utility.jsontransport')->registerArea($areaDef);
 
         print "<div class='postbox dynamic-area-wrap'>";
@@ -137,7 +138,7 @@ class DynamicAreas
         echo Utilities::getBaseIdField($environment->getStorage()->getIndex());
         echo "<input type='hidden' name='blog_id' value='{$blogId}' >";
         $areaHTML = new AreaBackendRenderer($areaDef, $environment);
-        $areaHTML->build();
+        echo $areaHTML->build();
 
         print "</div></div>";
 
@@ -241,7 +242,7 @@ class DynamicAreas
      * @since 0.1.0
      * @return void
      */
-    public function save($postId)
+    public function save($postId, $postObj)
     {
 
         if (!$this->auth($postId)) {
@@ -250,7 +251,7 @@ class DynamicAreas
 
 
         $environment = Utilities::getPostEnvironment($postId);
-        $environment->save();
+        $environment->save($postId, $postObj);
 
         $this->saveArea($postId);
         $this->flushCache();

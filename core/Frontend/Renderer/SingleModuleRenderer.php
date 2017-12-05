@@ -102,7 +102,7 @@ class SingleModuleRenderer implements RendererInterface
     }
 
     /**
-     * @return string
+     * @return array
      */
     private function setupClasses()
     {
@@ -112,11 +112,12 @@ class SingleModuleRenderer implements RendererInterface
                 'module',
                 'single-module',
                 $this->module->properties->getSetting('slug'),
+                str_replace('mod-', '', $this->module->properties->getSetting('slug')),
                 $this->wrapperClassesFromOVerrides(),
                 $this->renderSettings->get('wrapperClass', ''),
                 'view-' . str_replace('.twig', '', $this->module->properties->viewfile)
             );
-
+ 
     }
 
     /**
