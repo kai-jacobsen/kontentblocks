@@ -130,9 +130,8 @@ abstract class UserPanel extends AbstractPanel
         }
         Utilities::hiddenEditor();
         $this->fields->setFieldRenderClass('\Kontentblocks\Fields\Renderer\FieldRendererWP');
-        $this->renderer = $this->fields->getFieldRenderClass();
         $this->fields->setFormRenderClass('\Kontentblocks\Fields\FieldFormRendererWP');
-
+        $this->renderer = $this->fields->getFieldRenderClass();
         echo "<table class='form-table'><tbody>";
         $this->preRender();
         echo $this->renderFields();
@@ -144,7 +143,6 @@ abstract class UserPanel extends AbstractPanel
      */
     public function renderFields()
     {
-
         return $this->renderer->render();
     }
 

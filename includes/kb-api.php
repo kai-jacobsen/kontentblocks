@@ -2,6 +2,7 @@
 
 namespace Kontentblocks;
 
+use function foo\func;
 use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayoutsRegistry;
 use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Data\ValueObject;
@@ -46,7 +47,6 @@ function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $mo
 {
     global $post;
     $postId = (is_null($post_id) && !is_null($post)) ? $post->ID : $post_id;
-
 
 
     if (is_null($postId)) {
@@ -125,7 +125,6 @@ function isActiveArea($areaId, $postId = null)
 function renderSideAreas($postId, $areaSettings = array(), $moduleSettings = array())
 {
     global $post;
-
     $post_id = (null === $postId) ? $post->ID : $postId;
     $areas = get_post_meta($post_id, 'active_sidebar_areas', true);
     if (!empty($areas)) {
@@ -141,6 +140,7 @@ function renderSideAreas($postId, $areaSettings = array(), $moduleSettings = arr
  * @param $postId
  * @param array $areaSettings
  * @param array $moduleSettings
+ * @return array
  */
 function renderContext($context, $postId, $areaSettings = array(), $moduleSettings = array())
 {
@@ -148,25 +148,11 @@ function renderContext($context, $postId, $areaSettings = array(), $moduleSettin
     $postId = (null === $postId) ? $post->ID : $postId;
     $Environment = Utilities::getPostEnvironment($postId);
 
-    if (is_null($Environment)){
+    if (is_null($Environment)) {
         return [];
     }
 
-    $areas = $Environment->getAreasForContext($context);
-    $contextsOrder = $Environment->getDataProvider()->get('_kbcontexts');
-    if (is_array($contextsOrder) && !empty($contextsOrder)) {
-        foreach ($contextsOrder as $context => $areaIds) {
-            if (is_array($areaIds)) {
-                foreach (array_keys($areaIds) as $areaId) {
-                    if (isset($areas[$areaId])) {
-                        $tmp = $areas[$areaId];
-                        unset($areas[$areaId]);
-                        $areas[$areaId] = $tmp;
-                    }
-                }
-            }
-        }
-    }
+    $areas = areasForContext($postId, $context);
 
     if (!empty($areas)) {
         foreach (array_keys($areas) as $area) {
@@ -186,6 +172,32 @@ function renderContext($context, $postId, $areaSettings = array(), $moduleSettin
         }
     }
 
+}
+
+/**
+ * @param $postId
+ * @param $context
+ * @return mixed
+ */
+function areasForContext($postId, $context)
+{
+    $environment = Utilities::getPostEnvironment($postId);
+    $areas = $environment->getAreasForContext($context);
+    $contextsOrder = $environment->getDataProvider()->get('_kbcontexts');
+    if (is_array($contextsOrder) && !empty($contextsOrder)) {
+        foreach ($contextsOrder as $context => $areaIds) {
+            if (is_array($areaIds)) {
+                foreach (array_keys($areaIds) as $areaId) {
+                    if (isset($areas[$areaId])) {
+                        $tmp = $areas[$areaId];
+                        unset($areas[$areaId]);
+                        $areas[$areaId] = $tmp;
+                    }
+                }
+            }
+        }
+    }
+    return $areas;
 }
 
 

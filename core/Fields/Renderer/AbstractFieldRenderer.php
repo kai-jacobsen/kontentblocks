@@ -60,9 +60,18 @@ abstract class AbstractFieldRenderer implements InterfaceFieldRenderer
                 },
                 $section->flattenFields()
             );
-            $arr[] = new RenderSection($section, $fields);
+            $arr[] = $this->createRenderSection($section,$fields);
         }
         return $arr;
+    }
+
+    /**
+     * @param $section
+     * @param $fields
+     * @return RenderSection
+     */
+    protected function createRenderSection($section,$fields){
+        return new RenderSection($section, $fields);
     }
 
     /**

@@ -37,7 +37,7 @@ class FieldRendererWP extends AbstractFieldRenderer
 
     /**
      * Wrapper to output methods
-     * @return mixed|void
+     * @return mixed
      */
     public function render( )
     {
@@ -49,8 +49,16 @@ class FieldRendererWP extends AbstractFieldRenderer
                 'structure' => $this->renderSections
             )
         );
-
         return $view->render();
+    }
+
+    /**
+     * @param $section
+     * @param $fields
+     * @return RenderSection
+     */
+    protected function createRenderSection($section,$fields){
+        return new SimpleRenderSection($section, $fields);
     }
 
     public function getIdString()
