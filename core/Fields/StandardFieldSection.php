@@ -182,7 +182,6 @@ class StandardFieldSection implements ExportableFieldInterface
             }
 
             $this->collectToTabs($field);
-
             $field->setData($this->getFielddata($field));
             $this->increaseVisibleFields();
             $this->orderFields();
@@ -290,18 +289,27 @@ class StandardFieldSection implements ExportableFieldInterface
      * @param Field $field
      * @return $this
      */
-    private function collectToTabs(Field $field)
+    private function collectToTabs(ExportableFieldInterface $field)
     {
-        $tabArg = $field->getArg('tab', null);
 
-        if (is_null($tabArg)) {
-            $group = $this->getTabGroup($field->getArg('label'), $field->getKey());
-        } else {
-            $group = $this->getTabGroup($tabArg);
+        $fields = [$field];
+        if (is_a($field, FieldSubGroup::class)){
+            $fields = $field->getFields();
         }
-        $group->addField($field);
 
-        $field->setGroup($group);
+        foreach ($fields as $field){
+
+            $tabArg = $field->getArg('tab', null);
+
+            if (is_null($tabArg)) {
+                $group = $this->getTabGroup($field->getArg('label'), $field->getKey());
+            } else {
+                $group = $this->getTabGroup($tabArg);
+            }
+            $group->addField($field);
+            $field->setGroup($group);
+
+        }
 
     }
 
@@ -331,7 +339,7 @@ class StandardFieldSection implements ExportableFieldInterface
      * @param $field
      * @return mixed
      */
-    private function getFielddata(Field $field)
+    private function getFielddata(ExportableFieldInterface $field)
     {
         $data = $this->getEntityModel();
         if (isset($data[$field->getKey()])) {

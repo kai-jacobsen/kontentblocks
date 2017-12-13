@@ -179,8 +179,10 @@ function renderContext($context, $postId, $areaSettings = array(), $moduleSettin
  * @param $context
  * @return mixed
  */
-function areasForContext($postId, $context)
+function areasForContext($postId = null, $context)
 {
+    global $post;
+    $postId = (null === $postId) ? $post->ID : $postId;
     $environment = Utilities::getPostEnvironment($postId);
     $areas = $environment->getAreasForContext($context);
     $contextsOrder = $environment->getDataProvider()->get('_kbcontexts');
