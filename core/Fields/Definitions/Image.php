@@ -23,6 +23,12 @@ Class Image extends Field
     );
 
 
+    /**
+     * Before the data is injected into the field/form twig template
+     * Used to further manipulate or extend the data for the form
+     * @param array $data
+     * @return array
+     */
     public function prepareTemplateData($data)
     {
 

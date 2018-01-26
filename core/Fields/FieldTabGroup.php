@@ -47,7 +47,7 @@ class FieldTabGroup
      */
     public function addField(Field $field)
     {
-        $this->fields[] = $field;
+        $this->fields[$field->createUID()] = $field;
     }
 
     /**
