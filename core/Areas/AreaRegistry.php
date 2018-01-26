@@ -277,7 +277,7 @@ class AreaRegistry
     public function connect($classname, $args)
     {
         $setting = $args['settings']['connect'];
-        $postTypes = get_post_types(array('public' => true, '_builtin' => false), 'names', 'and');
+        $postTypes = get_post_types(array('public' => true, '_builtin' => true), 'names', 'and');
         if (empty($setting)) {
             return false;
         }
