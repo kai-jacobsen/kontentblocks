@@ -458,6 +458,7 @@ class Utilities
             return null;
         }
 
+
         if (post_type_supports($postType, 'editor')) {
             if (!apply_filters('kb.remote.concat.ignore.editor', '__return_false')) {
                 return null;

@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Renderer;
 
 
+use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\StandardFieldSection;
 use Kontentblocks\Templating\CoreView;
 
@@ -52,8 +53,9 @@ class RenderSection
             );
             $out .= $container->render();
         } else {
+            /** @var Field $field */
             foreach ($this->fields as $field) {
-                $out .= $field->build();
+                $out .= $field->render();
             }
         }
 
