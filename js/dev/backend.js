@@ -3406,7 +3406,6 @@ Fields.registerObject('oembed', require('./controls/oembed'));
 Fields.registerObject('subarea', require('./controls/subarea'));
 Fields.registerObject('medium', require('./controls/medium'));
 Fields.registerObject('imageselect', require('./controls/imageselect'));
-
 },{"./Fields":56,"./controls/checkbox":59,"./controls/color":60,"./controls/cropimage":61,"./controls/date-multiple":62,"./controls/datetime":64,"./controls/editor":65,"./controls/file":66,"./controls/flexfields":67,"./controls/gallery":73,"./controls/gallery2":76,"./controls/image":79,"./controls/imageselect":80,"./controls/link":81,"./controls/medium":82,"./controls/multiselect":83,"./controls/oembed":84,"./controls/otimes":85,"./controls/select":86,"./controls/subarea":87,"./controls/tagsinput":94,"./controls/text":97,"./controls/text-multiple":95,"./controls/textarea":98}],59:[function(require,module,exports){
 var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
@@ -3742,6 +3741,7 @@ module.exports = BaseView.extend({
   },
   render: function () {
     var that = this;
+    var settings = this.model.toJSON();
     this.$textarea = this.$('textarea');
     tinymce.on('AddEditor', function (event) {
       var editor = event.editor;
@@ -3750,6 +3750,23 @@ module.exports = BaseView.extend({
         editor.on('change', function () {
           that.update(editor.getContent());
         });
+
+        if (settings.settings && settings.settings.charlimit) {
+          var limit = settings.settings.charlimit;
+          var $charlimit = that.$('.char-limit');
+          editor.on('keyDown SetContent', function (ed, e) {
+            var content = tinyMCE.activeEditor.getContent();
+            var max = limit;
+            var len = content.length;
+            if (len >= max) {
+              $charlimit.html('<span class="text-error">Limit reached</span>');
+            } else {
+              var charCount = max - len;
+              $charlimit.html(charCount + ' characters left');
+            }
+          })
+        }
+
       }
     });
   },
@@ -3760,11 +3777,11 @@ module.exports = BaseView.extend({
   update: function (val) {
     this.model.set('value', val);
   },
-  toString: function(){
-    if (this.editor){
+  toString: function () {
+    if (this.editor) {
       try {
         return this.editor.getContent();
-      } catch (e){
+      } catch (e) {
         return '';
       }
     }

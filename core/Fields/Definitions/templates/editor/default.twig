@@ -1,4 +1,9 @@
 {% extends Form.getLayout() %}
 {% block fieldmarkup %}
+    {% set settings = Field.getArg('settings') %}
     {{ editorHTML }}
+
+    {% if settings.charlimit %}
+        <span class="char-limit">asd</span>
+    {% endif %}
 {% endblock %}
