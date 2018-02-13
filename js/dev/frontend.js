@@ -3146,7 +3146,8 @@ module.exports = BaseView.extend({
           library: {
             type: 'image'
           }
-        }).on('update', function (attachmentObj) { // bind callback to 'update'
+        });
+        that.frame.on('update', function (attachmentObj) { // bind callback to 'update'
           that.update(attachmentObj);
         })
           .on('close', function (att) {
@@ -3156,17 +3157,22 @@ module.exports = BaseView.extend({
             }
           })
           .on('ready', function () {
-            that.ready();
+            that.ready(that);
           }).on('replace', function () {
-            that.replace(that.frame.image.attachment);
-          }).on('select', function (what) {
-            var attachment = this.get('library').get('selection').first();
-            that.replace(attachment);
-          }).open();
+          that.replace(that.frame.image.attachment);
+        }).on('select', function (what) {
+          var attachment = this.get('library').get('selection').first();
+          that.replace(attachment);
+        }).open();
       });
   },
-  ready: function () {
+  ready: function (that) {
     jQuery('.media-modal').addClass('smaller kb-image-frame');
+
+    var settings = that.model.get('settings');
+    if (settings && settings.minDimensions) {
+      that.frame.uploader.options.uploader.params.mindimensions = settings.minDimensions;
+    }
   },
   replace: function (attachment) {
     this.attachment = attachment;
