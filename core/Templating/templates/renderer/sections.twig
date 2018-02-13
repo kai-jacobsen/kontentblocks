@@ -1,7 +1,18 @@
+<div class="kbf-fieldrenderer-sections--nav">
+    <div class="kb-context__header kb-field-section kb-field-section--quicknav">
+        <h2>Quicknav</h2>
+        <ul class="kbf-sections-quicknav">
+            {% for renderSection in structure %}
+                <li>
+                    <a href="#section-{{ renderSection.section.getSectionId() }}">{{ renderSection.section.args.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 <div class='kbf-fieldrenderer-sections kbf-field-sections' data-kb-field-renderer="sections">
     {% for renderSection in structure %}
     {% if (renderSection.section.getNumberOfVisibleFields() > 0) %}
-
     <div id='section-{{ renderSection.section.getSectionId() }}'
          class="kbf-section-wrap"
     {% for key,value in renderSection.section.args.attributes %}

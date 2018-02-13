@@ -3,37 +3,49 @@
   background-color: transparent;
   border: none;
 
-  .inside{
+  .inside {
     padding: 0 !important;
   }
 
-  .kb-custom-wrapper{
+  .kb-custom-wrapper {
     background-color: transparent;
   }
 
-  .kbf-section-wrap{
+  .kbf-section-wrap {
     background-color: #fff;
     margin-bottom: 20px;
   }
 
-  .kb-field-section-actions{
+  .kb-field-section-actions {
     display: inline-block;
     cursor: pointer;
 
-    .kb-toggle{
+    .kb-toggle {
       vertical-align: middle;
       position: relative;
-      top:5px;
+      top: 5px;
     }
 
   }
 
-  .kb-field-section h2{
+  .kb-field-section h2 {
     display: inline-block;
   }
 
-  .kb-field-section{
+  .kb-field-section {
     cursor: pointer;
+
+    &--quicknav{
+      background-color: $grey-100;
+    }
+
   }
 
+}
+
+.kbf-sections-quicknav {
+  li, li a {
+    display: inline-block;
+    margin-right: 6px;
+  }
 }
