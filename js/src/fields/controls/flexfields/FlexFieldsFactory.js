@@ -7,7 +7,14 @@ module.exports = Backbone.View.extend({
   factorNewItem: function (data, uid, title) {
     var itemId = uid || _.uniqueId('ff2');
     var text = this.model.get('newitemtext') || 'Enter a title : ';
-    title = title || prompt(text, '');
+    var ask = this.model.get('requesttitle') || false;
+
+    if (ask) {
+      title = title || prompt(text, '');
+    } else {
+      title = '#' + this.controller.subviews.length;
+    }
+
     var sections = _.clone(this.sections);
     _.each(sections, function (section) {
       _.each(section.fields, function (field) {
@@ -23,7 +30,7 @@ module.exports = Backbone.View.extend({
         });
         field.view = KB.FieldsAPI.getRefByType(field.type, itemData);
 
-        if (!fielddata){
+        if (!fielddata) {
           field.view.setDefaults();
         }
 
