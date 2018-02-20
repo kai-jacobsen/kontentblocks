@@ -16,6 +16,10 @@ class FlexFieldsManager implements \JsonSerializable
 
     protected $field;
 
+    /**
+     * FlexFieldsManager constructor.
+     * @param FlexibleFields $field
+     */
     public function __construct( FlexibleFields $field )
     {
         $this->field = $field;
@@ -35,11 +39,17 @@ class FlexFieldsManager implements \JsonSerializable
     }
 
 
+    /**
+     * @return array
+     */
     public function jsonSerialize()
     {
         return array( 'sections' => $this->sections );
     }
 
+    /**
+     * @return array
+     */
     public function export()
     {
         $export = array();

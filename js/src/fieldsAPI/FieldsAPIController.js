@@ -13,4 +13,5 @@ KB.FieldsAPI.register(require('fieldsAPI/definitions/textarea'));
 KB.FieldsAPI.register(require('fieldsAPI/definitions/medium'));
 KB.FieldsAPI.register(require('fieldsAPI/definitions/color'));
 KB.FieldsAPI.register(require('fieldsAPI/definitions/oembed'));
+KB.FieldsAPI.register(require('fieldsAPI/definitions/datetime'));
 

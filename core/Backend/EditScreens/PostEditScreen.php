@@ -12,12 +12,12 @@ use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Edit Screen (Post Edit Screen)
+ * Edit Screen (KDPost Edit Screen)
  * Purpose: Creates the UI for the registered post type, which is just 'page' by default
  * Removes default meta boxes and adds the custom ui
  * Handles saving of areas while in post context
  * @package Kontentblocks
- * @subpackage Post
+ * @subpackage KDPost
  * @since 0.1.0
  */
 Class PostEditScreen

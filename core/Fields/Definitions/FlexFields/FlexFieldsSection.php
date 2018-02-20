@@ -26,6 +26,10 @@ class FlexFieldsSection implements \JsonSerializable
         $this->args = $this->setupArgs( $args );
     }
 
+    /**
+     * @param $args
+     * @return array
+     */
     private function setupArgs( $args )
     {
         $defaults = array(
@@ -52,6 +56,9 @@ class FlexFieldsSection implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize()
     {
         return $this->fields;

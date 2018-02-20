@@ -1,5 +1,9 @@
-<div class="kb-field kb-js-field field-api-text kb-field--text">
+<div class="kb-field kb-js-field field-api-text kb-field--text kb-field--reset">
     <label class="heading">{{ model.label }}</label>
-    <input type="text" name="{{ fieldName model.baseId model.index model.primeKey }}" value="{{ model.value }}" >
+    <input type="text"
+    {{#each model.attributes}}
+        {{@key}}="{{this}}"
+    {{/each}}
+    name="{{ fieldName model.baseId model.index model.primeKey }}" value="{{ model.value }}" >
     <p class="description">{{ model.description }}</p>
 </div>

@@ -77,8 +77,19 @@
 .flexible-fields--section-box {
   border: 1px solid $lightgrey;
   padding: $halfpadding;
+  overflow: hidden;
+  //max-height: 250px;
+  //transition: all .3s ease-out;
+
+
 }
 
+.kb-active-box{
+  .flexible-fields--section-box{
+    overflow: auto;
+    max-height:none;
+  }
+}
 
 
 .os-content-inner {

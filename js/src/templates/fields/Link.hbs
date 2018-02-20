@@ -5,17 +5,17 @@
            type="text"
            name="{{ fieldName model.baseId model.index model.primeKey }}[link]"
            value="{{ model.value.link }}">
-    <a class='button kb-js-add-link'>Add Link</a>
+    <a class='button kb-js-add-link'>Add internal link</a>
     {{#if model.linktext }}
-    <div class='kb-field--link-meta'><label for='{{ model.index }}-linktext'>{{ i18n.linktext }}</label><br>
-        <input
-                type='text' data-kbf-link-linktext
-                name="{{ fieldName model.baseId model.index model.primeKey }}[linktext]"
-                class='kb-field--link-linktext'
-                id='{{ model.index }}-linktext'
-                value='{{ model.value.linktext }}'>
-    </div>
-        {{/if}}
+        <div class='kb-field--link-meta'><label for='{{ model.index }}-linktext'>{{ i18n.linktext }}</label><br>
+            <input
+                    type='text' data-kbf-link-linktext
+                    name="{{ fieldName model.baseId model.index model.primeKey }}[linktext]"
+                    class='kb-field--link-linktext'
+                    id='{{ model.index }}-linktext'
+                    value='{{ model.value.linktext }}'>
+        </div>
+    {{/if}}
 
     {{#if model.linktitle }}
         <div class='kb-field--link-meta'><label for='{{ model.index }}-linktitle'>{{ i18n.linktitle }}</label><br>

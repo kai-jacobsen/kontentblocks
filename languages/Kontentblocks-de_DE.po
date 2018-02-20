@@ -331,7 +331,7 @@ msgstr "Platzierung im Berarbeitungsbereich"
 #: ../core/./Language/packages/i18n_Areas.php:20
 #: ../core/Language/./packages/i18n_Areas.php:20
 msgid "Available on following post types:"
-msgstr "Ist auf folgenden Post Types verfügbar:"
+msgstr "Ist auf folgenden KDPost Types verfügbar:"
 
 #: ../core/./Language/packages/i18n_Areas.php:21
 #: ../core/Language/./packages/i18n_Areas.php:21
