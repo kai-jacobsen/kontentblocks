@@ -9475,11 +9475,11 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
     + "[_meta][type]\" value=\""
     + alias3(((helper = (helper = helpers.fftype || (depth0 != null ? depth0.fftype : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"fftype","hash":{},"data":data}) : helper)))
-    + "\">\n<div class=\"flexible-fields--section-box\">\n    <div class=\"flexible-fields--section-title\">\n        <h3>\n            <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n            <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n            <input type=\"text\" value=\""
+    + "\">\n<div class=\"flexible-fields--section-box\">\n    <div class=\"flexible-fields--section-title\">\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n        <input type=\"text\" value=\""
     + alias3(this.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.title : stack1), depth0))
     + "\" name=\""
     + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
-    + "[_meta][title] \">\n        </h3>\n    </div>\n    <div class=\"kb-field--tabs\">\n        <ul class=\"flexible-field--tab-nav\">\n\n        </ul>\n\n    </div>\n</div>";
+    + "[_meta][title] \">\n    </div>\n    <div class=\"flexible-fields--section-box-inner\">\n\n    </div>\n    <div class=\"kb-field--tabs\">\n        <ul class=\"flexible-field--tab-nav\">\n        </ul>\n    </div>\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":220}],159:[function(require,module,exports){
@@ -9605,7 +9605,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.description : stack1), depth0))
     + "</label>\n        <textarea class='kb-js-image-description kb-observe'\n                  name='"
     + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias3).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
-    + "[caption]'>\n            "
+    + "[caption]'>"
     + ((stack1 = alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.caption : stack1), depth0)) != null ? stack1 : "")
     + "\n        </textarea>\n            </div>\n        </div>\n        <input class='kb-js-image-id' type='hidden'\n               name='"
     + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias3).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))

@@ -1,5 +1,51 @@
-.flexible-fields--header{
+.flexible-fields--header {
   padding: 10px 0;
+}
+
+.flexible-fields--section-box {
+
+  .flexible-fields--section-title {
+    position: relative;
+    background-color: $grey-100;
+    padding: $halfpadding;
+
+
+
+    input[type=text]{
+      border: none;
+      font-style: italic;
+      border-bottom: 1px solid #ddd;
+      font-weight: normal;
+    }
+
+  }
+
+  .flexible-fields--js-drag-handle {
+    cursor: move;
+    &:before {
+      top: 3px;
+      position: relative;
+      font-size: 24px !important;
+      color: #666;
+      text-shadow: 1px 1px 1px #FFF;
+    }
+
+  }
+
+  .flexible-fields--js-trash {
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    cursor: pointer;
+    &:before {
+      font-size: 18px !important;
+
+    }
+
+    &:hover {
+      color: #333;
+    }
+  }
 }
 
 .flexible-fields--toggle-title {
@@ -41,7 +87,7 @@
     cursor: pointer;
     color: #999;
 
-    &:hover{
+    &:hover {
       color: #333;
     }
   }
@@ -68,6 +114,10 @@
     color: #999;
     cursor: pointer;
 
+    &:before {
+      font-size: 14px !important;
+    }
+
     &:hover {
       color: #333;
     }
@@ -76,21 +126,21 @@
 
 .flexible-fields--section-box {
   border: 1px solid $lightgrey;
-  padding: $halfpadding;
   overflow: hidden;
   //max-height: 250px;
   //transition: all .3s ease-out;
 
-
-}
-
-.kb-active-box{
-  .flexible-fields--section-box{
-    overflow: auto;
-    max-height:none;
+  &-inner{
+    padding: $halfpadding;
   }
 }
 
+.kb-active-box {
+  .flexible-fields--section-box {
+    overflow: auto;
+    max-height: none;
+  }
+}
 
 .os-content-inner {
   .flexible-fields--item-list {
