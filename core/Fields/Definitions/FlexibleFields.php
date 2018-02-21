@@ -3,6 +3,8 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Definitions\FlexFields\FlexFieldsManager;
+use Kontentblocks\Fields\Definitions\FlexFields\FlexFieldsSection;
+use Kontentblocks\Fields\Definitions\FlexFields\FlexFieldsType;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Kontentblocks;
 
@@ -22,12 +24,12 @@ Class FlexibleFields extends Field
 
     );
 
-    public function setValue( $data )
+    public function setValue($data)
     {
-        if (is_array( $data ) && !empty( $data )) {
+        if (is_array($data) && !empty($data)) {
             foreach ($data as $key => $value) {
-                if (!is_array( $value ) || !isset( $value['_meta'] )) {
-                    unset( $data[$key] );
+                if (!is_array($value) || !isset($value['_meta'])) {
+                    unset($data[$key]);
                 }
             }
         } else {
@@ -49,44 +51,50 @@ Class FlexibleFields extends Field
      *
      * @return mixed $new
      */
-    public function save( $new, $old )
+    public function save($new, $old)
     {
         $flatFields = $this->flattenFields();
-
-        if (is_null( $new )) {
+        if (is_null($new)) {
             return $old;
         }
 
-        if (is_array( $new )) {
-
+        if (is_array($new)) {
             foreach ($new as $item => $def) {
-                if (isset( $def['_meta']['delete'] )) {
+                if (isset($def['_meta']['delete'])) {
                     $new[$item] = null;
                 }
             }
         }
 
-        if (is_array( $new )) {
+        if (is_array($new)) {
             foreach ($new as $ukey => &$section) {
-                if (is_null( $section )) {
+                if (is_null($section)) {
                     continue;
                 }
 
+                $fftype = 'default';
+                if (isset($section['_meta']['type'])){
+                    $fftype = $section['_meta']['type'];
+                }
+
+
                 /** @var Field $field */
                 foreach ($section as $fkey => $field) {
-                    if (!array_key_exists( $fkey, $flatFields )) {
+
+                    if (!isset($flatFields[$fftype][$fkey])){
                         continue;
                     }
-                    $type = $flatFields[$fkey]['type'];
+
+                    $fieldType = $flatFields[$fftype][$fkey]['type'];
                     /** @var \Kontentblocks\Fields\Field $fieldInstance */
-                    $fieldInstance = Kontentblocks::getService( 'registry.fields' )->getField(
-                        $type,
+                    $fieldInstance = Kontentblocks::getService('registry.fields')->getField(
+                        $fieldType,
                         $ukey,
                         null,
                         $section[$fkey]
                     );
-                    $section[$fkey] = $fieldInstance->save( $section[$fkey], $old );
-                    if (!isset( $section['_meta']['uid'] )) {
+                    $section[$fkey] = $fieldInstance->save($section[$fkey], $old);
+                    if (!isset($section['_meta']['uid'])) {
                         $section['_meta']['uid'] = $ukey;
                     }
                 }
@@ -96,13 +104,21 @@ Class FlexibleFields extends Field
     }
 
 
+    /**
+     * @return array
+     */
     private function flattenFields()
     {
         $flat = array();
-        $sections = $this->getArg( 'fields' );
-        foreach ($sections as $section) {
-            foreach ($section['fields'] as $key => $args) {
-                $flat[$args['key']] = $args;
+        $types = $this->getArg('fields');
+        /** @var FlexFieldsType $type */
+        foreach ($types as $id => $type) {
+            $flat[$id] = [];
+            /** @var FlexFieldsSection $section */
+            foreach ($types[$id]['sections'] as $section) {
+                foreach ($section['fields'] as $key => $args) {
+                    $flat[$id][$args['key']] = $args;
+                }
             }
         }
         return $flat;
@@ -114,19 +130,19 @@ Class FlexibleFields extends Field
      *
      * @return mixed
      */
-    public function prepareFormValue( $value )
+    public function prepareFormValue($value)
     {
         return $value;
     }
 
     public function prepare()
     {
-        if (is_callable( $this->getArg( 'fields', null ) )) {
-            $manager = new FlexFieldsManager( $this );
-            $manager = call_user_func( $this->getArg( 'fields' ), $manager );
-            return $this->setArgs( array( 'fields' => $manager->export() ) );
+        if (is_callable($this->getArg('fields', null))) {
+            $manager = new FlexFieldsManager($this);
+            $manager = call_user_func($this->getArg('fields'), $manager);
+            return $this->setArgs(array('fields' => $manager->export()));
 
         }
-        return $this->setArgs( array( 'fields' => false ) );
+        return $this->setArgs(array('fields' => false));
     }
 }

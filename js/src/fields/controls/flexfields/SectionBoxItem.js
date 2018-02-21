@@ -23,7 +23,8 @@ module.exports = ToggleBoxItem.extend({
     var $skeleton = this.$el.append(tplSingleSectionBox({ // append the outer skeletion markup for the item / toggle head & body
       item: item,
       inputName: inputName,
-      uid: this.model.get('itemId')
+      uid: this.model.get('itemId'),
+      fftype: this.model.get('fftype')
     }));
     this.renderTabs($skeleton); // insert the tabs markup
     return $skeleton;

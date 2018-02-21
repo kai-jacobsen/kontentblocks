@@ -3901,21 +3901,25 @@ module.exports = Backbone.View.extend({
 
   initialize: function (options) {
     this.controller = options.controller;
-    this.sections = this.model.get('fields');
+    this.types = this.model.get('fields');
   },
-  factorNewItem: function (data, uid, title) {
+  factorNewItem: function (data, obj) {
+    var uid = obj['_meta'].uid || null;
+    var title = obj['_meta'].title || null;
+    var type = obj['_meta'].type;
     var itemId = uid || _.uniqueId('ff2');
     var text = this.model.get('newitemtext') || 'Enter a title : ';
     var ask = this.model.get('requesttitle') || false;
 
+
     if (ask) {
       title = title || prompt(text, '');
     } else {
-      title = '#' + this.controller.subviews.length;
+      title = title || '#' + this.controller.subviews.length;
     }
-
-    var sections = _.clone(this.sections);
-    _.each(sections, function (section) {
+    var typesections = this.types[type].sections || [];
+    var types = _.clone(this.types);
+    _.each(typesections, function (section) {
       _.each(section.fields, function (field) {
         var fielddata = (data && data[field.key]) ? data[field.key] : field.std;
         var itemData = _.extend(field, {
@@ -3928,18 +3932,17 @@ module.exports = Backbone.View.extend({
           type: field.type
         });
         field.view = KB.FieldsAPI.getRefByType(field.type, itemData);
-
         if (!fielddata) {
           field.view.setDefaults();
         }
-
       }, this)
     }, this);
 
     return {
       itemId: itemId,
+      fftype: type,
       title: title,
-      sections: sections
+      sections: typesections
     }
   }
 
@@ -3977,21 +3980,33 @@ module.exports = Backbone.View.extend({
     'click .kb-flexible-fields--js-add-item': 'addItem'
   },
   initialSetup: function () {
-    var data;
-
+    var data,types;
     data = this.model.get('value'); // model equals FieldControlModel, value equals parent obj data for this field key
+    types = this.model.get('fields');
     if (!_.isEmpty(data)) {
       _.each(data, function (dataobj, index) {
         if (!dataobj) {
           return;
         }
 
-        var item = this.factory.factorNewItem(data[dataobj['_meta'].uid], dataobj['_meta'].uid, dataobj['_meta'].title);
+        if (!dataobj['_meta'].type) {
+          dataobj['_meta'].type = 'default';
+        }
+
+        if (!types[dataobj['_meta'].type]){
+          return;
+        }
+
+        // factor item
+        var item = this.factory.factorNewItem(data[dataobj['_meta'].uid], dataobj);
+        // build view for item
         var view = new this.Renderer({
           controller: this,
           model: new Backbone.Model(item)
         });
+        //collect views
         this.subviews.push(view);
+        // render item
         this.$list.append(view.render());
         UI.initTabs();
         KB.Events.trigger('modal.recalibrate');
@@ -4016,7 +4031,8 @@ module.exports = Backbone.View.extend({
       return null;
     }
     this.$el.append(tplSkeleton({
-      i18n: I18n.getString('Refields.flexfields')
+      i18n: I18n.getString('Refields.flexfields'),
+      model: this.model.toJSON()
     }));
     this.setupElements();
     this.initialSetup();
@@ -4031,8 +4047,11 @@ module.exports = Backbone.View.extend({
     this.$list = this.$('.flexible-fields--item-list');
     this.$addButton = this.$('.kb-flexible-fields--js-add-item');
   },
-  addItem: function () {
-    var item = this.factory.factorNewItem();
+  addItem: function (e) {
+
+    var $btn = jQuery(e.currentTarget);
+    var type = $btn.data('kbf-addtype');
+    var item = this.factory.factorNewItem(null, {_meta: {type: type}});
     var view = new this.Renderer({
       controller: this,
       model: new Backbone.Model(item)
@@ -4070,7 +4089,8 @@ module.exports = ToggleBoxItem.extend({
     var $skeleton = this.$el.append(tplSingleSectionBox({ // append the outer skeletion markup for the item / toggle head & body
       item: item,
       inputName: inputName,
-      uid: this.model.get('itemId')
+      uid: this.model.get('itemId'),
+      fftype: this.model.get('fftype')
     }));
     this.renderTabs($skeleton); // insert the tabs markup
     return $skeleton;
@@ -4121,7 +4141,8 @@ module.exports = Backbone.View.extend({
     var $skeleton = this.$el.append(tplSingleToggleBox({ // append the outer skeleton markup for the item / toggle head & body
       item: item,
       inputName: inputName,
-      uid: this.model.get('itemId')
+      uid: this.model.get('itemId'),
+      fftype: this.model.get('fftype')
     }));
     this.renderTabs($skeleton); // insert the tabs markup
     return $skeleton;
@@ -8357,6 +8378,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
     + "[_meta][uid]\" value=\""
     + alias3(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"uid","hash":{},"data":data}) : helper)))
+    + "\">\n<input type=\"hidden\" name=\""
+    + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + "[_meta][type]\" value=\""
+    + alias3(((helper = (helper = helpers.fftype || (depth0 != null ? depth0.fftype : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"fftype","hash":{},"data":data}) : helper)))
     + "\">\n<div class=\"flexible-fields--section-box\">\n    <div class=\"flexible-fields--section-title\">\n        <h3>\n            <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n            <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n            <input type=\"text\" value=\""
     + alias3(this.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.title : stack1), depth0))
     + "\" name=\""
@@ -8374,6 +8399,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
     + "[_meta][uid]\" value=\""
     + alias3(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"uid","hash":{},"data":data}) : helper)))
+    + "\">\n<input type=\"hidden\" name=\""
+    + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + "[_meta][type]\" value=\""
+    + alias3(((helper = (helper = helpers.fftype || (depth0 != null ? depth0.fftype : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"fftype","hash":{},"data":data}) : helper)))
     + "\">\n<div class=\"flexible-fields--toggle-title\">\n    <h3>\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"genericon genericon-expand flexible-fields--js-toggle\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n        <input type=\"text\" value=\""
     + alias3(this.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.title : stack1), depth0))
     + "\" name=\""
@@ -8384,12 +8413,21 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 },{"hbsfy/runtime":223}],176:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
+    var stack1, helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
+
+  return "        <a class=\"button button-primary kb-flexible-fields--js-add-item\"\n           data-kbf-addtype=\""
+    + alias3(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"key","hash":{},"data":data}) : helper)))
+    + "\">"
+    + alias3(this.lambda(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.addNewItem : stack1), depth0))
+    + alias3(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"key","hash":{},"data":data}) : helper)))
+    + "</a>\n";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1;
 
-  return "<div class=\"flexible-fields--header\">\n    <a class=\"button button-primary kb-flexible-fields--js-add-item\">"
-    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.addNewItem : stack1), depth0))
-    + "</a>\n</div>\n<ul class=\"flexible-fields--item-list\"></ul>\n";
+  return "<div class=\"flexible-fields--header\">\n"
+    + ((stack1 = helpers.each.call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.fields : stack1),{"name":"each","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + "</div>\n<ul class=\"flexible-fields--item-list\"></ul>\n";
 },"useData":true});
 
 },{"hbsfy/runtime":223}],177:[function(require,module,exports){

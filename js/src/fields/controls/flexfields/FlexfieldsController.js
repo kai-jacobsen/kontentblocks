@@ -30,21 +30,33 @@ module.exports = Backbone.View.extend({
     'click .kb-flexible-fields--js-add-item': 'addItem'
   },
   initialSetup: function () {
-    var data;
-
+    var data,types;
     data = this.model.get('value'); // model equals FieldControlModel, value equals parent obj data for this field key
+    types = this.model.get('fields');
     if (!_.isEmpty(data)) {
       _.each(data, function (dataobj, index) {
         if (!dataobj) {
           return;
         }
 
-        var item = this.factory.factorNewItem(data[dataobj['_meta'].uid], dataobj['_meta'].uid, dataobj['_meta'].title);
+        if (!dataobj['_meta'].type) {
+          dataobj['_meta'].type = 'default';
+        }
+
+        if (!types[dataobj['_meta'].type]){
+          return;
+        }
+
+        // factor item
+        var item = this.factory.factorNewItem(data[dataobj['_meta'].uid], dataobj);
+        // build view for item
         var view = new this.Renderer({
           controller: this,
           model: new Backbone.Model(item)
         });
+        //collect views
         this.subviews.push(view);
+        // render item
         this.$list.append(view.render());
         UI.initTabs();
         KB.Events.trigger('modal.recalibrate');
@@ -69,7 +81,8 @@ module.exports = Backbone.View.extend({
       return null;
     }
     this.$el.append(tplSkeleton({
-      i18n: I18n.getString('Refields.flexfields')
+      i18n: I18n.getString('Refields.flexfields'),
+      model: this.model.toJSON()
     }));
     this.setupElements();
     this.initialSetup();
@@ -84,8 +97,11 @@ module.exports = Backbone.View.extend({
     this.$list = this.$('.flexible-fields--item-list');
     this.$addButton = this.$('.kb-flexible-fields--js-add-item');
   },
-  addItem: function () {
-    var item = this.factory.factorNewItem();
+  addItem: function (e) {
+
+    var $btn = jQuery(e.currentTarget);
+    var type = $btn.data('kbf-addtype');
+    var item = this.factory.factorNewItem(null, {_meta: {type: type}});
     var view = new this.Renderer({
       controller: this,
       model: new Backbone.Model(item)

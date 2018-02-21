@@ -36,7 +36,7 @@ class FlexibleFieldsReturn implements InterfaceFieldReturn
      * Flexible Field config array
      * @var array
      */
-    protected $sections;
+    protected $types;
 
     /**
      * Class Constructor
@@ -53,11 +53,10 @@ class FlexibleFieldsReturn implements InterfaceFieldReturn
         $this->key = $field->getKey();
         $this->fieldData = $value;
         $this->entityId = $field->getFieldId();
-        $this->sections = $field->getArg('fields');
+        $this->types = $field->getArg('fields');
         $this->items = $this->setupItems();
         $this->salt = $salt;
         $this->value = $value;
-
     }
 
     /**
@@ -74,7 +73,6 @@ class FlexibleFieldsReturn implements InterfaceFieldReturn
         if (!is_array($this->fieldData)) {
             return array();
         }
-
         $registry = Kontentblocks()->getService('registry.fields');
         $fields = $this->extractFieldsFromConfig();
         $items = array();
@@ -84,11 +82,8 @@ class FlexibleFieldsReturn implements InterfaceFieldReturn
                 continue;
             }
 
-
             $item = array();
             foreach ($fields as $key => $conf) {
-
-
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $registry->getField($conf['type'], $this->entityId, $index, $key);
 
@@ -102,6 +97,7 @@ class FlexibleFieldsReturn implements InterfaceFieldReturn
                 $field->setArgs($conf);
                 $item[$key] = $field->getFrontendValue($this->salt);
                 $item['index'] = $index;
+                $item['type'] = $key;
 
             }
             $items[$index] = $item;
@@ -120,18 +116,18 @@ class FlexibleFieldsReturn implements InterfaceFieldReturn
      */
     private function extractFieldsFromConfig()
     {
-        if (!is_array($this->sections)) {
+        if (!is_array($this->types)) {
             return array();
         }
-
         $collect = array();
-        foreach (array_values($this->sections) as $section) {
-
-            if (!empty($section['fields'])) {
-                foreach ($section['fields'] as $field) {
-                    $collect[$field['key']] = $field;
+        foreach ($this->types as $key => $type) {
+            foreach ($type['sections'] as $section) {
+                if (!empty($section['fields'])) {
+                    foreach ($section['fields'] as $field) {
+                        $field['fftype'] = $key;
+                        $collect[$field['key']] = $field;
+                    }
                 }
-
             }
         }
         return $collect;
@@ -177,7 +173,7 @@ class FlexibleFieldsReturn implements InterfaceFieldReturn
             return false;
         }
 
-        if (!isset($this->sections)) {
+        if (!isset($this->types)) {
             return false;
         }
 

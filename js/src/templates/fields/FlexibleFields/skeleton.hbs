@@ -1,4 +1,7 @@
 <div class="flexible-fields--header">
-    <a class="button button-primary kb-flexible-fields--js-add-item">{{ i18n.addNewItem }}</a>
+    {{#each model.fields}}
+        <a class="button button-primary kb-flexible-fields--js-add-item"
+           data-kbf-addtype="{{@key}}">{{ i18n.addNewItem }}{{@key}}</a>
+    {{/each}}
 </div>
 <ul class="flexible-fields--item-list"></ul>

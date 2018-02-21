@@ -2,21 +2,25 @@ module.exports = Backbone.View.extend({
 
   initialize: function (options) {
     this.controller = options.controller;
-    this.sections = this.model.get('fields');
+    this.types = this.model.get('fields');
   },
-  factorNewItem: function (data, uid, title) {
+  factorNewItem: function (data, obj) {
+    var uid = obj['_meta'].uid || null;
+    var title = obj['_meta'].title || null;
+    var type = obj['_meta'].type;
     var itemId = uid || _.uniqueId('ff2');
     var text = this.model.get('newitemtext') || 'Enter a title : ';
     var ask = this.model.get('requesttitle') || false;
 
+
     if (ask) {
       title = title || prompt(text, '');
     } else {
-      title = '#' + this.controller.subviews.length;
+      title = title || '#' + this.controller.subviews.length;
     }
-
-    var sections = _.clone(this.sections);
-    _.each(sections, function (section) {
+    var typesections = this.types[type].sections || [];
+    var types = _.clone(this.types);
+    _.each(typesections, function (section) {
       _.each(section.fields, function (field) {
         var fielddata = (data && data[field.key]) ? data[field.key] : field.std;
         var itemData = _.extend(field, {
@@ -29,18 +33,17 @@ module.exports = Backbone.View.extend({
           type: field.type
         });
         field.view = KB.FieldsAPI.getRefByType(field.type, itemData);
-
         if (!fielddata) {
           field.view.setDefaults();
         }
-
       }, this)
     }, this);
 
     return {
       itemId: itemId,
+      fftype: type,
       title: title,
-      sections: sections
+      sections: typesections
     }
   }
 

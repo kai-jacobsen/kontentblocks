@@ -12,7 +12,10 @@ use Kontentblocks\Fields\Definitions\FlexibleFields;
 class FlexFieldsManager implements \JsonSerializable
 {
 
-    public $sections = array();
+
+    public $types = array();
+
+    protected $currentType;
 
     protected $field;
 
@@ -20,9 +23,30 @@ class FlexFieldsManager implements \JsonSerializable
      * FlexFieldsManager constructor.
      * @param FlexibleFields $field
      */
-    public function __construct( FlexibleFields $field )
+    public function __construct(FlexibleFields $field)
     {
         $this->field = $field;
+        $this->currentType = $this->createType('default', ['name' => 'Default']);
+    }
+
+
+    /**
+     * @param $typeid
+     * @param array $args
+     * @return FlexFieldsType
+     */
+        public function createType($typeid, $args = array())
+    {
+
+        $typeid = sanitize_key($typeid);
+        if (isset($this->types[$typeid])) {
+            return $this->types[$typeid];
+        }
+
+        $this->types[$typeid] = new FlexFieldsType($typeid, $args);
+
+        return $this->types[$typeid];
+
     }
 
     /**
@@ -30,12 +54,13 @@ class FlexFieldsManager implements \JsonSerializable
      * @param array $args
      * @return FlexFieldsSection
      */
-    public function addSection( $sectionId, $args = array() )
+    public function addSection($sectionId, $args = array())
     {
-        if (!isset( $this->sections[$sectionId] )) {
-            $this->sections[$sectionId] = new FlexFieldsSection( $sectionId, $args );
-        }
-        return $this->sections[$sectionId];
+
+        $args['type'] = $this->currentType->getId();
+        $section = $this->currentType->addSection($sectionId, $args);
+        return $section;
+
     }
 
 
@@ -44,7 +69,7 @@ class FlexFieldsManager implements \JsonSerializable
      */
     public function jsonSerialize()
     {
-        return array( 'sections' => $this->sections );
+        return array('types' => $this->types);
     }
 
     /**
@@ -53,13 +78,11 @@ class FlexFieldsManager implements \JsonSerializable
     public function export()
     {
         $export = array();
-        foreach (array_values( $this->sections ) as $index => $section) {
-            $export[] = array(
-                'label' => $section->args['label'],
-                'id' => $section->sectionId,
-                'fields' => array_values( $section->fields )
-            );
+        /** @var FlexFieldsType $type */
+        foreach ($this->types as $type) {
+            $export[$type->getId()] = $type->export();
         }
         return $export;
     }
+
 }
