@@ -2305,7 +2305,7 @@ module.exports = Backbone.View.extend({
     'click .kb-flexible-fields--js-add-item': 'addItem'
   },
   initialSetup: function () {
-    var data,types;
+    var data, types;
     data = this.model.get('value'); // model equals FieldControlModel, value equals parent obj data for this field key
     types = this.model.get('fields');
     if (!_.isEmpty(data)) {
@@ -2318,7 +2318,7 @@ module.exports = Backbone.View.extend({
           dataobj['_meta'].type = 'default';
         }
 
-        if (!types[dataobj['_meta'].type]){
+        if (!types[dataobj['_meta'].type]) {
           return;
         }
 
@@ -9507,20 +9507,20 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
-    var stack1, helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
+    var stack1, helper, alias1=this.escapeExpression, alias2=this.lambda;
 
   return "        <a class=\"button button-primary kb-flexible-fields--js-add-item\"\n           data-kbf-addtype=\""
-    + alias3(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"key","hash":{},"data":data}) : helper)))
+    + alias1(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"key","hash":{},"data":data}) : helper)))
     + "\">"
-    + alias3(this.lambda(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.addNewItem : stack1), depth0))
-    + alias3(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"key","hash":{},"data":data}) : helper)))
+    + alias1(alias2(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.addNewItem : stack1), depth0))
+    + alias1(alias2(((stack1 = (depth0 != null ? depth0.args : depth0)) != null ? stack1.buttontext : stack1), depth0))
     + "</a>\n";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1;
 
-  return "<div class=\"flexible-fields--header\">\n"
+  return "<ul class=\"flexible-fields--item-list\"></ul>\n<div class=\"flexible-fields--header\">\n"
     + ((stack1 = helpers.each.call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.fields : stack1),{"name":"each","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + "</div>\n<ul class=\"flexible-fields--item-list\"></ul>\n";
+    + "</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":220}],161:[function(require,module,exports){

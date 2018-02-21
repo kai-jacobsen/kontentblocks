@@ -30,7 +30,7 @@ module.exports = Backbone.View.extend({
     'click .kb-flexible-fields--js-add-item': 'addItem'
   },
   initialSetup: function () {
-    var data,types;
+    var data, types;
     data = this.model.get('value'); // model equals FieldControlModel, value equals parent obj data for this field key
     types = this.model.get('fields');
     if (!_.isEmpty(data)) {
@@ -43,7 +43,7 @@ module.exports = Backbone.View.extend({
           dataobj['_meta'].type = 'default';
         }
 
-        if (!types[dataobj['_meta'].type]){
+        if (!types[dataobj['_meta'].type]) {
           return;
         }
 

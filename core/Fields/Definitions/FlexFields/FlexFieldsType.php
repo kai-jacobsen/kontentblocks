@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Fields\Definitions\FlexFields;
 
+use Kontentblocks\Language\I18n;
+
 
 /**
  * Class FlexFieldsType
@@ -33,7 +35,8 @@ class FlexFieldsType implements \JsonSerializable
     private function setupArgs($args)
     {
         $defaults = array(
-            'name' => 'No typename'
+            'name' => 'No typename',
+            'buttontext' => I18n::getPackage('Refields.flexfields')['addNewItem']
         );
         return wp_parse_args($args, $defaults);
     }
