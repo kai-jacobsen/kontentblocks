@@ -126,7 +126,8 @@ abstract class Module implements EntityInterface
             'views' => true,
             'concat' => true,
             'templates' => array(),
-            'fieldRenderer' => 'Kontentblocks\Fields\Renderer\FieldRendererTabs'
+            'fieldRenderer' => 'Kontentblocks\Fields\Renderer\FieldRendererTabs',
+            'iconclass' => 'dashicons-screenoptions'
         );
 
     }

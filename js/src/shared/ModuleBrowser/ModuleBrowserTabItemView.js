@@ -21,7 +21,7 @@ module.exports = Backbone.View.extend({
   },
   render: function () {
     var count = _.keys(this.model.get('modules')).length;
-    var countstr = '(' + count + ')';
+    var countstr = ' (' + count + ')';
 
     if (count === 0) {
       return false;

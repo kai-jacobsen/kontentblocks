@@ -16,6 +16,7 @@ module.exports = Backbone.View.extend({
   },
   // render list
   render: function (el) {
+    console.log(this.model);
     if (this.model.get('globalModule')) {
       this.$el.html(tplTemplateListItem({module: this.model.toJSON(), i18n: KB.i18n}));
     } else {
