@@ -10,7 +10,9 @@ use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
+use Kontentblocks\Panels\AbstractPanel;
 use Kontentblocks\Panels\PanelModel;
+use Kontentblocks\Panels\PostPanel;
 use Kontentblocks\Panels\TermPanel;
 use Kontentblocks\Templating\TemplatePart;
 use Kontentblocks\Utils\CommonTwig\SimpleView;
@@ -251,7 +253,7 @@ function getPostPanel($panelId = null, $postId = null)
     }
     $Panel = $Environment->getPanelObject($panelId);
     /** @var \Kontentblocks\Panels\PostPanel $Panel */
-    if (is_a($Panel, "\\Kontentblocks\\Panels\\AbstractPanel")) {
+    if (is_a($Panel, AbstractPanel::class)) {
         return $Panel;
     } else {
         return new \WP_Error(
@@ -302,7 +304,7 @@ function getTermPanelModel($panelId, $termId, $taxonomy = null)
 function getPostPanelModel($panelId = null, $postId = null)
 {
     $panel = getPostPanel($panelId, $postId);
-    if (is_a($panel, '\Kontentblocks\Panels\PostPanel')) {
+    if (is_a($panel, PostPanel::class)) {
         return $panel->setupViewModel();
     }
     return null;
@@ -323,7 +325,7 @@ function getPostPanelData($panelId = null, $postId = null, $raw = false)
 
     $data = [];
     $panel = getPostPanel($panelId, $postId);
-    if (is_a($panel, '\Kontentblocks\Panels\PostPanel')) {
+    if (is_a($panel, PostPanel::class)) {
         if (!$raw) {
             $data = $panel->setupViewModel()->export();
         } else {

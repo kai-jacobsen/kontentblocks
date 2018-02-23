@@ -205,6 +205,7 @@ abstract class AbstractPanel implements EntityInterface
         }
 
         $prepData = [];
+
         foreach ($this->model->export() as $key => $v) {
             /** @var \Kontentblocks\Fields\Field $field */
             $field = $this->fields->getFieldByKey($key);
@@ -217,6 +218,7 @@ abstract class AbstractPanel implements EntityInterface
         }
         $fModel = new PanelModel($prepData, $this);
         $this->frontendModel = $fModel;
+
         return $this->frontendModel;
     }
 

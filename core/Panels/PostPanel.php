@@ -65,6 +65,9 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      * @var string
      */
     protected $uid;
+    protected $model;
+    protected $args;
+    protected $dataProvider;
 
     /**
      * @param array $args
@@ -172,21 +175,15 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
     {
         $this->prepareModel(); // parse in missing data
         $this->fields->updateData();
-
         $renderer = $this->fields->getFieldRenderClass();
         return $renderer->render();
     }
 
     /**
-     * @param bool $reset
-     * @return \Kontentblocks\Common\Data\EntityModel
+     * @return PanelModel
      */
-    public function prepareModel($reset = false)
+    public function prepareModel()
     {
-        if ($reset) {
-            $this->environment->getDataProvider()->reset();
-            $this->model->set($this->environment->getDataProvider()->get($this->baseId));
-        }
         $model = $this->model->export();
         if ($this->fields) {
             $data = array();
