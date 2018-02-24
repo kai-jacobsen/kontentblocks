@@ -1907,7 +1907,7 @@ module.exports = Backbone.View.extend({
   initialState: function () {
     var state = Utilities.store.get(this.uid);
     if (state && !_.isUndefined(state.open) && state.open === false) {
-      this.$toggle.slideUp(200);
+      this.$el.slideUp(200);
       this.$toggle.removeClass('kb-toggle-open');
       return null;
     }

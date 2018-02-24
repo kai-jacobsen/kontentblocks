@@ -22,10 +22,6 @@ class StandardFieldController
      */
     public $sections = array();
     /**
-     * @var EntityModel
-     */
-    public $model;
-    /**
      * @var EntityInterface
      */
     public $entity;
@@ -72,7 +68,6 @@ class StandardFieldController
     {
         $this->baseId = $baseid;
         $this->entity = $entity;
-        $this->model = $entity->getModel();
         $this->parseArgs($args);
     }
 
@@ -91,7 +86,6 @@ class StandardFieldController
         foreach (array_keys($defaults) as $key) {
             $this->$key = $args[$key];
         }
-
     }
 
 

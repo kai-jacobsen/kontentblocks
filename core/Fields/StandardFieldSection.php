@@ -136,14 +136,13 @@ class StandardFieldSection implements ExportableFieldInterface
     public function addField($type, $key, $args = array())
     {
 
-        if (is_string($key) && empty($key)){
+        if (is_string($key) && empty($key)) {
             return $this;
         }
 
         if (is_string($key) && $key[0] === '_') {
             return $this;
         }
-
 
 
         /** @var \Kontentblocks\Fields\FieldRegistry $registry */
@@ -188,7 +187,7 @@ class StandardFieldSection implements ExportableFieldInterface
             }
 
             $this->collectToTabs($field);
-            $field->setData($this->getFielddata($field));
+//            $field->setData($this->getFielddata($field));
             $this->increaseVisibleFields();
             $this->orderFields();
         }
@@ -299,14 +298,12 @@ class StandardFieldSection implements ExportableFieldInterface
     {
 
         $fields = [$field];
-        if (is_a($field, FieldSubGroup::class)){
+        if (is_a($field, FieldSubGroup::class)) {
             $fields = $field->getFields();
         }
 
-        foreach ($fields as $field){
-
+        foreach ($fields as $field) {
             $tabArg = $field->getArg('tab', null);
-
             if (is_null($tabArg)) {
                 $group = $this->getTabGroup($field->getArg('label'), $field->getKey());
             } else {

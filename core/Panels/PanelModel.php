@@ -44,7 +44,6 @@ class PanelModel extends ValueObject implements SyncableInterface
         if (!Utilities::isPreview()) {
             $provider->delete('_preview_' . $this->entity->getId());
         }
-
         return $provider->update($key, $this->export());
     }
 

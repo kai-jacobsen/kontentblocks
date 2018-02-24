@@ -78,28 +78,28 @@ class FieldSubGroup implements ExportableFieldInterface
         return $this;
     }
 
-    /**
-     * Wrapper to each fields setup method
-     *
-     * @param array $instanceData
-     * @since 0.1.0
-     */
-    public function setup($instanceData)
-    {
-        /** @var Field $field */
-        foreach ($this->fields as $field) {
-
-            if (!is_object($field)) {
-                continue;
-            }
-
-            $fielddata = (!empty($instanceData[$field->getKey()])) ? $instanceData[$field->getKey()] : $field->getArg(
-                'std',
-                ''
-            );
-            $field->setData($fielddata);
-        }
-    }
+//    /**
+//     * Wrapper to each fields setup method
+//     *
+//     * @param array $instanceData
+//     * @since 0.1.0
+//     */
+//    public function setup($instanceData)
+//    {
+//        /** @var Field $field */
+//        foreach ($this->fields as $field) {
+//
+//            if (!is_object($field)) {
+//                continue;
+//            }
+//
+//            $fielddata = (!empty($instanceData[$field->getKey()])) ? $instanceData[$field->getKey()] : $field->getArg(
+//                'std',
+//                ''
+//            );
+//            $field->setData($fielddata);
+//        }
+//    }
 
 
     /**
@@ -183,7 +183,17 @@ class FieldSubGroup implements ExportableFieldInterface
     {
         /** @var Field $field */
         foreach ($this->fields as $field) {
-            $fielddata = (!empty($data[$field->getKey()])) ? $data[$field->getKey()] : $field->getArg('std', '');
+
+            $fielddata = '';
+
+            if (isset($data[$field->getKey()])) {
+                $fielddata = $data[$field->getKey()];
+            }
+
+            if (!isset($data[$field->getKey()])) {
+                $fielddata = $field->getArg('std', '');
+            }
+
             $field->setData($fielddata);
         }
     }
@@ -198,7 +208,7 @@ class FieldSubGroup implements ExportableFieldInterface
             if (!is_object($field)) {
                 continue;
             }
-            $collect[$field->getKey()] = $field->getDefaultValue();
+            $collect[$field->getKey()] = 'pooop';
         }
         return $collect;
     }

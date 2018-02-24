@@ -277,7 +277,6 @@ abstract class Field implements ExportableFieldInterface
     public function getValue($arrKey = null, $default = '')
     {
         $data = $this->value;
-
         if ($this->getCallback('get.value')) {
             $data = call_user_func($this->getCallback('get.value'), $data);
         }

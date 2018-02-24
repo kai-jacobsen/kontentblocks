@@ -426,4 +426,12 @@ class ImageReturn extends StandardFieldReturn
 
         return $value;
     }
+
+    public function __toString()
+    {
+        if (is_array($this->attachment) && isset($this->attachment['url'])){
+            return $this->attachment['url'];
+        }
+        return '';
+    }
 }

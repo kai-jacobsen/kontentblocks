@@ -9,6 +9,7 @@ use Kontentblocks\Fields\ModuleFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Templating\ModuleView;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class Module
@@ -73,12 +74,12 @@ abstract class Module implements EntityInterface
         $this->properties = $properties;
         $this->environment = $environment;
         $this->context = new ModuleContext($environment->export(), $this);
-        $this->model = new ModuleModel($data, $this);
         $this->viewManager = Kontentblocks::getService('registry.moduleViews')->getViewManager($this);
         /**
          * Setup FieldController, Sections and fields if used
          */
         $this->setupFields();
+        $this->model = $this->prepareModel($data);
     }
 
     /**
@@ -102,6 +103,30 @@ abstract class Module implements EntityInterface
     public function getId()
     {
         return $this->properties->mid;
+    }
+
+    /**
+     * @param $data
+     * @return ModuleModel
+     */
+    protected function prepareModel($data)
+    {
+        $savedData = $data;
+        $model = new ModuleModel([], $this);
+        if ($this->fields) {
+            $data = array();
+            $config = $this->fields->export();
+            foreach ($config->getFields() as $attrs) {
+                if ($attrs['arrayKey']) {
+                    $data[$attrs['arrayKey']][$attrs['key']] = $attrs['std'];
+                } else {
+                    $data[$attrs['key']] = $attrs['std'];
+                }
+            }
+            $new = wp_parse_args($savedData, $data);
+            $model->set($new);
+        }
+        return $model;
     }
 
     /**
@@ -181,6 +206,7 @@ abstract class Module implements EntityInterface
         // render fields if set
         if (isset($this->fields) && is_object($this->fields)) {
             $rendererClass = $this->properties->getSetting('fieldRenderer');
+            $this->fields->updateData();
             $renderer = new $rendererClass($this->fields);
             $concat .= $renderer->render();
         } else {
@@ -209,6 +235,7 @@ abstract class Module implements EntityInterface
     {
         $model = $this->model;
         if (isset($this->fields)) {
+            $this->fields->updateData();
             $model = $this->setupViewModel();
         }
         $this->view = $this->getView($model);
