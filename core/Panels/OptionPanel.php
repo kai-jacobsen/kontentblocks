@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Panels;
 
 
@@ -59,9 +60,9 @@ abstract class OptionPanel extends AbstractPanel
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
         $this->dataProvider = new SerOptionsDataProvider($this->baseId);
-        $this->model = new PanelModel($this->dataProvider->export(), $this);
         $this->fields = new StandardFieldController($this->baseId, $this);
         $this->fields();
+        $this->model = $this->prepareModel();
     }
 
     /**
@@ -79,6 +80,29 @@ abstract class OptionPanel extends AbstractPanel
         );
 
         return wp_parse_args($args, $defaults);
+    }
+
+    /**
+     * @return PanelModel
+     */
+    public function prepareModel()
+    {
+        $savedData = $this->dataProvider->export();
+        $model = new PanelModel([], $this);
+        if ($this->fields) {
+            $data = array();
+            $config = $this->fields->export();
+            foreach ($config->getFields() as $attrs) {
+                if ($attrs['arrayKey']) {
+                    $data[$attrs['arrayKey']][$attrs['key']] = $attrs['std'];
+                } else {
+                    $data[$attrs['key']] = $attrs['std'];
+                }
+            }
+            $new = wp_parse_args($savedData, $data);
+            $model->set($new);
+        }
+        return $model;
     }
 
     abstract public function fields();
@@ -253,6 +277,7 @@ abstract class OptionPanel extends AbstractPanel
     public function renderFields()
     {
         $renderer = $this->fields->getFieldRenderClass();
+        $this->fields->updateData();
         return $renderer->render();
     }
 

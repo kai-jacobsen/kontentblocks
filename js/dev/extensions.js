@@ -358,6 +358,8 @@ var BackupUi = Backbone.View.extend({
     this.listEl = jQuery('<ul></ul>').appendTo(this.$el);
     if (this.listEl.length > 0) {
       this.update();
+    } else {
+      return;
     }
 
     // Heartbeat send data1

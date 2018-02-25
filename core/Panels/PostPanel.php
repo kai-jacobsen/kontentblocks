@@ -203,7 +203,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function renderFields()
     {
-        $this->prepareModel(); // parse in missing data
+//        $this->prepareModel(); // parse in missing data
         $this->fields->updateData();
         $renderer = $this->fields->getFieldRenderClass();
         return $renderer->render();
