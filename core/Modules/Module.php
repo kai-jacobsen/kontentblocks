@@ -78,8 +78,9 @@ abstract class Module implements EntityInterface
         /**
          * Setup FieldController, Sections and fields if used
          */
+        $this->model = new ModuleModel($data, $this);
         $this->setupFields();
-        $this->model = $this->prepareModel($data);
+        $this->model = $this->prepareModel();
     }
 
     /**
@@ -109,10 +110,9 @@ abstract class Module implements EntityInterface
      * @param $data
      * @return ModuleModel
      */
-    protected function prepareModel($data)
+    protected function prepareModel()
     {
-        $savedData = $data;
-        $model = new ModuleModel([], $this);
+        $savedData = $this->model->export();
         if ($this->fields) {
             $data = array();
             $config = $this->fields->export();
@@ -124,9 +124,9 @@ abstract class Module implements EntityInterface
                 }
             }
             $new = wp_parse_args($savedData, $data);
-            $model->set($new);
+            $this->model->set($new);
         }
-        return $model;
+        return $this->model;
     }
 
     /**
@@ -163,6 +163,7 @@ abstract class Module implements EntityInterface
      */
     public function getModel()
     {
+
         return $this->model;
     }
 
