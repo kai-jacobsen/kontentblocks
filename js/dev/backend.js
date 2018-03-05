@@ -3378,7 +3378,7 @@ module.exports = Backbone.View.extend({
   handleLimit: function () {
     var limit = this.model.get('limit');
     if (limit) {
-      var items = jQuery('.kb-field--' + this.type + ' -item', this.$list).length;
+      var items = jQuery('.kb-field--' + this.type + '-item', this.$list).length;
       if (items >= limit) {
         this.$button.hide();
       } else {
