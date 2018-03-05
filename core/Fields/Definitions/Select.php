@@ -98,7 +98,7 @@ Class Select extends Field
     public function save($new, $old)
     {
         if ($this->getArg('select2', false)) {
-            if ($this->getArg('multiple', false)) {
+            if ($this->getArg('multiple', false) === true) {
                 if (!is_array($new)) {
                     $new = array();
                 }
@@ -113,7 +113,6 @@ Class Select extends Field
                 }
             }
         }
-
 
         if (is_null($new)) {
             return null;
