@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2018-02-25 */
+/*! Kontentblocks DevVersion 2018-03-05 */
 window.KBF = {
     groupedCallbacks: {},
     initCallbacks: [],
