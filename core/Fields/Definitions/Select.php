@@ -55,7 +55,7 @@ Class Select extends Field
         }
 
 
-        if ($this->getArg('select2', false) && is_array($val)) {
+        if ($this->getArg('select2', false)) {
             $collect = array();
 
             $toValue = $this->sortToValue($options);
@@ -73,6 +73,7 @@ Class Select extends Field
 
             $this->setArgs(array('options' => $toValue));
         }
+
 
         return $val;
     }
@@ -97,23 +98,27 @@ Class Select extends Field
     public function save($new, $old)
     {
         if ($this->getArg('select2', false)) {
-            if (!is_array($new)) {
-                $new = array();
-            }
-
-            if (is_array($old)) {
-                foreach (array_keys($old) as $index) {
-                    if (!isset($new[$index])) {
-                        $new[$index] = null;
-                    }
+            if ($this->getArg('multiple', false)) {
+                if (!is_array($new)) {
+                    $new = array();
                 }
-                return $new;
+
+                if (is_array($old)) {
+                    foreach (array_keys($old) as $index) {
+                        if (!isset($new[$index])) {
+                            $new[$index] = null;
+                        }
+                    }
+                    return $new;
+                }
             }
         }
+
 
         if (is_null($new)) {
             return null;
         }
+
         return $new;
     }
 }
