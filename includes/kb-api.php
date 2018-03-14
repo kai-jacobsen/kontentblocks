@@ -55,7 +55,6 @@ function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $mo
         return null;
     }
 
-
     /** @var \Kontentblocks\Areas\AreaRegistry $registry */
     $registry = Kontentblocks::getService('registry.areas');
     if ($registry->isDynamic($areaId)) {
@@ -67,7 +66,6 @@ function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $mo
     }
 
     $area = $environment->getAreaDefinition($areaId);
-
     if (!$area) {
         return '';
     }

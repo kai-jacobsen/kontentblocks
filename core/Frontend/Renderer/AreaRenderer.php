@@ -114,7 +114,6 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
             return false;
         }
 
-
         $this->areaHtmlNode = new AreaNode(
             $this->environment,
             $this->areaSettings
@@ -171,7 +170,7 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
         if (!$this->area->settings->isActive()) {
             return false;
         }
-        if ($this->area->dynamic && !$this->area->settings->isAttached() && $this->area->manual) {
+        if ($this->area->dynamic && !$this->area->settings->isAttached() && !$this->area->manual) {
             return false;
         }
 

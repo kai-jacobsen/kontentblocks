@@ -55,7 +55,7 @@ Class Select extends Field
         }
 
 
-        if ($this->getArg('select2', false)) {
+        if ($this->getArg('select2', false) && is_array($val)) {
             $collect = array();
 
             $toValue = $this->sortToValue($options);
