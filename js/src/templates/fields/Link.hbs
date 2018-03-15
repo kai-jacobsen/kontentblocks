@@ -27,6 +27,21 @@
                     value='{{ model.value.linktitle }}'>
         </div>
     {{/if}}
+
+    {{#if model.showtarget }}
+        <div class='kb-field--link-meta'>
+            <label for='{{ model.index }}-linktarget'>
+                <input data-kbf-link-target type='checkbox' class='kb-field--link-target'
+                       id='{{ model.index }}-linktarget'
+                    {{#if model.value.target }}
+                       checked="checked"
+                    {{/if}}
+                       value='{{ model.value.target }}'
+                       name='{{ fieldname model.baseId model.index model.primeKey }}[linktarget]'>
+                {{ i18n.linktarget }} </label>
+        </div>
+
+    {{/if}}
     <p class="description">{{ model.description }}</p>
 
 </div>

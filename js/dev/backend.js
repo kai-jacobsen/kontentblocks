@@ -1877,6 +1877,7 @@ var Utilities = require('common/Utilities');
 module.exports = Backbone.View.extend({
 
   initialize: function (options) {
+    var that = this;
     this.$toggle = options.$toggle;
     this.uid = options.uid;
     // setup local storage
@@ -1886,7 +1887,9 @@ module.exports = Backbone.View.extend({
         Utilities.store.set(this.uid, {open: true});
       }
       this.bindHandlers();
-      this.initialState();
+      _.defer(function () {
+        that.initialState();
+      });
     }
 
 
@@ -5040,20 +5043,21 @@ module.exports = BaseView.extend({
 },{"../FieldControlBaseView":52}],81:[function(require,module,exports){
 var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
-  initialize: function(){
+  initialize: function () {
     this.render();
   },
-  events:{
-    'click .kb-js-add-link' : 'openModal'
+  events: {
+    'click .kb-js-add-link': 'openModal'
   },
-  render: function(){
+  render: function () {
     this.$input = this.$('[data-kbf-link-url]');
     this.$text = this.$('[data-kbf-link-linktext]');
+    this.$target = this.$('[data-kbf-link-target]');
   },
-  derender: function(){
+  derender: function () {
 
   },
-  openModal: function(){
+  openModal: function () {
     window._kbLink = this;
     wpActiveEditor = this.$input.attr('id');
     jQuery('#wp-link-wrap').addClass('kb-customized');
@@ -5065,18 +5069,45 @@ module.exports = BaseView.extend({
     wpLink.isMCE = this.isMCE;
     wpLink.htmlUpdate = this.htmlUpdate;
     wpLink.open();
-    jQuery( '#wp-link-text').val(this.$text.val());
-    jQuery( '#wp-link-url').val(this.$input.val());
+    jQuery('#wp-link-text').val(this.$text.val());
+    jQuery('#wp-link-url').val(this.$input.val());
+
+    if (!this.model.get('showtarget')){
+      jQuery('#link-selector .link-target').addClass('kb-hide');
+    }
+
+    this.setTarget();
+
   },
-  htmlUpdate: function(){
-    var attrs, html, start, end, cursor, href,title,
+  setTarget: function () {
+    var $mTarget = jQuery('#wp-link-target');
+    if (this.$target.is(':checked')) {
+      $mTarget.prop('checked', true);
+    } else {
+      $mTarget.prop('checked', false);
+    }
+  },
+  setTargetFromModal: function (target) {
+    if (target === '_blank') {
+      this.$target.prop('checked', true);
+    } else {
+      this.$target.prop('checked', false);
+    }
+
+  },
+  htmlUpdate: function () {
+    var target, attrs, html, start, end, cursor, href, title,
       textarea = wpLink.textarea, result;
 
     if (!textarea)
       return;
     // get contents of dialog
     attrs = wpLink.getAttrs();
-    title = jQuery( '#wp-link-text').val();
+    title = jQuery('#wp-link-text').val();
+
+    target = attrs.target;
+    window._kbLink.setTargetFromModal(target);
+
     // If there's no href, return.
     if (!attrs.href || attrs.href == 'http://')
       return;
@@ -5091,19 +5122,23 @@ module.exports = BaseView.extend({
 
     window._kbLink.trigger('update', title, href);
     window._kbLink.$text.val(title);
+
     //restore the original function
     // close dialog and put the cursor inside the textarea
     wpLink.close();
     window._kbLink.close();
     textarea.focus();
   },
-  isMCE: function(){
+  isMCE: function () {
     return false;
   },
-  close: function(){
-      // restore the original functions to wpLink
-      wpLink.isMCE = window.kb_restore_isMce;
-      wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
+  close: function () {
+    // restore the original functions to wpLink
+    if (!this.model.get('showtarget')){
+      jQuery('#link-selector .link-target').removeClass('kb-hide');
+    }
+    wpLink.isMCE = window.kb_restore_isMce;
+    wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
   }
 });
 },{"../FieldControlBaseView":52}],82:[function(require,module,exports){
@@ -8569,6 +8604,24 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "-linktitle'\n                    value='"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.linktitle : stack1), depth0))
     + "'>\n        </div>\n";
+},"5":function(depth0,helpers,partials,data) {
+    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+
+  return "        <div class='kb-field--link-meta'>\n            <label for='"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1), depth0))
+    + "-linktarget'>\n                <input data-kbf-link-target type='checkbox' class='kb-field--link-target'\n                       id='"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1), depth0))
+    + "-linktarget'\n"
+    + ((stack1 = helpers['if'].call(depth0,((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.target : stack1),{"name":"if","hash":{},"fn":this.program(6, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + "                       value='"
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.target : stack1), depth0))
+    + "'\n                       name='"
+    + alias2((helpers.fieldname || (depth0 && depth0.fieldname) || helpers.helperMissing).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldname","hash":{},"data":data}))
+    + "[linktarget]'>\n                "
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.linktarget : stack1), depth0))
+    + " </label>\n        </div>\n\n";
+},"6":function(depth0,helpers,partials,data) {
+    return "                       checked=\"checked\"\n";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
@@ -8584,6 +8637,8 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.linktext : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "\n"
     + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.linktitle : stack1),{"name":"if","hash":{},"fn":this.program(3, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.showtarget : stack1),{"name":"if","hash":{},"fn":this.program(5, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "    <p class=\"description\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
     + "</p>\n\n</div>";

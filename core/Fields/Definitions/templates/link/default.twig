@@ -16,9 +16,20 @@
 
     {% if Field.getArg('linktitle') %}
         <div class='kb-field--link-meta'><label
-                    for='{{ Form.getInputFieldId('linktitle') }}'>{{ i18n.linktitle }}</label><br>";
+                    for='{{ Form.getInputFieldId('linktitle') }}'>{{ i18n.linktitle }}</label><br>
             <input type='text' class='kb-field--link-linktitle' id='{{ Form.getInputFieldId('linktitle') }}'
                    value='{{ Field.getValue('linktitle') }}' name='{{ Form.getFieldName('linktitle') }}'>
+        </div>
+    {% endif %}
+
+    {% if Field.getArg('showtarget') %}
+        <div class='kb-field--link-meta'>
+            <label for='{{ Form.getInputFieldId(false,'target') }}'>
+                <input data-kbf-link-target type='checkbox' class='kb-field--link-target'
+                       id='{{ Form.getInputFieldId(false,'target') }}'
+                        {{ checked(Field.getValue('target'), true) }}
+                       value='{{ Field.getValue('target') }}' name='{{ Form.getFieldName('target') }}'>
+                {{ i18n.linktarget }} </label>
         </div>
     {% endif %}
 {% endblock %}

@@ -2,6 +2,7 @@ var Utilities = require('common/Utilities');
 module.exports = Backbone.View.extend({
 
   initialize: function (options) {
+    var that = this;
     this.$toggle = options.$toggle;
     this.uid = options.uid;
     // setup local storage
@@ -11,7 +12,9 @@ module.exports = Backbone.View.extend({
         Utilities.store.set(this.uid, {open: true});
       }
       this.bindHandlers();
-      this.initialState();
+      _.defer(function () {
+        that.initialState();
+      });
     }
 
 

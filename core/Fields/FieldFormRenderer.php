@@ -101,12 +101,13 @@ class FieldFormRenderer
     /**
      * Helper to generate a unique id to be used with labels and inputs, basically.
      * @param bool $rnd
-     * @return string|void
+     * @param string $suffix
+     * @return string
      */
-    public function getInputFieldId($rnd = false)
+    public function getInputFieldId($rnd = false, $suffix = '')
     {
         $number = ($rnd) ? '_' . uniqid() : '';
-        $idAttr = sanitize_title($this->field->getFieldId() . '_' . $this->field->getKey() . $number);
+        $idAttr = sanitize_title($this->field->getFieldId() . '_' . $this->field->getKey() . $number . $suffix);
         return esc_attr($idAttr);
     }
 

@@ -23,6 +23,7 @@
             'linktext' => __( 'Buttonlabel', 'Kontentblocks' ),
             'linktitle' => __( 'Titleattribute', 'Kontentblocks' ),
             'linklabel' => __( 'URL', 'Kontentblocks' ),
+            'linktarget' => __( 'open in new tab', 'Kontentblocks'),
             'addLink' => __( 'Add link', 'Kontentblocks' )
         ),
         // Field::Image
