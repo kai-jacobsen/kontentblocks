@@ -47,7 +47,7 @@ use Pimple;
 Class Kontentblocks
 {
 
-    const VERSION = '0.9.10';
+    const VERSION = '0.10.1';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.16';
     const DEBUG = true;
@@ -136,20 +136,20 @@ Class Kontentblocks
             return new ModuleRegistry($services);
         };
 
-        $this->services['registry.areas'] = function ($services) {
-            return new AreaRegistry($services);
+        $this->services['registry.areas'] = function () {
+            return new AreaRegistry();
         };
-        $this->services['registry.moduleViews'] = function ($services) {
-            return new ModuleViewsRegistry($services);
+        $this->services['registry.moduleViews'] = function () {
+            return new ModuleViewsRegistry();
         };
-        $this->services['registry.fields'] = function ($services) {
-            return new FieldRegistry($services);
+        $this->services['registry.fields'] = function () {
+            return new FieldRegistry();
         };
-        $this->services['registry.panels'] = function ($services) {
-            return new PanelRegistry($services);
+        $this->services['registry.panels'] = function () {
+            return new PanelRegistry();
         };
-        $this->services['registry.screenLayouts'] = function ($services) {
-            return new EditScreenLayoutsRegistry($services);
+        $this->services['registry.screenLayouts'] = function () {
+            return new EditScreenLayoutsRegistry();
         };
 
 

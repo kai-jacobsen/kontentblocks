@@ -6,6 +6,7 @@ use Exception;
 use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\ExportableFieldInterface;
 use Kontentblocks\Common\Interfaces\EntityInterface;
+use function Kontentblocks\fieldRegistry;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
@@ -339,31 +340,6 @@ class StandardFieldSection implements ExportableFieldInterface
     }
 
     /**
-     * @param $field
-     * @return mixed
-     */
-    private function getFielddata(ExportableFieldInterface $field)
-    {
-        $data = $this->getEntityModel();
-        if (isset($data[$field->getKey()])) {
-            return (is_object($data) && !is_null(
-                    $data[$field->getKey()]
-                )) ? $data[$field->getKey()] : $field->getDefaultValue();
-        }
-
-        return $field->getDefaultValue();
-
-    }
-
-    /**
-     * @return EntityModel
-     */
-    public function getEntityModel()
-    {
-        return $this->entity->getModel();
-    }
-
-    /**
      * Increase number of visible fields property
      */
     protected function increaseVisibleFields()
@@ -539,12 +515,53 @@ class StandardFieldSection implements ExportableFieldInterface
         return $fields;
     }
 
+    public function addFieldTemplate($tplid)
+    {
+        $registry = fieldRegistry();
+        $tplid = (array)$tplid;
+        foreach ($tplid as $id) {
+            if ($registry->fieldTemplateExists($id)) {
+                $callback = $registry->getFieldTemplate($id);
+                if (is_callable($callback)) {
+                    call_user_func($callback, $this);
+                }
+            }
+        }
+
+        return $this;
+    }
+
     /**
      * Descrease number of visible fields property
      */
     protected function decreaseVisibleFields()
     {
         $this->numberOfVisibleFields--;
+    }
+
+    /**
+     * @param $field
+     * @return mixed
+     */
+    private function getFielddata(ExportableFieldInterface $field)
+    {
+        $data = $this->getEntityModel();
+        if (isset($data[$field->getKey()])) {
+            return (is_object($data) && !is_null(
+                    $data[$field->getKey()]
+                )) ? $data[$field->getKey()] : $field->getDefaultValue();
+        }
+
+        return $field->getDefaultValue();
+
+    }
+
+    /**
+     * @return EntityModel
+     */
+    public function getEntityModel()
+    {
+        return $this->entity->getModel();
     }
 
 

@@ -5,6 +5,7 @@ namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Common\Interfaces\EntityInterface;
+use Kontentblocks\Common\Interfaces\FieldEntityInterface;
 use Kontentblocks\Fields\ModuleFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
@@ -15,7 +16,7 @@ use Kontentblocks\Utils\Utilities;
  * Class Module
  * @package Kontentblocks\Modules
  */
-abstract class Module implements EntityInterface
+abstract class Module implements EntityInterface, FieldEntityInterface
 {
 
     /**
@@ -94,6 +95,7 @@ abstract class Module implements EntityInterface
                 $this->properties->parentObjectId);
             // setup Fields
             $this->fields();
+            $this->fields->afterSetup();
         }
     }
 
