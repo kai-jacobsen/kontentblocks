@@ -4,9 +4,11 @@ namespace Kontentblocks\Fields;
 
 use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Interfaces\EntityInterface;
+use function Kontentblocks\fieldRegistry;
 use Kontentblocks\Fields\Renderer\AbstractFieldRenderer;
 use Kontentblocks\Fields\Renderer\FieldRendererTabs;
 use Kontentblocks\Fields\Renderer\InterfaceFieldRenderer;
+use Kontentblocks\Kontentblocks;
 
 /**
  * Class AbstractFieldController
@@ -321,6 +323,7 @@ class StandardFieldController
      */
     public function render()
     {
+
         return $this->getFieldRenderClass()->render();
     }
 
@@ -372,6 +375,27 @@ class StandardFieldController
         if (is_a($string, FieldFormRenderer::class, true)) {
             $this->formRenderClass = $string;
         }
+    }
+
+    /**
+     * @param $tplid
+     * @return $this
+     */
+    public function addSectionTemplate($tplid)
+    {
+        $registry = fieldRegistry();
+        if ($registry->sectionTemplateExists($tplid)) {
+            $callback = $registry->getSectionTemplate($tplid);
+            if (is_callable($callback)) {
+                call_user_func($callback, $this);
+            }
+        }
+        return $this;
+    }
+
+    public function afterSetup()
+    {
+        return $this;
     }
 
 

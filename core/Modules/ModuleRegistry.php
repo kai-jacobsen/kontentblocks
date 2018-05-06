@@ -116,6 +116,28 @@ class ModuleRegistry
             $args['slug'] = 'mod-' . $args['slug'];
         }
 
+        if (isset($args['category'])) {
+            $cat = $args['category'];
+            $result = [];
+            if (is_string($cat)) {
+                $result[] = sanitize_title($cat);
+                $result[] = ucwords($cat);
+            }
+
+            if (is_array($cat) && count($cat) === 2) {
+                $result[] = $cat[0];
+                $result[] = $cat[1];
+            }
+
+            add_filter('kb.module.cats', function ($cats) use ($result) {
+                if (!isset($cats[$result[0]])) {
+                    $cats[$result[0]] = $result[1];
+                }
+                return $cats;
+            });
+
+        }
+
         return $args;
 
     }

@@ -60,8 +60,7 @@ abstract class OptionPanel extends AbstractPanel
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
         $this->dataProvider = new SerOptionsDataProvider($this->baseId);
-        $this->fields = new StandardFieldController($this->baseId, $this);
-        $this->fields();
+        $this->setupFields();
         $this->model = $this->prepareModel();
     }
 
@@ -81,6 +80,15 @@ abstract class OptionPanel extends AbstractPanel
 
         return wp_parse_args($args, $defaults);
     }
+
+    public function setupFields()
+    {
+        $this->fields = new StandardFieldController($this->baseId, $this);
+        $this->fields();
+        $this->fields->afterSetup();
+    }
+
+    abstract public function fields();
 
     /**
      * @return PanelModel
@@ -104,8 +112,6 @@ abstract class OptionPanel extends AbstractPanel
         }
         return $model;
     }
-
-    abstract public function fields();
 
     /**
      * @param $args

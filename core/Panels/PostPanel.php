@@ -82,8 +82,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
-        $this->fields = new PostPanelFieldController($this->baseId, $this);
-        $this->fields();
+        $this->setupFields();
         $this->model = $this->prepareModel();
     }
 
@@ -105,6 +104,18 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         );
         return wp_parse_args($args, $defaults);
     }
+
+    public function setupFields()
+    {
+        $this->fields = new PostPanelFieldController($this->baseId, $this);
+        $this->fields();
+        $this->fields->afterSetup();
+    }
+
+    /**
+     * Fields to render, must be provided by child class
+     */
+    abstract public function fields();
 
     /**
      * @return PanelModel
@@ -136,11 +147,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
     {
         return $this->context;
     }
-
-    /**
-     * Fields to render, must be provided by child class
-     */
-    abstract public function fields();
 
     /**
      * Setup hooks

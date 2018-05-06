@@ -23,6 +23,13 @@ class FieldRegistry
     protected $fields;
 
     /**
+     * @var array
+     */
+    protected $sectionTemplates = [];
+
+    protected $fieldTemplates = [];
+
+    /**
      * Field add method
      * Extracts information from a given file
      * Field must provide a static defaults property array with a "type" set
@@ -75,7 +82,7 @@ class FieldRegistry
      * @param $subkey
      * @param $key
      * @param array $args
-     * @return bool|Field
+     * @return null|Field
      * @since 0.1.0
      */
     public function getField($type, $baseId, $subkey, $key, $args = array())
@@ -83,8 +90,6 @@ class FieldRegistry
         if (isset($this->fields[$type])) {
             return new $this->fields[$type]($baseId, $subkey, $key, $args);
         }
-
-
         return null;
     }
 
@@ -95,6 +100,76 @@ class FieldRegistry
     public function validType($type)
     {
         return isset($this->fields[$type]);
+    }
+
+
+    /**
+     * @param $tplid
+     * @param $callback
+     * @return $this
+     */
+    public function addSectionTemplate($tplid, $callback)
+    {
+        if (!$this->sectionTemplateExists($tplid) && is_callable($callback)) {
+            $this->sectionTemplates[$tplid] = $callback;
+        }
+        return $this;
+    }
+
+    /**
+     * @param $tplid
+     * @return bool
+     */
+    public function sectionTemplateExists($tplid)
+    {
+        return isset($this->sectionTemplates[$tplid]);
+    }
+
+    /**
+     * @param $tplid
+     * @return mixed
+     */
+    public function getSectionTemplate($tplid)
+    {
+        if ($this->sectionTemplateExists($tplid)) {
+            return $this->sectionTemplates[$tplid];
+        }
+        return false;
+    }
+
+
+    /**
+     * @param $tplid
+     * @param $callback
+     * @return $this
+     */
+    public function addFieldTemplate($tplid, $callback)
+    {
+        if (!$this->fieldTemplateExists($tplid) && is_callable($callback)) {
+            $this->fieldTemplates[$tplid] = $callback;
+        }
+        return $this;
+    }
+
+    /**
+     * @param $tplid
+     * @return bool
+     */
+    public function fieldTemplateExists($tplid)
+    {
+        return isset($this->fieldTemplates[$tplid]);
+    }
+
+    /**
+     * @param $tplid
+     * @return mixed
+     */
+    public function getFieldTemplate($tplid)
+    {
+        if ($this->fieldTemplateExists($tplid)) {
+            return $this->fieldTemplates[$tplid];
+        }
+        return false;
     }
 
 }

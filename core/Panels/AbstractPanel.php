@@ -6,6 +6,7 @@ namespace Kontentblocks\Panels;
 use Kontentblocks\Backend\DataProvider\DataProviderInterface;
 use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Interfaces\EntityInterface;
+use Kontentblocks\Common\Interfaces\FieldEntityInterface;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Fields\StandardFieldController;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Class AbstractPanel
  * @package Kontentblocks\Panels
  */
-abstract class AbstractPanel implements EntityInterface
+abstract class AbstractPanel implements EntityInterface, FieldEntityInterface
 {
 
     public $saveAsSingle;
@@ -162,7 +163,8 @@ abstract class AbstractPanel implements EntityInterface
     /**
      * @return array
      */
-    public function getArgs(){
+    public function getArgs()
+    {
         return $this->args;
     }
 

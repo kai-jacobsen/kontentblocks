@@ -1,0 +1,7 @@
+<div class="kb-field kb-js-field field-api-checkbox kb-field--checkbox">
+    <label class="heading">{{ model.label }}
+        <input type="checkbox"{{#ifCond model.value '==' true }}checked="checked"{{/ifCond}}
+               name="{{ fieldName model.baseId model.index model.primeKey }}">
+    </label>
+    <p class="description">{{ model.description }}</p>
+</div>
