@@ -1,6 +1,6 @@
 {% extends Form.getLayout() %}
 {% block fieldmarkup %}
-<label><input type='checkbox' id='{{ Form.getInputFieldId() }}'
-              name='{{ Form.getFieldName() }}'  {{ checked(Field.getValue(), true, false) }} /> {{ Field.getArg( 'text', 'Please label this checkbox' ) }}
-</label>
+    <label><input type='checkbox' id='{{ Form.getInputFieldId() }}'
+                  name='{{ Form.getFieldName() }}' {{ checked(Field.getValue(), true, false) }} /> {{ Field.getArg( 'text', 'Please label this checkbox' ) }}
+    </label>
 {% endblock %}

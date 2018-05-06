@@ -519,6 +519,8 @@ class Utilities
         $cats['core'] = __('System', 'Kontentblocks');
         $cats['gmodule'] = __('Global Modules', 'Kontentblocks');
 
+        ksort($cats);
+
         Kontentblocks::getService('utility.jsontransport')->registerData('ModuleCategories', null, $cats);
         return $cats;
     }
