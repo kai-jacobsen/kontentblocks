@@ -198,6 +198,13 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
     {
         $classes = array();
 
+        $nextHash = null;
+        $nextModule = $this->getNextModule();
+
+        if (is_a($nextModule, Module::class)) {
+            $nextHash = $nextModule->properties->getSetting('hash');
+        }
+
         if ($this->position === 1) {
             $classes[] = 'first-module';
         }
@@ -217,12 +224,27 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
         }
 
 
-        if ($this->previousModule === $module->properties->getSetting('hash')) {
-            $classes[] = 'repeater';
+        if ($nextHash === $module->properties->getSetting('hash') && !$this->repeating){
+            $classes[] = 'first-repeater';
             $this->repeating = true;
-        } else {
-            $this->repeating = false;
         }
+
+
+
+
+
+        if ($this->previousModule === $module->properties->getSetting('hash')) {
+            if ($this->repeating && ($nextHash !== $module->properties->getSetting('hash'))){
+                $classes[] = 'repeater';
+                $classes[] = 'last-repeater';
+                $this->repeating = false;
+            } else {
+                $classes[] = 'repeater';
+            }
+        } else {
+        }
+
+
 
 
         if ($this->repeating && $this->areaHtmlNode->getSetting('mergeRepeating')) {
@@ -237,16 +259,6 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
     }
 
     /**
-     * @param Module $module
-     */
-    public function afterModule(Module $module)
-    {
-        $this->previousModule = $module->properties->getSetting('hash');
-        $this->position++;
-    }
-
-
-    /**
      * @return mixed
      */
     public function getNextModule()
@@ -254,6 +266,15 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
         $next = $this->modules->next();
         $this->modules->prev();
         return $next;
+    }
+
+    /**
+     * @param Module $module
+     */
+    public function afterModule(Module $module)
+    {
+        $this->previousModule = $module->properties->getSetting('hash');
+        $this->position++;
     }
 
     /**
