@@ -6,6 +6,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\TermEnvironment;
 use Kontentblocks\Backend\Environment\UserEnvironment;
 use Kontentblocks\Fields\Definitions\NullField;
+use Kontentblocks\Fields\Definitions\ReturnObjects\StandardFieldReturn;
 use Kontentblocks\Kontentblocks;
 use Symfony\Component\HttpFoundation\Request;
 use XHProfRuns_Default;
@@ -640,5 +641,14 @@ class Utilities
     public static function getNullField($args = [])
     {
         return new NullField('nullfield', null, 'nullkey', $args);
+    }
+
+    public static function extractFieldValue($val){
+
+        if (is_a($val, StandardFieldReturn::class)){
+            return $val->value;
+        }
+        return $val;
+
     }
 }

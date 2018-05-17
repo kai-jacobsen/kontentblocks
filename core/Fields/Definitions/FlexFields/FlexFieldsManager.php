@@ -26,16 +26,32 @@ class FlexFieldsManager implements \JsonSerializable
     public function __construct(FlexibleFields $field)
     {
         $this->field = $field;
-        $this->currentType = $this->createType('default', ['name' => 'Default']);
     }
 
+    /**
+     * @param $sectionId
+     * @param array $args
+     * @return FlexFieldsSection
+     */
+    public function addSection($sectionId, $args = array())
+    {
+
+        if (!$this->currentType) {
+            $this->currentType = $this->createType('default', ['name' => 'Default']);
+        }
+
+        $args['type'] = $this->currentType->getId();
+        $section = $this->currentType->addSection($sectionId, $args);
+        return $section;
+
+    }
 
     /**
      * @param $typeid
      * @param array $args
      * @return FlexFieldsType
      */
-        public function createType($typeid, $args = array())
+    public function createType($typeid, $args = array())
     {
 
         $typeid = sanitize_key($typeid);
@@ -48,21 +64,6 @@ class FlexFieldsManager implements \JsonSerializable
         return $this->types[$typeid];
 
     }
-
-    /**
-     * @param $sectionId
-     * @param array $args
-     * @return FlexFieldsSection
-     */
-    public function addSection($sectionId, $args = array())
-    {
-
-        $args['type'] = $this->currentType->getId();
-        $section = $this->currentType->addSection($sectionId, $args);
-        return $section;
-
-    }
-
 
     /**
      * @return array

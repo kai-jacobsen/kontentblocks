@@ -85,6 +85,10 @@ class FlexibleFieldsReturn implements InterfaceFieldReturn
             $item = array();
             foreach ($fields as $key => $conf) {
                 /** @var \Kontentblocks\Fields\Field $field */
+
+                if (!isset($data[$conf['key']])){
+                    continue;
+                }
                 $field = $registry->getField($conf['type'], $this->entityId, $index, $key);
 
                 if (!isset($data[$key])) {
@@ -98,11 +102,10 @@ class FlexibleFieldsReturn implements InterfaceFieldReturn
                 $item[$key] = $field->getFrontendValue($this->salt);
                 $item['index'] = $index;
                 $item['type'] = $key;
-
+                $item['_meta'] = $data['_meta'];
             }
             $items[$index] = $item;
         }
-
         $original = $this->field->getValue();
         if (is_array($original)) {
             $items = array_replace($original, array_intersect_key($items, $original));
@@ -121,6 +124,7 @@ class FlexibleFieldsReturn implements InterfaceFieldReturn
         }
         $collect = array();
         foreach ($this->types as $key => $type) {
+
             foreach ($type['sections'] as $section) {
                 if (!empty($section['fields'])) {
                     foreach ($section['fields'] as $field) {

@@ -131,7 +131,6 @@ class StandardFieldSection implements ExportableFieldInterface
      * @param string $key | Unique key
      * @param array $args | additional parameters, may differ by field type
      *
-     * @throws \Exception
      * @return StandardFieldSection Fluid layout
      */
     public function addField($type, $key, $args = array())
