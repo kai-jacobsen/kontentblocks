@@ -5,7 +5,7 @@ module.exports = Backbone.View.extend({
   },
   gone: function () {
     this.trigger('field.view.gone', this);
-    this.derender();
+    // this.derender();
   },
   toString: function(){
     return '';

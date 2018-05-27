@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Fields\Definitions\FlexFields;
 
+use function Kontentblocks\fieldRegistry;
 use Kontentblocks\Language\I18n;
 
 
@@ -53,6 +54,7 @@ class FlexFieldsType implements \JsonSerializable
         }
         return $this->sections[$sectionId];
     }
+
 
 
     /**
