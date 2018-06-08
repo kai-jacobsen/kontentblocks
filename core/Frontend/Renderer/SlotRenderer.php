@@ -98,7 +98,7 @@ class SlotRenderer
                 return null;
             }
             $this->moduleSettings->import($args);
-            $module->context->renderer = $this;
+            $module->context->setRenderer($this);
             $module->context->set(array('renderPosition' => $this->position));
             $module->context->set(array('renderSettings' => $this->moduleSettings));
             $renderer = new SingleModuleRenderer($module, $this->moduleSettings);

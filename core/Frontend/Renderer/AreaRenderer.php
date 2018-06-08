@@ -133,7 +133,7 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
             if (!is_a($module, '\Kontentblocks\Modules\Module') || !$module->verifyRender()) {
                 continue;
             }
-            $module->context->renderer = $this;
+            $module->context->setRenderer($this);
             $module->context->set(array('renderPosition' => $this->position));
             $this->beforeModule($module);
             $output .= $this->moduleRenderer->render();

@@ -37,7 +37,6 @@ class ModuleFieldSection extends StandardFieldSection
         $areaContext = $this->entity->getContext()->get('areaContext');
         $postType = $this->entity->getContext()->get('postType');
         $pageTemplate = $this->entity->getContext()->get('pageTemplate');
-
         $callback = $field->getCondition('callback');
         if (is_callable($callback)) {
             $res = call_user_func_array($callback, [$this, $field]);
