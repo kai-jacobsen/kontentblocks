@@ -154,7 +154,8 @@ abstract class Module implements EntityInterface, FieldEntityInterface
             'concat' => true,
             'templates' => array(),
             'fieldRenderer' => 'Kontentblocks\Fields\Renderer\FieldRendererTabs',
-            'iconclass' => 'dashicons-screenoptions'
+            'iconclass' => 'dashicons-screenoptions',
+            'subarea' => false
         );
 
     }

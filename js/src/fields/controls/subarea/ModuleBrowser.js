@@ -7,6 +7,7 @@ module.exports = ModuleBrowser.extend({
   initialize: function(options){
       ModuleBrowser.prototype.initialize.apply(this,arguments);
       this.subarea = options.subarea;
+      this.isSubarea = true;
   },
   createModule: function (module) {
     var Area, data;

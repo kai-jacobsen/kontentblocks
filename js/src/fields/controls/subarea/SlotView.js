@@ -59,7 +59,7 @@ module.exports = Backbone.View.extend({
   click: function () {
     if (!this.ModuleBrowser) {
       this.ModuleBrowser = new ModuleBrowser({
-        area: this.controller.area.View,
+        area: this.controller.subarea.View,
         subarea: this.controller.subarea.View
       });
       this.listenTo(this.ModuleBrowser, 'browser.module.created', this.moduleCreated);

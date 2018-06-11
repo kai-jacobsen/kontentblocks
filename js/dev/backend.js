@@ -5329,6 +5329,7 @@ module.exports = ModuleBrowser.extend({
   initialize: function(options){
       ModuleBrowser.prototype.initialize.apply(this,arguments);
       this.subarea = options.subarea;
+      this.isSubarea = true;
   },
   createModule: function (module) {
     var Area, data;
@@ -5527,7 +5528,7 @@ module.exports = Backbone.View.extend({
   click: function () {
     if (!this.ModuleBrowser) {
       this.ModuleBrowser = new ModuleBrowser({
-        area: this.controller.area.View,
+        area: this.controller.subarea.View,
         subarea: this.controller.subarea.View
       });
       this.listenTo(this.ModuleBrowser, 'browser.module.created', this.moduleCreated);
