@@ -860,7 +860,6 @@ module.exports = ListItem.extend({
   handleMove: function(){
     this.mode = 'move';
     this.createModule();
-
   },
   createModule: function () {
     var that = this;

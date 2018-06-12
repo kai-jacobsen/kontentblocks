@@ -111,7 +111,7 @@ module.exports = BaseView.extend({
     window._kbLink.setTargetFromModal(target);
 
     // If there's no href, return.
-    if (!attrs.href || attrs.href == 'http://')
+    if (!attrs.href)
       return;
     // Build HTML
     href = attrs.href;

@@ -5114,7 +5114,7 @@ module.exports = BaseView.extend({
     window._kbLink.setTargetFromModal(target);
 
     // If there's no href, return.
-    if (!attrs.href || attrs.href == 'http://')
+    if (!attrs.href)
       return;
     // Build HTML
     href = attrs.href;
@@ -5451,6 +5451,9 @@ module.exports = Backbone.View.extend({
     UI.repaint(this.fsControl.$el);
   },
   saveModule: function () {
+    if (!this.formLoaded){
+      return false;
+    }
     this.ModuleModel.sync();
     this.getClean();
   },
@@ -6961,6 +6964,7 @@ var BatchDeleteController = Backbone.View.extend({
     }, this.success, this);
   },
   success: function (res) {
+    var that = this;
     if (res.data.modules) {
       _.each(res.data.modules, function (value, key) {
         if (value) {
@@ -6969,6 +6973,7 @@ var BatchDeleteController = Backbone.View.extend({
           KB.Modules.remove(control.model);
           wp.heartbeat.interval('fast', 2);
           control.model.destroy();
+          that.hide();
         }
       }, this)
     }

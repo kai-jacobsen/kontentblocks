@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Fields\Definitions\ReturnObjects;
 
 
@@ -41,13 +42,34 @@ class LinkReturn extends StandardFieldReturn
     }
 
     /**
+     * @return string
+     */
+    public function getHref()
+    {
+        if ($this->isValidUrl()) {
+            return $this->url;
+        }
+        return '';
+    }
+
+    /**
      * @return bool
      */
     public function isValidUrl()
     {
         return (!filter_var($this->url, FILTER_VALIDATE_URL) === false);
     }
-    
+
+    /**
+     * @return string
+     */
+    public function getTarget()
+    {
+        if ($this->target !== false) {
+            return "target='_blank";
+        }
+        return '';
+    }
 
     /**
      * @return string
