@@ -163,7 +163,7 @@ abstract class Field implements ExportableFieldInterface
      * Get condition from condition arg
      * @param string $type
      *
-     * @return null
+     * @return mixed
      */
     public function getCondition($type)
     {
@@ -173,6 +173,11 @@ abstract class Field implements ExportableFieldInterface
                 return $conditions[$type];
             }
         }
+
+        if (!is_null($this->getArg($type, null))) {
+            return $this->getArg($type);
+        }
+
         return false;
     }
 
@@ -726,7 +731,7 @@ abstract class Field implements ExportableFieldInterface
      */
     public function render()
     {
-        if ($this->formRenderer){
+        if ($this->formRenderer) {
             return $this->formRenderer->build();
         }
     }
@@ -734,7 +739,8 @@ abstract class Field implements ExportableFieldInterface
     /**
      * @return string
      */
-    public function renderHidden(FieldFormRenderer $renderer){
+    public function renderHidden(FieldFormRenderer $renderer)
+    {
         return '';
     }
 }

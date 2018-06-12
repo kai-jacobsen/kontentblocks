@@ -46,7 +46,7 @@ class ModuleFieldController extends StandardFieldController
      * or returns the section if exists
      * @param string $sectionId
      * @param array $args
-     * @param Kontentblocks\Modules\Module
+     * @param \Kontentblocks\Modules\Module
      * @return object
      * @since 0.1.0
      */
