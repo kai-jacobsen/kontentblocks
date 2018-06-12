@@ -1871,7 +1871,7 @@ jQuery(document).ready(function () {
 
 });
 
-},{"./GlobalEvents":26,"./InlineSetup":35,"./Views/AreaView":40,"./Views/LayoutAreaView":43,"./Views/ModuleView":52,"./Views/PanelView":53,"common/Checks":9,"common/Config":10,"common/Logger":12,"common/Payload":14,"common/UI":17,"fields/FieldControlsCollection":21,"frontend/AdminBar":22,"frontend/Collections/ModuleCollection":24,"frontend/Models/AreaModel":36,"frontend/Models/ModuleModel":37,"frontend/Models/PanelModel":38,"frontend/Views/EditModalModules":42,"frontend/Views/Sidebar":54,"shared/ChangeObserver":67,"shared/Collections/ObjectProxyCollection":68,"shared/ViewsCollection":80,"tether":115}],26:[function(require,module,exports){
+},{"./GlobalEvents":26,"./InlineSetup":35,"./Views/AreaView":40,"./Views/LayoutAreaView":43,"./Views/ModuleView":52,"./Views/PanelView":53,"common/Checks":9,"common/Config":10,"common/Logger":12,"common/Payload":14,"common/UI":17,"fields/FieldControlsCollection":21,"frontend/AdminBar":22,"frontend/Collections/ModuleCollection":24,"frontend/Models/AreaModel":36,"frontend/Models/ModuleModel":37,"frontend/Models/PanelModel":38,"frontend/Views/EditModalModules":42,"frontend/Views/Sidebar":54,"shared/ChangeObserver":67,"shared/Collections/ObjectProxyCollection":68,"shared/ViewsCollection":80,"tether":126}],26:[function(require,module,exports){
 var Logger = require('common/Logger');
 KB.Events.on('module.before.sync panel.before.sync', function(Model){
   if (window.tinymce){
@@ -2661,7 +2661,7 @@ module.exports = Backbone.View.extend({
   }
 
 });
-},{"tether":115}],31:[function(require,module,exports){
+},{"tether":126}],31:[function(require,module,exports){
 var Check = require('common/Checks');
 module.exports = Backbone.View.extend({
   initialize: function (options) {
@@ -5982,26 +5982,26 @@ module.exports = KB.ViewsCollection;
 },{}],81:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"kb-context-bar grid__col grid__col--12-of-12\">\n    <div class=\"kb-context-bar--actions\">\n\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],82:[function(require,module,exports){
+},{"hbsfy/runtime":125}],82:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "<div class=\"module-browser-wrapper "
-    + this.escapeExpression(((helper = (helper = helpers.viewMode || (depth0 != null ? depth0.viewMode : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"viewMode","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(((helper = (helper = helpers.viewMode || (depth0 != null ? depth0.viewMode : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"viewMode","hash":{},"data":data}) : helper)))
     + "\">\n\n    <div class=\"module-browser-header module-categories\">\n        <div class=\"genericon genericon-close-alt close-browser kb-button\"></div>\n        <div class=\"dashicons dashicons-list-view module-browser--switch__list-view kb-hide\"></div>\n        <div class=\"dashicons dashicons-exerpt-view module-browser--switch__excerpt-view kb-hide\"></div>\n        <div class=\"dashicons dashicons-grid-view module-browser--switch__grid-view kb-hide\"></div>\n    </div>\n\n    <div class=\"module-browser__left-column kb-nano\">\n        <div class=\"modules-list kb-nano-content\">\n\n        </div>\n    </div>\n\n    <div class=\"module-browser__right-column kb-nano\">\n        <div class=\"module-description kb-nano-content\">\n\n        </div>\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],83:[function(require,module,exports){
+},{"hbsfy/runtime":125}],83:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<h3>"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.publicName : stack1), depth0))
@@ -6010,11 +6010,11 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</div>\n</h3>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],84:[function(require,module,exports){
+},{"hbsfy/runtime":125}],84:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kbmb-icon "
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.iconclass : stack1), depth0))
@@ -6025,79 +6025,79 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],85:[function(require,module,exports){
+},{"hbsfy/runtime":125}],85:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<h3>"
-    + this.escapeExpression(this.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.parentObject : stack1)) != null ? stack1.post_title : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.parentObject : stack1)) != null ? stack1.post_title : stack1), depth0))
     + "</h3>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],86:[function(require,module,exports){
+},{"hbsfy/runtime":125}],86:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div class=\"dashicons dashicons-plus kb-js-create-module\"></div>\n<div class=\"kbmb-hl\">"
-    + this.escapeExpression(this.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.parentObject : stack1)) != null ? stack1.post_title : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.parentObject : stack1)) != null ? stack1.post_title : stack1), depth0))
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],87:[function(require,module,exports){
+},{"hbsfy/runtime":125}],87:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div class=\"module-browser--poster-wrap\">\n    <img src=\""
-    + this.escapeExpression(this.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.poster : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.poster : stack1), depth0))
     + "\" >\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],88:[function(require,module,exports){
+},{"hbsfy/runtime":125}],88:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "    <div class=\"kb-status-draft kb-button-small\" data-kbtooltip=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.tooltipUndraft : stack1), depth0))
     + "\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.draft : stack1), depth0))
     + "</div>\n";
-},"3":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+},"3":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "   <div class=\"kb-status-public kb-button-small\" data-kbtooltip=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.tooltipDraft : stack1), depth0))
     + "\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.published : stack1), depth0))
     + "</div>\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return ((stack1 = helpers['if'].call(depth0,(depth0 != null ? depth0.draft : depth0),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.program(3, data, 0),"data":data})) != null ? stack1 : "");
+  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.draft : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "");
 },"useData":true});
 
-},{"hbsfy/runtime":114}],89:[function(require,module,exports){
+},{"hbsfy/runtime":125}],89:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "    <div class=\"kb-template-selector--wrapper\">\n        <div class=\"kb-selectbox\">\n            <select class=\"kb-template-select\" data-kb-rel=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.mid : stack1), depth0))
     + "\" name=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.mid : stack1), depth0))
     + "[viewfile]\">\n"
-    + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.views : depth0),{"name":"each","hash":{},"fn":this.program(2, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.views : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "            </select>\n        </div>\n    </div>\n";
-},"2":function(depth0,helpers,partials,data) {
-    var alias1=this.lambda, alias2=this.escapeExpression;
+},"2":function(container,depth0,helpers,partials,data) {
+    var alias1=container.lambda, alias2=container.escapeExpression;
 
   return "                    <option "
     + alias2(alias1((depth0 != null ? depth0.selected : depth0), depth0))
@@ -6108,67 +6108,67 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "\">"
     + alias2(alias1((depth0 != null ? depth0.name : depth0), depth0))
     + "</option>\n";
-},"4":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+},"4":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "    <input name=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.mid : stack1), depth0))
     + "[viewfile]\" type=\"hidden\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.viewfile : stack1), depth0))
     + "\">\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return ((stack1 = helpers['if'].call(depth0,(depth0 != null ? depth0.show : depth0),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.program(4, data, 0),"data":data})) != null ? stack1 : "")
+  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.show : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(4, data, 0),"data":data})) != null ? stack1 : "")
     + "\n";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],90:[function(require,module,exports){
+},{"hbsfy/runtime":125}],90:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div class=\"kb-area__empty-placeholder\">\n    <div class=\"kb-module-trigger\">"
-    + this.escapeExpression(this.lambda(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.jsFrontend : stack1)) != null ? stack1.onpage : stack1)) != null ? stack1.placeholder : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.jsFrontend : stack1)) != null ? stack1.onpage : stack1)) != null ? stack1.placeholder : stack1), depth0))
     + "</div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],91:[function(require,module,exports){
+},{"hbsfy/runtime":125}],91:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div>"
-    + ((stack1 = this.lambda(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.feedback : stack1), depth0)) != null ? stack1 : "")
+    + ((stack1 = container.lambda(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.feedback : stack1), depth0)) != null ? stack1 : "")
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],92:[function(require,module,exports){
+},{"hbsfy/runtime":125}],92:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
     return " kb-dynamic-module ";
-},"3":function(depth0,helpers,partials,data) {
+},"3":function(container,depth0,helpers,partials,data) {
     return " global-module ";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1;
+},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
   return "<div data-kb-mcontrols=\""
-    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.mid : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.mid : stack1), depth0))
     + "\" class='kb-module-controls "
-    + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.inDynamic : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.inDynamic : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + " "
-    + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.globalModule : stack1),{"name":"if","hash":{},"fn":this.program(3, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.globalModule : stack1),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "'>\n    <div class=\"kb-controls-wrap\"></div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],93:[function(require,module,exports){
+},{"hbsfy/runtime":125}],93:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"controls-title\">Module: <span> "
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0))
@@ -6181,62 +6181,62 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</div>\n\n</div>\n<form id=\"onsite-form\" class=\"wp-core-ui wp-admin kb-nano\">\n    <div class=\"kb-nano-content\" id=\"onsite-content\">\n\n        <div class=\"os-content-inner kb-module\">\n\n        </div>\n    </div>\n</form>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],94:[function(require,module,exports){
+},{"hbsfy/runtime":125}],94:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div class=\"kb-module__placeholder\">\n    <p>"
-    + this.escapeExpression(this.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0))
     + "\n    <span>Start here.</span>\n    </p>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],95:[function(require,module,exports){
+},{"hbsfy/runtime":125}],95:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "<div class=\"kb-sidebar__subheader\">\n    <span>You are editing area:</span> "
-    + this.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"name","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data}) : helper)))
     + "\n</div>\n<div class=\"kb-sidebar-area-details__settings\" style=\"display: none\">\n\n</div>\n<!--<div class=\"kb-sidebar-area-details__subheader\">Categories</div>-->";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],96:[function(require,module,exports){
+},{"hbsfy/runtime":125}],96:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "<div class=\"kb-sidebar__category-item\">\n    <div class=\"kb-sidebar__category-item__title\">\n        Category: "
-    + this.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"name","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data}) : helper)))
     + "\n    </div>\n    <div class=\"kb-sidebar__category-item__module-list\">\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],97:[function(require,module,exports){
+},{"hbsfy/runtime":125}],97:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div class=\"kb-sidebar__cat-module-item\">\n    "
-    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.settings : depth0)) != null ? stack1.name : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.settings : depth0)) != null ? stack1.name : stack1), depth0))
     + "\n    <div class=\"kb-sidebar__cat-module-item__actions\">\n    </div>\n</div>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],98:[function(require,module,exports){
+},{"hbsfy/runtime":125}],98:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<li class=\"kb-sidebar__no-modules\">No Modules attached yet</li>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],99:[function(require,module,exports){
+},{"hbsfy/runtime":125}],99:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kb-sidebar-item__wrapper\">\n    <div class=\"kb-sidebar-item__name\">"
     + ((stack1 = alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.view : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0)) != null ? stack1 : "")
@@ -6251,107 +6251,112 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</span></a>\n    <a class='kb-sidebar__module-delete kb-js-inline-delete'><span\n            class=\"dashicons dashicons-trash\"></span></a>\n    <a class='kb-sidebar__module-update kb-js-inline-update'><span\n            class=\"dashicons dashicons-update\"></span></a>\n\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],100:[function(require,module,exports){
+},{"hbsfy/runtime":125}],100:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "<div class=\"kb-sidebar__header-wrap\">\n    <div class=\"kb-sidebar__subheader\">\n        "
-    + this.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"name","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data}) : helper)))
     + "\n    </div>\n    <span class=\"genericon genericon-close-alt kb-sidebar-action--close\"></span>\n    <div class=\"kb-sidebar-action--update kb-fx-button kb-fx-button--effect-boris\"><span class=\"dashicons dashicons-update\"></span></div>\n\n</div>\n<form class=\"kb-sidebar__form-container\">\n\n</form>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],101:[function(require,module,exports){
+},{"hbsfy/runtime":125}],101:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "<div class=\"kb-sidebar--panel-item kb-sidebar__item\">\n    "
-    + this.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"name","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data}) : helper)))
     + "\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],102:[function(require,module,exports){
+},{"hbsfy/runtime":125}],102:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "<div class=\"kb-sidebar__item kb-sidebar__item--root\" data-kb-action=\""
-    + alias3(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"id","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\">\n    "
-    + alias3(((helper = (helper = helpers.text || (depth0 != null ? depth0.text : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"text","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.text || (depth0 != null ? depth0.text : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"text","hash":{},"data":data}) : helper)))
     + "\n    <span class=\"dashicons dashicons-arrow-right-alt2 kb-sidebar__add-module kb-js-sidebar-add-module\"></span>\n\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],103:[function(require,module,exports){
+},{"hbsfy/runtime":125}],103:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "<div class=\"kb-sidebar-areaview kb-sidebar-areaview--inactive\">\n    <div class=\"kb-sidebar-areaview__title\"> "
-    + this.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"name","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data}) : helper)))
     + "</div>\n    <span class=\"dashicons dashicons-arrow-right-alt2 kb-sidebar__add-module kb-js-sidebar-add-module\"></span>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],104:[function(require,module,exports){
+},{"hbsfy/runtime":125}],104:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"kb-sidebar__header-wrap\">\n    <div class=\"kb-sidebar__subheader\">\n        Kontentblocks\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],105:[function(require,module,exports){
+},{"hbsfy/runtime":125}],105:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"kb-sidebar__nav-controls\">\n    <div class=\"kb-sidebar__nav-button kb-js-sidebar-nav-back\">\n        <span class=\"dashicons dashicons-arrow-left-alt2 cbutton cbutton--effect-boris\"></span>\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":114}],106:[function(require,module,exports){
+},{"hbsfy/runtime":125}],106:[function(require,module,exports){
 'use strict';
 
-var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
 exports.__esModule = true;
+// istanbul ignore next
 
-var _import = require('./handlebars/base');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var base = _interopRequireWildcard(_import);
+// istanbul ignore next
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
+var _handlebarsBase = require('./handlebars/base');
+
+var base = _interopRequireWildcard(_handlebarsBase);
 
 // Each of these augment the Handlebars object. No need to setup here.
 // (This is done to easily share code between commonjs and browse envs)
 
-var _SafeString = require('./handlebars/safe-string');
+var _handlebarsSafeString = require('./handlebars/safe-string');
 
-var _SafeString2 = _interopRequireWildcard(_SafeString);
+var _handlebarsSafeString2 = _interopRequireDefault(_handlebarsSafeString);
 
-var _Exception = require('./handlebars/exception');
+var _handlebarsException = require('./handlebars/exception');
 
-var _Exception2 = _interopRequireWildcard(_Exception);
+var _handlebarsException2 = _interopRequireDefault(_handlebarsException);
 
-var _import2 = require('./handlebars/utils');
+var _handlebarsUtils = require('./handlebars/utils');
 
-var Utils = _interopRequireWildcard(_import2);
+var Utils = _interopRequireWildcard(_handlebarsUtils);
 
-var _import3 = require('./handlebars/runtime');
+var _handlebarsRuntime = require('./handlebars/runtime');
 
-var runtime = _interopRequireWildcard(_import3);
+var runtime = _interopRequireWildcard(_handlebarsRuntime);
 
-var _noConflict = require('./handlebars/no-conflict');
+var _handlebarsNoConflict = require('./handlebars/no-conflict');
 
-var _noConflict2 = _interopRequireWildcard(_noConflict);
+var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 
 // For compatibility and usage outside of module systems, make the Handlebars object a namespace
 function create() {
   var hb = new base.HandlebarsEnvironment();
 
   Utils.extend(hb, base);
-  hb.SafeString = _SafeString2['default'];
-  hb.Exception = _Exception2['default'];
+  hb.SafeString = _handlebarsSafeString2['default'];
+  hb.Exception = _handlebarsException2['default'];
   hb.Utils = Utils;
   hb.escapeExpression = Utils.escapeExpression;
 
@@ -6366,32 +6371,40 @@ function create() {
 var inst = create();
 inst.create = create;
 
-_noConflict2['default'](inst);
+_handlebarsNoConflict2['default'](inst);
 
 inst['default'] = inst;
 
 exports['default'] = inst;
 module.exports = exports['default'];
-},{"./handlebars/base":107,"./handlebars/exception":108,"./handlebars/no-conflict":109,"./handlebars/runtime":110,"./handlebars/safe-string":111,"./handlebars/utils":112}],107:[function(require,module,exports){
-'use strict';
 
-var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+
+},{"./handlebars/base":107,"./handlebars/exception":110,"./handlebars/no-conflict":120,"./handlebars/runtime":121,"./handlebars/safe-string":122,"./handlebars/utils":123}],107:[function(require,module,exports){
+'use strict';
 
 exports.__esModule = true;
 exports.HandlebarsEnvironment = HandlebarsEnvironment;
-exports.createFrame = createFrame;
+// istanbul ignore next
 
-var _import = require('./utils');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var Utils = _interopRequireWildcard(_import);
+var _utils = require('./utils');
 
-var _Exception = require('./exception');
+var _exception = require('./exception');
 
-var _Exception2 = _interopRequireWildcard(_Exception);
+var _exception2 = _interopRequireDefault(_exception);
 
-var VERSION = '3.0.1';
+var _helpers = require('./helpers');
+
+var _decorators = require('./decorators');
+
+var _logger = require('./logger');
+
+var _logger2 = _interopRequireDefault(_logger);
+
+var VERSION = '4.0.11';
 exports.VERSION = VERSION;
-var COMPILER_REVISION = 6;
+var COMPILER_REVISION = 7;
 
 exports.COMPILER_REVISION = COMPILER_REVISION;
 var REVISION_CHANGES = {
@@ -6400,34 +6413,34 @@ var REVISION_CHANGES = {
   3: '== 1.0.0-rc.4',
   4: '== 1.x.x',
   5: '== 2.0.0-alpha.x',
-  6: '>= 2.0.0-beta.1'
+  6: '>= 2.0.0-beta.1',
+  7: '>= 4.0.0'
 };
 
 exports.REVISION_CHANGES = REVISION_CHANGES;
-var isArray = Utils.isArray,
-    isFunction = Utils.isFunction,
-    toString = Utils.toString,
-    objectType = '[object Object]';
+var objectType = '[object Object]';
 
-function HandlebarsEnvironment(helpers, partials) {
+function HandlebarsEnvironment(helpers, partials, decorators) {
   this.helpers = helpers || {};
   this.partials = partials || {};
+  this.decorators = decorators || {};
 
-  registerDefaultHelpers(this);
+  _helpers.registerDefaultHelpers(this);
+  _decorators.registerDefaultDecorators(this);
 }
 
 HandlebarsEnvironment.prototype = {
   constructor: HandlebarsEnvironment,
 
-  logger: logger,
-  log: log,
+  logger: _logger2['default'],
+  log: _logger2['default'].log,
 
   registerHelper: function registerHelper(name, fn) {
-    if (toString.call(name) === objectType) {
+    if (_utils.toString.call(name) === objectType) {
       if (fn) {
-        throw new _Exception2['default']('Arg not supported with multiple helpers');
+        throw new _exception2['default']('Arg not supported with multiple helpers');
       }
-      Utils.extend(this.helpers, name);
+      _utils.extend(this.helpers, name);
     } else {
       this.helpers[name] = fn;
     }
@@ -6437,216 +6450,91 @@ HandlebarsEnvironment.prototype = {
   },
 
   registerPartial: function registerPartial(name, partial) {
-    if (toString.call(name) === objectType) {
-      Utils.extend(this.partials, name);
+    if (_utils.toString.call(name) === objectType) {
+      _utils.extend(this.partials, name);
     } else {
       if (typeof partial === 'undefined') {
-        throw new _Exception2['default']('Attempting to register a partial as undefined');
+        throw new _exception2['default']('Attempting to register a partial called "' + name + '" as undefined');
       }
       this.partials[name] = partial;
     }
   },
   unregisterPartial: function unregisterPartial(name) {
     delete this.partials[name];
+  },
+
+  registerDecorator: function registerDecorator(name, fn) {
+    if (_utils.toString.call(name) === objectType) {
+      if (fn) {
+        throw new _exception2['default']('Arg not supported with multiple decorators');
+      }
+      _utils.extend(this.decorators, name);
+    } else {
+      this.decorators[name] = fn;
+    }
+  },
+  unregisterDecorator: function unregisterDecorator(name) {
+    delete this.decorators[name];
   }
 };
 
-function registerDefaultHelpers(instance) {
-  instance.registerHelper('helperMissing', function () {
-    if (arguments.length === 1) {
-      // A missing field in a {{foo}} constuct.
-      return undefined;
-    } else {
-      // Someone is actually trying to call something, blow up.
-      throw new _Exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
-    }
-  });
+var log = _logger2['default'].log;
 
-  instance.registerHelper('blockHelperMissing', function (context, options) {
-    var inverse = options.inverse,
-        fn = options.fn;
+exports.log = log;
+exports.createFrame = _utils.createFrame;
+exports.logger = _logger2['default'];
 
-    if (context === true) {
-      return fn(this);
-    } else if (context === false || context == null) {
-      return inverse(this);
-    } else if (isArray(context)) {
-      if (context.length > 0) {
-        if (options.ids) {
-          options.ids = [options.name];
-        }
 
-        return instance.helpers.each(context, options);
-      } else {
-        return inverse(this);
-      }
-    } else {
-      if (options.data && options.ids) {
-        var data = createFrame(options.data);
-        data.contextPath = Utils.appendContextPath(options.data.contextPath, options.name);
-        options = { data: data };
-      }
+},{"./decorators":108,"./exception":110,"./helpers":111,"./logger":119,"./utils":123}],108:[function(require,module,exports){
+'use strict';
 
-      return fn(context, options);
-    }
-  });
+exports.__esModule = true;
+exports.registerDefaultDecorators = registerDefaultDecorators;
+// istanbul ignore next
 
-  instance.registerHelper('each', function (context, options) {
-    if (!options) {
-      throw new _Exception2['default']('Must pass iterator to #each');
-    }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-    var fn = options.fn,
-        inverse = options.inverse,
-        i = 0,
-        ret = '',
-        data = undefined,
-        contextPath = undefined;
+var _decoratorsInline = require('./decorators/inline');
 
-    if (options.data && options.ids) {
-      contextPath = Utils.appendContextPath(options.data.contextPath, options.ids[0]) + '.';
+var _decoratorsInline2 = _interopRequireDefault(_decoratorsInline);
+
+function registerDefaultDecorators(instance) {
+  _decoratorsInline2['default'](instance);
+}
+
+
+},{"./decorators/inline":109}],109:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+var _utils = require('../utils');
+
+exports['default'] = function (instance) {
+  instance.registerDecorator('inline', function (fn, props, container, options) {
+    var ret = fn;
+    if (!props.partials) {
+      props.partials = {};
+      ret = function (context, options) {
+        // Create a new partials stack frame prior to exec.
+        var original = container.partials;
+        container.partials = _utils.extend({}, original, props.partials);
+        var ret = fn(context, options);
+        container.partials = original;
+        return ret;
+      };
     }
 
-    if (isFunction(context)) {
-      context = context.call(this);
-    }
-
-    if (options.data) {
-      data = createFrame(options.data);
-    }
-
-    function execIteration(field, index, last) {
-      if (data) {
-        data.key = field;
-        data.index = index;
-        data.first = index === 0;
-        data.last = !!last;
-
-        if (contextPath) {
-          data.contextPath = contextPath + field;
-        }
-      }
-
-      ret = ret + fn(context[field], {
-        data: data,
-        blockParams: Utils.blockParams([context[field], field], [contextPath + field, null])
-      });
-    }
-
-    if (context && typeof context === 'object') {
-      if (isArray(context)) {
-        for (var j = context.length; i < j; i++) {
-          execIteration(i, i, i === context.length - 1);
-        }
-      } else {
-        var priorKey = undefined;
-
-        for (var key in context) {
-          if (context.hasOwnProperty(key)) {
-            // We're running the iterations one step out of sync so we can detect
-            // the last iteration without have to scan the object twice and create
-            // an itermediate keys array.
-            if (priorKey) {
-              execIteration(priorKey, i - 1);
-            }
-            priorKey = key;
-            i++;
-          }
-        }
-        if (priorKey) {
-          execIteration(priorKey, i - 1, true);
-        }
-      }
-    }
-
-    if (i === 0) {
-      ret = inverse(this);
-    }
+    props.partials[options.args[0]] = options.fn;
 
     return ret;
   });
-
-  instance.registerHelper('if', function (conditional, options) {
-    if (isFunction(conditional)) {
-      conditional = conditional.call(this);
-    }
-
-    // Default behavior is to render the positive path if the value is truthy and not empty.
-    // The `includeZero` option may be set to treat the condtional as purely not empty based on the
-    // behavior of isEmpty. Effectively this determines if 0 is handled by the positive path or negative.
-    if (!options.hash.includeZero && !conditional || Utils.isEmpty(conditional)) {
-      return options.inverse(this);
-    } else {
-      return options.fn(this);
-    }
-  });
-
-  instance.registerHelper('unless', function (conditional, options) {
-    return instance.helpers['if'].call(this, conditional, { fn: options.inverse, inverse: options.fn, hash: options.hash });
-  });
-
-  instance.registerHelper('with', function (context, options) {
-    if (isFunction(context)) {
-      context = context.call(this);
-    }
-
-    var fn = options.fn;
-
-    if (!Utils.isEmpty(context)) {
-      if (options.data && options.ids) {
-        var data = createFrame(options.data);
-        data.contextPath = Utils.appendContextPath(options.data.contextPath, options.ids[0]);
-        options = { data: data };
-      }
-
-      return fn(context, options);
-    } else {
-      return options.inverse(this);
-    }
-  });
-
-  instance.registerHelper('log', function (message, options) {
-    var level = options.data && options.data.level != null ? parseInt(options.data.level, 10) : 1;
-    instance.log(level, message);
-  });
-
-  instance.registerHelper('lookup', function (obj, field) {
-    return obj && obj[field];
-  });
-}
-
-var logger = {
-  methodMap: { 0: 'debug', 1: 'info', 2: 'warn', 3: 'error' },
-
-  // State enum
-  DEBUG: 0,
-  INFO: 1,
-  WARN: 2,
-  ERROR: 3,
-  level: 1,
-
-  // Can be overridden in the host environment
-  log: function log(level, message) {
-    if (typeof console !== 'undefined' && logger.level <= level) {
-      var method = logger.methodMap[level];
-      (console[method] || console.log).call(console, message); // eslint-disable-line no-console
-    }
-  }
 };
 
-exports.logger = logger;
-var log = logger.log;
+module.exports = exports['default'];
 
-exports.log = log;
 
-function createFrame(object) {
-  var frame = Utils.extend({}, object);
-  frame._parent = object;
-  return frame;
-}
-
-/* [args, ]options */
-},{"./exception":108,"./utils":112}],108:[function(require,module,exports){
+},{"../utils":123}],110:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -6671,13 +6559,28 @@ function Exception(message, node) {
     this[errorProps[idx]] = tmp[errorProps[idx]];
   }
 
+  /* istanbul ignore else */
   if (Error.captureStackTrace) {
     Error.captureStackTrace(this, Exception);
   }
 
-  if (loc) {
-    this.lineNumber = line;
-    this.column = column;
+  try {
+    if (loc) {
+      this.lineNumber = line;
+
+      // Work around issue under safari where we can't directly set the column value
+      /* istanbul ignore next */
+      if (Object.defineProperty) {
+        Object.defineProperty(this, 'column', {
+          value: column,
+          enumerable: true
+        });
+      } else {
+        this.column = column;
+      }
+    }
+  } catch (nop) {
+    /* Ignore if the browser is very particular */
   }
 }
 
@@ -6685,11 +6588,382 @@ Exception.prototype = new Error();
 
 exports['default'] = Exception;
 module.exports = exports['default'];
-},{}],109:[function(require,module,exports){
+
+
+},{}],111:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
-/*global window */
+exports.registerDefaultHelpers = registerDefaultHelpers;
+// istanbul ignore next
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _helpersBlockHelperMissing = require('./helpers/block-helper-missing');
+
+var _helpersBlockHelperMissing2 = _interopRequireDefault(_helpersBlockHelperMissing);
+
+var _helpersEach = require('./helpers/each');
+
+var _helpersEach2 = _interopRequireDefault(_helpersEach);
+
+var _helpersHelperMissing = require('./helpers/helper-missing');
+
+var _helpersHelperMissing2 = _interopRequireDefault(_helpersHelperMissing);
+
+var _helpersIf = require('./helpers/if');
+
+var _helpersIf2 = _interopRequireDefault(_helpersIf);
+
+var _helpersLog = require('./helpers/log');
+
+var _helpersLog2 = _interopRequireDefault(_helpersLog);
+
+var _helpersLookup = require('./helpers/lookup');
+
+var _helpersLookup2 = _interopRequireDefault(_helpersLookup);
+
+var _helpersWith = require('./helpers/with');
+
+var _helpersWith2 = _interopRequireDefault(_helpersWith);
+
+function registerDefaultHelpers(instance) {
+  _helpersBlockHelperMissing2['default'](instance);
+  _helpersEach2['default'](instance);
+  _helpersHelperMissing2['default'](instance);
+  _helpersIf2['default'](instance);
+  _helpersLog2['default'](instance);
+  _helpersLookup2['default'](instance);
+  _helpersWith2['default'](instance);
+}
+
+
+},{"./helpers/block-helper-missing":112,"./helpers/each":113,"./helpers/helper-missing":114,"./helpers/if":115,"./helpers/log":116,"./helpers/lookup":117,"./helpers/with":118}],112:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+var _utils = require('../utils');
+
+exports['default'] = function (instance) {
+  instance.registerHelper('blockHelperMissing', function (context, options) {
+    var inverse = options.inverse,
+        fn = options.fn;
+
+    if (context === true) {
+      return fn(this);
+    } else if (context === false || context == null) {
+      return inverse(this);
+    } else if (_utils.isArray(context)) {
+      if (context.length > 0) {
+        if (options.ids) {
+          options.ids = [options.name];
+        }
+
+        return instance.helpers.each(context, options);
+      } else {
+        return inverse(this);
+      }
+    } else {
+      if (options.data && options.ids) {
+        var data = _utils.createFrame(options.data);
+        data.contextPath = _utils.appendContextPath(options.data.contextPath, options.name);
+        options = { data: data };
+      }
+
+      return fn(context, options);
+    }
+  });
+};
+
+module.exports = exports['default'];
+
+
+},{"../utils":123}],113:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+// istanbul ignore next
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _utils = require('../utils');
+
+var _exception = require('../exception');
+
+var _exception2 = _interopRequireDefault(_exception);
+
+exports['default'] = function (instance) {
+  instance.registerHelper('each', function (context, options) {
+    if (!options) {
+      throw new _exception2['default']('Must pass iterator to #each');
+    }
+
+    var fn = options.fn,
+        inverse = options.inverse,
+        i = 0,
+        ret = '',
+        data = undefined,
+        contextPath = undefined;
+
+    if (options.data && options.ids) {
+      contextPath = _utils.appendContextPath(options.data.contextPath, options.ids[0]) + '.';
+    }
+
+    if (_utils.isFunction(context)) {
+      context = context.call(this);
+    }
+
+    if (options.data) {
+      data = _utils.createFrame(options.data);
+    }
+
+    function execIteration(field, index, last) {
+      if (data) {
+        data.key = field;
+        data.index = index;
+        data.first = index === 0;
+        data.last = !!last;
+
+        if (contextPath) {
+          data.contextPath = contextPath + field;
+        }
+      }
+
+      ret = ret + fn(context[field], {
+        data: data,
+        blockParams: _utils.blockParams([context[field], field], [contextPath + field, null])
+      });
+    }
+
+    if (context && typeof context === 'object') {
+      if (_utils.isArray(context)) {
+        for (var j = context.length; i < j; i++) {
+          if (i in context) {
+            execIteration(i, i, i === context.length - 1);
+          }
+        }
+      } else {
+        var priorKey = undefined;
+
+        for (var key in context) {
+          if (context.hasOwnProperty(key)) {
+            // We're running the iterations one step out of sync so we can detect
+            // the last iteration without have to scan the object twice and create
+            // an itermediate keys array.
+            if (priorKey !== undefined) {
+              execIteration(priorKey, i - 1);
+            }
+            priorKey = key;
+            i++;
+          }
+        }
+        if (priorKey !== undefined) {
+          execIteration(priorKey, i - 1, true);
+        }
+      }
+    }
+
+    if (i === 0) {
+      ret = inverse(this);
+    }
+
+    return ret;
+  });
+};
+
+module.exports = exports['default'];
+
+
+},{"../exception":110,"../utils":123}],114:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+// istanbul ignore next
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _exception = require('../exception');
+
+var _exception2 = _interopRequireDefault(_exception);
+
+exports['default'] = function (instance) {
+  instance.registerHelper('helperMissing', function () /* [args, ]options */{
+    if (arguments.length === 1) {
+      // A missing field in a {{foo}} construct.
+      return undefined;
+    } else {
+      // Someone is actually trying to call something, blow up.
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+    }
+  });
+};
+
+module.exports = exports['default'];
+
+
+},{"../exception":110}],115:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+var _utils = require('../utils');
+
+exports['default'] = function (instance) {
+  instance.registerHelper('if', function (conditional, options) {
+    if (_utils.isFunction(conditional)) {
+      conditional = conditional.call(this);
+    }
+
+    // Default behavior is to render the positive path if the value is truthy and not empty.
+    // The `includeZero` option may be set to treat the condtional as purely not empty based on the
+    // behavior of isEmpty. Effectively this determines if 0 is handled by the positive path or negative.
+    if (!options.hash.includeZero && !conditional || _utils.isEmpty(conditional)) {
+      return options.inverse(this);
+    } else {
+      return options.fn(this);
+    }
+  });
+
+  instance.registerHelper('unless', function (conditional, options) {
+    return instance.helpers['if'].call(this, conditional, { fn: options.inverse, inverse: options.fn, hash: options.hash });
+  });
+};
+
+module.exports = exports['default'];
+
+
+},{"../utils":123}],116:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+exports['default'] = function (instance) {
+  instance.registerHelper('log', function () /* message, options */{
+    var args = [undefined],
+        options = arguments[arguments.length - 1];
+    for (var i = 0; i < arguments.length - 1; i++) {
+      args.push(arguments[i]);
+    }
+
+    var level = 1;
+    if (options.hash.level != null) {
+      level = options.hash.level;
+    } else if (options.data && options.data.level != null) {
+      level = options.data.level;
+    }
+    args[0] = level;
+
+    instance.log.apply(instance, args);
+  });
+};
+
+module.exports = exports['default'];
+
+
+},{}],117:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+exports['default'] = function (instance) {
+  instance.registerHelper('lookup', function (obj, field) {
+    return obj && obj[field];
+  });
+};
+
+module.exports = exports['default'];
+
+
+},{}],118:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+var _utils = require('../utils');
+
+exports['default'] = function (instance) {
+  instance.registerHelper('with', function (context, options) {
+    if (_utils.isFunction(context)) {
+      context = context.call(this);
+    }
+
+    var fn = options.fn;
+
+    if (!_utils.isEmpty(context)) {
+      var data = options.data;
+      if (options.data && options.ids) {
+        data = _utils.createFrame(options.data);
+        data.contextPath = _utils.appendContextPath(options.data.contextPath, options.ids[0]);
+      }
+
+      return fn(context, {
+        data: data,
+        blockParams: _utils.blockParams([context], [data && data.contextPath])
+      });
+    } else {
+      return options.inverse(this);
+    }
+  });
+};
+
+module.exports = exports['default'];
+
+
+},{"../utils":123}],119:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+var _utils = require('./utils');
+
+var logger = {
+  methodMap: ['debug', 'info', 'warn', 'error'],
+  level: 'info',
+
+  // Maps a given level value to the `methodMap` indexes above.
+  lookupLevel: function lookupLevel(level) {
+    if (typeof level === 'string') {
+      var levelMap = _utils.indexOf(logger.methodMap, level.toLowerCase());
+      if (levelMap >= 0) {
+        level = levelMap;
+      } else {
+        level = parseInt(level, 10);
+      }
+    }
+
+    return level;
+  },
+
+  // Can be overridden in the host environment
+  log: function log(level) {
+    level = logger.lookupLevel(level);
+
+    if (typeof console !== 'undefined' && logger.lookupLevel(logger.level) <= level) {
+      var method = logger.methodMap[level];
+      if (!console[method]) {
+        // eslint-disable-line no-console
+        method = 'log';
+      }
+
+      for (var _len = arguments.length, message = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        message[_key - 1] = arguments[_key];
+      }
+
+      console[method].apply(console, message); // eslint-disable-line no-console
+    }
+  }
+};
+
+exports['default'] = logger;
+module.exports = exports['default'];
+
+
+},{"./utils":123}],120:[function(require,module,exports){
+/* global window */
+'use strict';
+
+exports.__esModule = true;
 
 exports['default'] = function (Handlebars) {
   /* istanbul ignore next */
@@ -6700,48 +6974,53 @@ exports['default'] = function (Handlebars) {
     if (root.Handlebars === Handlebars) {
       root.Handlebars = $Handlebars;
     }
+    return Handlebars;
   };
 };
 
 module.exports = exports['default'];
-},{}],110:[function(require,module,exports){
-'use strict';
 
-var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+
+},{}],121:[function(require,module,exports){
+'use strict';
 
 exports.__esModule = true;
 exports.checkRevision = checkRevision;
-
-// TODO: Remove this line and break up compilePartial
-
 exports.template = template;
 exports.wrapProgram = wrapProgram;
 exports.resolvePartial = resolvePartial;
 exports.invokePartial = invokePartial;
 exports.noop = noop;
+// istanbul ignore next
 
-var _import = require('./utils');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var Utils = _interopRequireWildcard(_import);
+// istanbul ignore next
 
-var _Exception = require('./exception');
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
-var _Exception2 = _interopRequireWildcard(_Exception);
+var _utils = require('./utils');
 
-var _COMPILER_REVISION$REVISION_CHANGES$createFrame = require('./base');
+var Utils = _interopRequireWildcard(_utils);
+
+var _exception = require('./exception');
+
+var _exception2 = _interopRequireDefault(_exception);
+
+var _base = require('./base');
 
 function checkRevision(compilerInfo) {
   var compilerRevision = compilerInfo && compilerInfo[0] || 1,
-      currentRevision = _COMPILER_REVISION$REVISION_CHANGES$createFrame.COMPILER_REVISION;
+      currentRevision = _base.COMPILER_REVISION;
 
   if (compilerRevision !== currentRevision) {
     if (compilerRevision < currentRevision) {
-      var runtimeVersions = _COMPILER_REVISION$REVISION_CHANGES$createFrame.REVISION_CHANGES[currentRevision],
-          compilerVersions = _COMPILER_REVISION$REVISION_CHANGES$createFrame.REVISION_CHANGES[compilerRevision];
-      throw new _Exception2['default']('Template was precompiled with an older version of Handlebars than the current runtime. ' + 'Please update your precompiler to a newer version (' + runtimeVersions + ') or downgrade your runtime to an older version (' + compilerVersions + ').');
+      var runtimeVersions = _base.REVISION_CHANGES[currentRevision],
+          compilerVersions = _base.REVISION_CHANGES[compilerRevision];
+      throw new _exception2['default']('Template was precompiled with an older version of Handlebars than the current runtime. ' + 'Please update your precompiler to a newer version (' + runtimeVersions + ') or downgrade your runtime to an older version (' + compilerVersions + ').');
     } else {
       // Use the embedded version info since the runtime doesn't know about this revision yet
-      throw new _Exception2['default']('Template was precompiled with a newer version of Handlebars than the current runtime. ' + 'Please update your runtime to a newer version (' + compilerInfo[1] + ').');
+      throw new _exception2['default']('Template was precompiled with a newer version of Handlebars than the current runtime. ' + 'Please update your runtime to a newer version (' + compilerInfo[1] + ').');
     }
   }
 }
@@ -6749,11 +7028,13 @@ function checkRevision(compilerInfo) {
 function template(templateSpec, env) {
   /* istanbul ignore next */
   if (!env) {
-    throw new _Exception2['default']('No environment passed to template');
+    throw new _exception2['default']('No environment passed to template');
   }
   if (!templateSpec || !templateSpec.main) {
-    throw new _Exception2['default']('Unknown template object: ' + typeof templateSpec);
+    throw new _exception2['default']('Unknown template object: ' + typeof templateSpec);
   }
+
+  templateSpec.main.decorator = templateSpec.main_d;
 
   // Note: Using env.VM references rather than local var references throughout this section to allow
   // for external users to override these as psuedo-supported APIs.
@@ -6762,6 +7043,9 @@ function template(templateSpec, env) {
   function invokePartialWrapper(partial, context, options) {
     if (options.hash) {
       context = Utils.extend({}, context, options.hash);
+      if (options.ids) {
+        options.ids[0] = true;
+      }
     }
 
     partial = env.VM.resolvePartial.call(this, partial, context, options);
@@ -6785,7 +7069,7 @@ function template(templateSpec, env) {
       }
       return result;
     } else {
-      throw new _Exception2['default']('The partial ' + options.name + ' could not be compiled when running in runtime-only mode');
+      throw new _exception2['default']('The partial ' + options.name + ' could not be compiled when running in runtime-only mode');
     }
   }
 
@@ -6793,7 +7077,7 @@ function template(templateSpec, env) {
   var container = {
     strict: function strict(obj, name) {
       if (!(name in obj)) {
-        throw new _Exception2['default']('"' + name + '" not defined in ' + obj);
+        throw new _exception2['default']('"' + name + '" not defined in ' + obj);
       }
       return obj[name];
     },
@@ -6813,7 +7097,9 @@ function template(templateSpec, env) {
     invokePartial: invokePartialWrapper,
 
     fn: function fn(i) {
-      return templateSpec[i];
+      var ret = templateSpec[i];
+      ret.decorator = templateSpec[i + '_d'];
+      return ret;
     },
 
     programs: [],
@@ -6843,13 +7129,15 @@ function template(templateSpec, env) {
 
       return obj;
     },
+    // An empty object to use as replacement for null-contexts
+    nullContext: Object.seal({}),
 
     noop: env.VM.noop,
     compilerInfo: templateSpec.compiler
   };
 
   function ret(context) {
-    var options = arguments[1] === undefined ? {} : arguments[1];
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     var data = options.data;
 
@@ -6860,10 +7148,18 @@ function template(templateSpec, env) {
     var depths = undefined,
         blockParams = templateSpec.useBlockParams ? [] : undefined;
     if (templateSpec.useDepths) {
-      depths = options.depths ? [context].concat(options.depths) : [context];
+      if (options.depths) {
+        depths = context != options.depths[0] ? [context].concat(options.depths) : options.depths;
+      } else {
+        depths = [context];
+      }
     }
 
-    return templateSpec.main.call(container, context, container.helpers, container.partials, data, blockParams, depths);
+    function main(context /*, options*/) {
+      return '' + templateSpec.main(container, context, container.helpers, container.partials, data, blockParams, depths);
+    }
+    main = executeDecorators(templateSpec.main, main, container, options.depths || [], data, blockParams);
+    return main(context, options);
   }
   ret.isTop = true;
 
@@ -6874,18 +7170,22 @@ function template(templateSpec, env) {
       if (templateSpec.usePartial) {
         container.partials = container.merge(options.partials, env.partials);
       }
+      if (templateSpec.usePartial || templateSpec.useDecorators) {
+        container.decorators = container.merge(options.decorators, env.decorators);
+      }
     } else {
       container.helpers = options.helpers;
       container.partials = options.partials;
+      container.decorators = options.decorators;
     }
   };
 
   ret._child = function (i, data, blockParams, depths) {
     if (templateSpec.useBlockParams && !blockParams) {
-      throw new _Exception2['default']('must pass block params');
+      throw new _exception2['default']('must pass block params');
     }
     if (templateSpec.useDepths && !depths) {
-      throw new _Exception2['default']('must pass parent depths');
+      throw new _exception2['default']('must pass parent depths');
     }
 
     return wrapProgram(container, i, templateSpec[i], data, 0, blockParams, depths);
@@ -6895,10 +7195,18 @@ function template(templateSpec, env) {
 
 function wrapProgram(container, i, fn, data, declaredBlockParams, blockParams, depths) {
   function prog(context) {
-    var options = arguments[1] === undefined ? {} : arguments[1];
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-    return fn.call(container, context, container.helpers, container.partials, options.data || data, blockParams && [options.blockParams].concat(blockParams), depths && [context].concat(depths));
+    var currentDepths = depths;
+    if (depths && context != depths[0] && !(context === container.nullContext && depths[0] === null)) {
+      currentDepths = [context].concat(depths);
+    }
+
+    return fn(container, context, container.helpers, container.partials, options.data || data, blockParams && [options.blockParams].concat(blockParams), currentDepths);
   }
+
+  prog = executeDecorators(fn, prog, container, depths, data, blockParams);
+
   prog.program = i;
   prog.depth = depths ? depths.length : 0;
   prog.blockParams = declaredBlockParams || 0;
@@ -6907,7 +7215,11 @@ function wrapProgram(container, i, fn, data, declaredBlockParams, blockParams, d
 
 function resolvePartial(partial, context, options) {
   if (!partial) {
-    partial = options.partials[options.name];
+    if (options.name === '@partial-block') {
+      partial = options.data['partial-block'];
+    } else {
+      partial = options.partials[options.name];
+    }
   } else if (!partial.call && !options.name) {
     // This is a dynamic partial that returned a string
     options.name = partial;
@@ -6917,10 +7229,40 @@ function resolvePartial(partial, context, options) {
 }
 
 function invokePartial(partial, context, options) {
+  // Use the current closure context to save the partial-block if this partial
+  var currentPartialBlock = options.data && options.data['partial-block'];
   options.partial = true;
+  if (options.ids) {
+    options.data.contextPath = options.ids[0] || options.data.contextPath;
+  }
+
+  var partialBlock = undefined;
+  if (options.fn && options.fn !== noop) {
+    (function () {
+      options.data = _base.createFrame(options.data);
+      // Wrapper function to get access to currentPartialBlock from the closure
+      var fn = options.fn;
+      partialBlock = options.data['partial-block'] = function partialBlockWrapper(context) {
+        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+        // Restore the partial-block from the closure for the execution of the block
+        // i.e. the part inside the block of the partial call.
+        options.data = _base.createFrame(options.data);
+        options.data['partial-block'] = currentPartialBlock;
+        return fn(context, options);
+      };
+      if (fn.partials) {
+        options.partials = Utils.extend({}, options.partials, fn.partials);
+      }
+    })();
+  }
+
+  if (partial === undefined && partialBlock) {
+    partial = partialBlock;
+  }
 
   if (partial === undefined) {
-    throw new _Exception2['default']('The partial ' + options.name + ' could not be found');
+    throw new _exception2['default']('The partial ' + options.name + ' could not be found');
   } else if (partial instanceof Function) {
     return partial(context, options);
   }
@@ -6932,16 +7274,27 @@ function noop() {
 
 function initData(context, data) {
   if (!data || !('root' in data)) {
-    data = data ? _COMPILER_REVISION$REVISION_CHANGES$createFrame.createFrame(data) : {};
+    data = data ? _base.createFrame(data) : {};
     data.root = context;
   }
   return data;
 }
-},{"./base":107,"./exception":108,"./utils":112}],111:[function(require,module,exports){
+
+function executeDecorators(fn, prog, container, depths, data, blockParams) {
+  if (fn.decorator) {
+    var props = {};
+    prog = fn.decorator(prog, props, container, depths && depths[0], data, blockParams, depths);
+    Utils.extend(prog, props);
+  }
+  return prog;
+}
+
+
+},{"./base":107,"./exception":110,"./utils":123}],122:[function(require,module,exports){
+// Build out our basic SafeString type
 'use strict';
 
 exports.__esModule = true;
-// Build out our basic SafeString type
 function SafeString(string) {
   this.string = string;
 }
@@ -6952,16 +7305,17 @@ SafeString.prototype.toString = SafeString.prototype.toHTML = function () {
 
 exports['default'] = SafeString;
 module.exports = exports['default'];
-},{}],112:[function(require,module,exports){
+
+
+},{}],123:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
 exports.extend = extend;
-
-// Older IE versions do not directly support indexOf so we must implement our own, sadly.
 exports.indexOf = indexOf;
 exports.escapeExpression = escapeExpression;
 exports.isEmpty = isEmpty;
+exports.createFrame = createFrame;
 exports.blockParams = blockParams;
 exports.appendContextPath = appendContextPath;
 var escape = {
@@ -6969,12 +7323,13 @@ var escape = {
   '<': '&lt;',
   '>': '&gt;',
   '"': '&quot;',
-  '\'': '&#x27;',
-  '`': '&#x60;'
+  "'": '&#x27;',
+  '`': '&#x60;',
+  '=': '&#x3D;'
 };
 
-var badChars = /[&<>"'`]/g,
-    possible = /[&<>"'`]/;
+var badChars = /[&<>"'`=]/g,
+    possible = /[&<>"'`=]/;
 
 function escapeChar(chr) {
   return escape[chr];
@@ -6997,7 +7352,7 @@ var toString = Object.prototype.toString;
 exports.toString = toString;
 // Sourced from lodash
 // https://github.com/bestiejs/lodash/blob/master/LICENSE.txt
-/*eslint-disable func-style, no-var */
+/* eslint-disable func-style */
 var isFunction = function isFunction(value) {
   return typeof value === 'function';
 };
@@ -7008,14 +7363,17 @@ if (isFunction(/x/)) {
     return typeof value === 'function' && toString.call(value) === '[object Function]';
   };
 }
-var isFunction;
 exports.isFunction = isFunction;
-/*eslint-enable func-style, no-var */
+
+/* eslint-enable func-style */
 
 /* istanbul ignore next */
 var isArray = Array.isArray || function (value) {
   return value && typeof value === 'object' ? toString.call(value) === '[object Array]' : false;
-};exports.isArray = isArray;
+};
+
+exports.isArray = isArray;
+// Older IE versions do not directly support indexOf so we must implement our own, sadly.
 
 function indexOf(array, value) {
   for (var i = 0, len = array.length; i < len; i++) {
@@ -7059,6 +7417,12 @@ function isEmpty(value) {
   }
 }
 
+function createFrame(object) {
+  var frame = extend({}, object);
+  frame._parent = object;
+  return frame;
+}
+
 function blockParams(params, ids) {
   params.path = ids;
   return params;
@@ -7067,26 +7431,28 @@ function blockParams(params, ids) {
 function appendContextPath(contextPath, id) {
   return (contextPath ? contextPath + '.' : '') + id;
 }
-},{}],113:[function(require,module,exports){
+
+
+},{}],124:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime')['default'];
 
-},{"./dist/cjs/handlebars.runtime":106}],114:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":106}],125:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":113}],115:[function(require,module,exports){
-/*! tether 1.2.0 */
+},{"handlebars/runtime":124}],126:[function(require,module,exports){
+/*! tether 1.4.4 */
 
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(factory);
+    define([], factory);
   } else if (typeof exports === 'object') {
-    module.exports = factory(require, exports, module);
+    module.exports = factory();
   } else {
     root.Tether = factory();
   }
-}(this, function(require, exports, module) {
+}(this, function() {
 
 'use strict';
 
@@ -7099,25 +7465,55 @@ if (typeof TetherBase === 'undefined') {
   TetherBase = { modules: [] };
 }
 
-function getScrollParent(el) {
+var zeroElement = null;
+
+// Same as native getBoundingClientRect, except it takes into account parent <frame> offsets
+// if the element lies within a nested document (<frame> or <iframe>-like).
+function getActualBoundingClientRect(node) {
+  var boundingRect = node.getBoundingClientRect();
+
+  // The original object returned by getBoundingClientRect is immutable, so we clone it
+  // We can't use extend because the properties are not considered part of the object by hasOwnProperty in IE9
+  var rect = {};
+  for (var k in boundingRect) {
+    rect[k] = boundingRect[k];
+  }
+
+  if (node.ownerDocument !== document) {
+    var _frameElement = node.ownerDocument.defaultView.frameElement;
+    if (_frameElement) {
+      var frameRect = getActualBoundingClientRect(_frameElement);
+      rect.top += frameRect.top;
+      rect.bottom += frameRect.top;
+      rect.left += frameRect.left;
+      rect.right += frameRect.left;
+    }
+  }
+
+  return rect;
+}
+
+function getScrollParents(el) {
   // In firefox if the el is inside an iframe with display: none; window.getComputedStyle() will return null;
   // https://bugzilla.mozilla.org/show_bug.cgi?id=548397
   var computedStyle = getComputedStyle(el) || {};
   var position = computedStyle.position;
+  var parents = [];
 
   if (position === 'fixed') {
-    return el;
+    return [el];
   }
 
   var parent = el;
-  while (parent = parent.parentNode) {
+  while ((parent = parent.parentNode) && parent && parent.nodeType === 1) {
     var style = undefined;
     try {
       style = getComputedStyle(parent);
     } catch (err) {}
 
     if (typeof style === 'undefined' || style === null) {
-      return parent;
+      parents.push(parent);
+      return parents;
     }
 
     var _style = style;
@@ -7125,14 +7521,21 @@ function getScrollParent(el) {
     var overflowX = _style.overflowX;
     var overflowY = _style.overflowY;
 
-    if (/(auto|scroll)/.test(overflow + overflowY + overflowX)) {
+    if (/(auto|scroll|overlay)/.test(overflow + overflowY + overflowX)) {
       if (position !== 'absolute' || ['relative', 'absolute', 'fixed'].indexOf(style.position) >= 0) {
-        return parent;
+        parents.push(parent);
       }
     }
   }
 
-  return document.body;
+  parents.push(el.ownerDocument.body);
+
+  // If the node is within a frame, account for the parent window scroll
+  if (el.ownerDocument !== document) {
+    parents.push(el.ownerDocument.defaultView);
+  }
+
+  return parents;
 }
 
 var uniqueId = (function () {
@@ -7143,14 +7546,14 @@ var uniqueId = (function () {
 })();
 
 var zeroPosCache = {};
-var getOrigin = function getOrigin(doc) {
+var getOrigin = function getOrigin() {
   // getBoundingClientRect is unfortunately too accurate.  It introduces a pixel or two of
   // jitter as the user scrolls that messes with our ability to detect if two positions
   // are equivilant or not.  We place an element at the top left of the page that will
   // get the same jitter, so we can cancel the two out.
-  var node = doc._tetherZeroElement;
-  if (typeof node === 'undefined') {
-    node = doc.createElement('div');
+  var node = zeroElement;
+  if (!node || !document.body.contains(node)) {
+    node = document.createElement('div');
     node.setAttribute('data-tether-id', uniqueId());
     extend(node.style, {
       top: 0,
@@ -7158,20 +7561,14 @@ var getOrigin = function getOrigin(doc) {
       position: 'absolute'
     });
 
-    doc.body.appendChild(node);
+    document.body.appendChild(node);
 
-    doc._tetherZeroElement = node;
+    zeroElement = node;
   }
 
   var id = node.getAttribute('data-tether-id');
   if (typeof zeroPosCache[id] === 'undefined') {
-    zeroPosCache[id] = {};
-
-    var rect = node.getBoundingClientRect();
-    for (var k in rect) {
-      // Can't use extend, as on IE9, elements don't resolve to be hasOwnProperty
-      zeroPosCache[id][k] = rect[k];
-    }
+    zeroPosCache[id] = getActualBoundingClientRect(node);
 
     // Clear the cache when this position call is done
     defer(function () {
@@ -7180,6 +7577,13 @@ var getOrigin = function getOrigin(doc) {
   }
 
   return zeroPosCache[id];
+};
+
+function removeUtilElements() {
+  if (zeroElement) {
+    document.body.removeChild(zeroElement);
+  }
+  zeroElement = null;
 };
 
 function getBounds(el) {
@@ -7193,15 +7597,9 @@ function getBounds(el) {
 
   var docEl = doc.documentElement;
 
-  var box = {};
-  // The original object returned by getBoundingClientRect is immutable, so we clone it
-  // We can't use extend because the properties are not considered part of the object by hasOwnProperty in IE9
-  var rect = el.getBoundingClientRect();
-  for (var k in rect) {
-    box[k] = rect[k];
-  }
+  var box = getActualBoundingClientRect(el);
 
-  var origin = getOrigin(doc);
+  var origin = getOrigin();
 
   box.top -= origin.top;
   box.left -= origin.left;
@@ -7225,7 +7623,11 @@ function getOffsetParent(el) {
   return el.offsetParent || document.documentElement;
 }
 
+var _scrollBarSize = null;
 function getScrollBarSize() {
+  if (_scrollBarSize) {
+    return _scrollBarSize;
+  }
   var inner = document.createElement('div');
   inner.style.width = '100%';
   inner.style.height = '200px';
@@ -7258,7 +7660,8 @@ function getScrollBarSize() {
 
   var width = widthContained - widthScroll;
 
-  return { width: width, height: width };
+  _scrollBarSize = { width: width, height: width };
+  return _scrollBarSize;
 }
 
 function extend() {
@@ -7318,7 +7721,9 @@ function hasClass(el, name) {
 }
 
 function getClassName(el) {
-  if (el.className instanceof SVGAnimatedString) {
+  // Can't use just SVGAnimatedString here since nodes within a Frame in IE have
+  // completely separately SVGAnimatedString base classes
+  if (el.className instanceof el.ownerDocument.defaultView.SVGAnimatedString) {
     return el.className.baseVal;
   }
   return el.className;
@@ -7383,7 +7788,7 @@ var Evented = (function () {
   }, {
     key: 'off',
     value: function off(event, handler) {
-      if (typeof this.bindings !== 'undefined' && typeof this.bindings[event] !== 'undefined') {
+      if (typeof this.bindings === 'undefined' || typeof this.bindings[event] === 'undefined') {
         return;
       }
 
@@ -7437,7 +7842,8 @@ var Evented = (function () {
 })();
 
 TetherBase.Utils = {
-  getScrollParent: getScrollParent,
+  getActualBoundingClientRect: getActualBoundingClientRect,
+  getScrollParents: getScrollParents,
   getBounds: getBounds,
   getOffsetParent: getOffsetParent,
   extend: extend,
@@ -7449,7 +7855,8 @@ TetherBase.Utils = {
   flush: flush,
   uniqueId: uniqueId,
   Evented: Evented,
-  getScrollBarSize: getScrollBarSize
+  getScrollBarSize: getScrollBarSize,
+  removeUtilElements: removeUtilElements
 };
 /* globals TetherBase, performance */
 
@@ -7459,14 +7866,18 @@ var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = 
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+var _get = function get(_x6, _x7, _x8) { var _again = true; _function: while (_again) { var object = _x6, property = _x7, receiver = _x8; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x6 = parent; _x7 = property; _x8 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 if (typeof TetherBase === 'undefined') {
   throw new Error('You must include the utils.js file before tether.js');
 }
 
 var _TetherBase$Utils = TetherBase.Utils;
-var getScrollParent = _TetherBase$Utils.getScrollParent;
+var getScrollParents = _TetherBase$Utils.getScrollParents;
 var getBounds = _TetherBase$Utils.getBounds;
 var getOffsetParent = _TetherBase$Utils.getOffsetParent;
 var extend = _TetherBase$Utils.extend;
@@ -7476,6 +7887,7 @@ var updateClasses = _TetherBase$Utils.updateClasses;
 var defer = _TetherBase$Utils.defer;
 var flush = _TetherBase$Utils.flush;
 var getScrollBarSize = _TetherBase$Utils.getScrollBarSize;
+var removeUtilElements = _TetherBase$Utils.removeUtilElements;
 
 function within(a, b) {
   var diff = arguments.length <= 2 || arguments[2] === undefined ? 1 : arguments[2];
@@ -7489,7 +7901,7 @@ var transformKey = (function () {
   }
   var el = document.createElement('div');
 
-  var transforms = ['transform', 'webkitTransform', 'OTransform', 'MozTransform', 'msTransform'];
+  var transforms = ['transform', 'WebkitTransform', 'OTransform', 'MozTransform', 'msTransform'];
   for (var i = 0; i < transforms.length; ++i) {
     var key = transforms[i];
     if (el.style[key] !== undefined) {
@@ -7508,7 +7920,7 @@ var position = function position() {
 };
 
 function now() {
-  if (typeof performance !== 'undefined' && typeof performance.now !== 'undefined') {
+  if (typeof performance === 'object' && typeof performance.now === 'function') {
     return performance.now();
   }
   return +new Date();
@@ -7534,7 +7946,7 @@ function now() {
       return;
     }
 
-    if (typeof pendingTimeout !== 'undefined') {
+    if (pendingTimeout != null) {
       clearTimeout(pendingTimeout);
       pendingTimeout = null;
     }
@@ -7544,7 +7956,7 @@ function now() {
     lastDuration = now() - lastCall;
   };
 
-  if (typeof window !== 'undefined') {
+  if (typeof window !== 'undefined' && typeof window.addEventListener !== 'undefined') {
     ['resize', 'scroll', 'touchmove'].forEach(function (event) {
       window.addEventListener(event, tick);
     });
@@ -7650,12 +8062,15 @@ var parseOffset = function parseOffset(value) {
 };
 var parseAttachment = parseOffset;
 
-var TetherClass = (function () {
+var TetherClass = (function (_Evented) {
+  _inherits(TetherClass, _Evented);
+
   function TetherClass(options) {
     var _this = this;
 
     _classCallCheck(this, TetherClass);
 
+    _get(Object.getPrototypeOf(TetherClass.prototype), 'constructor', this).call(this);
     this.position = this.position.bind(this);
 
     tethers.push(this);
@@ -7746,14 +8161,14 @@ var TetherClass = (function () {
       this.offset = parseOffset(this.options.offset);
       this.targetOffset = parseOffset(this.options.targetOffset);
 
-      if (typeof this.scrollParent !== 'undefined') {
+      if (typeof this.scrollParents !== 'undefined') {
         this.disable();
       }
 
       if (this.targetModifier === 'scroll-handle') {
-        this.scrollParent = this.target;
+        this.scrollParents = [this.target];
       } else {
-        this.scrollParent = getScrollParent(this.target);
+        this.scrollParents = getScrollParents(this.target);
       }
 
       if (!(this.options.enabled === false)) {
@@ -7874,6 +8289,8 @@ var TetherClass = (function () {
   }, {
     key: 'enable',
     value: function enable() {
+      var _this3 = this;
+
       var pos = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
 
       if (!(this.options.addTargetClasses === false)) {
@@ -7882,9 +8299,11 @@ var TetherClass = (function () {
       addClass(this.element, this.getClass('enabled'));
       this.enabled = true;
 
-      if (this.scrollParent !== document) {
-        this.scrollParent.addEventListener('scroll', this.position);
-      }
+      this.scrollParents.forEach(function (parent) {
+        if (parent !== _this3.target.ownerDocument) {
+          parent.addEventListener('scroll', _this3.position);
+        }
+      });
 
       if (pos) {
         this.position();
@@ -7893,32 +8312,40 @@ var TetherClass = (function () {
   }, {
     key: 'disable',
     value: function disable() {
+      var _this4 = this;
+
       removeClass(this.target, this.getClass('enabled'));
       removeClass(this.element, this.getClass('enabled'));
       this.enabled = false;
 
-      if (typeof this.scrollParent !== 'undefined') {
-        this.scrollParent.removeEventListener('scroll', this.position);
+      if (typeof this.scrollParents !== 'undefined') {
+        this.scrollParents.forEach(function (parent) {
+          parent.removeEventListener('scroll', _this4.position);
+        });
       }
     }
   }, {
     key: 'destroy',
     value: function destroy() {
-      var _this3 = this;
+      var _this5 = this;
 
       this.disable();
 
       tethers.forEach(function (tether, i) {
-        if (tether === _this3) {
+        if (tether === _this5) {
           tethers.splice(i, 1);
-          return;
         }
       });
+
+      // Remove any elements we were using for convenience from the DOM
+      if (tethers.length === 0) {
+        removeUtilElements();
+      }
     }
   }, {
     key: 'updateAttachClasses',
     value: function updateAttachClasses(elementAttach, targetAttach) {
-      var _this4 = this;
+      var _this6 = this;
 
       elementAttach = elementAttach || this.attachment;
       targetAttach = targetAttach || this.targetAttachment;
@@ -7951,27 +8378,27 @@ var TetherClass = (function () {
 
       var all = [];
       sides.forEach(function (side) {
-        all.push(_this4.getClass('element-attached') + '-' + side);
-        all.push(_this4.getClass('target-attached') + '-' + side);
+        all.push(_this6.getClass('element-attached') + '-' + side);
+        all.push(_this6.getClass('target-attached') + '-' + side);
       });
 
       defer(function () {
-        if (!(typeof _this4._addAttachClasses !== 'undefined')) {
+        if (!(typeof _this6._addAttachClasses !== 'undefined')) {
           return;
         }
 
-        updateClasses(_this4.element, _this4._addAttachClasses, all);
-        if (!(_this4.options.addTargetClasses === false)) {
-          updateClasses(_this4.target, _this4._addAttachClasses, all);
+        updateClasses(_this6.element, _this6._addAttachClasses, all);
+        if (!(_this6.options.addTargetClasses === false)) {
+          updateClasses(_this6.target, _this6._addAttachClasses, all);
         }
 
-        delete _this4._addAttachClasses;
+        delete _this6._addAttachClasses;
       });
     }
   }, {
     key: 'position',
     value: function position() {
-      var _this5 = this;
+      var _this7 = this;
 
       var flushChanges = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
 
@@ -7990,7 +8417,7 @@ var TetherClass = (function () {
       this.updateAttachClasses(this.attachment, targetAttachment);
 
       var elementPos = this.cache('element-bounds', function () {
-        return getBounds(_this5.element);
+        return getBounds(_this7.element);
       });
 
       var width = elementPos.width;
@@ -8008,7 +8435,7 @@ var TetherClass = (function () {
       }
 
       var targetPos = this.cache('target-bounds', function () {
-        return _this5.getTargetBounds();
+        return _this7.getTargetBounds();
       });
       var targetSize = targetPos;
 
@@ -8073,29 +8500,32 @@ var TetherClass = (function () {
         }
       };
 
+      var doc = this.target.ownerDocument;
+      var win = doc.defaultView;
+
       var scrollbarSize = undefined;
-      if (document.body.scrollWidth > window.innerWidth) {
+      if (win.innerHeight > doc.documentElement.clientHeight) {
         scrollbarSize = this.cache('scrollbar-size', getScrollBarSize);
         next.viewport.bottom -= scrollbarSize.height;
       }
 
-      if (document.body.scrollHeight > window.innerHeight) {
+      if (win.innerWidth > doc.documentElement.clientWidth) {
         scrollbarSize = this.cache('scrollbar-size', getScrollBarSize);
         next.viewport.right -= scrollbarSize.width;
       }
 
-      if (['', 'static'].indexOf(document.body.style.position) === -1 || ['', 'static'].indexOf(document.body.parentElement.style.position) === -1) {
+      if (['', 'static'].indexOf(doc.body.style.position) === -1 || ['', 'static'].indexOf(doc.body.parentElement.style.position) === -1) {
         // Absolute positioning in the body will be relative to the page, not the 'initial containing block'
-        next.page.bottom = document.body.scrollHeight - top - height;
-        next.page.right = document.body.scrollWidth - left - width;
+        next.page.bottom = doc.body.scrollHeight - top - height;
+        next.page.right = doc.body.scrollWidth - left - width;
       }
 
       if (typeof this.options.optimizations !== 'undefined' && this.options.optimizations.moveElement !== false && !(typeof this.targetModifier !== 'undefined')) {
         (function () {
-          var offsetParent = _this5.cache('target-offsetparent', function () {
-            return getOffsetParent(_this5.target);
+          var offsetParent = _this7.cache('target-offsetparent', function () {
+            return getOffsetParent(_this7.target);
           });
-          var offsetPosition = _this5.cache('target-offsetparent-bounds', function () {
+          var offsetPosition = _this7.cache('target-offsetparent-bounds', function () {
             return getBounds(offsetParent);
           });
           var offsetParentStyle = getComputedStyle(offsetParent);
@@ -8106,8 +8536,8 @@ var TetherClass = (function () {
             offsetBorder[side.toLowerCase()] = parseFloat(offsetParentStyle['border' + side + 'Width']);
           });
 
-          offsetPosition.right = document.body.scrollWidth - offsetPosition.left - offsetParentSize.width + offsetBorder.right;
-          offsetPosition.bottom = document.body.scrollHeight - offsetPosition.top - offsetParentSize.height + offsetBorder.bottom;
+          offsetPosition.right = doc.body.scrollWidth - offsetPosition.left - offsetParentSize.width + offsetBorder.right;
+          offsetPosition.bottom = doc.body.scrollHeight - offsetPosition.top - offsetParentSize.height + offsetBorder.bottom;
 
           if (next.page.top >= offsetPosition.top + offsetBorder.top && next.page.bottom >= offsetPosition.bottom) {
             if (next.page.left >= offsetPosition.left + offsetBorder.left && next.page.right >= offsetPosition.right) {
@@ -8148,7 +8578,7 @@ var TetherClass = (function () {
   }, {
     key: 'move',
     value: function move(pos) {
-      var _this6 = this;
+      var _this8 = this;
 
       if (!(typeof this.element.parentNode !== 'undefined')) {
         return;
@@ -8179,8 +8609,8 @@ var TetherClass = (function () {
       var css = { top: '', left: '', right: '', bottom: '' };
 
       var transcribe = function transcribe(_same, _pos) {
-        var hasOptimizations = typeof _this6.options.optimizations !== 'undefined';
-        var gpu = hasOptimizations ? _this6.options.optimizations.gpu : null;
+        var hasOptimizations = typeof _this8.options.optimizations !== 'undefined';
+        var gpu = hasOptimizations ? _this8.options.optimizations.gpu : null;
         if (gpu !== false) {
           var yPos = undefined,
               xPos = undefined;
@@ -8200,7 +8630,16 @@ var TetherClass = (function () {
             xPos = -_pos.right;
           }
 
-          css[transformKey] = 'translateX(' + Math.round(xPos) + 'px) translateY(' + Math.round(yPos) + 'px)';
+          if (window.matchMedia) {
+            // HubSpot/tether#207
+            var retina = window.matchMedia('only screen and (min-resolution: 1.3dppx)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3)').matches;
+            if (!retina) {
+              xPos = Math.round(xPos);
+              yPos = Math.round(yPos);
+            }
+          }
+
+          css[transformKey] = 'translateX(' + xPos + 'px) translateY(' + yPos + 'px)';
 
           if (transformKey !== 'msTransform') {
             // The Z transform will keep this in the GPU (faster, and prevents artifacts),
@@ -8232,14 +8671,14 @@ var TetherClass = (function () {
       } else if (typeof same.offset !== 'undefined' && same.offset.top && same.offset.left) {
         (function () {
           css.position = 'absolute';
-          var offsetParent = _this6.cache('target-offsetparent', function () {
-            return getOffsetParent(_this6.target);
+          var offsetParent = _this8.cache('target-offsetparent', function () {
+            return getOffsetParent(_this8.target);
           });
 
-          if (getOffsetParent(_this6.element) !== offsetParent) {
+          if (getOffsetParent(_this8.element) !== offsetParent) {
             defer(function () {
-              _this6.element.parentNode.removeChild(_this6.element);
-              offsetParent.appendChild(_this6.element);
+              _this8.element.parentNode.removeChild(_this8.element);
+              offsetParent.appendChild(_this8.element);
             });
           }
 
@@ -8252,20 +8691,26 @@ var TetherClass = (function () {
       }
 
       if (!moved) {
-        var offsetParentIsBody = true;
-        var currentNode = this.element.parentNode;
-        while (currentNode && currentNode.tagName !== 'BODY') {
-          if (getComputedStyle(currentNode).position !== 'static') {
-            offsetParentIsBody = false;
-            break;
+        if (this.options.bodyElement) {
+          if (this.element.parentNode !== this.options.bodyElement) {
+            this.options.bodyElement.appendChild(this.element);
+          }
+        } else {
+          var offsetParentIsBody = true;
+          var currentNode = this.element.parentNode;
+          while (currentNode && currentNode.nodeType === 1 && currentNode.tagName !== 'BODY') {
+            if (getComputedStyle(currentNode).position !== 'static') {
+              offsetParentIsBody = false;
+              break;
+            }
+
+            currentNode = currentNode.parentNode;
           }
 
-          currentNode = currentNode.parentNode;
-        }
-
-        if (!offsetParentIsBody) {
-          this.element.parentNode.removeChild(this.element);
-          document.body.appendChild(this.element);
+          if (!offsetParentIsBody) {
+            this.element.parentNode.removeChild(this.element);
+            this.element.ownerDocument.body.appendChild(this.element);
+          }
         }
       }
 
@@ -8276,11 +8721,6 @@ var TetherClass = (function () {
         var val = css[key];
         var elVal = this.element.style[key];
 
-        if (elVal !== '' && val !== '' && ['top', 'left', 'bottom', 'right'].indexOf(key) >= 0) {
-          elVal = parseFloat(elVal);
-          val = parseFloat(val);
-        }
-
         if (elVal !== val) {
           write = true;
           writeCSS[key] = val;
@@ -8289,14 +8729,15 @@ var TetherClass = (function () {
 
       if (write) {
         defer(function () {
-          extend(_this6.element.style, writeCSS);
+          extend(_this8.element.style, writeCSS);
+          _this8.trigger('repositioned');
         });
       }
     }
   }]);
 
   return TetherClass;
-})();
+})(Evented);
 
 TetherClass.modules = [];
 
@@ -8319,7 +8760,7 @@ var BOUNDS_FORMAT = ['left', 'top', 'right', 'bottom'];
 
 function getBoundingRect(tether, to) {
   if (to === 'scrollParent') {
-    to = tether.scrollParent;
+    to = tether.scrollParents[0];
   } else if (to === 'window') {
     to = [pageXOffset, pageYOffset, innerWidth + pageXOffset, innerHeight + pageYOffset];
   }
@@ -8330,11 +8771,21 @@ function getBoundingRect(tether, to) {
 
   if (typeof to.nodeType !== 'undefined') {
     (function () {
+      var node = to;
       var size = getBounds(to);
       var pos = size;
       var style = getComputedStyle(to);
 
       to = [pos.left, pos.top, size.width + pos.left, size.height + pos.top];
+
+      // Account any parent Frames scroll offset
+      if (node.ownerDocument !== document) {
+        var win = node.ownerDocument.defaultView;
+        to[0] += win.pageXOffset;
+        to[1] += win.pageYOffset;
+        to[2] += win.pageXOffset;
+        to[3] += win.pageYOffset;
+      }
 
       BOUNDS_FORMAT.forEach(function (side, i) {
         side = side[0].toUpperCase() + side.substr(1);
@@ -8447,34 +8898,32 @@ TetherBase.modules.push({
       }
 
       if (changeAttachY === 'together') {
-        if (top < bounds[1] && tAttachment.top === 'top') {
-          if (eAttachment.top === 'bottom') {
+        if (tAttachment.top === 'top') {
+          if (eAttachment.top === 'bottom' && top < bounds[1]) {
             top += targetHeight;
             tAttachment.top = 'bottom';
 
             top += height;
             eAttachment.top = 'top';
-          } else if (eAttachment.top === 'top') {
-            top += targetHeight;
+          } else if (eAttachment.top === 'top' && top + height > bounds[3] && top - (height - targetHeight) >= bounds[1]) {
+            top -= height - targetHeight;
             tAttachment.top = 'bottom';
 
-            top -= height;
             eAttachment.top = 'bottom';
           }
         }
 
-        if (top + height > bounds[3] && tAttachment.top === 'bottom') {
-          if (eAttachment.top === 'top') {
+        if (tAttachment.top === 'bottom') {
+          if (eAttachment.top === 'top' && top + height > bounds[3]) {
             top -= targetHeight;
             tAttachment.top = 'top';
 
             top -= height;
             eAttachment.top = 'bottom';
-          } else if (eAttachment.top === 'bottom') {
-            top -= targetHeight;
+          } else if (eAttachment.top === 'bottom' && top < bounds[1] && top + (height * 2 - targetHeight) <= bounds[3]) {
+            top += height - targetHeight;
             tAttachment.top = 'top';
 
-            top += height;
             eAttachment.top = 'top';
           }
         }
@@ -8666,6 +9115,10 @@ TetherBase.modules.push({
 
       if (tAttachment.top !== targetAttachment.top || tAttachment.left !== targetAttachment.left || eAttachment.top !== _this.attachment.top || eAttachment.left !== _this.attachment.left) {
         _this.updateAttachClasses(eAttachment, tAttachment);
+        _this.trigger('update', {
+          attachment: eAttachment,
+          targetAttachment: tAttachment
+        });
       }
     });
 
