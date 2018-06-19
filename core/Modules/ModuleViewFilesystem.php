@@ -183,7 +183,7 @@ class ModuleViewFilesystem
             }
         }
 
-        if ($subarea) {
+        if ($subarea && isset($this->views['subarea'])) {
             $collection = array_merge($collection, $this->getSingles($this->views['subarea']));
         }
 
