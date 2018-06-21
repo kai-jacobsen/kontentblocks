@@ -12,21 +12,21 @@
     "grunt-autoprefixer": "~0.6.4",
     "grunt-browser-sync": "^2.1.3",
     "grunt-browserify": "^3.8.0",
-    "grunt-concurrent": "^2.0.0",
+    "grunt-concurrent": "^2.3.1",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-jshint": "~0.6.4",
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-contrib-watch": "~0.5.0",
-    "grunt-exec": "^0.4.5",
+    "grunt-exec": "^0.4.7",
     "grunt-notify": "^0.4.1",
-    "grunt-sass": "^1.1.0",
-    "handlebars": "^3.0.3",
-    "hbsfy": "^2.2.1",
+    "grunt-sass": "^1.2.1",
+    "handlebars": "^4.0.11",
+    "hbsfy": "^2.8.1",
     "jshint-log-reporter": "^1.0.8",
-    "tether": "^1.1.0"
+    "tether": "^1.4.4"
   },
   "dependencies": {
-    "time-grunt": "^1.2.1"
+    "time-grunt": "^1.4.0"
   }
 }

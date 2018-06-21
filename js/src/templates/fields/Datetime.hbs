@@ -1,0 +1,13 @@
+<div class="kb-field kb-js-field kb-field--datetime field-api-datetime">
+<label class="heading">{{ model.label }}</label>
+<div class="kb-field--datetime-item">
+
+    <input type="text" name='{{ fieldName model.baseId model.index model.primeKey }}[human]'
+           value='{{ model.value.human }}' class='kb-datetimepicker'>
+    <input type='hidden' name='{{ fieldName model.baseId model.index model.primeKey }}[unix]' value='{{ model.value.unix }}'
+           class='kb-datetimepicker--js-unix'>
+    <input type='hidden' name='{{ fieldName model.baseId model.index model.primeKey }}[sql]' value='{{ model.value.sql }}'
+           class='kb-datetimepicker--js-sql'>
+</div>
+<p class="description">{{ model.description }}</p>
+</div>

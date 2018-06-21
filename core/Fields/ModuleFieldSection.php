@@ -37,7 +37,7 @@ class ModuleFieldSection extends StandardFieldSection
         $areaContext = $this->entity->getContext()->get('areaContext');
         $postType = $this->entity->getContext()->get('postType');
         $pageTemplate = $this->entity->getContext()->get('pageTemplate');
-
+        $submodule = $this->entity->properties->get('submodule');
         $callback = $field->getCondition('callback');
         if (is_callable($callback)) {
             $res = call_user_func_array($callback, [$this, $field]);
@@ -74,6 +74,13 @@ class ModuleFieldSection extends StandardFieldSection
                 (array)$field->getCondition('pageTemplate')
             )
         ) {
+            $field->setVisibility(false);
+            $this->decreaseVisibleFields();
+
+            return;
+        }
+
+        if ($field->getCondition('submodule') && ($field->getCondition('submodule')) === false) {
             $field->setVisibility(false);
             $this->decreaseVisibleFields();
 

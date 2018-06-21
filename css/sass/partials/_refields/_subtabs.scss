@@ -18,21 +18,46 @@
 .kbf-fields-tabnav ul.ui-tabs-nav {
   background-color: $grey-100;
   padding-top: 0;
+  margin-top: 0;
 
   li {
     display: block;
     float: none;
     background-color: $grey-100;
+    padding: 8px 0 5px 0;
+    margin-bottom: 0;
+    position: relative;
+    top: 0;
+
+    &:focus, &:active {
+      border: none;
+      outline: none;
+    }
 
     a {
       color: #333;
       padding: 0 12px;
       display: block;
       top: 0;
+      text-decoration: none;
+
+      &:focus, &:active {
+        border: none;
+        outline: none;
+      }
+    }
+
+    &.ui-tabs-active {
+      background-color: #fff;
     }
 
     &.ui-tabs-active a {
       border-bottom: 0;
+    }
+
+    &.ui-state-focus {
+      border: none;
+      outline: none;
     }
   }
 

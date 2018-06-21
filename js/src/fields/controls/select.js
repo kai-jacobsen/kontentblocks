@@ -25,5 +25,14 @@ module.exports = BaseView.extend({
   },
   rerender: function () {
     this.render();  
+  },
+  derender: function () {
+    var settings = _.extend(this.defaults, this.settings);
+    if (settings.sortable){
+      this.$("[data-kbselect2='true']").select2_sortable('destroy');
+    } else {
+      this.$el.removeClass('select-sortable');
+      this.$("[data-kbselect2='true']").select2('destroy');
+    }
   }
 });

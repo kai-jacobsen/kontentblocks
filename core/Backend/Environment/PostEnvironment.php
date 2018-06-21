@@ -15,10 +15,10 @@ use Kontentblocks\Panels\PostPanelRepository;
 
 
 /**
- * Post Environment
+ * KDPost Environment
  *
  * @package Kontentblocks
- * @subpackage Post
+ * @subpackage KDPost
  * @since 0.1.0
  */
 class PostEnvironment implements JsonSerializable, EnvironmentInterface

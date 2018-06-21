@@ -14,7 +14,7 @@ var SidebarView = require('frontend/Views/Sidebar');
 var FieldConfigsCollection = require('fields/FieldControlsCollection');
 var Payload = require('common/Payload');
 var ModuleCollection = require('frontend/Collections/ModuleCollection');
-var ObjectProxy = require('frontend/Collections/ObjectProxyCollection');
+var ObjectProxy = require('shared/Collections/ObjectProxyCollection');
 var ModuleModel = require('frontend/Models/ModuleModel');
 var ModuleView = require('./Views/ModuleView');
 
@@ -29,8 +29,6 @@ var Tether = require('tether');
 var AdminBar = require('frontend/AdminBar');
 var Checks = require('common/Checks');
 var Config = require('common/Config');
-var Refields = require('fields/RefieldsController');
-var FieldsAPI = require('fieldsAPI/FieldsAPIController');
 
 
 /*

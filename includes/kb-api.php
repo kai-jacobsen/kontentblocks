@@ -2,6 +2,7 @@
 
 namespace Kontentblocks;
 
+use function foo\func;
 use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayoutsRegistry;
 use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Data\ValueObject;
@@ -9,7 +10,9 @@ use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
+use Kontentblocks\Panels\AbstractPanel;
 use Kontentblocks\Panels\PanelModel;
+use Kontentblocks\Panels\PostPanel;
 use Kontentblocks\Panels\TermPanel;
 use Kontentblocks\Templating\TemplatePart;
 use Kontentblocks\Utils\CommonTwig\SimpleView;
@@ -52,7 +55,6 @@ function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $mo
         return null;
     }
 
-
     /** @var \Kontentblocks\Areas\AreaRegistry $registry */
     $registry = Kontentblocks::getService('registry.areas');
     if ($registry->isDynamic($areaId)) {
@@ -64,7 +66,6 @@ function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $mo
     }
 
     $area = $environment->getAreaDefinition($areaId);
-
     if (!$area) {
         return '';
     }
@@ -124,7 +125,6 @@ function isActiveArea($areaId, $postId = null)
 function renderSideAreas($postId, $areaSettings = array(), $moduleSettings = array())
 {
     global $post;
-
     $post_id = (null === $postId) ? $post->ID : $postId;
     $areas = get_post_meta($post_id, 'active_sidebar_areas', true);
     if (!empty($areas)) {
@@ -140,27 +140,19 @@ function renderSideAreas($postId, $areaSettings = array(), $moduleSettings = arr
  * @param $postId
  * @param array $areaSettings
  * @param array $moduleSettings
+ * @return array
  */
 function renderContext($context, $postId, $areaSettings = array(), $moduleSettings = array())
 {
     global $post;
     $postId = (null === $postId) ? $post->ID : $postId;
     $Environment = Utilities::getPostEnvironment($postId);
-    $areas = $Environment->getAreasForContext($context);
-    $contextsOrder = $Environment->getDataProvider()->get('_kbcontexts');
-    if (is_array($contextsOrder) && !empty($contextsOrder)) {
-        foreach ($contextsOrder as $context => $areaIds) {
-            if (is_array($areaIds)) {
-                foreach (array_keys($areaIds) as $areaId) {
-                    if (isset($areas[$areaId])) {
-                        $tmp = $areas[$areaId];
-                        unset($areas[$areaId]);
-                        $areas[$areaId] = $tmp;
-                    }
-                }
-            }
-        }
+
+    if (is_null($Environment)) {
+        return [];
     }
+
+    $areas = areasForContext($postId, $context);
 
     if (!empty($areas)) {
         foreach (array_keys($areas) as $area) {
@@ -180,6 +172,34 @@ function renderContext($context, $postId, $areaSettings = array(), $moduleSettin
         }
     }
 
+}
+
+/**
+ * @param $postId
+ * @param $context
+ * @return mixed
+ */
+function areasForContext($postId = null, $context)
+{
+    global $post;
+    $postId = (null === $postId) ? $post->ID : $postId;
+    $environment = Utilities::getPostEnvironment($postId);
+    $areas = $environment->getAreasForContext($context);
+    $contextsOrder = $environment->getDataProvider()->get('_kbcontexts');
+    if (is_array($contextsOrder) && !empty($contextsOrder)) {
+        foreach ($contextsOrder as $context => $areaIds) {
+            if (is_array($areaIds)) {
+                foreach (array_keys($areaIds) as $areaId) {
+                    if (isset($areas[$areaId])) {
+                        $tmp = $areas[$areaId];
+                        unset($areas[$areaId]);
+                        $areas[$areaId] = $tmp;
+                    }
+                }
+            }
+        }
+    }
+    return $areas;
 }
 
 
@@ -231,7 +251,7 @@ function getPostPanel($panelId = null, $postId = null)
     }
     $Panel = $Environment->getPanelObject($panelId);
     /** @var \Kontentblocks\Panels\PostPanel $Panel */
-    if (is_a($Panel, "\\Kontentblocks\\Panels\\AbstractPanel")) {
+    if (is_a($Panel, AbstractPanel::class)) {
         return $Panel;
     } else {
         return new \WP_Error(
@@ -282,7 +302,7 @@ function getTermPanelModel($panelId, $termId, $taxonomy = null)
 function getPostPanelModel($panelId = null, $postId = null)
 {
     $panel = getPostPanel($panelId, $postId);
-    if (is_a($panel, '\Kontentblocks\Panels\PostPanel')) {
+    if (is_a($panel, PostPanel::class)) {
         return $panel->setupViewModel();
     }
     return null;
@@ -303,7 +323,7 @@ function getPostPanelData($panelId = null, $postId = null, $raw = false)
 
     $data = [];
     $panel = getPostPanel($panelId, $postId);
-    if (is_a($panel, '\Kontentblocks\Panels\PostPanel')) {
+    if (is_a($panel, PostPanel::class)) {
         if (!$raw) {
             $data = $panel->setupViewModel()->export();
         } else {
@@ -414,3 +434,5 @@ function templatePart($slug, $name = '', $data = array())
     echo $part->render();
 
 }
+
+

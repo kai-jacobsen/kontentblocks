@@ -41,7 +41,8 @@ module.exports = Backbone.View.extend({
     var $skeleton = this.$el.append(tplSingleToggleBox({ // append the outer skeleton markup for the item / toggle head & body
       item: item,
       inputName: inputName,
-      uid: this.model.get('itemId')
+      uid: this.model.get('itemId'),
+      fftype: this.model.get('fftype')
     }));
     this.renderTabs($skeleton); // insert the tabs markup
     return $skeleton;

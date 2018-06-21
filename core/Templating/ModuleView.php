@@ -3,6 +3,7 @@
 namespace Kontentblocks\Templating;
 
 use Exception;
+use Kontentblocks\Backend\Environment\EntityContext;
 use Kontentblocks\Fields\ModuleFieldValueProxy;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\Module;
@@ -18,6 +19,7 @@ use Kontentblocks\Utils\MobileDetect;
 class ModuleView implements \JsonSerializable
 {
 
+    public $context;
     /**
      * @var array
      */
@@ -26,22 +28,18 @@ class ModuleView implements \JsonSerializable
      * @var object  Module Instance
      */
     protected $module;
-
     /**
      * @var array   merged from module data and additional injected data
      */
     protected $data;
-
     /**
      * @var string filename of twig file
      */
     protected $tplFile;
-
     /**
      * @var TWIG engine
      */
     protected $engine;
-
     /**
      * @var ModuleViewModel
      */
@@ -64,6 +62,7 @@ class ModuleView implements \JsonSerializable
         $this->tplFile = $tpl;
         $this->setPath($tpl->path);
         $this->engine = Kontentblocks::getService('templating.twig.public');
+
     }
 
 
@@ -130,11 +129,12 @@ class ModuleView implements \JsonSerializable
             );
         }
 
-        if (is_a($this->model, ModuleViewModel::class)){
+        if (is_a($this->model, ModuleViewModel::class)) {
             $data['_f'] = new ModuleFieldValueProxy($this->model);
         }
         $data['_utils'] = $this->setupUtilities();
         $data['Module'] = $this->module;
+
         $data = apply_filters('kb.module.view.data', $data, $this->module);
         return $data;
 
@@ -198,6 +198,14 @@ class ModuleView implements \JsonSerializable
         );
     }
 
+    /**
+     * @param $needle
+     * @return bool
+     */
+    public function isTemplate($needle)
+    {
+        return $this->tplFile->filename === $needle;
+    }
 
 }
 

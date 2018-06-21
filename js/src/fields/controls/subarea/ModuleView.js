@@ -83,6 +83,9 @@ module.exports = Backbone.View.extend({
     UI.repaint(this.fsControl.$el);
   },
   saveModule: function () {
+    if (!this.formLoaded){
+      return false;
+    }
     this.ModuleModel.sync();
     this.getClean();
   },

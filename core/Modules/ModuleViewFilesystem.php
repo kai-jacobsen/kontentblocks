@@ -155,14 +155,12 @@ class ModuleViewFilesystem
      */
     public function getTemplatesforContext(ModuleContext $context)
     {
-
         $collection = array();
         $collection += $this->getSingles($this->views);
-
         $areaContext = $context->areaContext;
         $postType = $context->postType;
         $pageTemplate = basename($context->pageTemplate);
-
+        $subarea = $context->subarea;
         if (array_key_exists($areaContext, $this->views)) {
             $collection = array_merge($collection, $this->getSingles($this->views[$areaContext]));
         }
@@ -187,6 +185,9 @@ class ModuleViewFilesystem
             }
         }
 
+        if ($subarea && isset($this->views['subarea'])) {
+            $collection = array_merge($collection, $this->getSingles($this->views['subarea']));
+        }
 
         return $collection;
 

@@ -17,16 +17,17 @@ function kb_register_area( $args )
 }
 
 
-
 /**
  * Render a single area wrapper
  * @param null $area
  * @param null $post_id
  * @param null $additionalArgs
+ * @param array $moduleSettings
+ * @param bool $echo
  */
-function kb_render_area( $area = null, $post_id = null, $additionalArgs = null )
+function kb_render_area( $area = null, $post_id = null, $additionalArgs = null, $moduleSettings = array(), $echo = true )
 {
-    \Kontentblocks\renderSingleArea( $area, $post_id, $additionalArgs );
+    \Kontentblocks\renderSingleArea( $area, $post_id, $additionalArgs, $moduleSettings, $echo );
 }
 
 add_action( 'kb_area', 'kb_render_area', 10, 3 );
@@ -67,7 +68,7 @@ add_action( 'sidebar_areas', 'kb_render_area_sidebar', 10, 3 );
  */
 function has_modules( $area_id, $post_id = null )
 {
-    \Kontentblocks\hasModules( $area_id, $post_id );
+    return \Kontentblocks\hasModules( $area_id, $post_id );
 }
 
 /**

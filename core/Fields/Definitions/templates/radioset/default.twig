@@ -1,0 +1,18 @@
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    {% for o in Field.getArg('options') %}
+        {% if (o.key and o.name and o.value) %}
+            <div class='kb-radioset-item'>
+                <label>
+                    <input type='radio' id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName() }}'
+                           value='{{ o.value }}'
+                            {% if o.value == Field.getValue() %} checked="checked" {% endif %}/>{{ o.name }}</label>
+            </div>
+
+        {% else %}
+            <p>Invalid option. Key,name or value missing.</p>
+        {% endif %}
+
+
+    {% endfor %}
+{% endblock %}

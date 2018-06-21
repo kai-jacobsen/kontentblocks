@@ -17,7 +17,7 @@ module.exports = Backbone.View.extend({
     this.open();
   },
   events: {
-    'click .kb-template-editor-close': 'close'
+    'click .kb-tpled--close': 'close'
   },
   open: function () {
     this.$backdrop = jQuery('<div class="kb-fullscreen-backdrop"></div>').appendTo('body');
@@ -28,7 +28,10 @@ module.exports = Backbone.View.extend({
     this.editor = CodeMirror(document.getElementById('codemirror'), {
       mode: "twig",
       theme: 'dracula',
-      lineNumbers: true
+      lineNumbers: true,
+      lineWrapping: true,
+      tabMode: "indent",
+      indentUnit: 4
     });
     this.render();
   },
@@ -50,7 +53,6 @@ module.exports = Backbone.View.extend({
       controller: this
     }).render();
     this.load(list.getActiveView());
-
   },
   load: function (viewfile) {
     var that = this;

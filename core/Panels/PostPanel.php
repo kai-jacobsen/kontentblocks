@@ -40,6 +40,9 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      * @var bool
      */
     public $saveAsSingle = false;
+    public $model;
+    public $args;
+    public $dataProvider;
     /**
      * meta box args
      * @var array|null
@@ -79,9 +82,8 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
-        $this->model = new PanelModel($this->dataProvider->get(Utilities::buildContextKey($this->baseId)), $this);
-        $this->fields = new PostPanelFieldController($this->baseId, $this);
-        $this->fields();
+        $this->setupFields();
+        $this->model = $this->prepareModel();
     }
 
     /**
@@ -103,11 +105,48 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         return wp_parse_args($args, $defaults);
     }
 
+    public function setupFields()
+    {
+        $this->fields = new PostPanelFieldController($this->baseId, $this);
+        $this->fields();
+        $this->fields->afterSetup();
+    }
+
     /**
      * Fields to render, must be provided by child class
      */
     abstract public function fields();
 
+    /**
+     * @return PanelModel
+     */
+    public function prepareModel()
+    {
+        $savedData = $this->dataProvider->get(Utilities::buildContextKey($this->baseId));
+        $model = new PanelModel([], $this);
+        if ($this->fields) {
+            $data = array();
+            $config = $this->fields->export();
+            foreach ($config->getFields() as $attrs) {
+                if ($attrs['arrayKey']) {
+                    $data[$attrs['arrayKey']][$attrs['key']] = $attrs['std'];
+                } else {
+                    $data[$attrs['key']] = $attrs['std'];
+                }
+            }
+            $new = wp_parse_args($savedData, $data);
+            $model->set($new);
+        }
+        return $model;
+    }
+
+    /**
+     * @return PostPanelContext
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
 
     /**
      * Setup hooks
@@ -170,38 +209,10 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function renderFields()
     {
-        $this->prepareModel(); // parse in missing data
+//        $this->prepareModel(); // parse in missing data
         $this->fields->updateData();
-
         $renderer = $this->fields->getFieldRenderClass();
         return $renderer->render();
-    }
-
-    /**
-     * @param bool $reset
-     * @return \Kontentblocks\Common\Data\EntityModel
-     */
-    public function prepareModel($reset = false)
-    {
-        if ($reset) {
-            $this->environment->getDataProvider()->reset();
-            $this->model->set($this->environment->getDataProvider()->get($this->baseId));
-        }
-        $model = $this->model->export();
-        if ($this->fields) {
-            $data = array();
-            $config = $this->fields->export();
-            foreach ($config->getFields() as $attrs) {
-                if ($attrs['arrayKey']) {
-                    $data[$attrs['arrayKey']][$attrs['key']] = $attrs['std'];
-                } else {
-                    $data[$attrs['key']] = $attrs['std'];
-                }
-            }
-            $new = wp_parse_args($model, $data);
-            $this->model->set($new);
-        }
-        return $this->model;
     }
 
     /**
@@ -247,14 +258,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
     }
 
     /**
-     * @return PanelModel|mixed
-     */
-    public function getModel()
-    {
-        return $this->model;
-    }
-
-    /**
      * add meta box action callback
      * @param $postObj
      */
@@ -290,13 +293,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         }
     }
 
-    /**
-     * @return PostPanelContext
-     */
-    public function getContext()
-    {
-        return $this->context;
-    }
 
     /**
      * Callback handler

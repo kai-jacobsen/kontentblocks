@@ -165,6 +165,7 @@ class AreaRegistry
             wp_cache_add('dynamicareas', $areas, Utilities::getCacheGroup(), 60 * 60 * 6);
         }
 
+
         if (is_array($areas) && !empty($areas)) {
             foreach ($areas as $areapost) {
                 $storage = new ModuleStorage($areapost->ID);
@@ -277,7 +278,7 @@ class AreaRegistry
     public function connect($classname, $args)
     {
         $setting = $args['settings']['connect'];
-        $postTypes = get_post_types(array('public' => true, '_builtin' => false), 'names', 'and');
+        $postTypes = get_post_types_by_support('kontentblocks');
         if (empty($setting)) {
             return false;
         }
@@ -305,7 +306,7 @@ class AreaRegistry
                         $connection->connect($classname);
                     }
                 } else if (in_array($target, $postTypes)) {
-                    foreach ($this->areas as $area) {
+                    foreach ($this->getAreasByPostType($target) as $area) {
                         $args['settings']['connect'] = array($area->id);
                         $this->connect($classname, $args);
                     }
@@ -355,6 +356,20 @@ class AreaRegistry
             $this->areas,
             function ($area) use ($tpl) {
                 return Utilities::strposa($area->pageTemplates, $tpl);
+            }
+        );
+    }
+
+    /**
+     * @param $pt
+     * @return array
+     */
+    public function getAreasByPostType($pt)
+    {
+        return array_filter(
+            $this->areas,
+            function ($area) use ($pt) {
+                return Utilities::strposa($area->postTypes, $pt);
             }
         );
     }

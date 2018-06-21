@@ -18,6 +18,7 @@ class FieldFormRendererWP extends FieldFormRenderer
      */
     public function setupClasslist()
     {
+
         return array(
             'main-wrap' => 'form-field kb-field-wrapper field-renderer-wp',
             'type-label' => 'kb-field-type-label',

@@ -49,7 +49,6 @@ class SingleModuleRenderer implements RendererInterface
         $this->classes = $this->setupClasses();
         $this->module->context->set($this->renderSettings->export());
 
-
         // @TODO other properties?
         if (isset($this->renderSettings['areaContext'])) {
             $this->module->context->areaContext = $this->renderSettings['areaContext'];
@@ -145,7 +144,6 @@ class SingleModuleRenderer implements RendererInterface
         if (method_exists($this->module, 'preRender')) {
             $this->module->preRender();
         }
-
 
         $out = '';
         $out .= $this->beforeModule();

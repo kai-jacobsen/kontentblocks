@@ -2,12 +2,15 @@
 
 namespace Kontentblocks\Fields\Definitions\FlexFields;
 
+use function Kontentblocks\fieldRegistry;
+use Kontentblocks\Fields\StandardFieldSection;
+
 
 /**
  * Class FlexFieldsSection
  * @package Kontentblocks\Fields\Definitions\FlexFields
  */
-class FlexFieldsSection implements \JsonSerializable
+class FlexFieldsSection extends StandardFieldSection implements \JsonSerializable
 {
 
     public $sectionId;
@@ -26,6 +29,10 @@ class FlexFieldsSection implements \JsonSerializable
         $this->args = $this->setupArgs( $args );
     }
 
+    /**
+     * @param $args
+     * @return array
+     */
     private function setupArgs( $args )
     {
         $defaults = array(
@@ -42,7 +49,7 @@ class FlexFieldsSection implements \JsonSerializable
      * @param $args
      * @return $this
      */
-    public function addField( $type, $key, $args )
+    public function addField( $type, $key, $args = [] )
     {
         if (!isset( $this->fields[$key] )) {
             $args['key'] = $key;
@@ -52,8 +59,28 @@ class FlexFieldsSection implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize()
     {
         return $this->fields;
+    }
+
+
+    public function addFieldTemplate($tplid)
+    {
+        $registry = fieldRegistry();
+        $tplid = (array)$tplid;
+        foreach ($tplid as $id) {
+            if ($registry->fieldTemplateExists($id)) {
+                $callback = $registry->getFieldTemplate($id);
+                if (is_callable($callback)) {
+                    call_user_func($callback, $this);
+                }
+            }
+        }
+
+        return $this;
     }
 }

@@ -24,7 +24,7 @@ module.exports = BaseView.extend({
   },
   deleteModule: function () {
     if (Window.ctrlPressed()) {
-      if (!this.marked){
+      if (!this.marked) {
         BatchDeleteController.add(this);
         this.mark();
       } else {
@@ -36,17 +36,17 @@ module.exports = BaseView.extend({
     }
 
   },
-  mark: function(){
+  mark: function () {
     this.$el.addClass('kb-batch-marked');
     this.marked = true;
   },
-  unmark: function(){
+  unmark: function () {
     this.$el.removeClass('kb-batch-marked');
     this.marked = false;
   },
   isValid: function () {
     return !!(!this.model.get('predefined') && !this.model.get('disabled') && !this.model.get('submodule') &&
-    Checks.userCan('delete_kontentblocks'));
+      Checks.userCan('delete_kontentblocks'));
   },
   yes: function () {
     Ajax.send({
@@ -61,9 +61,11 @@ module.exports = BaseView.extend({
   success: function (res) {
     if (res.success) {
       TinyMCE.removeEditors(this.model.View.$el);
+      KB.ObjectProxy.removeModel(this.model);
       KB.Modules.remove(this.model);
+
       wp.heartbeat.interval('fast', 2);
-      this.model.destroy();
+      // this.model.destroy();
     } else {
       Notice.notice('Error while removing a module', 'error');
     }

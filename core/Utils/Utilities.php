@@ -6,6 +6,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\TermEnvironment;
 use Kontentblocks\Backend\Environment\UserEnvironment;
 use Kontentblocks\Fields\Definitions\NullField;
+use Kontentblocks\Fields\Definitions\ReturnObjects\StandardFieldReturn;
 use Kontentblocks\Kontentblocks;
 use Symfony\Component\HttpFoundation\Request;
 use XHProfRuns_Default;
@@ -458,6 +459,7 @@ class Utilities
             return null;
         }
 
+
         if (post_type_supports($postType, 'editor')) {
             if (!apply_filters('kb.remote.concat.ignore.editor', '__return_false')) {
                 return null;
@@ -473,7 +475,7 @@ class Utilities
         $url = add_query_arg('concat', 'true', $base);
         $url = add_query_arg('contime', time(), $url);
         if ($url !== false) {
-            $args = wp_parse_args($args, array('timeout' => 3, 'blocking' => $blocking));
+            $args = wp_parse_args($args, array('timeout' => 5, 'blocking' => $blocking));
             $args = apply_filters('kb.remote.concat.args', $args, $url);
             $response = wp_remote_get($url, $args);
             return $response;
@@ -517,6 +519,8 @@ class Utilities
         $cats['special'] = __('Spezial', 'Kontentblocks');
         $cats['core'] = __('System', 'Kontentblocks');
         $cats['gmodule'] = __('Global Modules', 'Kontentblocks');
+
+        ksort($cats);
 
         Kontentblocks::getService('utility.jsontransport')->registerData('ModuleCategories', null, $cats);
         return $cats;
@@ -637,5 +641,14 @@ class Utilities
     public static function getNullField($args = [])
     {
         return new NullField('nullfield', null, 'nullkey', $args);
+    }
+
+    public static function extractFieldValue($val){
+
+        if (is_a($val, StandardFieldReturn::class)){
+            return $val->value;
+        }
+        return $val;
+
     }
 }

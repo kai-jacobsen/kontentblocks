@@ -29,6 +29,8 @@ var TabbedEditScreen = require('backend/Views/Ui/TabbedEditScreen');
 var ChangeObserver = require('shared/ChangeObserver');
 var Refields = require('fields/RefieldsController');
 var FieldsAPI = require('fieldsAPI/FieldsAPIController');
+var ObjectProxy = require('shared/Collections/ObjectProxyCollection');
+
 // ---------------
 // Collections
 // ---------------
@@ -68,7 +70,8 @@ KB.Contexts = new Backbone.Collection([], {
   model: ContextModel
 });
 
-KB.ObjectProxy = new Backbone.Collection();
+// KB.ObjectProxy = new Backbone.Collection();
+KB.ObjectProxy = new ObjectProxy();
 
 KB.ChangeObserver = new ChangeObserver();
 // KB.Autosave = new Autosave();
@@ -151,7 +154,6 @@ KB.App = (function () {
     }
     KB.FieldControls = new FieldControlsCollection();
     KB.FieldControls.add(_.toArray(Payload.getPayload('Fields')));
-
   }
 
 

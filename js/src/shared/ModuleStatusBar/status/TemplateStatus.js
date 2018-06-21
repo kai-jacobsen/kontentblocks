@@ -27,6 +27,5 @@ module.exports = BaseView.extend({
       view.isActive = (view.filename === this.model.get('viewfile'));
       return view;
     }, this);
-
   }
 });

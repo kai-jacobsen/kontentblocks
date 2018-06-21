@@ -10,6 +10,12 @@ module.exports = BaseView.extend({
   },
   getDefaults: function(){
     return '';
+  },
+  charcount: function (content, $charlimit, limit) {
+    var max = limit;
+    var len = content.length;
+    var charCount = max - len;
+    $charlimit.html(charCount + " chars left");
   }
 });
 

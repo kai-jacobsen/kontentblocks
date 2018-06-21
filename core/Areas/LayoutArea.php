@@ -10,6 +10,7 @@ use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\Helper\SubmoduleRepository;
 use function Kontentblocks\JSONTransport;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Templating\CoreView;
 
 class LayoutArea
@@ -92,6 +93,16 @@ class LayoutArea
                 'layoutData' => $this->setupModulesForConfig(),
             )
         );
+
+        $mreg = Kontentblocks::getService('registry.modules');
+        $smods = array_filter($mreg->modules,function ($mod){
+           return (isset($mod['settings']) && $mod['settings']['subarea'] === true);
+        });
+
+        foreach (array_keys($smods) as $classname){
+            $regged->connect($classname);
+        }
+
 
         Kontentblocks::getService('utility.jsontransport')->registerArea($regged);
     }

@@ -145,6 +145,10 @@ class CreateNewModule extends AbstractAjaxAction
         $this->moduleArgs['areaContext'] = $request->request->filter('areaContext', null, FILTER_SANITIZE_STRING);
         $this->moduleArgs['parentObjectId'] = absint($request->get('parentObjectId'));
 
+        if ($this->isSubmodule){
+            $this->moduleArgs['state']['active'] = true;
+        }
+
         $this->moduleArgs['globalModule'] = $this->globalModule = $request->request->getBoolean(
             'globalModule',
             null

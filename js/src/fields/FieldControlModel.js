@@ -27,13 +27,14 @@ module.exports = Backbone.Model.extend({
   },
   bindHandlers: function () {
     this.listenTo(this, 'field.model.settings', this.updateLinkedFields);
-    this.listenToOnce(this.ModuleModel, 'remove', this.remove); // delete this from collection when parent obj leaves
+    this.listenTo(this.ModuleModel, 'remove', this.remove); // delete this from collection when parent obj leaves
     this.listenTo(this.ModuleModel, 'change:entityData', this.setData); // reassign data when parent obj data changes
     this.listenTo(this.ModuleModel, 'module.model.updated', this.getClean); // set state to clean
     this.listenTo(this, 'change:value', this.upstreamData); // assign new data to parent obj when this data changes
     this.listenTo(this.ModuleModel, 'modal.serialize.before', this.unbind); // before the frontend modal reloads the parent obj
     this.listenTo(this.ModuleModel, 'modal.serialize', this.rebind); // frontend modal reloaded parent obj, reattach handlers
     this.listenTo(this.ModuleModel, 'change:area', this.unbind); // parent obj was dragged to new area, detach handlers
+    this.listenTo(this.ModuleModel, 'change:viewfile', this.unbind); // parent obj was dragged to new area, detach handlers
     this.listenTo(this.ModuleModel, 'after.change.area', this.rebind); // parent obj was dragged to new area, reattach handlers
   },
   setupType: function () {

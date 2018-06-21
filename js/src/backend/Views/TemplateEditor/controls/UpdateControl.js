@@ -1,5 +1,6 @@
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
+var Notice = require('common/Notice');
 
 module.exports = Backbone.View.extend({
   tagName: 'li',
@@ -11,9 +12,9 @@ module.exports = Backbone.View.extend({
     'click': 'update'
   },
   render: function () {
-    return this.$el.html('update');
+    return this.$el.html('<span class="dashicons dashicons-update"></span> Update');
   },
-  update: function(){
+  update: function () {
     var view = this.controller.getCurrentView();
     Ajax.send({
       action: 'updateModuleViewTemplate',
@@ -23,7 +24,10 @@ module.exports = Backbone.View.extend({
       module: this.controller.moduleModel.toJSON()
     }, this.success, this);
   },
-  success: function(res){
-    console.log(res);
+  success: function (res) {
+    if (res.success === false) {
+      Notice.notice(res.message, 'error',8);
+      this.controller.trigger('broadcast', res.message);
+    }
   }
 });

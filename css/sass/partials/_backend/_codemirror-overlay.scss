@@ -1,54 +1,81 @@
 .kb-codemirror-overlay {
   background-color: #fff;
   height: 600px;
+  height: 75vh;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   border: 1px solid $grey-400;
-  padding: 12px;
+  padding: 0;
   z-index: 500;
 }
 
-.kb-template-editor-wrap{
-  height: 100%;
-}
+.kb-tpled{
 
-.kb-template-editor-inner {
-  align-items: stretch;
-  height: 100%;
-
-  .CodeMirror, #codemirror{
-    height: 450px;
+  &--wrap{
+    height: 100%;
+    position: relative;
+    padding-top: 24px;
   }
-}
 
+  &--close{
+    position: absolute;
+    right: 12px;
+    top: 2px;
+    cursor: pointer;
+    z-index: 999;
+  }
 
+  &--inner {
+    align-items: stretch;
+    height: 100%;
 
-.kb-template-editor-sidebar {
-  width: 20%;
-  background-color: $grey-100;
+    .CodeMirror, #codemirror{
+      height: 450px;
+    }
+  }
 
-  ul{
+  &--sidebar {
+    width: 20%;
+    padding: 12px;
 
-    margin: 0;
-    padding: 0;
+    h5{
+      color: #666;
+      margin-top: 12px;
+      border-bottom: 1px solid #f2f2f2;
+    }
 
-    li{
-      background-color: $grey-100;
-      margin-bottom: 0;
-      padding: 6px 10px;
-      cursor: pointer;
+    ul{
 
-      &.kb-active-template{
-        background-color: #fff;
+      margin: 0;
+      padding: 0;
+
+      li{
+        margin-bottom: 0;
+        padding: 6px 0;
+        cursor: pointer;
+
+        &.kb-active-template{
+          font-weight: 900;
+        }
       }
+
     }
 
   }
 
-}
+  &--content {
+    flex-grow: 1;
+  }
 
-.kb-template-editor-content {
-  flex-grow: 1;
+  &--actions{
+
+  }
+
+  &--notice{
+    padding: 6px;
+    background: $grey-100;
+  }
+
 }

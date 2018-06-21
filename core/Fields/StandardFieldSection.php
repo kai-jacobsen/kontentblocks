@@ -6,6 +6,7 @@ use Exception;
 use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\ExportableFieldInterface;
 use Kontentblocks\Common\Interfaces\EntityInterface;
+use function Kontentblocks\fieldRegistry;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
@@ -53,6 +54,7 @@ class StandardFieldSection implements ExportableFieldInterface
      * @var string
      */
     public $uid;
+    public $tabs = [];
     /**
      * Array of registered fields for this section
      * @var array
@@ -94,6 +96,22 @@ class StandardFieldSection implements ExportableFieldInterface
 
     }
 
+    /**
+     * @param $args
+     * @return array
+     */
+    private function setupArgs($args)
+    {
+        $args = Utilities::arrayMergeRecursive($args, self::$defaults);
+        if (!isset($args['label'])) {
+            $args['label'] = strtoupper(str_replace('-', ' ', $this->sectionId));
+        }
+        if (!isset($args['description'])) {
+            $args['description'] = '';
+        }
+
+        return $args;
+    }
 
     /**
      * Unique section id
@@ -113,15 +131,19 @@ class StandardFieldSection implements ExportableFieldInterface
      * @param string $key | Unique key
      * @param array $args | additional parameters, may differ by field type
      *
-     * @throws \Exception
      * @return StandardFieldSection Fluid layout
      */
     public function addField($type, $key, $args = array())
     {
 
+        if (is_string($key) && empty($key)) {
+            return $this;
+        }
+
         if (is_string($key) && $key[0] === '_') {
             return $this;
         }
+
 
         /** @var \Kontentblocks\Fields\FieldRegistry $registry */
         $registry = Kontentblocks::getService('registry.fields');
@@ -164,7 +186,8 @@ class StandardFieldSection implements ExportableFieldInterface
                 $this->fields[$key] = $field;
             }
 
-            $field->setData($this->getFielddata($field));
+            $this->collectToTabs($field);
+//            $field->setData($this->getFielddata($field));
             $this->increaseVisibleFields();
             $this->orderFields();
         }
@@ -267,26 +290,52 @@ class StandardFieldSection implements ExportableFieldInterface
         }
     }
 
-
-    private function getFielddata($field)
+    /**
+     * @param Field $field
+     * @return $this
+     */
+    private function collectToTabs(ExportableFieldInterface $field)
     {
-        $data = $this->getEntityModel();
-        if (isset($data[$field->getKey()])) {
-            return (is_object($data) && !is_null(
-                    $data[$field->getKey()]
-                )) ? $data[$field->getKey()] : $field->getDefaultValue();
+
+        $fields = [$field];
+        if (is_a($field, FieldSubGroup::class)) {
+            $fields = $field->getFields();
         }
 
-        return $field->getDefaultValue();
+        foreach ($fields as $field) {
+            $tabArg = $field->getArg('tab', null);
+            if (is_null($tabArg)) {
+                $group = $this->getTabGroup($field->getArg('label'), $field->getKey());
+            } else {
+                $group = $this->getTabGroup($tabArg);
+            }
+            $group->addField($field);
+            $field->setGroup($group);
+
+        }
 
     }
 
     /**
-     * @return EntityModel
+     * @param $label
+     * @param null $tabid
+     * @return FieldTabGroup|mixed
      */
-    public function getEntityModel()
+    private function getTabGroup($label, $tabid = null)
     {
-        return $this->entity->getModel();
+
+        if (is_null($tabid)) {
+            $tabid = sanitize_key($label);
+        }
+        if (isset($this->tabs[$tabid])) {
+            return $this->tabs[$tabid];
+        }
+
+        $group = new FieldTabGroup($label, $tabid);
+        $this->tabs[$tabid] = $group;
+        return $group;
+
+
     }
 
     /**
@@ -303,6 +352,16 @@ class StandardFieldSection implements ExportableFieldInterface
     {
         $code = "return strnatcmp(\$a->getArg('priority'), \$b->getArg('priority'));";
         uasort($this->fields, create_function('$a,$b', $code));
+
+    }
+
+    /**
+     * ID getter
+     * @return string
+     */
+    public function getSectionId()
+    {
+        return $this->sectionId;
 
     }
 
@@ -410,16 +469,6 @@ class StandardFieldSection implements ExportableFieldInterface
     }
 
     /**
-     * ID getter
-     * @return string
-     */
-    public function getSectionId()
-    {
-        return $this->sectionId;
-
-    }
-
-    /**
      * Getter Number of visible fields
      * @return int
      */
@@ -454,29 +503,64 @@ class StandardFieldSection implements ExportableFieldInterface
     }
 
     /**
+     * @return array
+     */
+    public function getInvisibleFields()
+    {
+        $fields = array_filter($this->flattenFields(), function ($field) {
+            /** @var Field $field */
+            return !$field->isVisible();
+        });
+        return $fields;
+    }
+
+    public function addFieldTemplate($tplid)
+    {
+        $registry = fieldRegistry();
+        $tplid = (array)$tplid;
+        foreach ($tplid as $id) {
+            if ($registry->fieldTemplateExists($id)) {
+                $callback = $registry->getFieldTemplate($id);
+                if (is_callable($callback)) {
+                    call_user_func($callback, $this);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Descrease number of visible fields property
      */
     protected function decreaseVisibleFields()
     {
         $this->numberOfVisibleFields--;
+    }
+
+    /**
+     * @param $field
+     * @return mixed
+     */
+    private function getFielddata(ExportableFieldInterface $field)
+    {
+        $data = $this->getEntityModel();
+        if (isset($data[$field->getKey()])) {
+            return (is_object($data) && !is_null(
+                    $data[$field->getKey()]
+                )) ? $data[$field->getKey()] : $field->getDefaultValue();
+        }
+
+        return $field->getDefaultValue();
 
     }
 
     /**
-     * @param $args
-     * @return array
+     * @return EntityModel
      */
-    private function setupArgs($args)
+    public function getEntityModel()
     {
-        $args = Utilities::arrayMergeRecursive($args, self::$defaults);
-        if (!isset($args['label'])){
-            $args['label'] = strtoupper(str_replace('-',' ',$this->sectionId));
-        }
-        if (!isset($args['description'])){
-            $args['description'] = '';
-        }
-
-        return $args;
+        return $this->entity->getModel();
     }
 
 

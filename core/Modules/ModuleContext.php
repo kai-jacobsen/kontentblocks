@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Modules;
 
+use Kontentblocks\Areas\AreaProperties;
 use Kontentblocks\Backend\Environment\EntityContext;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Frontend\ModuleRenderSettings;
@@ -28,6 +29,9 @@ class ModuleContext extends EntityContext
 
     public $renderer;
 
+    public $subarea = false;
+
+
     /**
      * @var ModuleRenderSettings
      */
@@ -45,6 +49,19 @@ class ModuleContext extends EntityContext
         $this->areaId = &$module->properties->area->id;
     }
 
+    /**
+     * @param $renderer
+     */
+    public function setRenderer($renderer){
+        $this->renderer = $renderer;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasRenderer(){
+        return isset($this->renderer);
+    }
 
 
 }

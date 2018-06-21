@@ -33,7 +33,7 @@
     top: 0;
     opacity: 0;
     transition: left .3s, opacity .6s;
-    @extend .base-transition-timiing;
+    @extend .base-transition-timing;
   }
 
   .kb-module-control--edit {
@@ -98,7 +98,7 @@
     top: 40px;
     opacity: 0.5;
     transition: left .3s, opacity .6s;
-    @extend .base-transition-timiing;
+    @extend .base-transition-timing;
     cursor: pointer;
 
     &:hover{
@@ -163,7 +163,7 @@
   top: 0;
   opacity: 0;
   transition: left .3s, opacity .6s;
-  @extend .base-transition-timiing;
+  @extend .base-transition-timing;
 
 }
 

@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Renderer;
 
 
+use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\StandardFieldSection;
 use Kontentblocks\Templating\CoreView;
 
@@ -31,7 +32,9 @@ class RenderSection
     public function __construct(StandardFieldSection $section, $fields = array())
     {
         $this->section = $section;
-        $this->fields = $fields;
+        if (!empty($fields)) {
+            $this->fields = $fields;
+        }
     }
 
     /**
@@ -50,13 +53,14 @@ class RenderSection
             );
             $out .= $container->render();
         } else {
+            /** @var Field $field */
             foreach ($this->fields as $field) {
-                $out .= $field->build();
+                $out .= $field->render();
             }
         }
 
-
         return $out;
     }
+
 
 }

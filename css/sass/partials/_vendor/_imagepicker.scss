@@ -49,7 +49,7 @@ ul.thumbnails.image_picker_selector
     .thumbnail.selected
     {
       border: 2px solid $thumbnail_selected_color;
-      @extend .base-shadow;
+      @extend .base-shadow !optional;
       background-color: $grey-100;
     }
   }

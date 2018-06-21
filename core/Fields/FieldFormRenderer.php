@@ -101,12 +101,13 @@ class FieldFormRenderer
     /**
      * Helper to generate a unique id to be used with labels and inputs, basically.
      * @param bool $rnd
-     * @return string|void
+     * @param string $suffix
+     * @return string
      */
-    public function getInputFieldId($rnd = false)
+    public function getInputFieldId($rnd = false, $suffix = '')
     {
         $number = ($rnd) ? '_' . uniqid() : '';
-        $idAttr = sanitize_title($this->field->getFieldId() . '_' . $this->field->getKey() . $number);
+        $idAttr = sanitize_title($this->field->getFieldId() . '_' . $this->field->getKey() . $number . $suffix);
         return esc_attr($idAttr);
     }
 
@@ -211,7 +212,7 @@ class FieldFormRenderer
         // the current context
         // Checkboxes are an actual use case, checked boxes will render hidden to preserve the value during save
         if (!$this->field->isVisible()) {
-            if ($this->field->getSetting('renderHidden') && method_exists($this->field, 'renderHidden')) {
+            if ($this->field->getSetting('renderHidden')) {
                 return $this->field->renderHidden($this);
             }
             // Full markup

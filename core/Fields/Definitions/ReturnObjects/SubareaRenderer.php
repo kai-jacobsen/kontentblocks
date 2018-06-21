@@ -115,8 +115,10 @@ class SubareaRenderer extends StandardFieldReturn
             );
             $module->properties->area = $this->area;
             $renderer = new SingleModuleRenderer($module, $moduleRenderSettings);
-            $module->context->renderer = $this;
+            $module->context->setRenderer($this);
             $module->context->set(array('renderPosition' => $this->slotId));
+            $module->context->set(['subarea' => true]);
+            $module->viewManager->updateViews();
             $out = $renderer->render();
         }
 

@@ -3,7 +3,6 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Fields\FieldFormRenderer;
 
 /**
  * Advanced datetimepicker based on:
@@ -15,7 +14,8 @@ Class DateTime extends Field
 {
 
     public static $settings = array(
-        'type' => 'datetime'
+        'type' => 'datetime',
+        'returnObj' => 'DatetimeReturn'
     );
 
 

@@ -276,6 +276,7 @@ class JSONTransport
     {
         $json = json_encode($this->publicData);
         print "<script>var KB = KB || {}; KB.appData = {}; KB.appData =  {$json}; KB.on = function(){};</script>";
+
     }
 
     /**

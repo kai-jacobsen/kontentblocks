@@ -84,6 +84,11 @@ class Subarea extends Field
      */
     public function setValue($data)
     {
+
+        if (!is_array($data)){
+            $data = [];
+        }
+
         if (!isset($data['slots'])) {
             $data['slots'] = array();
         }

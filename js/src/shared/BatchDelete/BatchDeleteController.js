@@ -54,6 +54,7 @@ var BatchDeleteController = Backbone.View.extend({
     }, this.success, this);
   },
   success: function (res) {
+    var that = this;
     if (res.data.modules) {
       _.each(res.data.modules, function (value, key) {
         if (value) {
@@ -62,6 +63,7 @@ var BatchDeleteController = Backbone.View.extend({
           KB.Modules.remove(control.model);
           wp.heartbeat.interval('fast', 2);
           control.model.destroy();
+          that.hide();
         }
       }, this)
     }

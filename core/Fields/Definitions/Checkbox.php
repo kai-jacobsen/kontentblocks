@@ -77,6 +77,7 @@ Class Checkbox extends Field
 
     /**
      * @param FieldFormRenderer $form
+     * @return string|void
      */
     public function renderHidden(FieldFormRenderer $form)
     {

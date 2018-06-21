@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Fields\Renderer;
 
+use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Fields\StandardFieldSection;
 
@@ -55,24 +56,42 @@ abstract class AbstractFieldRenderer implements InterfaceFieldRenderer
         foreach ($sections as $section) {
             $fields = array_map(
                 function ($field) {
-                    return $this->getFormController($field);
+                    return $this->setFormController($field);
                 },
                 $section->flattenFields()
             );
-            $arr[] = new RenderSection($section, $fields);
+            $arr[] = $this->createRenderSection($section,$fields);
         }
         return $arr;
+    }
+
+    /**
+     * @param $section
+     * @param $fields
+     * @return RenderSection
+     */
+    protected function createRenderSection($section,$fields){
+        return new RenderSection($section, $fields);
     }
 
     /**
      * @param $field
      * @return mixed
      */
-    public function getFormController($field)
+    private function setFormController(Field $field)
     {
-//        if (is_null($this->fieldController->fieldFormRenderer)) {
-            return new $this->fieldController->formRenderClass($field);
-//        }
+        $form = new $this->fieldController->formRenderClass($field);
+        $field->setFormRenderer($form);
+        return $field;
+    }
+
+    /**
+     * @param $field
+     * @return mixed
+     */
+    public function getFormController(Field $field)
+    {
+        return new $this->fieldController->formRenderClass($field);
     }
 
     /**

@@ -1,20 +1,23 @@
-{% if section.numberOfVisibleFields > 0 %}
-    <div id="{{ section.uid }}" data-kbfsubtabs class="kbf-subtabs-container">
-        <div class="kbf-fields-tabnav">
-            <ul>
-                {% for fieldrender in fields %}
-                    {% if fieldrender.field.isVisible() %}
-                        <li><a href="#tab-{{ fieldrender.field.createUID() }}">{{ fieldrender.field.getArg('label') }}</a></li>
+<div id="{{ section.uid }}" data-kbfsubtabs class="kbf-subtabs-container">
+    <div class="kbf-fields-tabnav">
+        <ul>
+            {% for tab in section.tabs %}
+                {% if tab.hasVisibleFields() %}
+                    <li><a href="#tab-{{ tab.getId() }}">{{ tab.getLabel() }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="kbf-fields-tabscontainer">
+        {% for tab in section.tabs %}
+            <div id="tab-{{ tab.getId() }}">
+                {% for field in tab.fields %}
+                    {% if field.isVisible() == true %}
+                        {{ field.render() }}
                     {% endif %}
                 {% endfor %}
-            </ul>
-        </div>
-        <div class="kbf-fields-tabscontainer">
-            {% for fieldrender in fields %}
-                <div id="tab-{{ fieldrender.field.createUID() }}">
-                    {{ fieldrender.build() }}
-                </div>
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
     </div>
-{% endif %}
+</div>
+

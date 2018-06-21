@@ -112,11 +112,15 @@ div.kb-module-draft {
   top: -3px;
 
   &:before {
-    content: '\f431';
-    font-family: "genericons";
+    content: "\f347";
+    font-family: "dashicons";
     position: relative;
     font-size: 20px;
   }
+}
+
+.kb-toggle-open .kb-toggle:before{
+  content: "\f343";
 }
 
 .kb-disabled {
