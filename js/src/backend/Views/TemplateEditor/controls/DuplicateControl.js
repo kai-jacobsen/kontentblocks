@@ -9,24 +9,37 @@ module.exports = Backbone.View.extend({
     this.controls = options.controls
   },
   events: {
-    'click': 'update'
+    'click': 'ask'
   },
   render: function () {
     return this.$el.html('<span class="dashicons dashicons-admin-page"></span> Copy');
   },
-  update: function () {
+  ask: function () {
+    var tplName;
+    Notice.prompt('Template Name', 'Please provide a unique template name', '.twig', function (evt, value) {
+        tplName = value;
+        this.create(tplName);
+      },
+      function (evt, value) {
+      }, this);
+  },
+  create: function (tplName) {
     var view = this.controller.getCurrentView();
     Ajax.send({
-      action: 'updateModuleViewTemplate',
+      action: 'createModuleViewTemplate',
       _ajax_nonce: Config.getNonce('update'),
-      view: view.model.toJSON(),
-      tplstring: this.controller.editor.getValue(),
-      module: this.controller.moduleModel.toJSON()
+      module: this.controller.moduleModel.toJSON(),
+      filename: tplName,
+      tplstring: this.controller.editor.getValue()
     }, this.success, this);
   },
   success: function (res) {
     if (res.success === false) {
-      Notice.notice(res.message, 'error',8);
+      Notice.notice(res.message, 'error', 8);
+      return;
     }
+    this.controller.List.updateViews(res.data.views);
+    this.controller.trigger('broadcast', res.message);
+
   }
 });

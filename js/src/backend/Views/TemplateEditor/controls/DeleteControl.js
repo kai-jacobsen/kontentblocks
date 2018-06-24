@@ -9,26 +9,34 @@ module.exports = Backbone.View.extend({
     this.controls = options.controls
   },
   events: {
-    'click': 'update'
+    'click': 'ask'
   },
   render: function () {
-    return this.$el.html('<span class="dashicons dashicons-update"></span> Update');
+    return this.$el.html('<span class="dashicons dashicons-trash"></span> Delete loaded template');
   },
-  update: function () {
+  ask: function () {
+    Notice.confirm('Template Name', 'Delete template?', function (evt, value) {
+        this.delete();
+      },
+      function (evt, value) {
+      }, this);
+  },
+  delete: function () {
     var view = this.controller.getCurrentView();
     Ajax.send({
-      action: 'updateModuleViewTemplate',
+      action: 'deleteModuleViewTemplate',
       _ajax_nonce: Config.getNonce('update'),
-      view: view.model.toJSON(),
-      tplstring: this.controller.editor.getValue(),
-      module: this.controller.moduleModel.toJSON()
+      module: this.controller.moduleModel.toJSON(),
+      view: view.model.toJSON()
     }, this.success, this);
   },
   success: function (res) {
     if (res.success === false) {
-      Notice.notice(res.message, 'error',8);
+      Notice.notice(res.message, 'error', 8);
       this.controller.trigger('broadcast', res.message);
+      return
     }
+    this.controller.List.updateViews(res.data.views);
     this.controller.trigger('broadcast', res.message);
 
   }

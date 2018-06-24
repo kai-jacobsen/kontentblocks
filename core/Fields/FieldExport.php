@@ -88,8 +88,22 @@ class FieldExport implements \ArrayAccess
     /**
      * @return array
      */
-    public function getFields(){
+    public function getFields()
+    {
         return $this->fields;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVisibleFields()
+    {
+        return array_filter($this->fields, function ($field) {
+            if (isset($field['args']) && is_array($field['args']) && isset($field['args']['display'])) {
+                return $field['args']['display'];
+            }
+            return false;
+        });
     }
 
 }

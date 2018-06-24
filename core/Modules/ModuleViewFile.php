@@ -98,6 +98,13 @@ class ModuleViewFile implements \JsonSerializable
 
 
     /**
+     * @return string
+     */
+    public function getFullPath(){
+        return trailingslashit($this->path) .  $this->filename;
+    }
+
+    /**
      * @param $subPath
      * @return string
      */

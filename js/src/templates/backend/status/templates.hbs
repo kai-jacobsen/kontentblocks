@@ -3,7 +3,7 @@
         <div class="kb-selectbox">
             <select class="kb-template-select" data-kb-rel="{{ module.mid }}" name="{{ module.mid }}[viewfile]">
                 {{#each views }}
-                    <option {{ this.selected }} value="{{ this.filename }}"
+                    <option {{{ this.selected }}} value="{{ this.filename }}"
                                                 data-tpldesc="{{ this.description }}">{{ this.name }}</option>
                 {{/each}}
             </select>

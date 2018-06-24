@@ -6,6 +6,7 @@ var I18n = require('common/I18n');
 var Notice = require('common/Notice');
 module.exports = BaseView.extend({
   className: 'kb-status-draft',
+  id: 'status',
   events: {
     'click': 'toggleDraft'
   },

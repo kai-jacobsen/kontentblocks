@@ -2,6 +2,7 @@ var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var ViewsList = require('./ViewsList');
 var Controls = require('./Controls');
+var Fields = require('./FieldsList');
 var tplEDitor = require('templates/backend/template-editor/wrap.hbs');
 
 module.exports = Backbone.View.extend({
@@ -9,11 +10,12 @@ module.exports = Backbone.View.extend({
   currentView: null,
   initialize: function (options) {
     this.viewfile = options.viewfile;
+    this.moduleView = options.moduleView;
     this.$wrap = jQuery(tplEDitor()).appendTo(this.$el);
-    this.$sidebar = this.$('.kb-template-editor-sidebar');
-    this.$content = this.$('.kb-template-editor-content');
+    this.$sidebar = this.$('.kb-tpled--sidebar');
+    this.$content = this.$('.kb-tpled--content');
     this.moduleModel = options.module;
-    this.views = options.views;
+    this.views = this.prepareViews(this.moduleModel.get('views'));
     this.open();
   },
   events: {
@@ -21,7 +23,7 @@ module.exports = Backbone.View.extend({
   },
   open: function () {
     this.$backdrop = jQuery('<div class="kb-fullscreen-backdrop"></div>').appendTo('body');
-    this.$el.width(jQuery(window).width() * 0.7);
+    // this.$el.width(jQuery(window).width() * 0.9);
     jQuery('#wpwrap').addClass('module-browser-open');
     this.$el.appendTo('body');
     this.trigger('open');
@@ -43,16 +45,20 @@ module.exports = Backbone.View.extend({
 
   },
   render: function () {
-    var list = new ViewsList({
+    this.List = new ViewsList({
       $container: this.$('[data-views]'),
       views: this.views,
       controller: this
     }).render();
-    var controls = new Controls({
+    this.Controls = new Controls({
       $container: this.$('[data-controls]'),
       controller: this
     }).render();
-    this.load(list.getActiveView());
+    this.Fields = new Fields({
+      $container: this.$('[data-fields]'),
+      controller: this
+    });
+    this.load(this.List.getActiveView());
   },
   load: function (viewfile) {
     var that = this;
@@ -60,19 +66,27 @@ module.exports = Backbone.View.extend({
     if (this.currentView) {
       this.currentView.deselect();
     }
-
     Ajax.send({
       viewfile: viewfile.model.toJSON(),
       action: 'getTemplateString',
+      module: this.moduleModel.toJSON(),
       _ajax_nonce: Config.getNonce('read')
     }, function (res) {
-      that.editor.setValue(res.data);
+      that.editor.setValue(res.data.string);
       that.currentView = viewfile;
       that.currentView.select();
+      that.Fields.setFields(res.data.fields).render();
     }, this);
   },
   getCurrentView: function () {
     return this.currentView;
+  },
+  prepareViews: function (views) {
+    return _.map(views, function (view) {
+      view.selected = (view.filename === this.moduleModel.get('viewfile')) ? 'selected="selected"' : '';
+      view.isActive = (view.filename === this.moduleModel.get('viewfile'));
+      return view;
+    }, this);
   }
 
 });

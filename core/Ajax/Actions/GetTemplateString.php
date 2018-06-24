@@ -5,6 +5,8 @@ namespace Kontentblocks\Ajax\Actions;
 use Kontentblocks\Ajax\AbstractAjaxAction;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
+use Kontentblocks\Modules\ModuleWorkshop;
+use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -24,7 +26,16 @@ class GetTemplateString extends AbstractAjaxAction
         $path = $file['rootPath'] . $file['subPath'] . $file['filename'];
         $data = file_get_contents($path);
 
-        new AjaxSuccessResponse('Template String', $data);
+        $module = wp_unslash($request->request->get('module'));
+        $environment = Utilities::getPostEnvironment($module['postId']);
+        $ModuleWorkshop = new ModuleWorkshop($environment, $module);
+        $Module = $ModuleWorkshop->getModule();
+        $fields = $Module->setupFields()->fields->export()->getVisibleFields();
+
+        new AjaxSuccessResponse('Template String', [
+            'string' => $data,
+            'fields' => $fields
+        ]);
     }
 
 

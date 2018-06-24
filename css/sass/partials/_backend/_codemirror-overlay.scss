@@ -1,7 +1,7 @@
 .kb-codemirror-overlay {
   background-color: #fff;
   height: 600px;
-  height: 75vh;
+  height: 90vh;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -9,9 +9,23 @@
   border: 1px solid $grey-400;
   padding: 0;
   z-index: 500;
+  width: 90%;
 }
 
 .kb-tpled{
+
+
+  &--field-item{
+    border-bottom: 1px solid #f2f2f2;
+    padding-bottom: 6px;
+    font-size: 11px;
+
+    strong{
+      margin-right: 5px;
+    }
+
+  }
+
 
   &--wrap{
     height: 100%;
@@ -32,7 +46,7 @@
     height: 100%;
 
     .CodeMirror, #codemirror{
-      height: 450px;
+      height: calc(100% - 24px);
     }
   }
 
@@ -42,8 +56,12 @@
 
     h5{
       color: #666;
-      margin-top: 12px;
       border-bottom: 1px solid #f2f2f2;
+      margin-top: 0px;
+      margin-bottom: 6px;
+
+      &:first-child{
+      }
     }
 
     ul{
@@ -60,10 +78,9 @@
           font-weight: 900;
         }
       }
-
     }
-
   }
+
 
   &--content {
     flex-grow: 1;
@@ -73,9 +90,49 @@
 
   }
 
-  &--notice{
-    padding: 6px;
-    background: $grey-100;
+  &--views{
+    margin-bottom: 20px;
   }
 
+  &--notice{
+    padding: 6px 16px !important;
+    position: relative;
+    min-height: 60px;
+
+    span{
+      position: absolute;
+      left: 0px;
+      top:6px;
+    }
+
+    div{
+      padding-left: 10px;
+    }
+  }
+
+  &--sidebar-right{
+    height: 100%;
+  }
+}
+
+.kb-tpled--fields{
+  height: 90%;
+}
+.kb-tpled--fields > div{
+  overflow-y: auto;
+  height: 90%;
+}
+
+&--sidebar-right .kb-tpled--fields{
+
+  ul{
+    overflow-y: auto;
+    height: 100%;
+  }
+}
+
+.kb-tpl-editor-controls{
+  li:hover{
+    font-weight: bold;
+  }
 }

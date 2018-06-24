@@ -13,6 +13,15 @@ module.exports = Backbone.View.extend({
     });
     return this;
   },
+  updateViews: function (views) {
+    var prepedViews = this.controller.prepareViews(views);
+    this.views = this.createViews(prepedViews);
+    this.$el.empty();
+    this.render();
+    var tplSelect = this.controller.moduleView.ModuleStatusBar.getView('templates');
+    tplSelect.render(prepedViews);
+
+  },
   getActiveView: function () {
     return _.find(this.views, function (view) {
       return view.model.get('isActive');

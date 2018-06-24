@@ -45,7 +45,7 @@ class UpdateModuleViewTemplate extends AbstractAjaxAction
 
         file_put_contents($View->getNode()->getRealPath(), $string);
 
-        new AjaxSuccessResponse('here we go', [
+        new AjaxSuccessResponse('successfully updated', [
             'view' => $view,
             'module' => $Module->toJSON()
         ]);

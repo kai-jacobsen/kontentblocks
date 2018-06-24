@@ -42,7 +42,7 @@ class ModuleViewFilesystem
      * @param Module $module
      * @return array
      */
-    private function setupViews(Module $module)
+    public function setupViews(Module $module)
     {
 
         if ($this->isChildTheme) {
@@ -69,6 +69,13 @@ class ModuleViewFilesystem
         $modulePath = trailingslashit($module->properties->getSetting('path'));
 
         $this->paths[] = $modulePath;
+
+        $uploadDir = wp_upload_dir();
+        $class = $module->properties->class;
+        $path = $uploadDir['basedir'] . DIRECTORY_SEPARATOR . 'Kontentblocks' . DIRECTORY_SEPARATOR . 'moduletemplates' . DIRECTORY_SEPARATOR . $class . DIRECTORY_SEPARATOR;
+        if (is_dir($path)) {
+            $this->paths[] = $path;
+        }
 
         /**
          * iterate over all paths and convert file structure to md array
@@ -111,6 +118,14 @@ class ModuleViewFilesystem
         return $data;
     }
 
+    /**
+     * @return array
+     */
+    public function reloadViews()
+    {
+        $this->views = $this->setupViews($this->module);
+        return $this->views;
+    }
 
     public function getPreview()
     {
@@ -160,7 +175,7 @@ class ModuleViewFilesystem
         $areaContext = $context->areaContext;
         $postType = $context->postType;
         $pageTemplate = basename($context->pageTemplate);
-        $subarea = $context->subarea;
+        $subarea = $context->subarea || $this->module->properties->submodule;
         if (array_key_exists($areaContext, $this->views)) {
             $collection = array_merge($collection, $this->getSingles($this->views[$areaContext]));
         }
@@ -189,6 +204,9 @@ class ModuleViewFilesystem
             $collection = array_merge($collection, $this->getSingles($this->views['subarea']));
         }
 
+        if (isset($this->views['user'])) {
+            $collection = array_merge($collection, $this->getSingles($this->views['user']));
+        }
         return $collection;
 
     }
