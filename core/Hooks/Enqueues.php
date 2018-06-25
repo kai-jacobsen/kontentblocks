@@ -219,7 +219,9 @@ class Enqueues
             'isMobile' => Kontentblocks::getService('utility.mobileDetect')->isMobile(),
             'useModuleNav' => apply_filters('kb.config.module-nav', true),
             'initFrontend' => apply_filters('kb.config.initFrontend', true),
-            'editAlwaysOn' => apply_filters('kb.config.editAlwaysOn', false)
+            'editAlwaysOn' => apply_filters('kb.config.editAlwaysOn', false),
+            'moduleTemplateEditor' => apply_filters('kb.config.moduleTemplateEditor', false),
+
         );
 
         if (is_preview()) {

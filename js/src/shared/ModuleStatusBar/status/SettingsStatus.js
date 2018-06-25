@@ -1,7 +1,7 @@
 var BaseView = require('backend/Views/BaseControlView');
 var SettingsController = require('shared/ModuleStatusBar/status/Settings/SettingsStatusController');
 module.exports = BaseView.extend({
-  // id: 'settings',
+  id: 'settings',
   controller: null,
   className: 'kb-status-settings',
   events: {

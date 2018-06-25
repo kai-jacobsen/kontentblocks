@@ -56,7 +56,7 @@ class ModuleViewFile implements \JsonSerializable
      */
     public $meta;
     /**
-     * @var \DirectoryIterator
+     * @var \SplFileInfo
      */
     private $node;
 
@@ -72,6 +72,14 @@ class ModuleViewFile implements \JsonSerializable
         $this->node = $node;
         $this->meta = $meta;
         $this->prepareNode();
+
+    }
+
+    /**
+     * @return SplFileInfo
+     */
+    public function getNode(){
+        return $this->node;
     }
 
     /**
@@ -88,6 +96,13 @@ class ModuleViewFile implements \JsonSerializable
         $this->description = $this->meta->getDescriptionForFile($this->filename);
     }
 
+
+    /**
+     * @return string
+     */
+    public function getFullPath(){
+        return trailingslashit($this->path) .  $this->filename;
+    }
 
     /**
      * @param $subPath

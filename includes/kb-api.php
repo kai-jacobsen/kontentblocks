@@ -434,3 +434,5 @@ function templatePart($slug, $name = '', $data = array())
     echo $part->render();
 
 }
+
+

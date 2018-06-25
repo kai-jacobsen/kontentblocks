@@ -138,7 +138,7 @@ class ModuleViewManager
     /**
      * @param $name
      *
-     * @return null
+     * @return ModuleViewFile|null
      */
     public function getViewByName($name)
     {
@@ -147,6 +147,21 @@ class ModuleViewManager
         } else {
             return null;
         }
+    }
+
+    /**
+     * @param $viewId
+     * @return ModuleViewFile|null
+     */
+    public function getViewById($viewId)
+    {
+        $filter = array_filter($this->views, function ($view) use ($viewId) {
+            return ($view->id === $viewId);
+        });
+        if (empty($filter)) {
+            return null;
+        }
+        return array_shift($filter);
     }
 
     /**

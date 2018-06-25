@@ -10,7 +10,7 @@ module.exports =
       $parent = jQuery('body');
     }
     jQuery('.wp-editor-area', $parent).each(function () {
-      if (jQuery(this).attr('id') === 'wp-content-wrap' || jQuery(this).attr('id') === 'ghosteditor') {
+      if (jQuery(this).attr('id') === 'wp-content-wrap' || jQuery(this).attr('id') === 'ghosteditor' || jQuery(this).attr('id') === 'replycontent') {
       } else {
         var textarea = this.id;
         tinyMCE.execCommand('mceRemoveEditor', true, textarea);
@@ -25,7 +25,7 @@ module.exports =
       var id = jQuery(this).find('textarea').attr('id');
       var textarea = jQuery(this).find('textarea');
 
-      if (id === 'ghosteditor') {
+      if (id === 'ghosteditor' || id === 'replycontent') {
         return;
       } else {
         textarea.val(switchEditors.wpautop(textarea.val()));

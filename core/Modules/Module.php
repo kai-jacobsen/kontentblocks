@@ -97,6 +97,7 @@ abstract class Module implements EntityInterface, FieldEntityInterface
             $this->fields();
             $this->fields->afterSetup();
         }
+        return $this;
     }
 
     /**

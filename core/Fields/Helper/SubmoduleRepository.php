@@ -1,4 +1,5 @@
 <?php
+
 namespace Kontentblocks\Fields\Helper;
 
 
@@ -73,6 +74,8 @@ class SubmoduleRepository
                 $module = $workshop->getModule();
                 $collection[$key] = $module;
                 $json[$key] = $module->toJSON();
+                $module->getViewManager()->getFileSystem()->reloadViews();
+                $module->getViewManager()->updateViews();
                 if (!is_admin()) {
                     $jsonTransport->registerModule($module->toJSON());
                 }
@@ -85,7 +88,6 @@ class SubmoduleRepository
 //            $this->field->getKey(),
 //            $this->field->getArg('arrayKey')
 //        );
-
 
         return $collection;
     }

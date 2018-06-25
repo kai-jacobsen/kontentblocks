@@ -37,7 +37,6 @@ class GetModuleBackendForm extends AbstractAjaxAction
 //        $module->properties->viewfile = filter_var( $moduleDef['viewfile'], FILTER_SANITIZE_STRING );
         $module = apply_filters('kb.module.before.factory', $module);
         $module->setupFields();
-
 //        $currentData = wp_unslash( $request->getFiltered( 'entityData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
 //        $oldData = $module->model->export();
 
@@ -47,7 +46,7 @@ class GetModuleBackendForm extends AbstractAjaxAction
         $html = $module->renderForm();
         $return = array(
             'html' => $html,
-            'json' => Kontentblocks::getService('utility.jsontransport')->getJSON()
+            'json' => Kontentblocks::getService('utility.jsontransport')->getJSON(),
         );
         new AjaxSuccessResponse('serving backend module form', $return);
     }
