@@ -10,6 +10,7 @@ Fields.registerObject('image', require('./controls/image'));
 Fields.registerObject('cropimage', require('./controls/cropimage'));
 Fields.registerObject('link', require('./controls/link'));
 Fields.registerObject('textarea', require('./controls/textarea'));
+Fields.registerObject('code', require('./controls/code'));
 Fields.registerObject('text', require('./controls/text'));
 Fields.registerObject('checkbox', require('./controls/checkbox'));
 Fields.registerObject('text-multiple', require('./controls/text-multiple'));

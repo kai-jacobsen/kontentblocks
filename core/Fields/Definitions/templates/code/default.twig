@@ -1,0 +1,8 @@
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+<textarea id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName() }}'
+          placeholder='{{ Form.getPlaceholder() }}'
+        {% for attr, value in Field.getArg('attributes', []) %}
+            {{ attr }}="{{ value|esc_attr }}"
+        {% endfor %}>{{ Field.getValue() }}</textarea>
+{% endblock %}
