@@ -1,6 +1,6 @@
 var BaseView = require('backend/Views/BaseControlView');
 var CodemirrorOverlay = require('backend/Views/TemplateEditor/CodemirrorOverlay');
-
+var Config = require('common/Config');
 module.exports = BaseView.extend({
   id: 'templateEditor',
   controller: null,
@@ -12,7 +12,7 @@ module.exports = BaseView.extend({
     this.moduleView = options.parent;
   },
   isValid: function () {
-    return true;
+    return Config.get('moduleTemplateEditor');
   },
   render: function () {
     this.$el.append('' +

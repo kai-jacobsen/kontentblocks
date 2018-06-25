@@ -8374,7 +8374,7 @@ module.exports = BaseView.extend({
 },{"backend/Views/BaseControlView":13,"shared/ModuleStatusBar/status/Settings/SettingsStatusController":152}],159:[function(require,module,exports){
 var BaseView = require('backend/Views/BaseControlView');
 var CodemirrorOverlay = require('backend/Views/TemplateEditor/CodemirrorOverlay');
-
+var Config = require('common/Config');
 module.exports = BaseView.extend({
   id: 'templateEditor',
   controller: null,
@@ -8386,7 +8386,7 @@ module.exports = BaseView.extend({
     this.moduleView = options.parent;
   },
   isValid: function () {
-    return true;
+    return Config.get('moduleTemplateEditor');
   },
   render: function () {
     this.$el.append('' +
@@ -8399,7 +8399,7 @@ module.exports = BaseView.extend({
   }
 
 });
-},{"backend/Views/BaseControlView":13,"backend/Views/TemplateEditor/CodemirrorOverlay":38}],160:[function(require,module,exports){
+},{"backend/Views/BaseControlView":13,"backend/Views/TemplateEditor/CodemirrorOverlay":38,"common/Config":53}],160:[function(require,module,exports){
 var BaseView = require('backend/Views/BaseControlView');
 var tplTemplatesStatus = require('templates/backend/status/templates.hbs');
 var CodemirrorOverlay = require('backend/Views/TemplateEditor/CodemirrorOverlay');

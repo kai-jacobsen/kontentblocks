@@ -47,7 +47,7 @@ use Pimple;
 Class Kontentblocks
 {
 
-    const VERSION = '0.10.1dev5';
+    const VERSION = '0.10.1dev6';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.16';
     const DEBUG = true;
