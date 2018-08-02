@@ -31,7 +31,6 @@ var ChangeObserver = require('shared/ChangeObserver');
 var Refields = require('fields/RefieldsController');
 var FieldsAPI = require('fieldsAPI/FieldsAPIController');
 var ObjectProxy = require('shared/Collections/ObjectProxyCollection');
-
 // ---------------
 // Collections
 // ---------------
@@ -5170,9 +5169,8 @@ module.exports = Backbone.View.extend({
     var data = this.model.get('value').images || {};
     this.setIds(data);
 
-
     if (this.ids != '') {
-      var args = {post__in: this.ids};
+      var args = {post__in: this.ids,suppress_filters:true};
       var query = wp.media.query(args);
       if (!this.selection) {
         this.selection = new wp.media.model.Selection(query.models, {
@@ -5193,6 +5191,7 @@ module.exports = Backbone.View.extend({
   },
   initImages: function () {
     _.each(this.ids, function (imageId) {
+      console.log(imageId, this.selection.get(imageId), this.selection);
       this.add(this.selection.get(imageId));
     }, this);
   },

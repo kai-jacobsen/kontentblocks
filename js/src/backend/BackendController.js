@@ -30,7 +30,6 @@ var ChangeObserver = require('shared/ChangeObserver');
 var Refields = require('fields/RefieldsController');
 var FieldsAPI = require('fieldsAPI/FieldsAPIController');
 var ObjectProxy = require('shared/Collections/ObjectProxyCollection');
-
 // ---------------
 // Collections
 // ---------------
