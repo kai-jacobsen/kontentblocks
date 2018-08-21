@@ -5191,8 +5191,10 @@ module.exports = Backbone.View.extend({
   },
   initImages: function () {
     _.each(this.ids, function (imageId) {
-      console.log(imageId, this.selection.get(imageId), this.selection);
-      this.add(this.selection.get(imageId));
+      var image = this.selection.get(imageId);
+      if (image){
+        this.add(this.selection.get(imageId));
+      }
     }, this);
   },
   add: function (model) {
