@@ -60,8 +60,8 @@ abstract class OptionPanel extends AbstractPanel
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
         $this->dataProvider = new SerOptionsDataProvider($this->baseId);
-        $this->setupFields();
         $this->model = $this->prepareModel();
+        $this->setupFields();
     }
 
     /**

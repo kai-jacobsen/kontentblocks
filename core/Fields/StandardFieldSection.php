@@ -187,7 +187,7 @@ class StandardFieldSection implements ExportableFieldInterface
             }
 
             $this->collectToTabs($field);
-//            $field->setData($this->getFielddata($field));
+            $field->setData($this->getFielddata($field));
             $this->increaseVisibleFields();
             $this->orderFields();
         }
@@ -336,6 +336,31 @@ class StandardFieldSection implements ExportableFieldInterface
         return $group;
 
 
+    }
+
+    /**
+     * @param $field
+     * @return mixed
+     */
+    private function getFielddata(ExportableFieldInterface $field)
+    {
+        $data = $this->getEntityModel();
+        if (isset($data[$field->getKey()])) {
+            return (is_object($data) && !is_null(
+                    $data[$field->getKey()]
+                )) ? $data[$field->getKey()] : $field->getDefaultValue();
+        }
+
+        return $field->getDefaultValue();
+
+    }
+
+    /**
+     * @return EntityModel
+     */
+    public function getEntityModel()
+    {
+        return $this->entity->getModel();
     }
 
     /**
@@ -536,31 +561,6 @@ class StandardFieldSection implements ExportableFieldInterface
     protected function decreaseVisibleFields()
     {
         $this->numberOfVisibleFields--;
-    }
-
-    /**
-     * @param $field
-     * @return mixed
-     */
-    private function getFielddata(ExportableFieldInterface $field)
-    {
-        $data = $this->getEntityModel();
-        if (isset($data[$field->getKey()])) {
-            return (is_object($data) && !is_null(
-                    $data[$field->getKey()]
-                )) ? $data[$field->getKey()] : $field->getDefaultValue();
-        }
-
-        return $field->getDefaultValue();
-
-    }
-
-    /**
-     * @return EntityModel
-     */
-    public function getEntityModel()
-    {
-        return $this->entity->getModel();
     }
 
 
