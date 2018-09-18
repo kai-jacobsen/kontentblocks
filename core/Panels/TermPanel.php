@@ -189,7 +189,7 @@ abstract class TermPanel extends AbstractPanel
         if ($this->args['insideTable']) {
             $this->fields->setFormRenderClass('\Kontentblocks\Fields\FieldFormRendererWP');
         }
-
+        $this->fields->updateData();
         $this->renderer = $this->fields->getFieldRenderClass();
 
         $html = '';

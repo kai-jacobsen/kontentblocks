@@ -104,7 +104,7 @@ class StandardFieldSection implements ExportableFieldInterface
     {
         $args = Utilities::arrayMergeRecursive($args, self::$defaults);
         if (!isset($args['label'])) {
-            $args['label'] = strtoupper(str_replace('-', ' ', $this->sectionId));
+            $args['label'] = ucfirst(str_replace('-', ' ', $this->sectionId));
         }
         if (!isset($args['description'])) {
             $args['description'] = '';
@@ -187,7 +187,7 @@ class StandardFieldSection implements ExportableFieldInterface
             }
 
             $this->collectToTabs($field);
-            $field->setData($this->getFielddata($field));
+//            $field->setData($this->getFielddata($field));
             $this->increaseVisibleFields();
             $this->orderFields();
         }
