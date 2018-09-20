@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Fields\Definitions;
 
+use Kontentblocks\Fields\Definitions\ReturnObjects\OpeningTimesReturn;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Customizer\CustomizerIntegration;
 use WP_Customize_Manager;
@@ -18,7 +19,8 @@ Class OpeningTimes extends Field
     // Defaults
     public static $settings = array(
         'type' => 'otimes',
-        'forceSave' => true
+        'forceSave' => true,
+        'returnObj' => 'OpeningTimesReturn'
     );
 
 

@@ -25,3 +25,4 @@ Fields.registerObject('oembed', require('./controls/oembed'));
 Fields.registerObject('subarea', require('./controls/subarea'));
 Fields.registerObject('medium', require('./controls/medium'));
 Fields.registerObject('imageselect', require('./controls/imageselect'));
+Fields.registerObject('osm', require('./controls/osm'));

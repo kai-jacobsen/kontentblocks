@@ -1,0 +1,8 @@
+.kb-field--osm-wrapper {
+  [data-kb-osm-map] {
+    width: 100%;
+    min-height: 300px;
+    background-color: $grey-200;
+    margin-bottom: 30px;
+  }
+}

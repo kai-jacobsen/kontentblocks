@@ -14,7 +14,7 @@ class OpeningTimesReturn extends StandardFieldReturn
     /**
      * @var array Original field data
      */
-    protected $value;
+    public $value;
 
     /**
      * @var array Prepared extended data
@@ -24,7 +24,7 @@ class OpeningTimesReturn extends StandardFieldReturn
     /**
      * @var \Kontentblocks\Fields\Definitions\OpeningTimes
      */
-    private $field;
+    public $field;
 
 
     /**
@@ -32,7 +32,7 @@ class OpeningTimesReturn extends StandardFieldReturn
      * @param $value
      * @param $field
      */
-    public function __construct( $value, $field )
+    public function __construct($value, $field)
     {
         $this->field = $field;
         $this->value = $value;
@@ -58,8 +58,6 @@ class OpeningTimesReturn extends StandardFieldReturn
     }
 
 
-
-
     /**
      * Return prepared data
      * @return array
@@ -69,9 +67,15 @@ class OpeningTimesReturn extends StandardFieldReturn
         return $this->prepared;
     }
 
-
-
-
+    /**
+     * @return array
+     */
+    public function getValidDays()
+    {
+        return array_filter($this->prepared,function ($day){
+            return $day['valid'];
+        });
+    }
 
 
     /**
@@ -93,14 +97,14 @@ class OpeningTimesReturn extends StandardFieldReturn
     private function validate()
     {
 
-        if (!is_array( $this->getValue() )) {
+        if (!is_array($this->getValue())) {
             return false;
         }
 
         $valid = $this->field->cleanData($this->value);
 
-        $keys = array_keys( $valid );
-        if (!is_array( $keys ) || count( $keys ) !== 7) {
+        $keys = array_keys($valid);
+        if (!is_array($keys) || count($keys) !== 7) {
             return false;
         }
         $this->value = $valid;
@@ -119,8 +123,8 @@ class OpeningTimesReturn extends StandardFieldReturn
 
     public function getToday()
     {
-        $day = date( 'N', time() );
-        return array_values( $this->prepared )[absint( $day ) - 1];
+        $day = date('N', time());
+        return array_values($this->prepared)[absint($day) - 1];
     }
 
     public function nowOpen()
@@ -130,17 +134,18 @@ class OpeningTimesReturn extends StandardFieldReturn
         $date = date('d-m-Y ', $now);
         $open = false;
         if ($day['valid']) {
-            $open = ( $now > strtotime( $date.$day[0]['open'] ) && $now < strtotime( $date.$day[0]['close'] ) );
+            $open = ($now > strtotime($date . $day[0]['open']) && $now < strtotime($date . $day[0]['close']));
             if ($day['split'] && !$open) {
-                $open = ( $now > strtotime( $date.$day[1]['open'] ) && $now < strtotime( $date.$day[1]['close'] ) );
+                $open = ($now > strtotime($date . $day[1]['open']) && $now < strtotime($date . $day[1]['close']));
             }
         }
         return $open;
 
     }
 
-    public function getDay($day){
-        if (isset($this->value[$day])){
+    public function getDay($day)
+    {
+        if (isset($this->value[$day])) {
             return $this->value[$day];
         }
         return false;
@@ -153,11 +158,11 @@ class OpeningTimesReturn extends StandardFieldReturn
     private function mapDays()
     {
 
-        $i18n = I18n::getPackages( 'Refields.otimes' );
+        $i18n = I18n::getPackages('Refields.otimes');
         $value = $this->getValue();
         $now = current_time('d-m-Y ');
-        array_walk( $value,
-            function ( &$v, $day ) use ( $i18n, $now ) {
+        array_walk($value,
+            function (&$v, $day) use ($i18n, $now) {
 
                 $d = $i18n[$day];
                 $v['day']['short'] = $d['short'];
@@ -165,21 +170,21 @@ class OpeningTimesReturn extends StandardFieldReturn
                 $t2 = $v[1];
 
 
-                if (!empty( $t2['open'] ) || !empty( $t2['close'] )) {
+                if (!empty($t2['open']) || !empty($t2['close'])) {
                     $v['split'] = true;
                 } else {
                     $v['split'] = false;
                 }
 
                 // test if all fields have a value
-                if (!empty($v[0]['open']) && !empty($v[0]['close']) && !$v['split']){
+                if (!empty($v[0]['open']) && !empty($v[0]['close']) && !$v['split']) {
                     $v['valid'] = true;
                 } else {
                     $v['valid'] = false;
                 }
 
-                if ($v['split']){
-                    if (!empty($v[1]['open']) && !empty($v[1]['close'])){
+                if ($v['split']) {
+                    if (!empty($v[1]['open']) && !empty($v[1]['close'])) {
                         $v['valid'] = true;
                     } else {
                         $v['valid'] = false;

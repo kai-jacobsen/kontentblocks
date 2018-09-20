@@ -106,6 +106,9 @@ class StandardFieldSection implements ExportableFieldInterface
         if (!isset($args['label'])) {
             $args['label'] = ucfirst(str_replace('-', ' ', $this->sectionId));
         }
+        if (!isset($args['title'])) {
+            $args['title'] = ucfirst(str_replace('-', ' ', $this->sectionId));
+        }
         if (!isset($args['description'])) {
             $args['description'] = '';
         }
