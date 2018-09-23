@@ -60,8 +60,10 @@ abstract class OptionPanel extends AbstractPanel
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
         $this->dataProvider = new SerOptionsDataProvider($this->baseId);
+        $savedData = $this->dataProvider->export();
+        $this->model = new PanelModel($savedData, $this);
         $this->setupFields();
-        $this->model = $this->prepareModel();
+        $this->prepareModel();
     }
 
     /**
@@ -95,8 +97,7 @@ abstract class OptionPanel extends AbstractPanel
      */
     public function prepareModel()
     {
-        $savedData = $this->dataProvider->export();
-        $model = new PanelModel([], $this);
+        $savedData = $this->model->export();
         if ($this->fields) {
             $data = array();
             $config = $this->fields->export();
@@ -108,9 +109,9 @@ abstract class OptionPanel extends AbstractPanel
                 }
             }
             $new = wp_parse_args($savedData, $data);
-            $model->set($new);
+            $this->model->set($new);
         }
-        return $model;
+        return $this->model;
     }
 
     /**

@@ -104,7 +104,10 @@ class StandardFieldSection implements ExportableFieldInterface
     {
         $args = Utilities::arrayMergeRecursive($args, self::$defaults);
         if (!isset($args['label'])) {
-            $args['label'] = strtoupper(str_replace('-', ' ', $this->sectionId));
+            $args['label'] = ucfirst(str_replace('-', ' ', $this->sectionId));
+        }
+        if (!isset($args['title'])) {
+            $args['title'] = ucfirst(str_replace('-', ' ', $this->sectionId));
         }
         if (!isset($args['description'])) {
             $args['description'] = '';
@@ -339,6 +342,31 @@ class StandardFieldSection implements ExportableFieldInterface
     }
 
     /**
+     * @param $field
+     * @return mixed
+     */
+    private function getFielddata(ExportableFieldInterface $field)
+    {
+        $data = $this->getEntityModel();
+        if (isset($data[$field->getKey()])) {
+            return (is_object($data) && !is_null(
+                    $data[$field->getKey()]
+                )) ? $data[$field->getKey()] : $field->getDefaultValue();
+        }
+
+        return $field->getDefaultValue();
+
+    }
+
+    /**
+     * @return EntityModel
+     */
+    public function getEntityModel()
+    {
+        return $this->entity->getModel();
+    }
+
+    /**
      * Increase number of visible fields property
      */
     protected function increaseVisibleFields()
@@ -536,31 +564,6 @@ class StandardFieldSection implements ExportableFieldInterface
     protected function decreaseVisibleFields()
     {
         $this->numberOfVisibleFields--;
-    }
-
-    /**
-     * @param $field
-     * @return mixed
-     */
-    private function getFielddata(ExportableFieldInterface $field)
-    {
-        $data = $this->getEntityModel();
-        if (isset($data[$field->getKey()])) {
-            return (is_object($data) && !is_null(
-                    $data[$field->getKey()]
-                )) ? $data[$field->getKey()] : $field->getDefaultValue();
-        }
-
-        return $field->getDefaultValue();
-
-    }
-
-    /**
-     * @return EntityModel
-     */
-    public function getEntityModel()
-    {
-        return $this->entity->getModel();
     }
 
 

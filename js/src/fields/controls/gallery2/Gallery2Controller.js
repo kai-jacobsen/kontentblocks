@@ -92,9 +92,8 @@ module.exports = Backbone.View.extend({
     var data = this.model.get('value').images || {};
     this.setIds(data);
 
-
     if (this.ids != '') {
-      var args = {post__in: this.ids};
+      var args = {post__in: this.ids,suppress_filters:true};
       var query = wp.media.query(args);
       if (!this.selection) {
         this.selection = new wp.media.model.Selection(query.models, {
@@ -115,7 +114,10 @@ module.exports = Backbone.View.extend({
   },
   initImages: function () {
     _.each(this.ids, function (imageId) {
-      this.add(this.selection.get(imageId));
+      var image = this.selection.get(imageId);
+      if (image){
+        this.add(this.selection.get(imageId));
+      }
     }, this);
   },
   add: function (model) {

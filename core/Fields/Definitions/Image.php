@@ -32,8 +32,7 @@ Class Image extends Field
     public static function uploadFilter($file)
     {
 
-        $req = Request::createFromGlobals();
-        $dimensions = $req->request->get('mindimensions', false);
+        $dimensions = filter_input(INPUT_POST,'mindimension', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
         if (!is_array($dimensions) || count($dimensions) !== 2) {
             return $file;

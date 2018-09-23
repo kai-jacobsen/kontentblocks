@@ -41,9 +41,6 @@ Class RadioSet extends Field
     {
         $options = $this->getArg('options');
         $list = wp_list_pluck($options, 'value');
-
-
-
         if (is_string($new) && !empty($new)) {
             if (in_array($new, $list)) {
                 return $new;

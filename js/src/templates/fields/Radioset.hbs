@@ -1,0 +1,12 @@
+<div class="kb-field kb-js-field field-api-radioset kb-field--radioset">
+    <label class="heading">{{ model.label }}</label>
+    {{#each model.options}}
+    <div class='kb-radioset-item'>
+        <label>
+        <input type='radio' name='{{ fieldName ../model.baseId ../model.index ../model.primeKey }}'
+               value='{{ this.value }}'
+               {{#ifCond this.value '==' ../model.value }}checked="checked"{{/ifCond}}/>{{{ this.name }}}</label>
+    </div>
+    {{/each}}
+    <p class="description">{{ model.description }}</p>
+</div>

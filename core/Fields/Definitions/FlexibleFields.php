@@ -73,7 +73,7 @@ Class FlexibleFields extends Field
                 }
 
                 $fftype = 'default';
-                if (isset($section['_meta']['type'])){
+                if (isset($section['_meta']['type'])) {
                     $fftype = $section['_meta']['type'];
                 }
 
@@ -81,7 +81,7 @@ Class FlexibleFields extends Field
                 /** @var Field $field */
                 foreach ($section as $fkey => $field) {
 
-                    if (!isset($flatFields[$fftype][$fkey])){
+                    if (!isset($flatFields[$fftype][$fkey])) {
                         continue;
                     }
 
@@ -91,7 +91,8 @@ Class FlexibleFields extends Field
                         $fieldType,
                         $ukey,
                         null,
-                        $section[$fkey]
+                        $section[$fkey],
+                        $flatFields[$fftype][$fkey]
                     );
                     $section[$fkey] = $fieldInstance->save($section[$fkey], $old);
                     if (!isset($section['_meta']['uid'])) {

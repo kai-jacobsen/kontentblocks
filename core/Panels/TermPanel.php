@@ -67,6 +67,8 @@ abstract class TermPanel extends AbstractPanel
         $this->setupArgs($this->args);
         $this->term = $environment->termObj;
         $this->context = new TermPanelContext($environment->export(), $this);
+        $savedData = $this->dataProvider->get(Utilities::buildContextKey($this->baseId));
+        $this->model = new PanelModel($savedData, $this);
         $this->setupFields();
         $this->model = $this->prepareModel();
     }
@@ -90,7 +92,7 @@ abstract class TermPanel extends AbstractPanel
 
     public function setupFields()
     {
-        $this->fields = new UserPanelFieldController($this->baseId, $this);
+        $this->fields = new TermPanelFieldController($this->baseId, $this);
         $this->fields();
         $this->fields->afterSetup();
     }
@@ -102,8 +104,7 @@ abstract class TermPanel extends AbstractPanel
      */
     public function prepareModel()
     {
-        $savedData = $this->dataProvider->get(Utilities::buildContextKey($this->baseId));
-        $model = new PanelModel([], $this);
+        $savedData = $this->model->export();
         if ($this->fields) {
             $data = array();
             $config = $this->fields->export();
@@ -115,9 +116,9 @@ abstract class TermPanel extends AbstractPanel
                 }
             }
             $new = wp_parse_args($savedData, $data);
-            $model->set($new);
+            $this->model->set($new);
         }
-        return $model;
+        return $this->model;
     }
 
     public function init()
@@ -188,7 +189,7 @@ abstract class TermPanel extends AbstractPanel
         if ($this->args['insideTable']) {
             $this->fields->setFormRenderClass('\Kontentblocks\Fields\FieldFormRendererWP');
         }
-
+        $this->fields->updateData();
         $this->renderer = $this->fields->getFieldRenderClass();
 
         $html = '';

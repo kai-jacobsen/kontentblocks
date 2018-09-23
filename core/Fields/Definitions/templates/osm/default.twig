@@ -1,0 +1,16 @@
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    <div class="kb-field--osm-wrapper" data-kbfield="osm">
+        <div data-kb-osm-map></div>
+
+        <div class="kb-field--osm-meta">
+            <label>Lat
+                <input data-kb-osm-lat type="text" name="{{ Form.getFieldName('lat') }}" value="{{ value.lat }}">
+            </label>
+            <label>Lng
+                <input data-kb-osm-lng type="text" name="{{ Form.getFieldName('lng') }}" value="{{ value.lng }}">
+            </label>
+        </div>
+
+    </div>
+{% endblock %}

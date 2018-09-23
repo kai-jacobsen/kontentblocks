@@ -29,6 +29,8 @@ var Tether = require('tether');
 var AdminBar = require('frontend/AdminBar');
 var Checks = require('common/Checks');
 var Config = require('common/Config');
+var Refields = require('fields/RefieldsController');
+var FieldsAPI = require('fieldsAPI/FieldsAPIController');
 
 
 /*

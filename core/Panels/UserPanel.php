@@ -64,10 +64,10 @@ abstract class UserPanel extends AbstractPanel
         $this->context = new UserPanelContext($environment->export(), $this);
         $this->user = $environment->userObj;
         $this->fields = new UserPanelFieldController($this->getBaseId(), $this);
-        $this->model = $this->prepareModel();
-        $this->data = $this->model->export();
+        $savedData = $this->dataProvider->get($this->getBaseId());
+        $this->model = new PanelModel($savedData, $this);
         $this->fields();
-
+        $this->model = $this->prepareModel();
     }
 
     /**
@@ -89,8 +89,8 @@ abstract class UserPanel extends AbstractPanel
      */
     public function prepareModel()
     {
-        $savedData = $this->dataProvider->get($this->getBaseId());
-        $model = new PanelModel([], $this);
+        $savedData = $this->model->export();
+        $model = $this->model;
         if ($this->fields) {
             $data = array();
             $config = $this->fields->export();
@@ -153,6 +153,7 @@ abstract class UserPanel extends AbstractPanel
         Utilities::hiddenEditor();
         $this->fields->setFieldRenderClass('\Kontentblocks\Fields\Renderer\FieldRendererWP');
         $this->fields->setFormRenderClass('\Kontentblocks\Fields\FieldFormRendererWP');
+        $this->fields->updateData();
         $this->renderer = $this->fields->getFieldRenderClass();
         echo "<table class='form-table'><tbody>";
         $this->preRender();

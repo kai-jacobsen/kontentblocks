@@ -199,10 +199,18 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
         $classes = array();
 
         $nextHash = null;
+        $nextSlug = '';
         $nextModule = $this->getNextModule();
+
+        $prevSlug = '';
 
         if (is_a($nextModule, Module::class)) {
             $nextHash = $nextModule->properties->getSetting('hash');
+            $nextSlug = $nextModule->properties->getSetting('slug');
+        }
+
+        if (is_a($this->previousModule, Module::class)) {
+            $prevSlug = $this->previousModule->properties->getSetting('slug');
         }
 
         if ($this->position === 1) {
@@ -224,17 +232,22 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
         }
 
 
-        if ($nextHash === $module->properties->getSetting('hash') && !$this->repeating){
+        if ($nextHash === $module->properties->getSetting('hash') && !$this->repeating) {
             $classes[] = 'first-repeater';
             $this->repeating = true;
         }
 
+        if (!empty($nextSlug)) {
+            $classes[] = 'next-' . $nextSlug;
+        }
 
-
+        if (!empty($prevSlug)) {
+            $classes[] = 'next-' . $prevSlug;
+        }
 
 
         if ($this->previousModule === $module->properties->getSetting('hash')) {
-            if ($this->repeating && ($nextHash !== $module->properties->getSetting('hash'))){
+            if ($this->repeating && ($nextHash !== $module->properties->getSetting('hash'))) {
                 $classes[] = 'repeater';
                 $classes[] = 'last-repeater';
                 $this->repeating = false;
@@ -243,8 +256,6 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
             }
         } else {
         }
-
-
 
 
         if ($this->repeating && $this->areaHtmlNode->getSetting('mergeRepeating')) {

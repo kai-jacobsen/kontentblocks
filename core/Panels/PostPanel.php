@@ -82,6 +82,8 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
+        $savedData = $this->dataProvider->get(Utilities::buildContextKey($this->baseId));
+        $this->model = new PanelModel($savedData, $this);
         $this->setupFields();
         $this->model = $this->prepareModel();
     }
@@ -122,8 +124,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function prepareModel()
     {
-        $savedData = $this->dataProvider->get(Utilities::buildContextKey($this->baseId));
-        $model = new PanelModel([], $this);
+        $savedData = $this->model->export();
         if ($this->fields) {
             $data = array();
             $config = $this->fields->export();
@@ -135,9 +136,9 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
                 }
             }
             $new = wp_parse_args($savedData, $data);
-            $model->set($new);
+            $this->model->set($new);
         }
-        return $model;
+        return $this->model;
     }
 
     /**
@@ -184,6 +185,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
 
     public function form()
     {
+        $this->fields->updateData();
         $this->beforeForm();
         $this->preRender();
         echo $this->renderFields();
