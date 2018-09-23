@@ -73,6 +73,7 @@ Class Kontentblocks
         add_action('kb.areas.setup', array($this, 'loadModules'), 9);
         add_action('kb.areas.setup', array($this, 'loadPanels'), 10);
         add_action('after_setup_theme', array($this, 'setup'), 11);
+        do_action('kontentblocks.after.init');
     }
 
     /**
