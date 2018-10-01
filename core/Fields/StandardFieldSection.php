@@ -379,8 +379,9 @@ class StandardFieldSection implements ExportableFieldInterface
     private function orderFields()
     {
         $code = "return strnatcmp(\$a->getArg('priority'), \$b->getArg('priority'));";
-        uasort($this->fields, create_function('$a,$b', $code));
-
+        uasort($this->fields, function ($a, $b){
+           return strnatcmp($a->getArg('priority'), $b->getArg('priority'));
+        });
     }
 
     /**

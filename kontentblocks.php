@@ -3,7 +3,7 @@
   Plugin Name: Kontentblocks
   Plugin URI: https://github.com/kai-jacobsen/kontentblocks
   Description: Content modularization framework
-  Version: 0.10.4
+  Version: 0.10.5
   Author: Kai Jacobsen
   Author URI: https://github.com/kai-jacobsen/kontentblocks-plugin
   Text Domain: Kontentblocks
@@ -47,7 +47,7 @@ use Pimple;
 Class Kontentblocks
 {
 
-    const VERSION = '0.10.4';
+    const VERSION = '0.10.5';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.16';
     const DEBUG = true;
@@ -389,6 +389,7 @@ Class Kontentblocks
      */
     public function loadPanels()
     {
+
         /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
         $Registry = $this->services['registry.panels'];
         // add core modules path
