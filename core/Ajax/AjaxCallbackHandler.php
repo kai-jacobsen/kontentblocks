@@ -128,7 +128,7 @@ class AjaxCallbackHandler
                 'wp_ajax_' . $action,
                 function () use ($callback) {
                     if ($this->verify($callback)) {
-                        call_user_func($callback, Request::createFromGlobals());
+                        call_user_func($callback, Utilities::getRequest());
                     }
                 }
             );

@@ -192,7 +192,7 @@ abstract class OptionPanel extends AbstractPanel
      */
     public function observeSaveRequest()
     {
-        $postData = Request::createFromGlobals();
+        $postData = Utilities::getRequest();
         $data = $postData->request->filter($this->menu['slug'] . '_save', false, FILTER_VALIDATE_BOOLEAN);
         if ($data) {
             $this->saveCallback(null, null);
@@ -208,7 +208,7 @@ abstract class OptionPanel extends AbstractPanel
      */
     public function saveCallback($objectId, $objectObject)
     {
-        $postData = Request::createFromGlobals();
+        $postData = Utilities::getRequest();
         $this->save($postData);
     }
 

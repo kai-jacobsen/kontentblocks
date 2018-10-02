@@ -33,7 +33,7 @@ class SavePost
     {
         $this->environment = $environment;
         $this->postid = $environment->getId();
-        $this->postdata = Request::createFromGlobals();
+        $this->postdata = Utilities::getRequest();
         $this->index = $this->environment->getStorage()->getIndex();
         $this->postObj = $environment->getPostObject();
 

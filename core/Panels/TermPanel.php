@@ -278,7 +278,7 @@ abstract class TermPanel extends AbstractPanel
      */
     public function saveCallback($termId, $termObj)
     {
-        $postData = Request::createFromGlobals();
+        $postData = Utilities::getRequest();
         if (absint($postData->request->get('tag_ID')) !== $termId) {
             return;
         }

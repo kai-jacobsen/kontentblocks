@@ -23,6 +23,8 @@ class Utilities
     protected static $termEnvironments = array();
     protected static $userEnvironments = array();
 
+    protected static $request;
+
     /**
      * @param null $storageId
      * @param null $actualPostId
@@ -588,7 +590,7 @@ class Utilities
      */
     public static function isPreview()
     {
-        $request = Request::createFromGlobals();
+        $request = Utilities::getRequest();
         if (is_admin()) {
             return ($request->request->get('wp-preview', '') === 'dopreview');
         } else {
@@ -643,12 +645,23 @@ class Utilities
         return new NullField('nullfield', null, 'nullkey', $args);
     }
 
-    public static function extractFieldValue($val){
+    public static function extractFieldValue($val)
+    {
 
-        if (is_a($val, StandardFieldReturn::class)){
+        if (is_a($val, StandardFieldReturn::class)) {
             return $val->value;
         }
         return $val;
+    }
 
+    /**
+     * @return Request
+     */
+    public static function getRequest()
+    {
+        if (!is_null(self::$request)) {
+            self::$request = Request::createFromGlobals();
+        }
+        return self::$request;
     }
 }

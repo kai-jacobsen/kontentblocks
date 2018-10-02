@@ -311,7 +311,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
             return;
         }
 
-        $postData = Request::createFromGlobals();
+        $postData = Utilities::getRequest();
         $data = $postData->request->filter($this->baseId, null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (empty($data)) {
             return;

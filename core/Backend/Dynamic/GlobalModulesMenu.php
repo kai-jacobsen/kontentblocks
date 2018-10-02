@@ -104,7 +104,7 @@ class GlobalModulesMenu
     {
 
         $screen = get_current_screen();
-        $request = Request::createFromGlobals();
+        $request = Utilities::getRequest();
         if ($screen->post_type !== 'kb-gmd') {
             return;
         }
@@ -274,7 +274,7 @@ class GlobalModulesMenu
         }
 
 
-        $value = Request::createFromGlobals();
+        $value = Utilities::getRequest();
         $environment = Utilities::getPostEnvironment($postId);
         $moduleRepository = $environment->getModuleRepository();
         $module = $moduleRepository->getModuleObject($postObj->post_name);
@@ -366,7 +366,7 @@ class GlobalModulesMenu
     public function createGlobalModule($postId, \WP_Post $post, PostEnvironment $environment)
     {
 
-        $value = Request::createFromGlobals();
+        $value = Utilities::getRequest();
 
         $gmodule = $value->get('new-gmodule');
         if (empty($gmodule)) {
@@ -432,7 +432,7 @@ class GlobalModulesMenu
             return $data;
         }
 
-        $request = Request::createFromGlobals();
+        $request = Utilities::getRequest();
         if (!$request->request->get('new-gmodule', false)) {
             return $data;
         }

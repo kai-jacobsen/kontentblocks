@@ -3,7 +3,7 @@
   Plugin Name: Kontentblocks
   Plugin URI: https://github.com/kai-jacobsen/kontentblocks
   Description: Content modularization framework
-  Version: 0.10.5
+  Version: 0.10.6
   Author: Kai Jacobsen
   Author URI: https://github.com/kai-jacobsen/kontentblocks-plugin
   Text Domain: Kontentblocks
@@ -34,6 +34,7 @@ use Kontentblocks\Templating\Twig;
 use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\CommonTwig\SimpleTwig;
 use Kontentblocks\Utils\JSONTransport;
+use Kontentblocks\Utils\Utilities;
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -47,7 +48,7 @@ use Pimple;
 Class Kontentblocks
 {
 
-    const VERSION = '0.10.5';
+    const VERSION = '0.10.6';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.16';
     const DEBUG = true;
@@ -55,6 +56,7 @@ Class Kontentblocks
     static $instance;
     static $ajaxhandler;
     public $services;
+    public $request;
 
     /**
      *
@@ -63,6 +65,7 @@ Class Kontentblocks
     {
         self::bootstrap();
         $this->services = new Pimple\Container();
+        $this->request = Utilities::getRequest();
         // setup services
         $this->setupTemplating();
         $this->setupRegistries();
@@ -74,6 +77,8 @@ Class Kontentblocks
         add_action('kb.areas.setup', array($this, 'loadPanels'), 10);
         add_action('after_setup_theme', array($this, 'setup'), 11);
         do_action('kontentblocks.after.init');
+
+
     }
 
     /**
