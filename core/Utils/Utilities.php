@@ -8,6 +8,7 @@ use Kontentblocks\Backend\Environment\UserEnvironment;
 use Kontentblocks\Fields\Definitions\NullField;
 use Kontentblocks\Fields\Definitions\ReturnObjects\StandardFieldReturn;
 use Kontentblocks\Kontentblocks;
+use phpDocumentor\Reflection\Types\Self_;
 use Symfony\Component\HttpFoundation\Request;
 use XHProfRuns_Default;
 
@@ -590,7 +591,7 @@ class Utilities
      */
     public static function isPreview()
     {
-        $request = Utilities::getRequest();
+        $request = self::getRequest();
         if (is_admin()) {
             return ($request->request->get('wp-preview', '') === 'dopreview');
         } else {
@@ -659,7 +660,7 @@ class Utilities
      */
     public static function getRequest()
     {
-        if (!is_null(self::$request)) {
+        if (is_null(self::$request)) {
             self::$request = Request::createFromGlobals();
         }
         return self::$request;

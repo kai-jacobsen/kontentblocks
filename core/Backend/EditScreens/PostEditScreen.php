@@ -150,7 +150,6 @@ Class PostEditScreen
     {
 
         $request = Utilities::getRequest();
-
         // get the real postId
         if (!empty($request->request->get('wp-preview', '')) && $request->request->get('wp-preview',
                 '') === 'dopreview'
