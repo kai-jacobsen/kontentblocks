@@ -428,11 +428,11 @@ class GlobalModulesMenu
      */
     public function postData($data, $post)
     {
-        $request = Request::createFromGlobals();
         if ($post['post_type'] !== 'kb-gmd') {
             return $data;
         }
 
+        $request = Request::createFromGlobals();
         if (!$request->request->get('new-gmodule', false)) {
             return $data;
         }
