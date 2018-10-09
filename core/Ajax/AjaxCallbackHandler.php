@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
+use Kontentblocks\Utils\Utilities;
 use Symfony\Component\HttpFoundation\Request;
 
 
