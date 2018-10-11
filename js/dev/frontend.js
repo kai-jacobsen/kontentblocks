@@ -1333,8 +1333,10 @@ var Ui = {
     var selector = $('.kb-field--tabs', $context);
     selector.tabs({
       activate: function (e, ui) {
-        $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});
-        KB.Events.trigger('modal.recalibrate');
+        _.defer(function () {
+          $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});
+          KB.Events.trigger('modal.recalibrate');
+        });
       }
     });
     selector.each(function () {
@@ -2938,13 +2940,14 @@ module.exports = Backbone.View.extend({
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
       jQuery(this).toggleClass('kb-togglebox-open');
-
       if (jQuery(this).hasClass('kb-togglebox-open')){
         TinyMCE.removeEditors(jQuery(this));
         TinyMCE.restoreEditors(jQuery(this));
 
       }
-      KB.Events.trigger('modal.recalibrate');
+      _.defer(function () {
+        KB.Events.trigger('modal.recalibrate');
+      });
     });
   },
   deleteItem: function () {
@@ -6131,11 +6134,11 @@ var EditableText = Backbone.View.extend({
   initialize: function () {
     this.settings = this.model.get('tinymce');
     this.parentView = this.model.get('ModuleModel').View;
-    this.setupDefaults();
     this.listenToOnce(this.model.get('ModuleModel'), 'remove', this.deactivate);
     this.listenToOnce(this.model.get('ModuleModel'), 'module.create', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.show', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
+    this.listenTo(this, 'kn.inline.synced', this.deactivate);
     this.Toolbar = new Toolbar({
       FieldControlView: this,
       model: this.model,
@@ -6186,86 +6189,31 @@ var EditableText = Backbone.View.extend({
     this.trigger('field.view.rerender', this);
 
   },
-  setupDefaults: function () {
+  setupEvents: function () {
+    var $edEl = $('#' + this.id);
     var that = this;
-    // defaults
-    var defaults = {
-      theme: 'inlite',
-      skin: false,
-      menubar: true,
-      add_unload_trigger: false,
-      entity_encoding: "raw",
-      fixed_toolbar_container: null,
-      insert_toolbar: '',
-      schema: 'html5',
-      inline: true,
-      selection_toolbar: 'bold italic | quicklink h2 h3 blockquote',
-      plugins: 'textcolor, wptextpattern,paste',
-      statusbar: false,
-      preview_styles: false,
-      paste_as_text: true,
-      setup: function (ed) {
-        ed.on('init', function () {
-          that.editor = ed;
-          ed.module = that.model.get('ModuleModel');
-          ed.kfilter = (that.model.get('filter') && that.model.get('filter') === 'content');
-          KB.Events.trigger('KB::tinymce.new-inline-editor', ed);
-          ed.focus();
-
-          // jQuery('.mce-panel.mce-floatpanel').hide();
-          jQuery(window).on('scroll.kbmce resize.kbmce', function () {
-            jQuery('.mce-panel.mce-floatpanel').hide();
-          });
-
-        });
-
-
-        ed.on('NodeChange', function (e) {
-          // that.getSelection(ed, e);
-          KB.Events.trigger('window.change');
-        });
-
-        ed.on('focus', function () {
-          var con;
-          window.wpActiveEditor = that.el.id;
-          con = Utilities.getIndex(ed.module.get('entityData'), that.model.get('kpath'));
-          if (ed.kfilter) {
-            ed.setContent(switchEditors.wpautop(con));
-          }
-          ed.previousContent = ed.getContent();
-          ed.module.View.$el.addClass('kb-inline-text--active');
-        });
-
-        ed.on('blur', function (e) {
-          var content;
-          ed.module.View.$el.removeClass('kb-inline-text--active');
-          content = ed.getContent();
-          // apply filter
-          if (ed.kfilter) {
-            content = switchEditors._wp_Nop(ed.getContent());
-          }
-          // get a copy of module data
-          //entityData = _.clone(ed.module.get('entityData'));
-          //path = that.model.get('kpath');
-          //Utilities.setIndex(entityData, path, content);
-          // && ed.kfilter set
-          if (ed.isDirty()) {
-            if (ed.kfilter) {
-              that.retrieveFilteredContent(ed, content);
-            } else {
-              that.model.set('value', content);
-              that.model.syncContent = ed.getContent();
-              that.model.trigger('external.change', that.model);
-              that.model.trigger('field.model.dirty', that.model);
-              KB.Events.trigger('content.change');
-            }
-          } else {
-            ed.setContent(ed.previousContent);
-          }
-        });
-      }
-    };
-    this.defaults = _.extend(defaults, this.settings);
+    KB.Events.trigger('KB::tinymce.new-inline-editor', this.editor);
+    this.editor.kfilter = (this.model.get('filter') && this.model.get('filter') === 'content');
+    this.editor.module = this.model.get('ModuleModel');
+    var con = Utilities.getIndex(this.editor.module.get('entityData'), this.model.get('kpath'));
+    if (this.editor.kfilter) {
+      this.editor.setContent(switchEditors.wpautop(con));
+    }
+    this.editor.previousContent = this.editor.getContent();
+    this.editor.module.View.$el.addClass('kb-inline-text--active');
+    this.editor.subscribe('editableInput', this.handleChange.bind(this));
+  },
+  handleChange: function () {
+    var content = this.editor.getContent();
+    if (this.editor.kfilter) {
+      content = switchEditors._wp_Nop(this.editor.getContent());
+    }
+    this.model.set('value', content);
+    // this.model.syncContent = this.editor.getContent();
+    this.model.trigger('external.change', this.model);
+    this.model.trigger('field.model.dirty', this.model);
+    KB.Events.trigger('content.change');
+    this.editor.isDirty = true;
   },
   retrieveFilteredContent: function (ed, content) {
     var that = this;
@@ -6280,22 +6228,14 @@ var EditableText = Backbone.View.extend({
       type: 'POST',
       dataType: 'json',
       success: function (res) {
-        ed.setContent(res.data.content);
-        that.model.set('value', content);
-        that.model.syncContent = ed.getContent();
-
-        that.model.trigger('field.model.dirty', that.model);
-        that.model.trigger('external.change', that.model);
-        KB.Events.trigger('content.change');
-
-        //ed.module.trigger('kb.frontend.module.inlineUpdate');
+        var $edEl = $('#' + that.id).html(res.data.content);
+        ed.destroy();
         setTimeout(function () {
           if (window.twttr) {
             window.twttr.widgets.load();
           }
           jQuery(window).off('scroll.kbmce resize.kbmce');
           ed.off('nodeChange ResizeEditor ResizeWindow');
-          that.deactivate();
         }, 500);
       },
       error: function () {
@@ -6308,17 +6248,31 @@ var EditableText = Backbone.View.extend({
     }
     e.stopPropagation();
     if (!this.editor) {
-      tinymce.init(_.defaults(this.defaults, {
-        selector: '#' + this.id
-      }));
+      this.editor = new MediumEditor('#' + this.id, {
+        toolbar: {
+          diffTop: -50
+        }
+      });
+      this.setupEvents();
+    } else {
+      this.editor.setup();
+      this.setupEvents();
     }
   },
   deactivate: function () {
     if (this.editor) {
-      var ed = this.editor;
-      this.editor = null;
-      tinyMCE.execCommand('mceRemoveEditor', true, ed.id);
-      KB.Events.trigger('kb.repaint'); // @TODO figure this out
+      this.editor.unsubscribe('editableInput', this.handleChange.bind(this));
+      // var content = this.editor.getContent();
+      var content = Utilities.getIndex(this.editor.module.get('entityData'), this.model.get('kpath'));
+
+      // apply filter
+      if (this.editor.kfilter) {
+        content = switchEditors._wp_Nop(content);
+        this.retrieveFilteredContent(this.editor, content);
+      } else {
+        this.editor.destroy();
+        KB.Events.trigger('kb.repaint'); // @TODO figure this out
+      }
     }
   },
   cleanString: function (string) {
@@ -6327,19 +6281,6 @@ var EditableText = Backbone.View.extend({
       .replace(/<br>/g, '')
       .replace(/<[^\/>][^>]*><\/[^>]+>/g, '')
       .replace(/<p><\/p>/g, '');
-  },
-  getSelection: function (editor, event) {
-    // var sel = editor.selection.getContent();
-    // var $toolbar = jQuery('.mce-panel.mce-floatpanel');
-    // if (sel === '') {
-    //   $toolbar.hide();
-    // } else {
-    //   var mpos = markSelection();
-    //   var w = $toolbar.width();
-    //   $toolbar.css({top: mpos.top - 40 + 'px', left: mpos.left - w + 'px'});
-    //   console.log('ran');
-    //   $toolbar.show();
-    // }
   },
   synchronize: function (model) {
     if (this.editor) {
@@ -6351,74 +6292,6 @@ var EditableText = Backbone.View.extend({
 
   }
 });
-
-var markSelection = (function () {
-  var markerTextChar = "\ufeff";
-  var markerTextCharEntity = "&#xfeff;";
-
-  var markerEl, markerId = "sel_" + new Date().getTime() + "_" + Math.random().toString().substr(2);
-
-  var selectionEl;
-
-  return function () {
-    var sel, range;
-    if (document.selection && document.selection.createRange) {
-      // Clone the TextRange and collapse
-      range = document.selection.createRange().duplicate();
-      range.collapse(false);
-
-      // Create the marker element containing a single invisible character by creating literal HTML and insert it
-      range.pasteHTML('<span id="' + markerId + '" style="position: relative;">' + markerTextCharEntity + '</span>');
-      markerEl = document.getElementById(markerId);
-    } else if (window.getSelection) {
-      sel = window.getSelection();
-
-      if (sel.getRangeAt) {
-        range = sel.getRangeAt(0).cloneRange();
-      } else {
-        // Older WebKit doesn't have getRangeAt
-        range.setStart(sel.anchorNode, sel.anchorOffset);
-        range.setEnd(sel.focusNode, sel.focusOffset);
-
-        // Handle the case when the selection was selected backwards (from the end to the start in the
-        // document)
-        if (range.collapsed !== sel.isCollapsed) {
-          range.setStart(sel.focusNode, sel.focusOffset);
-          range.setEnd(sel.anchorNode, sel.anchorOffset);
-        }
-      }
-
-      range.collapse(false);
-
-      // Create the marker element containing a single invisible character using DOM methods and insert it
-      markerEl = document.createElement("span");
-      markerEl.id = markerId;
-      var $markerEl = jQuery(markerEl);
-      $markerEl.prepend(document.createTextNode(markerTextChar));
-      range.insertNode(markerEl);
-    }
-
-    if (markerEl) {
-      // Find markerEl position http://www.quirksmode.org/js/findpos.html
-      var obj = markerEl;
-      var left = 0, top = 0;
-      do {
-        left += obj.offsetLeft;
-        top += obj.offsetTop;
-      } while (obj = obj.offsetParent);
-
-
-      markerEl.parentNode.removeChild(markerEl);
-      $markerEl.remove();
-
-
-      return {
-        left: left,
-        top: top
-      };
-    }
-  };
-})();
 
 
 module.exports = EditableText;
@@ -6596,9 +6469,7 @@ module.exports = Backbone.View.extend({
     'mouseleave': 'mouseleave'
   },
   focusEditor: function (e) {
-    if (!this.Parent.editor){
-      this.Parent.activate(e);
-    }
+    this.Parent.activate(e);
   },
   render: function () {
     return this.$el;
@@ -6608,13 +6479,13 @@ module.exports = Backbone.View.extend({
   },
   mouseenter: function () {
     this.Parent.$el.addClass('kb-field--outline');
-    _.each(this.model.get('linkedFields'), function(linkedModel){
+    _.each(this.model.get('linkedFields'), function (linkedModel) {
       linkedModel.FieldControlView.$el.addClass('kb-field--outline-link');
     })
   },
-  mouseleave: function(){
+  mouseleave: function () {
     this.Parent.$el.removeClass('kb-field--outline');
-    _.each(this.model.get('linkedFields'), function(linkedModel){
+    _.each(this.model.get('linkedFields'), function (linkedModel) {
       linkedModel.FieldControlView.$el.removeClass('kb-field--outline-link');
     })
   }
@@ -6627,7 +6498,7 @@ module.exports = Backbone.View.extend({
   initialize: function (options) {
     this.visible = false;
     this.options = options || {};
-    this.Parent = options.parent;
+    this.parent = options.parent;
   },
   className: 'kb-inline-control kb-inline--update',
   events: {
@@ -6636,13 +6507,13 @@ module.exports = Backbone.View.extend({
     'mouseleave': 'mouseleave'
   },
   render: function () {
-      return this.$el;
+    return this.$el;
   },
   syncFieldModel: function (context) {
-    var dfr = this.model.sync(this);
-    dfr.done(function (res) {
+    var dfr = this.model.sync(this).done(function (res) {
       if (res.success) {
         this.model.getClean();
+        this.parent.trigger('kn.inline.synced');
         _.each(this.model.get('linkedFields'), function (model, i) {
           if (!_.isNull(model)) {
             model.getClean();
@@ -7419,7 +7290,6 @@ module.exports = Backbone.View.extend({
       conH,
       position,
       winDiff;
-
     // get window height
     winH = (jQuery(window).height() - 16);
     // get height of modal contents

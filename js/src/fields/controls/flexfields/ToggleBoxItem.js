@@ -18,13 +18,14 @@ module.exports = Backbone.View.extend({
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
       jQuery(this).toggleClass('kb-togglebox-open');
-
       if (jQuery(this).hasClass('kb-togglebox-open')){
         TinyMCE.removeEditors(jQuery(this));
         TinyMCE.restoreEditors(jQuery(this));
 
       }
-      KB.Events.trigger('modal.recalibrate');
+      _.defer(function () {
+        KB.Events.trigger('modal.recalibrate');
+      });
     });
   },
   deleteItem: function () {

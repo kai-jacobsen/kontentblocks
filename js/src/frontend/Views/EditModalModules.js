@@ -338,7 +338,6 @@ module.exports = Backbone.View.extend({
       conH,
       position,
       winDiff;
-
     // get window height
     winH = (jQuery(window).height() - 16);
     // get height of modal contents

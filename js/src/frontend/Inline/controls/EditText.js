@@ -12,9 +12,7 @@ module.exports = Backbone.View.extend({
     'mouseleave': 'mouseleave'
   },
   focusEditor: function (e) {
-    if (!this.Parent.editor){
-      this.Parent.activate(e);
-    }
+    this.Parent.activate(e);
   },
   render: function () {
     return this.$el;
@@ -24,13 +22,13 @@ module.exports = Backbone.View.extend({
   },
   mouseenter: function () {
     this.Parent.$el.addClass('kb-field--outline');
-    _.each(this.model.get('linkedFields'), function(linkedModel){
+    _.each(this.model.get('linkedFields'), function (linkedModel) {
       linkedModel.FieldControlView.$el.addClass('kb-field--outline-link');
     })
   },
-  mouseleave: function(){
+  mouseleave: function () {
     this.Parent.$el.removeClass('kb-field--outline');
-    _.each(this.model.get('linkedFields'), function(linkedModel){
+    _.each(this.model.get('linkedFields'), function (linkedModel) {
       linkedModel.FieldControlView.$el.removeClass('kb-field--outline-link');
     })
   }

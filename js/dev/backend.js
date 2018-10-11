@@ -3008,8 +3008,10 @@ var Ui = {
     var selector = $('.kb-field--tabs', $context);
     selector.tabs({
       activate: function (e, ui) {
-        $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});
-        KB.Events.trigger('modal.recalibrate');
+        _.defer(function () {
+          $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});
+          KB.Events.trigger('modal.recalibrate');
+        });
       }
     });
     selector.each(function () {
@@ -4634,13 +4636,14 @@ module.exports = Backbone.View.extend({
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
       jQuery(this).toggleClass('kb-togglebox-open');
-
       if (jQuery(this).hasClass('kb-togglebox-open')){
         TinyMCE.removeEditors(jQuery(this));
         TinyMCE.restoreEditors(jQuery(this));
 
       }
-      KB.Events.trigger('modal.recalibrate');
+      _.defer(function () {
+        KB.Events.trigger('modal.recalibrate');
+      });
     });
   },
   deleteItem: function () {
