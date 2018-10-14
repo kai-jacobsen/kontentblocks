@@ -124,8 +124,8 @@ abstract class TermPanel extends AbstractPanel
     public function init()
     {
 
-
         if (is_admin()) {
+
             add_action("edited_{$this->args['taxonomy']}", array($this, 'saveCallback'), 10, 2);
             if ($this->args['insideTable']) {
                 add_action("{$this->args['taxonomy']}_edit_form_fields", array($this, 'form'));
@@ -134,6 +134,7 @@ abstract class TermPanel extends AbstractPanel
             }
             add_action('admin_footer', array($this, 'toJSON'), 5);
             add_action('admin_footer', array($this, 'changeUi'), 5);
+
         }
     }
 
@@ -142,6 +143,7 @@ abstract class TermPanel extends AbstractPanel
         if ($this->args['hideDescription']) {
             echo "<style>.term-description-wrap {display: none !important;}</style>";
         }
+        echo "<script>$('body').addClass('kontentblocks-enabled');</script>";
     }
 
     public function toJSON()

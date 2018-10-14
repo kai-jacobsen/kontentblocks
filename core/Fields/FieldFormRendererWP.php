@@ -20,7 +20,7 @@ class FieldFormRendererWP extends FieldFormRenderer
     {
 
         return array(
-            'main-wrap' => 'form-field kb-field-wrapper field-renderer-wp',
+            'main-wrap' => 'form-field  kb-field-wrapper field-renderer-wp',
             'type-label' => 'kb-field-type-label',
             'field-header' => 'kb-field-header',
         );
@@ -32,7 +32,7 @@ class FieldFormRendererWP extends FieldFormRenderer
     protected function setupAttributes()
     {
         return array(
-            'class' => "kb-field--{$this->field->type} kb-field--reset klearfix"
+            'class' => "kb-field kb-field--{$this->field->type} kb-field--reset klearfix"
         );
     }
 }
