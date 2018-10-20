@@ -1,10 +1,13 @@
 <input type="hidden" name="{{ inputName }}[_meta][uid]" value="{{ uid }}">
 <input type="hidden" name="{{ inputName }}[_meta][type]" value="{{ fftype }}">
+<input data-flexfield-visible type="hidden" name="{{ inputName }}[_meta][status]" value="{{ status }}">
 <div class="flexible-fields--toggle-title">
     <h3>
         <span class="genericon genericon-draggable flexible-fields--js-drag-handle"></span>
-        <span class="genericon genericon-expand flexible-fields--js-toggle"></span>
+        <span class="genericon genericon-expand flexible-fields--js-toggle" data-flexfields-toggle></span>
+        <span class="dashicons dashicons-trash flexible-fields--js-duplicate"></span>
         <span class="dashicons dashicons-trash flexible-fields--js-trash"></span>
+        <span class="dashicons dashicons-trash flexible-fields--js-visibility"></span>
         <input type="text" value="{{ item.title }}" name="{{ inputName }}[_meta][title]">
     </h3>
 </div>

@@ -13,15 +13,15 @@ module.exports = Backbone.View.extend({
   },
   events: {
     'click .flexible-fields--js-toggle': 'toggleItem',
-    'click .flexible-fields--js-trash': 'deleteItem'
+    'click .flexible-fields--js-trash': 'deleteItem',
+    'click .flexible-fields--js-visibility': 'toggleItemStatus'
   },
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
       jQuery(this).toggleClass('kb-togglebox-open');
-      if (jQuery(this).hasClass('kb-togglebox-open')){
+      if (jQuery(this).hasClass('kb-togglebox-open')) {
         TinyMCE.removeEditors(jQuery(this));
         TinyMCE.restoreEditors(jQuery(this));
-
       }
       _.defer(function () {
         KB.Events.trigger('modal.recalibrate');
@@ -36,6 +36,14 @@ module.exports = Backbone.View.extend({
     this.$el.append('<input type="hidden" name="' + inputName + '[_meta][delete]" value="' + this.model.get('itemId') + '" >');
     Notice.notice('Please click update to save the changes', 'success');
   },
+  toggleItemStatus: function () {
+    var val = this.$('[data-flexfield-visible]').val();
+    console.log(val);
+    var nVal = (val === 'visible') ? 'hidden' : 'visible';
+    this.$('[data-flexfield-visible]').val(nVal);
+    this.$el.toggleClass('ff-section-invisible');
+    Notice.notice('Please click update to save the changes', 'success');
+  },
   render: function () {
     var inputName = this.createInputName(this.model.get('itemId'));
     var item = this.model.toJSON(); // tab information and value hold by this.model
@@ -43,9 +51,13 @@ module.exports = Backbone.View.extend({
       item: item,
       inputName: inputName,
       uid: this.model.get('itemId'),
-      fftype: this.model.get('fftype')
+      fftype: this.model.get('fftype'),
+      status: this.model.get('status')
     }));
     this.renderTabs($skeleton); // insert the tabs markup
+    if (this.model.get('status') === 'hidden'){
+      this.$el.toggleClass('ff-section-invisible')
+    }
     return $skeleton;
   },
   renderTabs: function ($skeleton) {

@@ -2729,6 +2729,7 @@ module.exports = Backbone.View.extend({
     var uid = obj['_meta'].uid || null;
     var title = obj['_meta'].title || null;
     var type = obj['_meta'].type;
+    var status = obj['_meta'].status || 'visible';
     var itemId = uid || _.uniqueId('ff2');
     var text = this.model.get('newitemtext') || 'Enter a title : ';
     var ask = this.model.get('requesttitle') || false;
@@ -2764,6 +2765,7 @@ module.exports = Backbone.View.extend({
       itemId: itemId,
       fftype: type,
       title: title,
+      status: status,
       sections: typesections
     }
   }
@@ -2814,6 +2816,7 @@ module.exports = Backbone.View.extend({
         if (!dataobj['_meta'].type) {
           dataobj['_meta'].type = 'default';
         }
+
 
         if (!types[dataobj['_meta'].type]) {
           return;
@@ -2912,7 +2915,8 @@ module.exports = ToggleBoxItem.extend({
       item: item,
       inputName: inputName,
       uid: this.model.get('itemId'),
-      fftype: this.model.get('fftype')
+      fftype: this.model.get('fftype'),
+      visible: visible
     }));
     this.renderTabs($skeleton); // insert the tabs markup
     return $skeleton;
@@ -2935,15 +2939,15 @@ module.exports = Backbone.View.extend({
   },
   events: {
     'click .flexible-fields--js-toggle': 'toggleItem',
-    'click .flexible-fields--js-trash': 'deleteItem'
+    'click .flexible-fields--js-trash': 'deleteItem',
+    'click .flexible-fields--js-visibility': 'toggleItemStatus'
   },
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
       jQuery(this).toggleClass('kb-togglebox-open');
-      if (jQuery(this).hasClass('kb-togglebox-open')){
+      if (jQuery(this).hasClass('kb-togglebox-open')) {
         TinyMCE.removeEditors(jQuery(this));
         TinyMCE.restoreEditors(jQuery(this));
-
       }
       _.defer(function () {
         KB.Events.trigger('modal.recalibrate');
@@ -2958,6 +2962,14 @@ module.exports = Backbone.View.extend({
     this.$el.append('<input type="hidden" name="' + inputName + '[_meta][delete]" value="' + this.model.get('itemId') + '" >');
     Notice.notice('Please click update to save the changes', 'success');
   },
+  toggleItemStatus: function () {
+    var val = this.$('[data-flexfield-visible]').val();
+    console.log(val);
+    var nVal = (val === 'visible') ? 'hidden' : 'visible';
+    this.$('[data-flexfield-visible]').val(nVal);
+    this.$el.toggleClass('ff-section-invisible');
+    Notice.notice('Please click update to save the changes', 'success');
+  },
   render: function () {
     var inputName = this.createInputName(this.model.get('itemId'));
     var item = this.model.toJSON(); // tab information and value hold by this.model
@@ -2965,9 +2977,13 @@ module.exports = Backbone.View.extend({
       item: item,
       inputName: inputName,
       uid: this.model.get('itemId'),
-      fftype: this.model.get('fftype')
+      fftype: this.model.get('fftype'),
+      status: this.model.get('status')
     }));
     this.renderTabs($skeleton); // insert the tabs markup
+    if (this.model.get('status') === 'hidden'){
+      this.$el.toggleClass('ff-section-invisible')
+    }
     return $skeleton;
   },
   renderTabs: function ($skeleton) {
@@ -10052,7 +10068,11 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
     + "[_meta][type]\" value=\""
     + alias4(((helper = (helper = helpers.fftype || (depth0 != null ? depth0.fftype : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"fftype","hash":{},"data":data}) : helper)))
-    + "\">\n<div class=\"flexible-fields--section-box\">\n    <div class=\"flexible-fields--section-title\">\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n        <input type=\"text\" value=\""
+    + "\">\n<input data-flexfield-visible type=\"hidden\" name=\""
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + "[_meta][status]\" value=\""
+    + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
+    + "\">\n\n<div class=\"flexible-fields--section-box\">\n    <div class=\"flexible-fields--section-title\">\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n        <input type=\"text\" value=\""
     + alias4(container.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.title : stack1), depth0))
     + "\" name=\""
     + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
@@ -10073,7 +10093,11 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
     + "[_meta][type]\" value=\""
     + alias4(((helper = (helper = helpers.fftype || (depth0 != null ? depth0.fftype : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"fftype","hash":{},"data":data}) : helper)))
-    + "\">\n<div class=\"flexible-fields--toggle-title\">\n    <h3>\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"genericon genericon-expand flexible-fields--js-toggle\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n        <input type=\"text\" value=\""
+    + "\">\n<input data-flexfield-visible type=\"hidden\" name=\""
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + "[_meta][status]\" value=\""
+    + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
+    + "\">\n<div class=\"flexible-fields--toggle-title\">\n    <h3>\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"genericon genericon-expand flexible-fields--js-toggle\" data-flexfields-toggle></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-duplicate\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-visibility\"></span>\n        <input type=\"text\" value=\""
     + alias4(container.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.title : stack1), depth0))
     + "\" name=\""
     + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))

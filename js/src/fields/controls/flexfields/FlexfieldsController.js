@@ -43,6 +43,7 @@ module.exports = Backbone.View.extend({
           dataobj['_meta'].type = 'default';
         }
 
+
         if (!types[dataobj['_meta'].type]) {
           return;
         }

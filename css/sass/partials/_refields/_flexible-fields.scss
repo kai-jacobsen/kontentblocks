@@ -2,6 +2,17 @@
   padding: 10px 0;
 }
 
+.kb-flexible-fields--item-wrapper{
+  &.ff-section-invisible{
+    border-left: 3px solid $red;
+    opacity: 0.3;
+
+    &:hover{
+      opacity: 0.8;
+    }
+  }
+}
+
 .flexible-fields--section-box {
 
   .flexible-fields--section-title {
@@ -116,6 +127,43 @@
 
     &:before {
       font-size: 14px !important;
+    }
+
+    &:hover {
+      color: #333;
+    }
+  }
+  .flexible-fields--js-duplicate {
+    position: absolute;
+    right: 40px;
+    font-size: 15px !important;
+    top: 13px;
+    color: #999;
+    cursor: pointer;
+    font: normal 14px/1 'dashicons' !important;
+
+    &:before {
+      font-size: 14px !important;
+        content: '\f105';
+    }
+
+    &:hover {
+      color: #333;
+    }
+  }
+
+  .flexible-fields--js-visibility {
+    position: absolute;
+    right: 68px;
+    font-size: 15px !important;
+    top: 12px;
+    color: #999;
+    cursor: pointer;
+    font: normal 14px/1 'dashicons' !important;
+
+    &:before {
+      font-size: 14px !important;
+      content: '\f177';
     }
 
     &:hover {
