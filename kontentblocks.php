@@ -77,8 +77,6 @@ Class Kontentblocks
         add_action('kb.areas.setup', array($this, 'loadPanels'), 10);
         add_action('after_setup_theme', array($this, 'setup'), 11);
         do_action('kontentblocks.after.init');
-
-
     }
 
     /**
@@ -97,21 +95,21 @@ Class Kontentblocks
         if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
             require_once dirname(__FILE__) . '/vendor/autoload.php';
         }
-        // Kontentblocks autloader
-        // Public API
+//        // Kontentblocks autloader
+//        // Public API
         require_once dirname(__FILE__) . '/includes/wp-api.php';
         require_once dirname(__FILE__) . '/includes/kb-api.php';
-
-        // File gets created during build process and contains one function
-        // to get the current git hash or a random hash during development
-        // hash is used to invalidate the local storage data
-        if (file_exists(dirname(__FILE__) . '/build/hash.php')) {
-            require_once(dirname(__FILE__) . '/build/hash.php');
-        }
-
-        if (is_admin()) {
-            require_once dirname(__FILE__) . '/core/Utils/tables.php';
-        }
+//
+//        // File gets created during build process and contains one function
+//        // to get the current git hash or a random hash during development
+//        // hash is used to invalidate the local storage data
+//        if (file_exists(dirname(__FILE__) . '/build/hash.php')) {
+//            require_once(dirname(__FILE__) . '/build/hash.php');
+//        }
+//
+//        if (is_admin()) {
+//            require_once dirname(__FILE__) . '/core/Utils/tables.php';
+//        }
 
     }
 
@@ -463,4 +461,3 @@ add_action(
 register_activation_hook(__FILE__, array('\Kontentblocks\Kontentblocks', 'onActivation'));
 register_deactivation_hook(__FILE__, array('\Kontentblocks\Kontentblocks', 'onDeactivation'));
 register_uninstall_hook(__FILE__, array('\Kontentblocks\Kontentblocks', 'onUninstall'));
-

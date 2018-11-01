@@ -201,9 +201,11 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         $class = (is_array($this->metaBox)) ? 'kb-postbox' : '';
         $elementId = 'kbp-' . $this->getBaseId() . '-container';
         $renderId = $this->fields->getFieldRenderClass()->getIdString();
+
         echo "<div id='{$elementId}' data-kbpuid='{$this->uid}' class='postbox {$class} {$renderId}' data-kb-field-renderer='{$renderId}'>
                 <div class='kb-custom-wrapper'>
-                <div class='inside'>";
+                <div class='inside'>" .
+             wp_nonce_field($this->getBaseId() . '_save', $this->getBaseId() . '_nc', true, true);
     }
 
     /**
@@ -311,11 +313,19 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
             return;
         }
 
+
         $postData = Utilities::getRequest();
-        $data = $postData->request->filter($this->baseId, null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        if (empty($data)) {
+
+        $verify = wp_verify_nonce($postData->request->get($this->getBaseId() . '_nc'), $this->getBaseId() . '_save');
+
+        if (!$verify) {
             return;
         }
+
+//        $data = $postData->request->filter($this->baseId, null, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+//        if (empty($data) &&) {
+//            return;
+//        }
         $this->model->reset()->set($postData->request->get($this->baseId));
         $this->save($postData);
     }

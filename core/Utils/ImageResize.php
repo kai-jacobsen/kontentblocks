@@ -75,7 +75,6 @@ namespace Kontentblocks\Utils {
                 $upscale = false
             ) {
 
-
                 // Validate inputs.
                 if (!$attachment || (!$width && !$height)) {
                     return false;

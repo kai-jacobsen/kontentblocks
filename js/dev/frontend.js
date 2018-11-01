@@ -2812,16 +2812,12 @@ module.exports = Backbone.View.extend({
         if (!dataobj) {
           return;
         }
-
         if (!dataobj['_meta'].type) {
           dataobj['_meta'].type = 'default';
         }
-
-
         if (!types[dataobj['_meta'].type]) {
           return;
         }
-
         // factor item
         var item = this.factory.factorNewItem(data[dataobj['_meta'].uid], dataobj);
         // build view for item
@@ -2837,7 +2833,6 @@ module.exports = Backbone.View.extend({
         KB.Events.trigger('modal.recalibrate');
       }, this);
     }
-
     UI.initTabs();
     this.$list.sortable({
       handle: '.flexible-fields--js-drag-handle',
@@ -2850,6 +2845,33 @@ module.exports = Backbone.View.extend({
     });
     KB.Events.trigger('modal.recalibrate'); // tell the frontend modal to resize
     this._initialized = true; // flag init state
+  },
+  duplicateItem: function (model) {
+    var itemId = model.get('itemId');
+    var title = model.get('title') + ' (Copy)';
+    var data = this.model.get('value'); // model equals FieldControlModel, value equals parent obj data for this field key
+    if (!data[itemId]) {
+      return false;
+    }
+    var itemData = JSON.parse(JSON.stringify(data[itemId]));
+    if (!itemData['_meta']) {
+      return false;
+    }
+    itemData['_meta']['uid'] = null;
+    itemData['_meta']['title'] = title;
+
+    var item = this.factory.factorNewItem(itemData, itemData);
+    var view = new this.Renderer({
+      controller: this,
+      model: new Backbone.Model(item)
+    });
+    //collect views
+    this.subviews.push(view);
+    // render item
+    this.$list.append(view.render());
+    UI.initTabs();
+    KB.Events.trigger('modal.recalibrate');
+
   },
   render: function () {
     if (this.active) {
@@ -2873,7 +2895,6 @@ module.exports = Backbone.View.extend({
     this.$addButton = this.$('.kb-flexible-fields--js-add-item');
   },
   addItem: function (e) {
-
     var $btn = jQuery(e.currentTarget);
     var type = $btn.data('kbf-addtype');
     var item = this.factory.factorNewItem(null, {_meta: {type: type}});
@@ -2940,7 +2961,8 @@ module.exports = Backbone.View.extend({
   events: {
     'click .flexible-fields--js-toggle': 'toggleItem',
     'click .flexible-fields--js-trash': 'deleteItem',
-    'click .flexible-fields--js-visibility': 'toggleItemStatus'
+    'click .flexible-fields--js-visibility': 'toggleItemStatus',
+    'click .flexible-fields--js-duplicate': 'duplicateItem'
   },
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
@@ -2964,11 +2986,13 @@ module.exports = Backbone.View.extend({
   },
   toggleItemStatus: function () {
     var val = this.$('[data-flexfield-visible]').val();
-    console.log(val);
     var nVal = (val === 'visible') ? 'hidden' : 'visible';
     this.$('[data-flexfield-visible]').val(nVal);
     this.$el.toggleClass('ff-section-invisible');
     Notice.notice('Please click update to save the changes', 'success');
+  },
+  duplicateItem: function(){
+    this.Controller.duplicateItem(this.model);
   },
   render: function () {
     var inputName = this.createInputName(this.model.get('itemId'));
@@ -5128,9 +5152,13 @@ module.exports = BaseView.extend({
     var value = this.model.get('value');
     var queryargs = {};
     var that = this;
-    if (!_.isEmpty(this.model.get('value').id )) {
+    var id = this.model.get('value').id;
+    if (typeof id === 'number'){
+      id = id.toString();
+    }
+    if (id) {
       queryargs.post__in = [this.model.get('value').id];
-      wp.media.query(queryargs) // set the query
+      var query = wp.media.query(queryargs) // set the query
         .more() // execute the query, this will return an deferred object
         .done(function () { // attach callback, executes after the ajax call succeeded
           var attachment = this.first();

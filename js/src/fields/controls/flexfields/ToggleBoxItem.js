@@ -14,7 +14,8 @@ module.exports = Backbone.View.extend({
   events: {
     'click .flexible-fields--js-toggle': 'toggleItem',
     'click .flexible-fields--js-trash': 'deleteItem',
-    'click .flexible-fields--js-visibility': 'toggleItemStatus'
+    'click .flexible-fields--js-visibility': 'toggleItemStatus',
+    'click .flexible-fields--js-duplicate': 'duplicateItem'
   },
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
@@ -38,11 +39,13 @@ module.exports = Backbone.View.extend({
   },
   toggleItemStatus: function () {
     var val = this.$('[data-flexfield-visible]').val();
-    console.log(val);
     var nVal = (val === 'visible') ? 'hidden' : 'visible';
     this.$('[data-flexfield-visible]').val(nVal);
     this.$el.toggleClass('ff-section-invisible');
     Notice.notice('Please click update to save the changes', 'success');
+  },
+  duplicateItem: function(){
+    this.Controller.duplicateItem(this.model);
   },
   render: function () {
     var inputName = this.createInputName(this.model.get('itemId'));
