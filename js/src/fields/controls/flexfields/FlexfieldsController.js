@@ -38,15 +38,12 @@ module.exports = Backbone.View.extend({
         if (!dataobj) {
           return;
         }
-
         if (!dataobj['_meta'].type) {
           dataobj['_meta'].type = 'default';
         }
-
         if (!types[dataobj['_meta'].type]) {
           return;
         }
-
         // factor item
         var item = this.factory.factorNewItem(data[dataobj['_meta'].uid], dataobj);
         // build view for item
@@ -62,7 +59,6 @@ module.exports = Backbone.View.extend({
         KB.Events.trigger('modal.recalibrate');
       }, this);
     }
-
     UI.initTabs();
     this.$list.sortable({
       handle: '.flexible-fields--js-drag-handle',
@@ -75,6 +71,33 @@ module.exports = Backbone.View.extend({
     });
     KB.Events.trigger('modal.recalibrate'); // tell the frontend modal to resize
     this._initialized = true; // flag init state
+  },
+  duplicateItem: function (model) {
+    var itemId = model.get('itemId');
+    var title = model.get('title') + ' (Copy)';
+    var data = this.model.get('value'); // model equals FieldControlModel, value equals parent obj data for this field key
+    if (!data[itemId]) {
+      return false;
+    }
+    var itemData = JSON.parse(JSON.stringify(data[itemId]));
+    if (!itemData['_meta']) {
+      return false;
+    }
+    itemData['_meta']['uid'] = null;
+    itemData['_meta']['title'] = title;
+
+    var item = this.factory.factorNewItem(itemData, itemData);
+    var view = new this.Renderer({
+      controller: this,
+      model: new Backbone.Model(item)
+    });
+    //collect views
+    this.subviews.push(view);
+    // render item
+    this.$list.append(view.render());
+    UI.initTabs();
+    KB.Events.trigger('modal.recalibrate');
+
   },
   render: function () {
     if (this.active) {
@@ -98,7 +121,6 @@ module.exports = Backbone.View.extend({
     this.$addButton = this.$('.kb-flexible-fields--js-add-item');
   },
   addItem: function (e) {
-
     var $btn = jQuery(e.currentTarget);
     var type = $btn.data('kbf-addtype');
     var item = this.factory.factorNewItem(null, {_meta: {type: type}});

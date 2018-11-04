@@ -149,8 +149,7 @@ Class PostEditScreen
     function save($postId, $postObj)
     {
 
-        $request = Request::createFromGlobals();
-
+        $request = Utilities::getRequest();
         // get the real postId
         if (!empty($request->request->get('wp-preview', '')) && $request->request->get('wp-preview',
                 '') === 'dopreview'

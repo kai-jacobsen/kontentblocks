@@ -43,6 +43,7 @@ class PostMetaDataProvider implements DataProviderInterface
 
         add_action('updated_post_meta', function ($metaId, $objectId, $metaKey, $metaValue) {
             if ($objectId === $this->postId) {
+                clean_post_cache($this->postId);
                 $this->reset();
             }
         }, 10, 4);
@@ -61,7 +62,6 @@ class PostMetaDataProvider implements DataProviderInterface
      */
     public function reset()
     {
-        clean_post_cache($this->postId);
         $this->getPostCustom();
         return $this;
     }
@@ -128,7 +128,7 @@ class PostMetaDataProvider implements DataProviderInterface
         $this->meta[$key] = $value;
         $parent_id = wp_is_post_revision($this->postId);
         if ($parent_id) {
-            return update_metadata('post',$this->postId,$key,$value);
+            return update_metadata('post', $this->postId, $key, $value);
         }
 
         return update_post_meta($this->postId, $key, $value);

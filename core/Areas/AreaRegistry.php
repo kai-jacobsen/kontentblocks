@@ -159,6 +159,7 @@ class AreaRegistry
                 array(
                     'post_type' => 'kb-dyar',
                     'posts_per_page' => -1,
+                    'update_post_meta_cache' => false,
                     'suppress_filters' => false // let multilanguage plugins set the right context
                 )
             );
@@ -361,6 +362,16 @@ class AreaRegistry
     }
 
     /**
+     * getter for global areas
+     * @return array
+     * @since 0.1.0
+     */
+    public function getGlobalAreas()
+    {
+        return $this->globalAreas;
+    }
+
+    /**
      * @param $pt
      * @return array
      */
@@ -372,16 +383,6 @@ class AreaRegistry
                 return Utilities::strposa($area->postTypes, $pt);
             }
         );
-    }
-
-    /**
-     * getter for global areas
-     * @return array
-     * @since 0.1.0
-     */
-    public function getGlobalAreas()
-    {
-        return $this->globalAreas;
     }
 
     /**
@@ -481,8 +482,11 @@ class AreaRegistry
      */
     private function orderBy($areas, $field)
     {
-        $code = "return strnatcmp(\$a->$field, \$b->$field);";
-        uasort($areas, create_function('$a,$b', $code));
+
+
+        uasort($areas, function ($a, $b) use ($field) {
+            return strnatcmp($a->$field, $b->$field);
+        });
         return $areas;
     }
 

@@ -18,9 +18,13 @@ module.exports = BaseView.extend({
     var value = this.model.get('value');
     var queryargs = {};
     var that = this;
-    if (!_.isEmpty(this.model.get('value').id )) {
+    var id = this.model.get('value').id;
+    if (typeof id === 'number'){
+      id = id.toString();
+    }
+    if (id) {
       queryargs.post__in = [this.model.get('value').id];
-      wp.media.query(queryargs) // set the query
+      var query = wp.media.query(queryargs) // set the query
         .more() // execute the query, this will return an deferred object
         .done(function () { // attach callback, executes after the ajax call succeeded
           var attachment = this.first();

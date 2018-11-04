@@ -47,6 +47,7 @@ class ModuleFactory
         if (is_null($data)) {
             $this->data = apply_filters(
                 'kb.module.factory.data',
+//                $environment->getStorage()->reset()->getModuleData($properties->mid, null),
                 $environment->getStorage()->reset()->getModuleData($properties->mid, null),
                 $properties
             );

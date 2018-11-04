@@ -82,11 +82,12 @@ class FlexibleFieldsReturn implements InterfaceFieldReturn
                 continue;
             }
 
+
             $item = array();
             foreach ($fields as $key => $conf) {
                 /** @var \Kontentblocks\Fields\Field $field */
 
-                if (!isset($data[$conf['key']])){
+                if (!isset($data[$conf['key']])) {
                     continue;
                 }
                 $field = $registry->getField($conf['type'], $this->entityId, $index, $key);
@@ -110,7 +111,16 @@ class FlexibleFieldsReturn implements InterfaceFieldReturn
         if (is_array($original)) {
             $items = array_replace($original, array_intersect_key($items, $original));
         }
-        return $items;
+
+
+        return array_filter($items, function ($data) {
+            if (is_array($data['_meta']) && isset($data['_meta']['status'])) {
+                if ($data['_meta']['status'] === 'hidden') {
+                    return false;
+                }
+            }
+            return true;
+        });
     }
 
     /**

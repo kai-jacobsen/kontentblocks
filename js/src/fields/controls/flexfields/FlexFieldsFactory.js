@@ -8,6 +8,7 @@ module.exports = Backbone.View.extend({
     var uid = obj['_meta'].uid || null;
     var title = obj['_meta'].title || null;
     var type = obj['_meta'].type;
+    var status = obj['_meta'].status || 'visible';
     var itemId = uid || _.uniqueId('ff2');
     var text = this.model.get('newitemtext') || 'Enter a title : ';
     var ask = this.model.get('requesttitle') || false;
@@ -43,6 +44,7 @@ module.exports = Backbone.View.extend({
       itemId: itemId,
       fftype: type,
       title: title,
+      status: status,
       sections: typesections
     }
   }

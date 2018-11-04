@@ -83,8 +83,10 @@ var Ui = {
     var selector = $('.kb-field--tabs', $context);
     selector.tabs({
       activate: function (e, ui) {
-        $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});
-        KB.Events.trigger('modal.recalibrate');
+        _.defer(function () {
+          $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});
+          KB.Events.trigger('modal.recalibrate');
+        });
       }
     });
     selector.each(function () {

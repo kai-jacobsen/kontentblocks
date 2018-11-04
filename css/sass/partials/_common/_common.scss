@@ -29,7 +29,7 @@
 
 }
 
-.kb-generic--inner{
+.kb-generic--inner {
   padding: 5px;
 }
 
@@ -66,7 +66,7 @@
   font-size: 18px;
 }
 
-.kb-js-generic--move, .kb-js-generic--delete{
+.kb-js-generic--move, .kb-js-generic--delete {
   display: inline-block;
   margin: 0 3px;
   color: #999;
@@ -74,7 +74,7 @@
   top: 6px;
 }
 
-.kb-generic--editable-title{
+.kb-generic--editable-title {
   display: inline-block !important;
   width: 250px !important;
   margin-left: 20px !important;
@@ -82,15 +82,15 @@
   padding-bottom: 0 !important;
 }
 
-.kb-js-add-custom{
+.kb-js-add-custom {
   font-size: 13px;
 }
 
-#kontentblocks-core-ui a:focus{
+#kontentblocks-core-ui a:focus {
   box-shadow: none !important;
 }
 
-.kb-button-small{
+.kb-button-small {
   font-size: 12px;
   padding: 3px 10px;
   color: #fff;
@@ -98,7 +98,7 @@
   text-decoration: none;
   transition: background .3s ease-out;
 
-  &:hover{
+  &:hover {
     text-decoration: none;
     color: #fff;
     background-color: $lighterblue;
@@ -106,10 +106,23 @@
   }
 }
 
-.kb-cursor-pointer{
+.kb-cursor-pointer {
   cursor: pointer;
 }
 
-.kbflexwrap{
+.kbflexwrap {
   display: flex;
+}
+
+.kontentblocks-enabled {
+  #edittag {
+    max-width: 100%;
+    .kb-field {
+      padding: 12px 12px 12px 0;
+      background-color: #fff;
+    }
+  }
+  .form-table td {
+    background-color: #fff;
+  }
 }

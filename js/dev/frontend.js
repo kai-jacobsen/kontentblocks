@@ -1333,8 +1333,10 @@ var Ui = {
     var selector = $('.kb-field--tabs', $context);
     selector.tabs({
       activate: function (e, ui) {
-        $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});
-        KB.Events.trigger('modal.recalibrate');
+        _.defer(function () {
+          $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});
+          KB.Events.trigger('modal.recalibrate');
+        });
       }
     });
     selector.each(function () {
@@ -2727,6 +2729,7 @@ module.exports = Backbone.View.extend({
     var uid = obj['_meta'].uid || null;
     var title = obj['_meta'].title || null;
     var type = obj['_meta'].type;
+    var status = obj['_meta'].status || 'visible';
     var itemId = uid || _.uniqueId('ff2');
     var text = this.model.get('newitemtext') || 'Enter a title : ';
     var ask = this.model.get('requesttitle') || false;
@@ -2762,6 +2765,7 @@ module.exports = Backbone.View.extend({
       itemId: itemId,
       fftype: type,
       title: title,
+      status: status,
       sections: typesections
     }
   }
@@ -2808,15 +2812,12 @@ module.exports = Backbone.View.extend({
         if (!dataobj) {
           return;
         }
-
         if (!dataobj['_meta'].type) {
           dataobj['_meta'].type = 'default';
         }
-
         if (!types[dataobj['_meta'].type]) {
           return;
         }
-
         // factor item
         var item = this.factory.factorNewItem(data[dataobj['_meta'].uid], dataobj);
         // build view for item
@@ -2832,7 +2833,6 @@ module.exports = Backbone.View.extend({
         KB.Events.trigger('modal.recalibrate');
       }, this);
     }
-
     UI.initTabs();
     this.$list.sortable({
       handle: '.flexible-fields--js-drag-handle',
@@ -2845,6 +2845,33 @@ module.exports = Backbone.View.extend({
     });
     KB.Events.trigger('modal.recalibrate'); // tell the frontend modal to resize
     this._initialized = true; // flag init state
+  },
+  duplicateItem: function (model) {
+    var itemId = model.get('itemId');
+    var title = model.get('title') + ' (Copy)';
+    var data = this.model.get('value'); // model equals FieldControlModel, value equals parent obj data for this field key
+    if (!data[itemId]) {
+      return false;
+    }
+    var itemData = JSON.parse(JSON.stringify(data[itemId]));
+    if (!itemData['_meta']) {
+      return false;
+    }
+    itemData['_meta']['uid'] = null;
+    itemData['_meta']['title'] = title;
+
+    var item = this.factory.factorNewItem(itemData, itemData);
+    var view = new this.Renderer({
+      controller: this,
+      model: new Backbone.Model(item)
+    });
+    //collect views
+    this.subviews.push(view);
+    // render item
+    this.$list.append(view.render());
+    UI.initTabs();
+    KB.Events.trigger('modal.recalibrate');
+
   },
   render: function () {
     if (this.active) {
@@ -2868,7 +2895,6 @@ module.exports = Backbone.View.extend({
     this.$addButton = this.$('.kb-flexible-fields--js-add-item');
   },
   addItem: function (e) {
-
     var $btn = jQuery(e.currentTarget);
     var type = $btn.data('kbf-addtype');
     var item = this.factory.factorNewItem(null, {_meta: {type: type}});
@@ -2910,7 +2936,8 @@ module.exports = ToggleBoxItem.extend({
       item: item,
       inputName: inputName,
       uid: this.model.get('itemId'),
-      fftype: this.model.get('fftype')
+      fftype: this.model.get('fftype'),
+      visible: visible
     }));
     this.renderTabs($skeleton); // insert the tabs markup
     return $skeleton;
@@ -2933,18 +2960,20 @@ module.exports = Backbone.View.extend({
   },
   events: {
     'click .flexible-fields--js-toggle': 'toggleItem',
-    'click .flexible-fields--js-trash': 'deleteItem'
+    'click .flexible-fields--js-trash': 'deleteItem',
+    'click .flexible-fields--js-visibility': 'toggleItemStatus',
+    'click .flexible-fields--js-duplicate': 'duplicateItem'
   },
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
       jQuery(this).toggleClass('kb-togglebox-open');
-
-      if (jQuery(this).hasClass('kb-togglebox-open')){
+      if (jQuery(this).hasClass('kb-togglebox-open')) {
         TinyMCE.removeEditors(jQuery(this));
         TinyMCE.restoreEditors(jQuery(this));
-
       }
-      KB.Events.trigger('modal.recalibrate');
+      _.defer(function () {
+        KB.Events.trigger('modal.recalibrate');
+      });
     });
   },
   deleteItem: function () {
@@ -2955,6 +2984,16 @@ module.exports = Backbone.View.extend({
     this.$el.append('<input type="hidden" name="' + inputName + '[_meta][delete]" value="' + this.model.get('itemId') + '" >');
     Notice.notice('Please click update to save the changes', 'success');
   },
+  toggleItemStatus: function () {
+    var val = this.$('[data-flexfield-visible]').val();
+    var nVal = (val === 'visible') ? 'hidden' : 'visible';
+    this.$('[data-flexfield-visible]').val(nVal);
+    this.$el.toggleClass('ff-section-invisible');
+    Notice.notice('Please click update to save the changes', 'success');
+  },
+  duplicateItem: function(){
+    this.Controller.duplicateItem(this.model);
+  },
   render: function () {
     var inputName = this.createInputName(this.model.get('itemId'));
     var item = this.model.toJSON(); // tab information and value hold by this.model
@@ -2962,9 +3001,13 @@ module.exports = Backbone.View.extend({
       item: item,
       inputName: inputName,
       uid: this.model.get('itemId'),
-      fftype: this.model.get('fftype')
+      fftype: this.model.get('fftype'),
+      status: this.model.get('status')
     }));
     this.renderTabs($skeleton); // insert the tabs markup
+    if (this.model.get('status') === 'hidden'){
+      this.$el.toggleClass('ff-section-invisible')
+    }
     return $skeleton;
   },
   renderTabs: function ($skeleton) {
@@ -5109,9 +5152,13 @@ module.exports = BaseView.extend({
     var value = this.model.get('value');
     var queryargs = {};
     var that = this;
-    if (!_.isEmpty(this.model.get('value').id )) {
+    var id = this.model.get('value').id;
+    if (typeof id === 'number'){
+      id = id.toString();
+    }
+    if (id) {
       queryargs.post__in = [this.model.get('value').id];
-      wp.media.query(queryargs) // set the query
+      var query = wp.media.query(queryargs) // set the query
         .more() // execute the query, this will return an deferred object
         .done(function () { // attach callback, executes after the ajax call succeeded
           var attachment = this.first();
@@ -6131,11 +6178,11 @@ var EditableText = Backbone.View.extend({
   initialize: function () {
     this.settings = this.model.get('tinymce');
     this.parentView = this.model.get('ModuleModel').View;
-    this.setupDefaults();
     this.listenToOnce(this.model.get('ModuleModel'), 'remove', this.deactivate);
     this.listenToOnce(this.model.get('ModuleModel'), 'module.create', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.show', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
+    this.listenTo(this, 'kn.inline.synced', this.deactivate);
     this.Toolbar = new Toolbar({
       FieldControlView: this,
       model: this.model,
@@ -6186,86 +6233,31 @@ var EditableText = Backbone.View.extend({
     this.trigger('field.view.rerender', this);
 
   },
-  setupDefaults: function () {
+  setupEvents: function () {
+    var $edEl = $('#' + this.id);
     var that = this;
-    // defaults
-    var defaults = {
-      theme: 'inlite',
-      skin: false,
-      menubar: true,
-      add_unload_trigger: false,
-      entity_encoding: "raw",
-      fixed_toolbar_container: null,
-      insert_toolbar: '',
-      schema: 'html5',
-      inline: true,
-      selection_toolbar: 'bold italic | quicklink h2 h3 blockquote',
-      plugins: 'textcolor, wptextpattern,paste',
-      statusbar: false,
-      preview_styles: false,
-      paste_as_text: true,
-      setup: function (ed) {
-        ed.on('init', function () {
-          that.editor = ed;
-          ed.module = that.model.get('ModuleModel');
-          ed.kfilter = (that.model.get('filter') && that.model.get('filter') === 'content');
-          KB.Events.trigger('KB::tinymce.new-inline-editor', ed);
-          ed.focus();
-
-          // jQuery('.mce-panel.mce-floatpanel').hide();
-          jQuery(window).on('scroll.kbmce resize.kbmce', function () {
-            jQuery('.mce-panel.mce-floatpanel').hide();
-          });
-
-        });
-
-
-        ed.on('NodeChange', function (e) {
-          // that.getSelection(ed, e);
-          KB.Events.trigger('window.change');
-        });
-
-        ed.on('focus', function () {
-          var con;
-          window.wpActiveEditor = that.el.id;
-          con = Utilities.getIndex(ed.module.get('entityData'), that.model.get('kpath'));
-          if (ed.kfilter) {
-            ed.setContent(switchEditors.wpautop(con));
-          }
-          ed.previousContent = ed.getContent();
-          ed.module.View.$el.addClass('kb-inline-text--active');
-        });
-
-        ed.on('blur', function (e) {
-          var content;
-          ed.module.View.$el.removeClass('kb-inline-text--active');
-          content = ed.getContent();
-          // apply filter
-          if (ed.kfilter) {
-            content = switchEditors._wp_Nop(ed.getContent());
-          }
-          // get a copy of module data
-          //entityData = _.clone(ed.module.get('entityData'));
-          //path = that.model.get('kpath');
-          //Utilities.setIndex(entityData, path, content);
-          // && ed.kfilter set
-          if (ed.isDirty()) {
-            if (ed.kfilter) {
-              that.retrieveFilteredContent(ed, content);
-            } else {
-              that.model.set('value', content);
-              that.model.syncContent = ed.getContent();
-              that.model.trigger('external.change', that.model);
-              that.model.trigger('field.model.dirty', that.model);
-              KB.Events.trigger('content.change');
-            }
-          } else {
-            ed.setContent(ed.previousContent);
-          }
-        });
-      }
-    };
-    this.defaults = _.extend(defaults, this.settings);
+    KB.Events.trigger('KB::tinymce.new-inline-editor', this.editor);
+    this.editor.kfilter = (this.model.get('filter') && this.model.get('filter') === 'content');
+    this.editor.module = this.model.get('ModuleModel');
+    var con = Utilities.getIndex(this.editor.module.get('entityData'), this.model.get('kpath'));
+    if (this.editor.kfilter) {
+      this.editor.setContent(switchEditors.wpautop(con));
+    }
+    this.editor.previousContent = this.editor.getContent();
+    this.editor.module.View.$el.addClass('kb-inline-text--active');
+    this.editor.subscribe('editableInput', this.handleChange.bind(this));
+  },
+  handleChange: function () {
+    var content = this.editor.getContent();
+    if (this.editor.kfilter) {
+      content = switchEditors._wp_Nop(this.editor.getContent());
+    }
+    this.model.set('value', content);
+    // this.model.syncContent = this.editor.getContent();
+    this.model.trigger('external.change', this.model);
+    this.model.trigger('field.model.dirty', this.model);
+    KB.Events.trigger('content.change');
+    this.editor.isDirty = true;
   },
   retrieveFilteredContent: function (ed, content) {
     var that = this;
@@ -6280,22 +6272,14 @@ var EditableText = Backbone.View.extend({
       type: 'POST',
       dataType: 'json',
       success: function (res) {
-        ed.setContent(res.data.content);
-        that.model.set('value', content);
-        that.model.syncContent = ed.getContent();
-
-        that.model.trigger('field.model.dirty', that.model);
-        that.model.trigger('external.change', that.model);
-        KB.Events.trigger('content.change');
-
-        //ed.module.trigger('kb.frontend.module.inlineUpdate');
+        var $edEl = $('#' + that.id).html(res.data.content);
+        ed.destroy();
         setTimeout(function () {
           if (window.twttr) {
             window.twttr.widgets.load();
           }
           jQuery(window).off('scroll.kbmce resize.kbmce');
           ed.off('nodeChange ResizeEditor ResizeWindow');
-          that.deactivate();
         }, 500);
       },
       error: function () {
@@ -6308,17 +6292,31 @@ var EditableText = Backbone.View.extend({
     }
     e.stopPropagation();
     if (!this.editor) {
-      tinymce.init(_.defaults(this.defaults, {
-        selector: '#' + this.id
-      }));
+      this.editor = new MediumEditor('#' + this.id, {
+        toolbar: {
+          diffTop: -50
+        }
+      });
+      this.setupEvents();
+    } else {
+      this.editor.setup();
+      this.setupEvents();
     }
   },
   deactivate: function () {
     if (this.editor) {
-      var ed = this.editor;
-      this.editor = null;
-      tinyMCE.execCommand('mceRemoveEditor', true, ed.id);
-      KB.Events.trigger('kb.repaint'); // @TODO figure this out
+      this.editor.unsubscribe('editableInput', this.handleChange.bind(this));
+      // var content = this.editor.getContent();
+      var content = Utilities.getIndex(this.editor.module.get('entityData'), this.model.get('kpath'));
+
+      // apply filter
+      if (this.editor.kfilter) {
+        content = switchEditors._wp_Nop(content);
+        this.retrieveFilteredContent(this.editor, content);
+      } else {
+        this.editor.destroy();
+        KB.Events.trigger('kb.repaint'); // @TODO figure this out
+      }
     }
   },
   cleanString: function (string) {
@@ -6327,19 +6325,6 @@ var EditableText = Backbone.View.extend({
       .replace(/<br>/g, '')
       .replace(/<[^\/>][^>]*><\/[^>]+>/g, '')
       .replace(/<p><\/p>/g, '');
-  },
-  getSelection: function (editor, event) {
-    // var sel = editor.selection.getContent();
-    // var $toolbar = jQuery('.mce-panel.mce-floatpanel');
-    // if (sel === '') {
-    //   $toolbar.hide();
-    // } else {
-    //   var mpos = markSelection();
-    //   var w = $toolbar.width();
-    //   $toolbar.css({top: mpos.top - 40 + 'px', left: mpos.left - w + 'px'});
-    //   console.log('ran');
-    //   $toolbar.show();
-    // }
   },
   synchronize: function (model) {
     if (this.editor) {
@@ -6351,74 +6336,6 @@ var EditableText = Backbone.View.extend({
 
   }
 });
-
-var markSelection = (function () {
-  var markerTextChar = "\ufeff";
-  var markerTextCharEntity = "&#xfeff;";
-
-  var markerEl, markerId = "sel_" + new Date().getTime() + "_" + Math.random().toString().substr(2);
-
-  var selectionEl;
-
-  return function () {
-    var sel, range;
-    if (document.selection && document.selection.createRange) {
-      // Clone the TextRange and collapse
-      range = document.selection.createRange().duplicate();
-      range.collapse(false);
-
-      // Create the marker element containing a single invisible character by creating literal HTML and insert it
-      range.pasteHTML('<span id="' + markerId + '" style="position: relative;">' + markerTextCharEntity + '</span>');
-      markerEl = document.getElementById(markerId);
-    } else if (window.getSelection) {
-      sel = window.getSelection();
-
-      if (sel.getRangeAt) {
-        range = sel.getRangeAt(0).cloneRange();
-      } else {
-        // Older WebKit doesn't have getRangeAt
-        range.setStart(sel.anchorNode, sel.anchorOffset);
-        range.setEnd(sel.focusNode, sel.focusOffset);
-
-        // Handle the case when the selection was selected backwards (from the end to the start in the
-        // document)
-        if (range.collapsed !== sel.isCollapsed) {
-          range.setStart(sel.focusNode, sel.focusOffset);
-          range.setEnd(sel.anchorNode, sel.anchorOffset);
-        }
-      }
-
-      range.collapse(false);
-
-      // Create the marker element containing a single invisible character using DOM methods and insert it
-      markerEl = document.createElement("span");
-      markerEl.id = markerId;
-      var $markerEl = jQuery(markerEl);
-      $markerEl.prepend(document.createTextNode(markerTextChar));
-      range.insertNode(markerEl);
-    }
-
-    if (markerEl) {
-      // Find markerEl position http://www.quirksmode.org/js/findpos.html
-      var obj = markerEl;
-      var left = 0, top = 0;
-      do {
-        left += obj.offsetLeft;
-        top += obj.offsetTop;
-      } while (obj = obj.offsetParent);
-
-
-      markerEl.parentNode.removeChild(markerEl);
-      $markerEl.remove();
-
-
-      return {
-        left: left,
-        top: top
-      };
-    }
-  };
-})();
 
 
 module.exports = EditableText;
@@ -6596,9 +6513,7 @@ module.exports = Backbone.View.extend({
     'mouseleave': 'mouseleave'
   },
   focusEditor: function (e) {
-    if (!this.Parent.editor){
-      this.Parent.activate(e);
-    }
+    this.Parent.activate(e);
   },
   render: function () {
     return this.$el;
@@ -6608,13 +6523,13 @@ module.exports = Backbone.View.extend({
   },
   mouseenter: function () {
     this.Parent.$el.addClass('kb-field--outline');
-    _.each(this.model.get('linkedFields'), function(linkedModel){
+    _.each(this.model.get('linkedFields'), function (linkedModel) {
       linkedModel.FieldControlView.$el.addClass('kb-field--outline-link');
     })
   },
-  mouseleave: function(){
+  mouseleave: function () {
     this.Parent.$el.removeClass('kb-field--outline');
-    _.each(this.model.get('linkedFields'), function(linkedModel){
+    _.each(this.model.get('linkedFields'), function (linkedModel) {
       linkedModel.FieldControlView.$el.removeClass('kb-field--outline-link');
     })
   }
@@ -6627,7 +6542,7 @@ module.exports = Backbone.View.extend({
   initialize: function (options) {
     this.visible = false;
     this.options = options || {};
-    this.Parent = options.parent;
+    this.parent = options.parent;
   },
   className: 'kb-inline-control kb-inline--update',
   events: {
@@ -6636,13 +6551,13 @@ module.exports = Backbone.View.extend({
     'mouseleave': 'mouseleave'
   },
   render: function () {
-      return this.$el;
+    return this.$el;
   },
   syncFieldModel: function (context) {
-    var dfr = this.model.sync(this);
-    dfr.done(function (res) {
+    var dfr = this.model.sync(this).done(function (res) {
       if (res.success) {
         this.model.getClean();
+        this.parent.trigger('kn.inline.synced');
         _.each(this.model.get('linkedFields'), function (model, i) {
           if (!_.isNull(model)) {
             model.getClean();
@@ -7419,7 +7334,6 @@ module.exports = Backbone.View.extend({
       conH,
       position,
       winDiff;
-
     // get window height
     winH = (jQuery(window).height() - 16);
     // get height of modal contents
@@ -10182,7 +10096,11 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
     + "[_meta][type]\" value=\""
     + alias4(((helper = (helper = helpers.fftype || (depth0 != null ? depth0.fftype : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"fftype","hash":{},"data":data}) : helper)))
-    + "\">\n<div class=\"flexible-fields--section-box\">\n    <div class=\"flexible-fields--section-title\">\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n        <input type=\"text\" value=\""
+    + "\">\n<input data-flexfield-visible type=\"hidden\" name=\""
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + "[_meta][status]\" value=\""
+    + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
+    + "\">\n\n<div class=\"flexible-fields--section-box\">\n    <div class=\"flexible-fields--section-title\">\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n        <input type=\"text\" value=\""
     + alias4(container.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.title : stack1), depth0))
     + "\" name=\""
     + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
@@ -10203,7 +10121,11 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
     + "[_meta][type]\" value=\""
     + alias4(((helper = (helper = helpers.fftype || (depth0 != null ? depth0.fftype : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"fftype","hash":{},"data":data}) : helper)))
-    + "\">\n<div class=\"flexible-fields--toggle-title\">\n    <h3>\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"genericon genericon-expand flexible-fields--js-toggle\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n        <input type=\"text\" value=\""
+    + "\">\n<input data-flexfield-visible type=\"hidden\" name=\""
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + "[_meta][status]\" value=\""
+    + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
+    + "\">\n<div class=\"flexible-fields--toggle-title\">\n    <h3>\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"genericon genericon-expand flexible-fields--js-toggle\" data-flexfields-toggle></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-duplicate\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-visibility\"></span>\n        <input type=\"text\" value=\""
     + alias4(container.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.title : stack1), depth0))
     + "\" name=\""
     + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
@@ -10459,29 +10381,36 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
+    return "            data-kbselect2=\"true\"\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "            multiple=\"multiple\"\n";
+},"5":function(container,depth0,helpers,partials,data) {
     return "            <option value=\"\">Auswählen</option>\n";
-},"3":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"7":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda;
 
   return "            <option "
-    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.value : depth0),"==",((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.value : stack1),{"name":"ifCond","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "    value=\""
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.value : depth0),"==",((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.value : stack1),{"name":"ifCond","hash":{},"fn":container.program(8, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n                    value=\""
     + container.escapeExpression(alias1((depth0 != null ? depth0.value : depth0), depth0))
     + "\">"
     + ((stack1 = alias1((depth0 != null ? depth0.name : depth0), depth0)) != null ? stack1 : "")
     + "</option>\n";
-},"4":function(container,depth0,helpers,partials,data) {
+},"8":function(container,depth0,helpers,partials,data) {
     return "selected=\"selected\"";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {});
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
   return "<div class=\"kb-field kb-js-field field-api-text kb-field--select\">\n    <label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
-    + "</label>\n    <select name=\""
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
-    + "\">\n"
-    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.showempty : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.options : stack1),{"name":"each","hash":{},"fn":container.program(3, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "</label>\n    <select\n            name=\""
+    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + "\"\n"
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.select2 : stack1),"===",true,{"name":"ifCond","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.multiple : stack1),"===",true,{"name":"ifCond","hash":{},"fn":container.program(3, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "    >\n"
+    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.showempty : stack1),{"name":"if","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.options : stack1),{"name":"each","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "    </select>\n    <p class=\"description\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
     + "</p>\n</div>";

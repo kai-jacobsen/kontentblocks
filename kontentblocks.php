@@ -3,7 +3,7 @@
   Plugin Name: Kontentblocks
   Plugin URI: https://github.com/kai-jacobsen/kontentblocks
   Description: Content modularization framework
-  Version: 0.10.3.dev1
+  Version: 0.10.8
   Author: Kai Jacobsen
   Author URI: https://github.com/kai-jacobsen/kontentblocks-plugin
   Text Domain: Kontentblocks
@@ -34,6 +34,7 @@ use Kontentblocks\Templating\Twig;
 use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\CommonTwig\SimpleTwig;
 use Kontentblocks\Utils\JSONTransport;
+use Kontentblocks\Utils\Utilities;
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -47,7 +48,7 @@ use Pimple;
 Class Kontentblocks
 {
 
-    const VERSION = '0.10.2.dev1';
+    const VERSION = '0.10.8';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.16';
     const DEBUG = true;
@@ -55,6 +56,7 @@ Class Kontentblocks
     static $instance;
     static $ajaxhandler;
     public $services;
+    public $request;
 
     /**
      *
@@ -63,6 +65,7 @@ Class Kontentblocks
     {
         self::bootstrap();
         $this->services = new Pimple\Container();
+        $this->request = Utilities::getRequest();
         // setup services
         $this->setupTemplating();
         $this->setupRegistries();
@@ -92,21 +95,21 @@ Class Kontentblocks
         if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
             require_once dirname(__FILE__) . '/vendor/autoload.php';
         }
-        // Kontentblocks autloader
-        // Public API
+//        // Kontentblocks autloader
+//        // Public API
         require_once dirname(__FILE__) . '/includes/wp-api.php';
         require_once dirname(__FILE__) . '/includes/kb-api.php';
-
-        // File gets created during build process and contains one function
-        // to get the current git hash or a random hash during development
-        // hash is used to invalidate the local storage data
-        if (file_exists(dirname(__FILE__) . '/build/hash.php')) {
-            require_once(dirname(__FILE__) . '/build/hash.php');
-        }
-
-        if (is_admin()) {
-            require_once dirname(__FILE__) . '/core/Utils/tables.php';
-        }
+//
+//        // File gets created during build process and contains one function
+//        // to get the current git hash or a random hash during development
+//        // hash is used to invalidate the local storage data
+//        if (file_exists(dirname(__FILE__) . '/build/hash.php')) {
+//            require_once(dirname(__FILE__) . '/build/hash.php');
+//        }
+//
+//        if (is_admin()) {
+//            require_once dirname(__FILE__) . '/core/Utils/tables.php';
+//        }
 
     }
 
@@ -389,8 +392,9 @@ Class Kontentblocks
      */
     public function loadPanels()
     {
-        /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
-        $Registry = $this->services['registry.panels'];
+
+        /** @var \Kontentblocks\Modules\ModuleRegistry $registry */
+        $registry = $this->services['registry.panels'];
         // add core modules path
         $paths = apply_filters('kb.panel.paths', array());
         $paths = array_unique($paths);
@@ -401,7 +405,7 @@ Class Kontentblocks
                     $files = glob($subdir . '/[pP]anel*.php');
                     foreach ($files as $template) {
                         if (strpos(basename($template), '__') === false) {
-                            $Registry->add($template);
+                            $registry->add($template);
                         }
                     }
                 }
@@ -409,7 +413,7 @@ Class Kontentblocks
             $files = glob($path . '*.php');
             foreach ($files as $template) {
                 if (strpos(basename($template), '__') === false) {
-                    $Registry->addByFile($template);
+                    $registry->addByFile($template);
                 }
             }
         }
@@ -457,4 +461,3 @@ add_action(
 register_activation_hook(__FILE__, array('\Kontentblocks\Kontentblocks', 'onActivation'));
 register_deactivation_hook(__FILE__, array('\Kontentblocks\Kontentblocks', 'onDeactivation'));
 register_uninstall_hook(__FILE__, array('\Kontentblocks\Kontentblocks', 'onUninstall'));
-

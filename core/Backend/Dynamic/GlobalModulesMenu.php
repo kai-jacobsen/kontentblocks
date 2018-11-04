@@ -104,7 +104,7 @@ class GlobalModulesMenu
     {
 
         $screen = get_current_screen();
-        $request = Request::createFromGlobals();
+        $request = Utilities::getRequest();
         if ($screen->post_type !== 'kb-gmd') {
             return;
         }
@@ -274,7 +274,7 @@ class GlobalModulesMenu
         }
 
 
-        $value = Request::createFromGlobals();
+        $value = Utilities::getRequest();
         $environment = Utilities::getPostEnvironment($postId);
         $moduleRepository = $environment->getModuleRepository();
         $module = $moduleRepository->getModuleObject($postObj->post_name);
@@ -334,7 +334,6 @@ class GlobalModulesMenu
 //        if (!wp_verify_nonce($_POST['kb_noncename'], 'kontentblocks_save_post')) {
 //            return false;
 //        }
-
         // Check permissions
         if (!current_user_can('edit_post', $postId)) {
             return false;
@@ -367,7 +366,7 @@ class GlobalModulesMenu
     public function createGlobalModule($postId, \WP_Post $post, PostEnvironment $environment)
     {
 
-        $value = Request::createFromGlobals();
+        $value = Utilities::getRequest();
 
         $gmodule = $value->get('new-gmodule');
         if (empty($gmodule)) {
@@ -429,11 +428,11 @@ class GlobalModulesMenu
      */
     public function postData($data, $post)
     {
-        $request = Request::createFromGlobals();
         if ($post['post_type'] !== 'kb-gmd') {
             return $data;
         }
 
+        $request = Utilities::getRequest();
         if (!$request->request->get('new-gmodule', false)) {
             return $data;
         }

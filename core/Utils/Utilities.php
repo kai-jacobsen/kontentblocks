@@ -8,6 +8,7 @@ use Kontentblocks\Backend\Environment\UserEnvironment;
 use Kontentblocks\Fields\Definitions\NullField;
 use Kontentblocks\Fields\Definitions\ReturnObjects\StandardFieldReturn;
 use Kontentblocks\Kontentblocks;
+use phpDocumentor\Reflection\Types\Self_;
 use Symfony\Component\HttpFoundation\Request;
 use XHProfRuns_Default;
 
@@ -22,6 +23,8 @@ class Utilities
     protected static $postEnvironments = array();
     protected static $termEnvironments = array();
     protected static $userEnvironments = array();
+
+    protected static $request;
 
     /**
      * @param null $storageId
@@ -588,7 +591,7 @@ class Utilities
      */
     public static function isPreview()
     {
-        $request = Request::createFromGlobals();
+        $request = self::getRequest();
         if (is_admin()) {
             return ($request->request->get('wp-preview', '') === 'dopreview');
         } else {
@@ -643,12 +646,23 @@ class Utilities
         return new NullField('nullfield', null, 'nullkey', $args);
     }
 
-    public static function extractFieldValue($val){
+    public static function extractFieldValue($val)
+    {
 
-        if (is_a($val, StandardFieldReturn::class)){
+        if (is_a($val, StandardFieldReturn::class)) {
             return $val->value;
         }
         return $val;
+    }
 
+    /**
+     * @return Request
+     */
+    public static function getRequest()
+    {
+        if (is_null(self::$request)) {
+            self::$request = Request::createFromGlobals();
+        }
+        return self::$request;
     }
 }

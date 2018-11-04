@@ -62,7 +62,7 @@ class AreaDynamicManager
 
     public function synchronize()
     {
-        if (is_admin()) {
+        if (is_admin() && !wp_doing_ajax()) {
             $this->setupDiff();
             $this->maybeCreateAreas();
             $this->maybeRemoveAreas();

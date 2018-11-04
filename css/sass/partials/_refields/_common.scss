@@ -128,7 +128,7 @@ body .kb-field-wrapper{
     border-left: none;
   }
 
-  .kb-field{
+  .kb-field:not(.kb-field--flexfields){
 
     .kb-field--label-heading{
       display: none;

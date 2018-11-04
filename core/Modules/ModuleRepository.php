@@ -29,6 +29,8 @@ class ModuleRepository
 
     protected $modulesByType = [];
 
+    private $initialized = false;
+
 
     /**
      * ModuleRepository constructor.
@@ -50,7 +52,7 @@ class ModuleRepository
     {
         $index = $this->environment->getStorage()->getIndex();
         $areas = $this->environment->findAreas();
-        if (is_array($index)) {
+        if (is_array($index) && !$this->initialized) {
             foreach ($index as $module) {
                 if (in_array($module['area'], array_keys($areas))) {
                     if (!is_admin()) {
@@ -65,6 +67,7 @@ class ModuleRepository
                     }
                 }
             }
+            $this->initialized = true;
         }
         return $this;
     }

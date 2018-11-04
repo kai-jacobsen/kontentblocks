@@ -47,7 +47,7 @@ class SaveRevision
     private function setupRequestData()
     {
         if (!$this->isRevisionScreen) {
-            return Request::createFromGlobals();
+            return Utilities::getRequest();
         }
 
         /*

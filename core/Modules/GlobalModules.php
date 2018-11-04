@@ -40,6 +40,7 @@ class GlobalModules
                 'post_type' => 'kb-gmd',
                 'posts_per_page' => -1,
                 'suppress_filters' => false,
+                'update_post_meta_cache' => false,
                 'post_status' => 'publish'
             )
         );

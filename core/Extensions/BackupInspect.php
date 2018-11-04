@@ -64,7 +64,7 @@ class BackupInspect
      */
     public function observeQuery()
     {
-        $request = Request::createFromGlobals();
+        $request = Utilities::getRequest();
         if (is_numeric($request->query->get('restore_backup', null))) {
             $location = remove_query_arg(array('restore_backup', 'post_id'));
             $this->restoreBackup($_GET['post_id'], $_GET['restore_backup']);
@@ -93,7 +93,7 @@ class BackupInspect
     public function getBackups()
     {
         check_ajax_referer('kb-read');
-        $request = Request::createFromGlobals();
+        $request = Utilities::getRequest();
         $postId = $request->request->get('post_id', null);
 
         if (is_null($postId)) {

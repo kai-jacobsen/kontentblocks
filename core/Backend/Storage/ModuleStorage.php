@@ -44,9 +44,6 @@ class ModuleStorage implements \Countable
      */
     public function __construct($postId, DataProvider $dataProvider = null)
     {
-        if (!isset($postId) || $postId === 0) {
-            throw new \Exception('a valid post id must be provided');
-        }
         $this->storageId = $postId;
         // Late init data handler if not provided
         if (is_null($dataProvider)) {
@@ -228,8 +225,10 @@ class ModuleStorage implements \Countable
      */
     public function reset()
     {
-        $this->getDataProvider()->reset();
-        $this->setup();
+        if (is_admin()){
+            $this->getDataProvider()->reset();
+            $this->setup();
+        }
 
         return $this;
     }
@@ -279,7 +278,7 @@ class ModuleStorage implements \Countable
     }
 
     /**
-     * Prepare and return the data to backup
+     * Prepare and return the data to backups
      * @return array
      */
     public function backup()
