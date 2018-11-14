@@ -29,16 +29,32 @@ module.exports = BaseView.extend({
   },
   setupMap: function () {
     var that = this;
-    this.map = L.map(this.uniq).setView([53.551086, 9.993682], 10);
+    this.map = L.map(this.uniq).setView([53.551086, 9.993682], 15);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
       maxZoom: 18,
     }).addTo(this.map);
+    L.Control.geocoder(
+      {
+        collapsed: false,
+        defaultMarkGeocode: false
+      }
+    ).on('markgeocode', function (e) {
+      that.map.setView(e.geocode.center, 17);
+    })
+      .addTo(this.map);
 
     this.map.on('click', function (e) {
       that.setMarker(e.latlng.lat, e.latlng.lng)
     });
     that.updateMarker();
+
+    $('.leaflet-control-geocoder').on('keydown', function (e) {
+      if (e.which === 13) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    })
   },
   setMarker: function (lat, lng) {
     var that = this;
@@ -49,7 +65,6 @@ module.exports = BaseView.extend({
     that.marker = L.marker([lat, lng]).addTo(that.map);
     that.$lat.val(lat);
     that.$lng.val(lng);
-    console.log(that.marker);
   },
   toString: function () {
     return '';

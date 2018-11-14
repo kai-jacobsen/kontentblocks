@@ -1,7 +1,7 @@
 {% extends Form.getLayout() %}
 {% block fieldmarkup %}
     <div class='kb-field-image-wrapper' data-kbfield="image">
-        <div class='kb-js-add-image kb-field-image-container'>
+        <div tabindex="0" aria-label="Datei auswählen für: {{ Field.getArg('label') }}" role="button" class='kb-js-add-image kb-field-image-container'>
             {% if (Field.getArg('width')) %}
                 <img src='{{ image.size(Field.getArg('width'),Field.getArg('height')).src() }}'>
             {% else %}
@@ -11,14 +11,14 @@
         <div class="kb-field-image-meta {% if Field.getArg('hideMeta') %} kb-hide {% endif %}">
             <div class="kb-field-image-title">
                 <label>{{ i18n.title }}</label>
-                <input class='kb-js-image-title kb-observe' type="text"
+                <input class='kb-js-image-title kb-observe' type="text" aria-label="Titel Attribut für:{{ Field.getArg('label') }}"
                        name='{{ Form.getFieldName( 'title') }}'
                        value='{{ value.title }}'>
             </div>
             <div class="kb-field-image-description">
                 <label>{{ i18n.description }}</label>
 
-                <textarea class='kb-js-image-description kb-observe' type="text"
+                <textarea aria-label="Besschreibung für: {{ Field.getArg('label') }}" class='kb-js-image-description kb-observe' type="text"
                           name='{{ Form.getFieldName( 'caption') }}'>{{ value.caption }}</textarea>
             </div>
         </div>

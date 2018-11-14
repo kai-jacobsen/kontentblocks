@@ -256,6 +256,13 @@ class StandardFieldSection implements ExportableFieldInterface
      */
     public function markVisibility(Field $field)
     {
+        $cap = $field->getArg('cap', false);
+        if ($cap !== false) {
+            if (!current_user_can($cap)) {
+                return $field->setVisibility(false);
+            }
+        }
+
         $field->setVisibility(true);
     }
 

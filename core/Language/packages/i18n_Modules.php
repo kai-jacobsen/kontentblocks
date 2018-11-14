@@ -29,7 +29,8 @@
             'tooltipRemoveFromClipboard' => __('Remove from clipboard', 'Kontentblocks'),
             'tooltipAddToClipboard' => __('Add to clipboard', 'Kontentblocks'),
             'dragToSort' => __('Drag to (re)sort', 'Kontentblocks'),
-            'toggleFullscreen' => __('Toggle Fullscreen', 'Kontentblocks')
+            'toggleFullscreen' => __('Toggle Fullscreen', 'Kontentblocks'),
+            'toggleModule' => __('Toggle Module open / close', 'Kontentblocks')
         ),
         'controls' => array(
             'be' => array(

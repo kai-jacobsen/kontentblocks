@@ -169,7 +169,6 @@ class Enqueues
         global $is_IE;
 
         self::appConfig();
-
         // enqueue scripts
         if (is_admin()) {
 

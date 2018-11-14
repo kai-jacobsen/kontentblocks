@@ -1209,17 +1209,28 @@ var BatchDeleteController = require('shared/BatchDelete/BatchDeleteController');
 var I18n = require('common/I18n');
 
 module.exports = BaseView.extend({
-  id: 'delete',
+  id: function () {
+    return 'delete_' + this.model.get('id');
+  },
   marked: false,
   className: 'kb-delete block-menu-icon',
   attributes: {
-    "data-kbtooltip": I18n.getString('Modules.controls.be.tooltips.delete')
+    "data-kbtooltip": I18n.getString('Modules.controls.be.tooltips.delete'),
+    "tabindex": "0",
+    "role" : "button",
+    "aria-label": I18n.getString('Modules.controls.be.tooltips.delete')
   },
   initialize: function () {
     _.bindAll(this, "yes", "no");
   },
   events: {
-    'click': 'deleteModule'
+    'click': 'deleteModule',
+    'keydown': 'keyDown'
+  },
+  keyDown: function(e){
+    if (e.keyCode === 13){
+      this.$el.trigger('click')
+    }
   },
   deleteModule: function () {
     if (Window.ctrlPressed()) {
@@ -1407,22 +1418,36 @@ var Notice = require('common/Notice');
 var Ajax = require('common/Ajax');
 var I18n = require('common/I18n');
 module.exports = BaseView.extend({
-  id: 'status',
+  id: function () {
+    return 'status_' + this.model.get('id');
+  },
   initialize: function (options) {
     this.options = options || {};
   },
   className: 'module-status block-menu-icon',
   events: {
-    'click': 'changeStatus'
+    'click': 'changeStatus',
+    'keydown':'keyDown'
+  },
+  keyDown: function(e){
+    if (e.keyCode === 13){
+      this.$el.trigger('click')
+    }
   },
   attributes: function () {
     if (this.model.get('state').active) {
       return {
-        'data-kbtooltip': I18n.getString('Modules.controls.be.tooltips.status.off')
+        'data-kbtooltip': I18n.getString('Modules.controls.be.tooltips.status.off'),
+        'aria-label': I18n.getString('Modules.controls.be.tooltips.status.off'),
+        'tabindex': "0",
+        'role': 'button'
       }
     } else {
       return {
-        'data-kbtooltip': I18n.getString('Modules.controls.be.tooltips.status.on')
+        'data-kbtooltip': I18n.getString('Modules.controls.be.tooltips.status.on'),
+        'aria-label': I18n.getString('Modules.controls.be.tooltips.status.on'),
+        'tabindex': "0",
+        'role': 'button'
       }
     }
   },
@@ -1448,8 +1473,10 @@ module.exports = BaseView.extend({
     this.model.set('state', state);
     if (state.active) {
       this.$el.attr('data-kbtooltip', I18n.getString('Modules.controls.be.tooltips.status.off'));
+      this.$el.attr('aria-label', I18n.getString('Modules.controls.be.tooltips.status.off'));
     } else {
       this.$el.attr('data-kbtooltip', I18n.getString('Modules.controls.be.tooltips.status.on'));
+      this.$el.attr('aria-label', I18n.getString('Modules.controls.be.tooltips.status.on'));
     }
 
     this.options.parent.$head.toggleClass('module-inactive');
@@ -1556,8 +1583,12 @@ module.exports = BaseView.extend({
 //KB.Backbone.Backend.ModuleStatus
 var BaseView = require('backend/Views/BaseControlView');
 var Checks = require('common/Checks');
+var I18n = require('common/I18n');
+
 module.exports = BaseView.extend({
-  id: 'toggle',
+  id: function () {
+    return 'toggle_' + this.model.get('id');
+  },
   initialize: function (options) {
     this.options = options || {};
     this.parent = options.parent;
@@ -1566,13 +1597,21 @@ module.exports = BaseView.extend({
       this.toggleBody();
       this.parent.open = true;
     } else {
-      if (!this.parent.model.get('globalModule')){
+      if (!this.parent.model.get('globalModule')) {
         this.parent.open = false;
       }
     }
   },
   events: {
-    'click': 'toggleBody'
+    'click': 'toggleBody',
+    'keydown': 'keyDown'
+  },
+  attributes: {
+    "tabindex": "0",
+    "role" : "button",
+    "aria-pressed": "false",
+    "data-kbtooltip": I18n.getString('Modules.tooltips.toggleModule'),
+    "aria-label": I18n.getString('Modules.tooltips.toggleModule')
   },
   className: 'ui-toggle kb-toggle block-menu-icon',
   isValid: function () {
@@ -1581,6 +1620,11 @@ module.exports = BaseView.extend({
       return true;
     } else {
       return false;
+    }
+  },
+  keyDown: function(e){
+    if (e.keyCode === 13){
+      this.$el.trigger('click')
     }
   },
   // show/hide handler
@@ -1595,13 +1639,19 @@ module.exports = BaseView.extend({
     }
   },
   setOpenStatus: function () {
-    this.parent.open =  !this.parent.open;
+    this.parent.open = !this.parent.open;
     store.set(this.parent.model.get('mid') + '_open', this.parent.open);
     this.parent.trigger('kb.module.view.open', this.parent.open);
     this.parent.model.trigger('kb.module.view.open', this.parent.open);
+    if (this.parent.open){
+      this.$el.attr('aria-pressed', 'true');
+    } else{
+      this.$el.attr('aria-pressed', 'false');
+
+    }
   }
 });
-},{"backend/Views/BaseControlView":13,"common/Checks":52}],33:[function(require,module,exports){
+},{"backend/Views/BaseControlView":13,"common/Checks":52,"common/I18n":54}],33:[function(require,module,exports){
 //KB.Backbone.Backend.ModuleView
 var ModuleControlsView = require('backend/Views/ModuleControls/ControlsView');
 var ModuleUiView = require('backend/Views/ModuleUi/ModuleUiView');
@@ -3006,7 +3056,13 @@ var Ui = {
   initTabs: function ($cntxt) {
     var $context = $cntxt || jQuery('body');
     var selector = $('.kb-field--tabs', $context);
+    var $window = $(window);
+
+
     selector.tabs({
+      beforeActivate: function (event, ui) {
+        window.location.hash = ui.newPanel.selector;
+      },
       activate: function (e, ui) {
         _.defer(function () {
           $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});
@@ -3020,10 +3076,24 @@ var Ui = {
       if (length === 1) {
         $(this).find('.ui-tabs-nav').css('display', 'none');
       }
+
+      $window.on('hashchange', function () {
+        if (!location.hash) {
+          selector.tabs('option', 'active', 0);
+          return;
+        }
+        $('ul > li > a', selector).each(function (index,a) {
+          if ($(a).attr('href') === location.hash){
+            selector.tabs('option', 'active', index);
+          }
+        })
+      })
+
     });
 
+
     var $subtabs = $('[data-kbfsubtabs]', $context).tabs({
-      activate: function(){
+      activate: function () {
         KB.Events.trigger('modal.recalibrate');
       }
     });
@@ -3043,6 +3113,7 @@ var Ui = {
     var validModule = false;
 
     var that = this;
+
     /*
      * Test if the current sorted module
      * is allowed in (potentially) new area
@@ -3180,23 +3251,21 @@ var Ui = {
           }
           // function call applies when target area != origin
           // chain reordering and change of area
-          $.when(that.changeArea(areaOver, currentModule)).
-            then(function (res) {
-              if (res.success) {
-                that.resort(ui.sender);
-              } else {
-                return false;
-              }
-            }).
-            done(function () {
-              that.triggerAreaChange(areaOver, currentModule);
-              $(KB).trigger('kb:sortable::update');
-              // force recreation of any attached fields
-              currentModule.View.clearFields();
+          $.when(that.changeArea(areaOver, currentModule)).then(function (res) {
+            if (res.success) {
+              that.resort(ui.sender);
+            } else {
+              return false;
+            }
+          }).done(function () {
+            that.triggerAreaChange(areaOver, currentModule);
+            $(KB).trigger('kb:sortable::update');
+            // force recreation of any attached fields
+            currentModule.View.clearFields();
 
-              Notice.notice('Area change and order were updated successfully', 'success');
+            Notice.notice('Area change and order were updated successfully', 'success');
 
-            });
+          });
         }
       }
     });
@@ -3313,7 +3382,7 @@ var Ui = {
     if (settings.data) {
       var a = settings.data;
 
-      if (a && a.split){
+      if (a && a.split) {
         var b = a.split('&');
         var result = {};
         $.each(b, function (x, y) {
@@ -5791,16 +5860,32 @@ module.exports = BaseView.extend({
   },
   setupMap: function () {
     var that = this;
-    this.map = L.map(this.uniq).setView([53.551086, 9.993682], 10);
+    this.map = L.map(this.uniq).setView([53.551086, 9.993682], 15);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
       maxZoom: 18,
     }).addTo(this.map);
+    L.Control.geocoder(
+      {
+        collapsed: false,
+        defaultMarkGeocode: false
+      }
+    ).on('markgeocode', function (e) {
+      that.map.setView(e.geocode.center, 17);
+    })
+      .addTo(this.map);
 
     this.map.on('click', function (e) {
       that.setMarker(e.latlng.lat, e.latlng.lng)
     });
     that.updateMarker();
+
+    $('.leaflet-control-geocoder').on('keydown', function (e) {
+      if (e.which === 13) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    })
   },
   setMarker: function (lat, lng) {
     var that = this;
@@ -5811,7 +5896,6 @@ module.exports = BaseView.extend({
     that.marker = L.marker([lat, lng]).addTo(that.map);
     that.$lat.val(lat);
     that.$lng.val(lng);
-    console.log(that.marker);
   },
   toString: function () {
     return '';
@@ -8597,6 +8681,9 @@ module.exports = BaseView.extend({
     this.moduleView = options.parent;
     this.views = this.prepareViews(this.model.get('views'));
   },
+  attributes:{
+    'aria-label': 'Modultemplate Auswahl'
+  },
   events: {
     'dblclick': 'openEditor'
   },
@@ -8749,7 +8836,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<div class=\"kb-context-bar grid__col grid__col--12-of-12\">\n    <div class=\"kb-context-bar--actions\">\n\n    </div>\n</div>";
+    return "<div class=\"kb-context-bar grid__col grid__col--12-of-12\" aria-hidden=\"true\">\n    <div class=\"kb-context-bar--actions\">\n\n    </div>\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":245}],170:[function(require,module,exports){
@@ -9326,7 +9413,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.lambda, alias3=container.escapeExpression, alias4=helpers.helperMissing;
 
-  return "<div class=\"kb-field kb-field kb-field--image kb-fieldapi-field\">\n    <div class='kb-field-image-wrapper' data-kbfield=\"image\">\n        <div class='kb-js-add-image kb-field-image-container'>\n"
+  return "<div class=\"kb-field kb-field kb-field--image kb-fieldapi-field\">\n    <div class='kb-field-image-wrapper' data-kbfield=\"image\">\n        <div role=\"button\" aria-label=\"Datei auswählen\" tabindex=\"0\" class='kb-js-add-image kb-field-image-container'>\n"
     + ((stack1 = helpers["if"].call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.url : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "        </div>\n        <div class=\"kb-field-image-meta "
     + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.hideMeta : stack1),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")

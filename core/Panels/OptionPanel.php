@@ -233,13 +233,10 @@ abstract class OptionPanel extends AbstractPanel
      */
     public function form()
     {
-        // @TODO what? deprecate, replace
-        do_action('kb.do.enqueue.admin.files');
-
         if (!current_user_can('edit_kontentblocks')) {
             return false;
         }
-
+        do_action('kb.do.enqueue.admin.files');
         Utilities::hiddenEditor();
         $this->toJSON();
 
@@ -272,9 +269,9 @@ abstract class OptionPanel extends AbstractPanel
         $out .= "<div class='wrap'>";
         $out .= "<h2>{$this->menu['title']}</h2>";
         $out .= "<form method='post' action=''>";
-        $out .= "<div class='postbox'>
+        $out .= "<div class='postbox option-panel-postbox'>
                 <div class='kb-custom-wrapper'>
-                <div class='handlediv' title='Zum Umschalten klicken'></div><div class='inside'>";
+                <div class='inside'>";
         return $out;
     }
 

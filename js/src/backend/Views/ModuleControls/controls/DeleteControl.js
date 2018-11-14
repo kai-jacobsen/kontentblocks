@@ -10,17 +10,28 @@ var BatchDeleteController = require('shared/BatchDelete/BatchDeleteController');
 var I18n = require('common/I18n');
 
 module.exports = BaseView.extend({
-  id: 'delete',
+  id: function () {
+    return 'delete_' + this.model.get('id');
+  },
   marked: false,
   className: 'kb-delete block-menu-icon',
   attributes: {
-    "data-kbtooltip": I18n.getString('Modules.controls.be.tooltips.delete')
+    "data-kbtooltip": I18n.getString('Modules.controls.be.tooltips.delete'),
+    "tabindex": "0",
+    "role" : "button",
+    "aria-label": I18n.getString('Modules.controls.be.tooltips.delete')
   },
   initialize: function () {
     _.bindAll(this, "yes", "no");
   },
   events: {
-    'click': 'deleteModule'
+    'click': 'deleteModule',
+    'keydown': 'keyDown'
+  },
+  keyDown: function(e){
+    if (e.keyCode === 13){
+      this.$el.trigger('click')
+    }
   },
   deleteModule: function () {
     if (Window.ctrlPressed()) {

@@ -9106,6 +9106,23 @@ button.Zebra_DatePicker_Icon_Inside {
   padding: 0px;
 }
 
+/* line 71, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+.option-panel-postbox .kb-field--tabs ul.ui-tabs-nav {
+  margin-top: 0;
+  margin-right: 0;
+}
+
+/* line 76, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+.option-panel-postbox .kb-custom-wrapper, .option-panel-postbox .inside {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* line 84, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+.kbf-fields-tabnav ul.ui-tabs-nav {
+  border-top: none;
+}
+
 /* line 3, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_link.scss */
 .kb-field--link .button.kb-js-add-link {
   position: relative;

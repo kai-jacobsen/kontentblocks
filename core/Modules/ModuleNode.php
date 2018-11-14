@@ -97,7 +97,7 @@ class ModuleNode
         $unsortable = ((isset($this->unsortable) and $this->unsortable) == '1') ? 'cantsort' : null;
 
         // Block List Item
-        return "<li id='{$this->module->getId()}' rel='{$this->module->getId(
+        return "<li aria-role='region' aria-label='Modul: {$this->module->properties->getSetting('name')}' tabindex='0' id='{$this->module->getId()}' rel='{$this->module->getId(
         )}{$count}' data-modulehash='{$hash}' class='kbui-{$this->module->properties->getSetting(
             'slug'
         )} kb-module__wrapper kb-module {$this->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
@@ -133,7 +133,7 @@ class ModuleNode
         $html .= "<div rel='{$this->module->getId()}' class='kb-module__header klearfix edit kb-title'>";
         $html .= "<div class='ui-wrap'></div>";
         // name
-        $html .= "<div class='kb-name'><input class='kb-module-name' type='text' name='{$this->module->getId(
+        $html .= "<div  class='kb-name'><input aria-label='Modulbezeichnung' class='kb-module-name' type='text' name='{$this->module->getId(
             )}[overrides][name]' value='" . esc_attr(
                 $this->module->properties->getSetting('name')
             ) . "' /></div>";

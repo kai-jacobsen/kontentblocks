@@ -9,6 +9,9 @@ module.exports = BaseView.extend({
     this.moduleView = options.parent;
     this.views = this.prepareViews(this.model.get('views'));
   },
+  attributes:{
+    'aria-label': 'Modultemplate Auswahl'
+  },
   events: {
     'dblclick': 'openEditor'
   },

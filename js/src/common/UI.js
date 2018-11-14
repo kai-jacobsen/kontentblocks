@@ -81,7 +81,13 @@ var Ui = {
   initTabs: function ($cntxt) {
     var $context = $cntxt || jQuery('body');
     var selector = $('.kb-field--tabs', $context);
+    var $window = $(window);
+
+
     selector.tabs({
+      beforeActivate: function (event, ui) {
+        window.location.hash = ui.newPanel.selector;
+      },
       activate: function (e, ui) {
         _.defer(function () {
           $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});
@@ -95,10 +101,24 @@ var Ui = {
       if (length === 1) {
         $(this).find('.ui-tabs-nav').css('display', 'none');
       }
+
+      $window.on('hashchange', function () {
+        if (!location.hash) {
+          selector.tabs('option', 'active', 0);
+          return;
+        }
+        $('ul > li > a', selector).each(function (index,a) {
+          if ($(a).attr('href') === location.hash){
+            selector.tabs('option', 'active', index);
+          }
+        })
+      })
+
     });
 
+
     var $subtabs = $('[data-kbfsubtabs]', $context).tabs({
-      activate: function(){
+      activate: function () {
         KB.Events.trigger('modal.recalibrate');
       }
     });
@@ -118,6 +138,7 @@ var Ui = {
     var validModule = false;
 
     var that = this;
+
     /*
      * Test if the current sorted module
      * is allowed in (potentially) new area
@@ -255,23 +276,21 @@ var Ui = {
           }
           // function call applies when target area != origin
           // chain reordering and change of area
-          $.when(that.changeArea(areaOver, currentModule)).
-            then(function (res) {
-              if (res.success) {
-                that.resort(ui.sender);
-              } else {
-                return false;
-              }
-            }).
-            done(function () {
-              that.triggerAreaChange(areaOver, currentModule);
-              $(KB).trigger('kb:sortable::update');
-              // force recreation of any attached fields
-              currentModule.View.clearFields();
+          $.when(that.changeArea(areaOver, currentModule)).then(function (res) {
+            if (res.success) {
+              that.resort(ui.sender);
+            } else {
+              return false;
+            }
+          }).done(function () {
+            that.triggerAreaChange(areaOver, currentModule);
+            $(KB).trigger('kb:sortable::update');
+            // force recreation of any attached fields
+            currentModule.View.clearFields();
 
-              Notice.notice('Area change and order were updated successfully', 'success');
+            Notice.notice('Area change and order were updated successfully', 'success');
 
-            });
+          });
         }
       }
     });
@@ -388,7 +407,7 @@ var Ui = {
     if (settings.data) {
       var a = settings.data;
 
-      if (a && a.split){
+      if (a && a.split) {
         var b = a.split('&');
         var result = {};
         $.each(b, function (x, y) {

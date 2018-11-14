@@ -1,6 +1,6 @@
 <div class="kb-field kb-field kb-field--image kb-fieldapi-field">
     <div class='kb-field-image-wrapper' data-kbfield="image">
-        <div class='kb-js-add-image kb-field-image-container'>
+        <div role="button" aria-label="Datei auswählen" tabindex="0" class='kb-js-add-image kb-field-image-container'>
             {{#if model.value.url }}
                 <img src="{{{ model.value.url }}}">
             {{/if}}

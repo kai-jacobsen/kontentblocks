@@ -66,3 +66,21 @@
     padding:0px;
   }
 }
+
+.option-panel-postbox{
+  .kb-field--tabs ul.ui-tabs-nav{
+    margin-top: 0;
+    margin-right: 0;
+  }
+
+  .kb-custom-wrapper, .inside{
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+
+}
+
+.kbf-fields-tabnav ul.ui-tabs-nav{
+  border-top: none;
+}
