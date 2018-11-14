@@ -126,7 +126,7 @@ class ScreenContext
     public function openContext()
     {
 
-        return "<div id='context_{$this->id}' data-kbcontext='{$this->id}' class='area-{$this->id} kb-context-container'>
+        return "<div id='context_{$this->id}' data-kbcontext='{$this->id}' class='area-{$this->id} kb-context-container' role='region' tabindex='0' aria-label='Inhaltsbereich: {$this->title}'>
                     <div class='kb-context__inner'>
                     <div class='kb-context__header'>
                         <h2>{$this->title}</h2>
