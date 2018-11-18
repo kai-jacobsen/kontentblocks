@@ -46,6 +46,7 @@ class SavePost
      */
     public function save($postId, $postObj)
     {
+
         // mic check one two, one two
         if ($this->auth() === false) {
             return false;

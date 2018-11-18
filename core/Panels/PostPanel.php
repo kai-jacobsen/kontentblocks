@@ -40,34 +40,53 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      * @var bool
      */
     public $saveAsSingle = false;
+
+    /**
+     * @var PanelModel
+     */
     public $model;
+
+    /**
+     * @var array
+     */
     public $args;
+
+    /**
+     * @var \Kontentblocks\Backend\DataProvider\DataProvider
+     */
     public $dataProvider;
+
     /**
      * meta box args
      * @var array|null
      */
     protected $metaBox;
+
     /**
      * Position / Hook to use
      * @var string
      */
+
     protected $hook;
     /**
      * Post Types
      * @var array
      */
+
     protected $postTypes = array();
     /**
      * PageTemplates
      * @var array
      */
+
     protected $pageTemplates = array();
     /**
      * unique identifier
      * @var string
      */
     protected $uid;
+
+    protected $integratePost;
 
     /**
      * @param array $args
@@ -76,7 +95,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function __construct($args, PostEnvironment $environment)
     {
-
         $this->environment = $environment;
         $this->context = new PostPanelContext($environment->export(), $this);
         $this->dataProvider = $environment->getDataProvider();
@@ -103,6 +121,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
             'postTypes' => array(),
             'pageTemplates' => array('default'),
             'frontend' => true,
+            'integratePost' => true
         );
         return wp_parse_args($args, $defaults);
     }
@@ -167,6 +186,8 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
                 add_action($this->hook, array($this, 'prepForm'), $this->args['priority']);
             }
         }
+
+
         add_action('wp_footer', array($this, 'toJSON'));
     }
 
@@ -305,6 +326,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function saveCallback($postId, $postObj)
     {
+
         if ((absint($postId) !== absint($this->postId)) && !Utilities::isPreview()) {
             return;
         }
@@ -315,7 +337,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
 
 
         $postData = Utilities::getRequest();
-
         $verify = wp_verify_nonce($postData->request->get($this->getBaseId() . '_nc'), $this->getBaseId() . '_save');
 
         if (!$verify) {

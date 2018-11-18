@@ -4313,10 +4313,10 @@ module.exports = BaseView.extend({
   render: function () {
     this.$unixIn = this.$('.kb-datetimepicker--js-unix');
     this.$sqlIn = this.$('.kb-datetimepicker--js-sql');
-    this.$('.kb-datetimepicker').datetimepicker(_.extend(this.defaults, this.settings));
+    this.$('.kb-datetimepicker').kbdatetimepicker(_.extend(this.defaults, this.settings));
   },
   derender: function () {
-    this.$('.kb-datetimepicker').datetimepicker('destroy');
+    this.$('.kb-datetimepicker').kbdatetimepicker('destroy');
   }
 });
 },{"../FieldControlBaseView":63}],77:[function(require,module,exports){
@@ -5911,7 +5911,7 @@ module.exports = BaseView.extend({
     this.render();
   },
   render:function(){
-    this.$('.kb-ot-timepicker').datetimepicker({
+    this.$('.kb-ot-timepicker').kbdatetimepicker({
       datepicker: false,
       format: 'H:i',
       validateOnBlur: false,
@@ -5919,7 +5919,7 @@ module.exports = BaseView.extend({
     });
   },
   derender: function(){
-    this.$('.kb-ot-timepicker').datetimepicker('destroy');
+    this.$('.kb-ot-timepicker').kbdatetimepicker('destroy');
   },
   split:function(){
     this.$('table').toggleClass('split');

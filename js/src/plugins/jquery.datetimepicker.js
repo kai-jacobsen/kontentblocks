@@ -344,7 +344,7 @@
       timeboxparent.trigger('resize_scroll.xdsoft_scroller', [_percent]);
     });
   };
-  $.fn.datetimepicker = function (opt) {
+  $.fn.kbdatetimepicker = function (opt) {
     var KEY0 = 48,
       KEY9 = 57,
       _KEY0 = 96,

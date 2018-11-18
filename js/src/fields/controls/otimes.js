@@ -7,7 +7,7 @@ module.exports = BaseView.extend({
     this.render();
   },
   render:function(){
-    this.$('.kb-ot-timepicker').datetimepicker({
+    this.$('.kb-ot-timepicker').kbdatetimepicker({
       datepicker: false,
       format: 'H:i',
       validateOnBlur: false,
@@ -15,7 +15,7 @@ module.exports = BaseView.extend({
     });
   },
   derender: function(){
-    this.$('.kb-ot-timepicker').datetimepicker('destroy');
+    this.$('.kb-ot-timepicker').kbdatetimepicker('destroy');
   },
   split:function(){
     this.$('table').toggleClass('split');

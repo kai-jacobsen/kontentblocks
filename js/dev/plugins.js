@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2018-11-14 */
+/*! Kontentblocks DevVersion 2018-11-18 */
 !function(a) {
     "use strict";
     function b(a, b) {
@@ -14553,7 +14553,7 @@
             timeboxparent.trigger("resize_scroll.xdsoft_scroller", [ _percent ]);
         });
     };
-    $.fn.datetimepicker = function(opt) {
+    $.fn.kbdatetimepicker = function(opt) {
         var KEY0 = 48, KEY9 = 57, _KEY0 = 96, _KEY9 = 105, CTRLKEY = 17, DEL = 46, ENTER = 13, ESC = 27, BACKSPACE = 8, ARROWLEFT = 37, ARROWUP = 38, ARROWRIGHT = 39, ARROWDOWN = 40, TAB = 9, F5 = 116, AKEY = 65, CKEY = 67, VKEY = 86, ZKEY = 90, YKEY = 89, ctrlDown = false, options = $.isPlainObject(opt) || !opt ? $.extend(true, {}, default_options, opt) : $.extend({}, default_options), lazyInitTimer = 0, lazyInit = function(input) {
             input.on("open.xdsoft focusin.xdsoft mousedown.xdsoft", function initOnActionCallback(event) {
                 if (input.is(":disabled") || input.is(":hidden") || !input.is(":visible") || input.data("xdsoft_datetimepicker")) return;

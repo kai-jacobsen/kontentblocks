@@ -41,7 +41,7 @@ Class PostEditScreen
     function __construct()
     {
         global $pagenow;
-        if (in_array($pagenow, $this->setupHooks())) {
+        if (in_array($pagenow, $this->setupHooks()) && apply_filters('kb.init.edit.screen', $pagenow) !== false) {
             // add UI
 
             add_action('add_meta_boxes', array($this, 'renderUserInterface'), 10, 2);
@@ -72,6 +72,9 @@ Class PostEditScreen
      */
     public function renderUserInterface($postType, $post)
     {
+        if (is_null($post)){
+            return;
+        }
         $this->environment = Utilities::getPostEnvironment($post->ID);
         $this->environment->initUi();
         add_action(
