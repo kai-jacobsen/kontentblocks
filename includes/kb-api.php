@@ -297,13 +297,17 @@ function getTermPanelModel($panelId, $termId, $taxonomy = null)
 /**
  * @param null $panelId
  * @param null $postId
+ * @param bool $setup
  * @return EntityModel
  */
-function getPostPanelModel($panelId = null, $postId = null)
+function getPostPanelModel($panelId = null, $postId = null, $setup = true)
 {
     $panel = getPostPanel($panelId, $postId);
     if (is_a($panel, PostPanel::class)) {
-        return $panel->setupViewModel();
+        if ($setup){
+            return $panel->setupViewModel();
+        }
+        return $panel->getModel();
     }
     return null;
 }

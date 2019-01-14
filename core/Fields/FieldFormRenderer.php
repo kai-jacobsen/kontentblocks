@@ -66,7 +66,7 @@ class FieldFormRenderer
     protected function setupAttributes()
     {
         return array(
-            'class' => "kb-field kb-field--{$this->field->type} kb-field--reset klearfix"
+            'class' => "kb-field-flex kb-field kb-field--{$this->field->type} kb-field--reset klearfix"
         );
     }
 

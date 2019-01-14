@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2018-11-18 */
+/*! Kontentblocks DevVersion 2019-01-14 */
 !function(a) {
     "use strict";
     function b(a, b) {
@@ -27535,7 +27535,15 @@ if (!("classList" in document.createElement("_"))) {
 })(this.window || global);
 
 (function($) {
-    var image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAAHnlligAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHJJREFUeNpi+P///4EDBxiAGMgCCCAGFB5AADGCRBgYDh48CCRZIJS9vT2QBAggFBkmBiSAogxFBiCAoHogAKIKAlBUYTELAiAmEtABEECk20G6BOmuIl0CIMBQ/IEMkO0myiSSraaaBhZcbkUOs0HuBwDplz5uFJ3Z4gAAAABJRU5ErkJggg==", _before = '<a tabindex="0" class="wp-color-result" />', _after = '<div class="wp-picker-holder" />', _wrap = '<div class="wp-picker-container" />', _button = '<input type="button" class="button button-small hidden" />';
+    if ($.wp.wpColorPicker.prototype._hasAlpha) {
+        return;
+    }
+    var image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAAHnlligAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHJJREFUeNpi+P///4EDBxiAGMgCCCAGFB5AADGCRBgYDh48CCRZIJS9vT2QBAggFBkmBiSAogxFBiCAoHogAKIKAlBUYTELAiAmEtABEECk20G6BOmuIl0CIMBQ/IEMkO0myiSSraaaBhZcbkUOs0HuBwDplz5uFJ3Z4gAAAABJRU5ErkJggg==", _after = '<div class="wp-picker-holder" />', _wrap = '<div class="wp-picker-container" />', _button = '<input type="button" class="button button-small" />', _deprecated = wpColorPickerL10n.current !== undefined;
+    if (_deprecated) {
+        var _before = '<a tabindex="0" class="wp-color-result" />';
+    } else {
+        var _before = '<button type="button" class="button wp-color-result" aria-expanded="false"><span class="wp-color-result-text"></span></button>', _wrappingLabel = "<label></label>", _wrappingLabelText = '<span class="screen-reader-text"></span>';
+    }
     Color.fn.toString = function() {
         if (this._alpha < 1) return this.toCSS("rgba", this._alpha).replace(/\s+/g, "");
         var hex = parseInt(this._color, 10).toString(16);
@@ -27544,25 +27552,59 @@ if (!("classList" in document.createElement("_"))) {
         return "#" + hex;
     };
     $.widget("wp.wpColorPicker", $.wp.wpColorPicker, {
+        _hasAlpha: true,
         _create: function() {
-            if (!$.support.iris) return;
+            if (!$.support.iris) {
+                return;
+            }
             var self = this, el = self.element;
             $.extend(self.options, el.data());
+            if (self.options.type === "hue") {
+                return self._createHueOnly();
+            }
             self.close = $.proxy(self.close, self);
             self.initialValue = el.val();
-            el.addClass("wp-color-picker").hide().wrap(_wrap);
-            self.wrap = el.parent();
-            self.toggler = $(_before).insertBefore(el).css({
-                backgroundColor: self.initialValue
-            }).attr("title", wpColorPickerL10n.pick).attr("data-current", wpColorPickerL10n.current);
-            self.pickerContainer = $(_after).insertAfter(el);
-            self.button = $(_button);
+            el.addClass("wp-color-picker");
+            if (_deprecated) {
+                el.hide().wrap(_wrap);
+                self.wrap = el.parent();
+                self.toggler = $(_before).insertBefore(el).css({
+                    backgroundColor: self.initialValue
+                }).attr("title", wpColorPickerL10n.pick).attr("data-current", wpColorPickerL10n.current);
+                self.pickerContainer = $(_after).insertAfter(el);
+                self.button = $(_button).addClass("hidden");
+            } else {
+                if (!el.parent("label").length) {
+                    el.wrap(_wrappingLabel);
+                    self.wrappingLabelText = $(_wrappingLabelText).insertBefore(el).text(wpColorPickerL10n.defaultLabel);
+                }
+                self.wrappingLabel = el.parent();
+                self.wrappingLabel.wrap(_wrap);
+                self.wrap = self.wrappingLabel.parent();
+                self.toggler = $(_before).insertBefore(self.wrappingLabel).css({
+                    backgroundColor: self.initialValue
+                });
+                self.toggler.find(".wp-color-result-text").text(wpColorPickerL10n.pick);
+                self.pickerContainer = $(_after).insertAfter(self.wrappingLabel);
+                self.button = $(_button);
+            }
             if (self.options.defaultColor) {
                 self.button.addClass("wp-picker-default").val(wpColorPickerL10n.defaultString);
+                if (!_deprecated) {
+                    self.button.attr("aria-label", wpColorPickerL10n.defaultAriaLabel);
+                }
             } else {
                 self.button.addClass("wp-picker-clear").val(wpColorPickerL10n.clear);
+                if (!_deprecated) {
+                    self.button.attr("aria-label", wpColorPickerL10n.clearAriaLabel);
+                }
             }
-            el.wrap('<span class="wp-picker-input-wrap" />').after(self.button);
+            if (_deprecated) {
+                el.wrap('<span class="wp-picker-input-wrap" />').after(self.button);
+            } else {
+                self.wrappingLabel.wrap('<span class="wp-picker-input-wrap hidden" />').after(self.button);
+                self.inputWrapper = el.closest(".wp-picker-input-wrap");
+            }
             el.iris({
                 target: self.pickerContainer,
                 hide: self.options.hide,
@@ -27573,15 +27615,25 @@ if (!("classList" in document.createElement("_"))) {
                     if (self.options.alpha) {
                         self.toggler.css({
                             "background-image": "url(" + image + ")"
-                        }).html("<span />");
-                        self.toggler.find("span").css({
-                            width: "100%",
-                            height: "100%",
+                        });
+                        if (_deprecated) {
+                            self.toggler.html('<span class="color-alpha" />');
+                        } else {
+                            self.toggler.css({
+                                position: "relative"
+                            });
+                            if (self.toggler.find("span.color-alpha").length == 0) {
+                                self.toggler.append('<span class="color-alpha" />');
+                            }
+                        }
+                        self.toggler.find("span.color-alpha").css({
+                            width: "30px",
+                            height: "24px",
                             position: "absolute",
                             top: 0,
                             left: 0,
-                            "border-top-left-radius": "3px",
-                            "border-bottom-left-radius": "3px",
+                            "border-top-left-radius": "2px",
+                            "border-bottom-left-radius": "2px",
                             background: ui.color.toString()
                         });
                     } else {
@@ -27589,7 +27641,9 @@ if (!("classList" in document.createElement("_"))) {
                             backgroundColor: ui.color.toString()
                         });
                     }
-                    if ($.isFunction(self.options.change)) self.options.change.call(this, event, ui);
+                    if ($.isFunction(self.options.change)) {
+                        self.options.change.call(this, event, ui);
+                    }
                 }
             });
             el.val(self.initialValue);
@@ -27603,7 +27657,7 @@ if (!("classList" in document.createElement("_"))) {
             self.wrap.on("click.wpcolorpicker", function(event) {
                 event.stopPropagation();
             });
-            self.toggler.on("click", function() {
+            self.toggler.click(function() {
                 if (self.toggler.hasClass("wp-picker-open")) {
                     self.close();
                 } else {
@@ -27613,26 +27667,24 @@ if (!("classList" in document.createElement("_"))) {
             self.element.on("change", function(event) {
                 if ($(this).val() === "" || self.element.hasClass("iris-error")) {
                     if (self.options.alpha) {
-                        self.toggler.removeAttr("style");
-                        self.toggler.find("span").css("backgroundColor", "");
+                        if (_deprecated) {
+                            self.toggler.removeAttr("style");
+                        }
+                        self.toggler.find("span.color-alpha").css("backgroundColor", "");
                     } else {
                         self.toggler.css("backgroundColor", "");
                     }
                     if ($.isFunction(self.options.clear)) self.options.clear.call(this, event);
                 }
             });
-            self.toggler.on("keyup", function(event) {
-                if (event.keyCode === 13 || event.keyCode === 32) {
-                    event.preventDefault();
-                    self.toggler.trigger("click").next().focus();
-                }
-            });
             self.button.on("click", function(event) {
                 if ($(this).hasClass("wp-picker-clear")) {
                     self.element.val("");
                     if (self.options.alpha) {
-                        self.toggler.removeAttr("style");
-                        self.toggler.find("span").css("backgroundColor", "");
+                        if (_deprecated) {
+                            self.toggler.removeAttr("style");
+                        }
+                        self.toggler.find("span.color-alpha").css("backgroundColor", "");
                     } else {
                         self.toggler.css("backgroundColor", "");
                     }

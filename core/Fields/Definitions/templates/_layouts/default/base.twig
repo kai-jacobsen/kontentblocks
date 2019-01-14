@@ -1,19 +1,24 @@
-<div class="{{ Form.getClass('main-wrap') }} {% if Field.getArg('description') %} field-has-description {% endif %}"
+<div class="kb-flex-wrapper {{ Form.getClass('main-wrap') }} {% if Field.getArg('description') %} field-has-description {% endif %}"
      data-kbfuid="{{ Field.uniqueId|escape('html_attr') }}"
      id='{{ Field.uniqueId|escape('html_attr') }}'>
     <div class="{{ Form.getClass('type-label') }}">{{ Field.getSetting('type') }}</div>
-    <div class="{{ Form.getClass('field-header') }}">
-        {% if (Field.getArg('title')) %}
+    {% if (Field.getArg('title')) %}
+        <div class="{{ Form.getClass('field-header') }}">
             <h4>{{ Field.getArg('title')|escape }}</h4>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
     <div {% for attr,value in Form.fieldWrapAttributes %} {{ attr }}='{{ value|esc_attr }}' {% endfor %} >
-    {{ Form.getLabel() }}
+    <div class="kb-field--label-wrap">
+        {{ Form.getLabel() }}
+        {{ Form.getDescription() }}
 
-    {% block fieldmarkup %}
-        {#goes here#}
-    {% endblock %}
-
-    {{ Form.getDescription() }}
     </div>
+    <div class="kb-field--field-wrap">
+        {% block fieldmarkup %}
+            {#goes here#}
+        {% endblock %}
+
+    </div>
+
+</div>
 </div>

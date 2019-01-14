@@ -1,171 +1,220 @@
 {% extends Form.getLayout() %}
 {% block fieldmarkup %}
-<div id='{{ Form.getInputFieldId() }}' data-fieldkey='{{ Field.getKey() }}'
-     data-arraykey='{{ Field.getArg('arrayKey') }}' data-module='{{ Field.getFieldId() }}'
-     class='opening-times--stage '></div>
+    <div id='{{ Form.getInputFieldId() }}' data-fieldkey='{{ Field.getKey() }}'
+         data-arraykey='{{ Field.getArg('arrayKey') }}' data-module='{{ Field.getFieldId() }}'
+         class='opening-times--stage '></div>
 
-<div class="otimes-field--stage">
-    <span class="js-oday-activate-split">Aufteilen</span>
-    <table class="otimes-table {% if value.hasSplit %} split {% endif %}">
-        <tbody>
-        <tr>
-            <td class="oday">{{ i18n.mon.short }}</td>
-            <td class="oday-open">
-                <input name="{{ Form.getFieldName('mon', '0', 'open') }}" type="text" value="{{ value.mon.0.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til">{{ i18n.until }}</td>
-            <td class="oday-close">
-                <input name="{{ Form.getFieldName('mon', '0', 'close') }}" type="text" value="{{ value.mon.0.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til">{{ i18n.and }}</td>
-            <td class="oday-open oday-split">
-                <input name="{{ Form.getFieldName('mon', '1', 'open') }}" type="text" value="{{ value.mon.1.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til oday-split">{{ i18n.until }}</td>
-            <td class="oday-close oday-split">
-                <input name="{{ Form.getFieldName('mon', '1', 'close') }}" type="text" value="{{ value.mon.1.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-        </tr>
+    <div class="otimes-field--stage">
+        <span class="js-oday-activate-split">Aufteilen</span>
+        <table class="otimes-table {% if value.hasSplit %} split {% endif %}">
+            <tbody>
+            <tr>
+                <td class="oday">{{ i18n.mon.short }}</td>
+                <td class="oday-open">
+                    <input name="{{ Form.getFieldName('mon', '0', 'open') }}" type="text" value="{{ value.mon.0.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til">{{ i18n.until }}</td>
+                <td class="oday-close">
+                    <input name="{{ Form.getFieldName('mon', '0', 'close') }}" type="text"
+                           value="{{ value.mon.0.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til">{{ i18n.and }}</td>
+                <td class="oday-open oday-split">
+                    <input name="{{ Form.getFieldName('mon', '1', 'open') }}" type="text" value="{{ value.mon.1.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til oday-split">{{ i18n.until }}</td>
+                <td class="oday-close oday-split">
+                    <input name="{{ Form.getFieldName('mon', '1', 'close') }}" type="text"
+                           value="{{ value.mon.1.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-close">
+                    <label> <input
+                                name="{{ Form.getFieldName('mon', 'closed') }}" {{ checked('closed', value.mon.closed) }}
+                                type="checkbox" value="closed"> geschlossen </label>
+                </td>
+            </tr>
 
 
-        <tr>
-            <td class="oday">{{ i18n.tue.short }}</td>
-            <td class="oday-open">
-                <input name="{{ Form.getFieldName('tue', '0', 'open') }}" type="text" value="{{ value.tue.0.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til">{{ i18n.until }}</td>
-            <td class="oday-close">
-                <input name="{{ Form.getFieldName('tue', '0', 'close') }}" type="text" value="{{ value.tue.0.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til add-split">{{ i18n.and }}</td>
-            <td class="oday-open oday-split">
-                <input name="{{ Form.getFieldName('tue', '1', 'open') }}" type="text" value="{{ value.tue.1.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til oday-split">{{ i18n.until }}</td>
-            <td class="oday-close oday-split">
-                <input name="{{ Form.getFieldName('tue', '1', 'close') }}" type="text" value="{{ value.tue.1.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-        </tr>
+            <tr>
+                <td class="oday">{{ i18n.tue.short }}</td>
+                <td class="oday-open">
+                    <input name="{{ Form.getFieldName('tue', '0', 'open') }}" type="text" value="{{ value.tue.0.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til">{{ i18n.until }}</td>
+                <td class="oday-close">
+                    <input name="{{ Form.getFieldName('tue', '0', 'close') }}" type="text"
+                           value="{{ value.tue.0.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til add-split">{{ i18n.and }}</td>
+                <td class="oday-open oday-split">
+                    <input name="{{ Form.getFieldName('tue', '1', 'open') }}" type="text" value="{{ value.tue.1.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til oday-split">{{ i18n.until }}</td>
+                <td class="oday-close oday-split">
+                    <input name="{{ Form.getFieldName('tue', '1', 'close') }}" type="text"
+                           value="{{ value.tue.1.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-close">
+                    <label> <input
+                                name="{{ Form.getFieldName('tue', 'closed') }}" {{ checked('closed', value.tue.closed) }}
+                                type="checkbox" value="closed"> geschlossen </label>
+                </td>
+            </tr>
 
-        <tr>
-            <td class="oday">{{ i18n.wed.short }}</td>
-            <td class="oday-open">
-                <input name="{{ Form.getFieldName('wed', '0', 'open') }}" type="text" value="{{ value.wed.0.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til">{{ i18n.until }}</td>
-            <td class="oday-close">
-                <input name="{{ Form.getFieldName('wed', '0', 'close') }}" type="text" value="{{ value.wed.0.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til add-split">{{ i18n.and }}</td>
-            <td class="oday-open oday-split">
-                <input name="{{ Form.getFieldName('wed', '1', 'open') }}" type="text" value="{{ value.wed.1.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til oday-split">{{ i18n.until }}</td>
-            <td class="oday-close oday-split">
-                <input name="{{ Form.getFieldName('wed', '1', 'close') }}" type="text" value="{{ value.wed.1.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-        </tr>
-        <tr>
-            <td class="oday">{{ i18n.thu.short }}</td>
-            <td class="oday-open">
-                <input name="{{ Form.getFieldName('thu', '0', 'open') }}" type="text" value="{{ value.thu.0.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til">{{ i18n.until }}</td>
-            <td class="oday-close">
-                <input name="{{ Form.getFieldName('thu', '0', 'close') }}" type="text" value="{{ value.thu.0.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til add-split">{{ i18n.and }}</td>
-            <td class="oday-open oday-split">
-                <input name="{{ Form.getFieldName('thu', '1', 'open') }}" type="text" value="{{ value.thu.1.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til oday-split">{{ i18n.until }}</td>
-            <td class="oday-close oday-split">
-                <input name="{{ Form.getFieldName('thu', '1', 'close') }}" type="text" value="{{ value.thu.1.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-        </tr>
-        <tr>
-            <td class="oday">{{ i18n.fri.short }}</td>
-            <td class="oday-open">
-                <input name="{{ Form.getFieldName('fri', '0', 'open') }}" type="text" value="{{ value.fri.0.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til">{{ i18n.until }}</td>
-            <td class="oday-close">
-                <input name="{{ Form.getFieldName('fri', '0', 'close') }}" type="text" value="{{ value.fri.0.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til add-split">{{ i18n.and }}</td>
-            <td class="oday-open oday-split">
-                <input name="{{ Form.getFieldName('fri', '1', 'open') }}" type="text" value="{{ value.fri.1.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til oday-split">{{ i18n.until }}</td>
-            <td class="oday-close oday-split">
-                <input name="{{ Form.getFieldName('fri', '1', 'close') }}" type="text" value="{{ value.fri.1.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-        </tr>
-        <tr>
-            <td class="oday">{{ i18n.sat.short }}</td>
-            <td class="oday-open">
-                <input name="{{ Form.getFieldName('sat', '0', 'open') }}" type="text" value="{{ value.sat.0.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til">{{ i18n.until }}</td>
-            <td class="oday-close">
-                <input name="{{ Form.getFieldName('sat', '0', 'close') }}" type="text" value="{{ value.sat.0.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til add-split">{{ i18n.and }}</td>
-            <td class="oday-open oday-split">
-                <input name="{{ Form.getFieldName('sat', '1', 'open') }}" type="text" value="{{ value.sat.1.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til oday-split">{{ i18n.until }}</td>
-            <td class="oday-close oday-split">
-                <input name="{{ Form.getFieldName('sat', '1', 'close') }}" type="text" value="{{ value.sat.1.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-        </tr>
-        <tr>
-            <td class="oday">{{ i18n.sun.short }}</td>
-            <td class="oday-open">
-                <input name="{{ Form.getFieldName('sun', '0', 'open') }}" type="text" value="{{ value.sun.0.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til">{{ i18n.until }}</td>
-            <td class="oday-close">
-                <input name="{{ Form.getFieldName('sun', '0', 'close') }}" type="text" value="{{ value.sun.0.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til add-split">{{ i18n.and }}</td>
-            <td class="oday-open oday-split">
-                <input name="{{ Form.getFieldName('sun', '1', 'open') }}" type="text" value="{{ value.sun.1.open }}"
-                       class="kb-ot-timepicker">
-            </td>
-            <td class="oday-til oday-split">{{ i18n.until }}</td>
-            <td class="oday-close oday-split">
-                <input name="{{ Form.getFieldName('sun', '1', 'close') }}" type="text" value="{{ value.sun.1.close }}"
-                       class="kb-ot-timepicker">
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+            <tr>
+                <td class="oday">{{ i18n.wed.short }}</td>
+                <td class="oday-open">
+                    <input name="{{ Form.getFieldName('wed', '0', 'open') }}" type="text" value="{{ value.wed.0.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til">{{ i18n.until }}</td>
+                <td class="oday-close">
+                    <input name="{{ Form.getFieldName('wed', '0', 'close') }}" type="text"
+                           value="{{ value.wed.0.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til add-split">{{ i18n.and }}</td>
+                <td class="oday-open oday-split">
+                    <input name="{{ Form.getFieldName('wed', '1', 'open') }}" type="text" value="{{ value.wed.1.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til oday-split">{{ i18n.until }}</td>
+                <td class="oday-close oday-split">
+                    <input name="{{ Form.getFieldName('wed', '1', 'close') }}" type="text"
+                           value="{{ value.wed.1.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-close">
+                    <label> <input
+                                name="{{ Form.getFieldName('wed', 'closed') }}" {{ checked('closed', value.wed.closed) }}
+                                type="checkbox" value="closed"> geschlossen </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="oday">{{ i18n.thu.short }}</td>
+                <td class="oday-open">
+                    <input name="{{ Form.getFieldName('thu', '0', 'open') }}" type="text" value="{{ value.thu.0.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til">{{ i18n.until }}</td>
+                <td class="oday-close">
+                    <input name="{{ Form.getFieldName('thu', '0', 'close') }}" type="text"
+                           value="{{ value.thu.0.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til add-split">{{ i18n.and }}</td>
+                <td class="oday-open oday-split">
+                    <input name="{{ Form.getFieldName('thu', '1', 'open') }}" type="text" value="{{ value.thu.1.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til oday-split">{{ i18n.until }}</td>
+                <td class="oday-close oday-split">
+                    <input name="{{ Form.getFieldName('thu', '1', 'close') }}" type="text"
+                           value="{{ value.thu.1.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-close">
+                    <label> <input
+                                name="{{ Form.getFieldName('thu', 'closed') }}" {{ checked('closed', value.thu.closed) }}
+                                type="checkbox" value="closed"> geschlossen </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="oday">{{ i18n.fri.short }}</td>
+                <td class="oday-open">
+                    <input name="{{ Form.getFieldName('fri', '0', 'open') }}" type="text" value="{{ value.fri.0.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til">{{ i18n.until }}</td>
+                <td class="oday-close">
+                    <input name="{{ Form.getFieldName('fri', '0', 'close') }}" type="text"
+                           value="{{ value.fri.0.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til add-split">{{ i18n.and }}</td>
+                <td class="oday-open oday-split">
+                    <input name="{{ Form.getFieldName('fri', '1', 'open') }}" type="text" value="{{ value.fri.1.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til oday-split">{{ i18n.until }}</td>
+                <td class="oday-close oday-split">
+                    <input name="{{ Form.getFieldName('fri', '1', 'close') }}" type="text"
+                           value="{{ value.fri.1.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-close">
+                    <label> <input
+                                name="{{ Form.getFieldName('fri', 'closed') }}" {{ checked('closed', value.fri.closed) }}
+                                type="checkbox" value="closed"> geschlossen </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="oday">{{ i18n.sat.short }}</td>
+                <td class="oday-open">
+                    <input name="{{ Form.getFieldName('sat', '0', 'open') }}" type="text" value="{{ value.sat.0.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til">{{ i18n.until }}</td>
+                <td class="oday-close">
+                    <input name="{{ Form.getFieldName('sat', '0', 'close') }}" type="text"
+                           value="{{ value.sat.0.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til add-split">{{ i18n.and }}</td>
+                <td class="oday-open oday-split">
+                    <input name="{{ Form.getFieldName('sat', '1', 'open') }}" type="text" value="{{ value.sat.1.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til oday-split">{{ i18n.until }}</td>
+                <td class="oday-close oday-split">
+                    <input name="{{ Form.getFieldName('sat', '1', 'close') }}" type="text"
+                           value="{{ value.sat.1.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-close">
+                    <label> <input
+                                name="{{ Form.getFieldName('sat', 'closed') }}" {{ checked('closed', value.sat.closed) }}
+                                type="checkbox" value="closed"> geschlossen </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="oday">{{ i18n.sun.short }}</td>
+                <td class="oday-open">
+                    <input name="{{ Form.getFieldName('sun', '0', 'open') }}" type="text" value="{{ value.sun.0.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til">{{ i18n.until }}</td>
+                <td class="oday-close">
+                    <input name="{{ Form.getFieldName('sun', '0', 'close') }}" type="text"
+                           value="{{ value.sun.0.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til add-split">{{ i18n.and }}</td>
+                <td class="oday-open oday-split">
+                    <input name="{{ Form.getFieldName('sun', '1', 'open') }}" type="text" value="{{ value.sun.1.open }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-til oday-split">{{ i18n.until }}</td>
+                <td class="oday-close oday-split">
+                    <input name="{{ Form.getFieldName('sun', '1', 'close') }}" type="text"
+                           value="{{ value.sun.1.close }}"
+                           class="kb-ot-timepicker">
+                </td>
+                <td class="oday-close">
+                    <label> <input
+                                name="{{ Form.getFieldName('sun', 'closed') }}" {{ checked('closed', value.sun.closed) }}
+                                type="checkbox" value="closed"> geschlossen </label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

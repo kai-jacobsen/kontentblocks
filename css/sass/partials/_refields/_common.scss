@@ -152,3 +152,33 @@ body .kb-field-wrapper{
   text-align: right;
   color: $grey-500;
 }
+
+@media screen and (min-width: 1200px) {
+
+  .kb-field-flex.klearfix {
+    display: flex !important;
+
+    &.kb-field {
+      padding: 0;
+    }
+
+    .kb-field--label-wrap {
+      width: 210px;
+      margin-right: 20px;
+      background-color: $grey-100;
+      padding: 20px;
+    }
+
+    .kb-field--field-wrap {
+      flex-grow: 1;
+      padding: 20px 0;
+
+    }
+
+  }
+}
+
+
+.kb-flex-wrapper.kb-field-wrapper{
+  padding: 0;
+}
