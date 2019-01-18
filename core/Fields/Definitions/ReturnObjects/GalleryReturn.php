@@ -13,7 +13,7 @@ use Kontentblocks\Kontentblocks;
 class GalleryReturn
 {
 
-    public $images = array();
+    public $images = null;
     protected $field;
     protected $value;
 
@@ -25,9 +25,21 @@ class GalleryReturn
     {
         $this->field = $field;
         $this->value = $value;
-        if (isset($value['images']) && is_array($value['images'])) {
-            $this->setupMediaElements();
+
+    }
+
+    /**
+     * @return array
+     */
+    public function getImages()
+    {
+        if (is_null($this->images)) {
+            if (isset($this->value['images']) && is_array($this->value['images'])) {
+                $this->images = $this->setupMediaElements();
+            }
         }
+
+        return $this->images;
     }
 
     /**
@@ -35,6 +47,7 @@ class GalleryReturn
      */
     private function setupMediaElements()
     {
+        $images = [];
         foreach ($this->value['images'] as $k => $attId) {
             if (is_numeric($attId)) {
                 $fielddef = array(
@@ -57,19 +70,11 @@ class GalleryReturn
                 $field->setData(array('id' => $attId));
                 $field->setArgs(['index' => $k, 'arrayKey' => $this->field->getKey() . '.images']);
                 $return = new ImageReturn(array('id' => $attId), $field, null);
-                array_push($this->images, $return);
+                array_push($images, $return);
             }
         }
+        return $images;
     }
-
-    /**
-     * @return array
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-
 
     /**
      * @return bool|mixed

@@ -16,14 +16,14 @@ Class OSM extends Field
     {
 
         add_action('admin_enqueue_scripts', function () {
-            wp_register_style('leaflet-css', KB_PLUGIN_URL . 'css/assets/' . 'leaflet.css');
+            wp_register_style('leaflet-css', KB_PLUGIN_URL . 'css/assets/' . 'leaflet_incl_geocoder.css');
             wp_register_script('leaflet-js', KB_PLUGIN_URL . 'js/vendor/leaflet.js');
-            wp_register_script('leaflet-geocoder', 'KB_PLUGIN_URL' . 'js/vendor/leaflet.js');
+//            wp_register_script('leaflet-geocoder', KB_PLUGIN_URL . 'js/vendor/leaflet.js');
 
             if (is_admin()) {
                 wp_enqueue_style('leaflet-css');
                 wp_enqueue_script('leaflet-js');
-                wp_enqueue_script('leaflet-geocoder');
+//                wp_enqueue_script('leaflet-geocoder');
             }
         });
 

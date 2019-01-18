@@ -73,14 +73,14 @@
 
 }
 
-body .kb-field-wrapper{
+body .kb-field-wrapper {
   border-left: 1px solid transparent;
 
   //&:hover{
   //  border-left: 1px solid #333;
   //}
 
-  .kb-field-wrapper:hover{
+  .kb-field-wrapper:hover {
     border-left: 1px solid transparent;
 
   }
@@ -92,7 +92,7 @@ body .kb-field-wrapper{
   border-bottom: 1px dotted #eaeaea;
   position: relative;
 
-  .kb-field-type-label{
+  .kb-field-type-label {
     font-size: 9px !important;
     color: #666;
     text-transform: capitalize;
@@ -102,7 +102,7 @@ body .kb-field-wrapper{
     right: 0;
   }
 
-  &:hover{
+  &:hover {
     background-color: #fefefe;
   }
 
@@ -121,20 +121,20 @@ body .kb-field-wrapper{
   }
 }
 
-.kb-field-wrapper.field-renderer-wp{
+.kb-field-wrapper.field-renderer-wp {
 
-  &:hover{
+  &:hover {
     background-color: transparent;
     border-left: none;
   }
 
-  .kb-field:not(.kb-field--flexfields){
+  .kb-field:not(.kb-field--flexfields) {
 
-    .kb-field--label-heading{
+    .kb-field--label-heading {
       display: none;
     }
 
-    input[type='text']{
+    input[type='text'] {
       width: 100%;
       max-width: 100% !important;
     }
@@ -147,7 +147,7 @@ body .kb-field-wrapper{
   font-size: 12px;
 }
 
-.kb-field--bubble.charcount{
+.kb-field--bubble.charcount {
   display: block;
   text-align: right;
   color: $grey-500;
@@ -163,10 +163,15 @@ body .kb-field-wrapper{
     }
 
     .kb-field--label-wrap {
-      width: 210px;
-      margin-right: 20px;
-      background-color: $grey-100;
+      width: 150px;
+      margin-right: 0;
+      //background-color: $grey-100;
       padding: 20px;
+
+      label.heading {
+        font-size: 13px;
+      }
+
     }
 
     .kb-field--field-wrap {
@@ -179,6 +184,6 @@ body .kb-field-wrapper{
 }
 
 
-.kb-flex-wrapper.kb-field-wrapper{
+.kb-flex-wrapper.kb-field-wrapper {
   padding: 0;
 }
