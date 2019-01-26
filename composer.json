@@ -31,10 +31,10 @@
     "mobiledetect/mobiledetectlib": "2.8.*",
     "monolog/monolog": "1.*",
     "symfony/yaml": "3.0.*",
-    "symfony/http-foundation": "3.0.*"
+    "symfony/http-foundation": "3.0.*",
+    "league/pipeline" : "1.0.*"
   },
   "require-dev": {
-    "codeclimate/php-test-reporter": "*",
     "phpunit/phpunit": "5.7.8"
   }
 }
