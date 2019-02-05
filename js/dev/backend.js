@@ -5848,7 +5848,15 @@ module.exports = BaseView.extend({
     this.$lng = this.$('[data-kb-osm-lng]');
     _.defer(function () {
       that.setupMap();
+      _.defer(function () {
+        that.map.invalidateSize();
+      });
     });
+
+    this.$map.on('mouseenter', function () {
+      that.map.invalidateSize();
+    })
+
   },
   updateMarker: function () {
     var lat = this.$lat.val();

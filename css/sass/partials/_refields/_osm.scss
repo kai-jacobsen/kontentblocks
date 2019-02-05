@@ -5,4 +5,10 @@
     background-color: $grey-200;
     margin-bottom: 30px;
   }
+
+  .kb-field--osm-meta input{
+    width: 200px;
+    max-width: unset;
+    margin-right: 15px;
+  }
 }
