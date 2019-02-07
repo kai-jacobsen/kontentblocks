@@ -201,7 +201,6 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
         $nextHash = null;
         $nextSlug = '';
         $nextModule = $this->getNextModule();
-
         $prevSlug = '';
 
         if (is_a($nextModule, Module::class)) {
@@ -242,11 +241,11 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
         }
 
         if (!empty($prevSlug)) {
-            $classes[] = 'next-' . $prevSlug;
+            $classes[] = 'prev-' . $prevSlug;
         }
 
 
-        if ($this->previousModule === $module->properties->getSetting('hash')) {
+        if (is_a($this->previousModule, Module::class) && $this->previousModule->properties->getSetting('hash') === $module->properties->getSetting('hash')) {
             if ($this->repeating && ($nextHash !== $module->properties->getSetting('hash'))) {
                 $classes[] = 'repeater';
                 $classes[] = 'last-repeater';
@@ -284,7 +283,7 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
      */
     public function afterModule(Module $module)
     {
-        $this->previousModule = $module->properties->getSetting('hash');
+        $this->previousModule = $module;
         $this->position++;
     }
 
