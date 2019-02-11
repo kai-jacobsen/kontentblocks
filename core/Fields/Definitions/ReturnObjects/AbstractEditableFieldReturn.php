@@ -87,8 +87,9 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn, Inte
      * @param $field
      * @param $salt
      */
-    public function __construct( $value, $field, $salt = null )
+    public function __construct( $value, Field $field, $salt = null )
     {
+
         $this->salt = ( !is_null( $salt ) ) ? $salt : '';
         $this->setValue( $value );
         $this->setupFromField( $field );

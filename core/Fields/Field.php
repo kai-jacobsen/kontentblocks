@@ -374,8 +374,9 @@ abstract class Field implements ExportableFieldInterface
             $base = $this->baseId . $this->key . $state . $this->getArg('index', '') . $this->getArg(
                     'arrayKey',
                     ''
-                );
-            $this->uniqueId = 'kb-' . hash('crc32', $base);
+                ) . md5(json_encode($this->value));
+//            $this->uniqueId = 'kb-' . hash('crc32', $base);
+            $this->uniqueId = wp_generate_uuid4();
         }
         return $this->uniqueId;
     }

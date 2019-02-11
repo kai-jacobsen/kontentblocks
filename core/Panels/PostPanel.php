@@ -175,7 +175,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
     {
         if (is_admin()) {
             $postType = $this->environment->getPostType();
-
             if (!post_type_supports($postType, 'kontentblocks')) {
                 return null;
             }
@@ -250,6 +249,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
 
     public function toJSON()
     {
+
         $args = $this->getProperties();
         Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
     }

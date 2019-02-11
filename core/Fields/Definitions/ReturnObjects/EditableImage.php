@@ -98,6 +98,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
             'id' => $this->getValue('id'),
             'type' => 'EditableImage',
             'kpath' => $this->createPath(),
+            'parentObjectId' => $this->field->controller->getEntity()->postId,
             'tooltip' => $this->helptext,
             'mode' => ($this->background) ? 'background' : 'simple',
             'state' => $this->field->getArg('state', 'image-details'),

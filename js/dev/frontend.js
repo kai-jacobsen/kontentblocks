@@ -1335,9 +1335,11 @@ var Ui = {
 
 
     selector.tabs({
-      beforeActivate: function (event, ui) {
-        window.location.hash = ui.newPanel.selector;
-      },
+      // beforeActivate: function (event, ui) {
+      //   console.log(ui);
+      //
+      //   window.location.hash = ui.newPanel.selector;
+      // },
       activate: function (e, ui) {
         _.defer(function () {
           $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});

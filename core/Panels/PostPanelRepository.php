@@ -35,6 +35,7 @@ class PostPanelRepository extends StandardPanelRepository
             $panel['postId'] = $environment->getId();
             if (!isset($this->panels[$id])) {
                 $this->panels[$id] = new $panel['class']($panel, $environment);
+                $this->panels[$id]->init();
             }
         }
     }

@@ -34,8 +34,10 @@ class OpeningTimesReturn extends StandardFieldReturn
         $this->field = $field;
         $this->value = $value;
 
+
         if ($this->validate()) {
             $this->prepared = $this->prepareData();
+            $this->groups = $this->buildGroups($this->prepared);
         }
     }
 
@@ -127,7 +129,6 @@ class OpeningTimesReturn extends StandardFieldReturn
 
         );
 
-        $value['groups'] = $this->buildGroups($value);
         return $value;
     }
 
@@ -226,6 +227,7 @@ class OpeningTimesReturn extends StandardFieldReturn
      */
     public function getValidDays()
     {
+
         return array_filter($this->prepared, function ($day) {
             return $day['valid'];
         });
