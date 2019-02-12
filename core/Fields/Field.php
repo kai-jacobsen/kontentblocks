@@ -375,8 +375,7 @@ abstract class Field implements ExportableFieldInterface
                     'arrayKey',
                     ''
                 ) . md5(json_encode($this->value));
-//            $this->uniqueId = 'kb-' . hash('crc32', $base);
-            $this->uniqueId = wp_generate_uuid4();
+            $this->uniqueId = 'kb-' . hash('crc32', $base);
         }
         return $this->uniqueId;
     }

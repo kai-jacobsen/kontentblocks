@@ -184,12 +184,12 @@ KB.App = (function () {
     if (area.get('public')) {
       KB.Views.Areas.add(area.get('id'), new AreaView({
         model: area,
-        el: '#' + area.get('id') + '-container'
+        el: '#' + area.get('id') + '-kb-container'
       }));
     } else {
       KB.Views.Areas.add(area.get('id'), new SystemAreaView({
         model: area,
-        el: '#' + area.get('id') + '-container'
+        el: '#' + area.get('id') + '-kb-container'
       }));
     }
   }
@@ -197,7 +197,7 @@ KB.App = (function () {
   function createPanelViews(panel) {
     KB.Views.Areas.add(panel.get('baseId'), new PanelView({
       model: panel,
-      el: '#kbp-' + panel.get('baseId') + '-container'
+      el: '#kbp-' + panel.get('baseId') + '-kb-container'
     }));
   }
 
