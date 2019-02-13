@@ -67,9 +67,9 @@ var EditableImage = Backbone.View.extend({
     this.$el.addClass('kb-inline-imageedit-attached');
     this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
     this.$title = jQuery('*[data-' + this.model.get('uid') + '-title]');
-
   },
   rerender: function () {
+    var that = this;
     this.render();
     this.trigger('field.view.rerender', this);
   },

@@ -232,11 +232,11 @@ class JSONTransport
      */
     public function registerPanel($panel)
     {
-        if (isset($this->panels[$panel['baseId']])) {
-            $panel = Utilities::arrayMergeRecursive($panel, $this->panels[$panel['baseId']]);
+        if (isset($this->panels[$panel['mid']])) {
+            $panel = Utilities::arrayMergeRecursive($panel, $this->panels[$panel['mid']]);
         }
 
-        $this->panels[$panel['baseId']] = $panel;
+        $this->panels[$panel['mid']] = $panel;
         return $this;
     }
 

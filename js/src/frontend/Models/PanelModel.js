@@ -2,7 +2,7 @@
 var Config = require('common/Config');
 var Logger = require('common/Logger');
 module.exports = Backbone.Model.extend({
-  idAttribute: 'baseId',
+  idAttribute: 'mid',
   attachedFields: {},
   changedFields: {},
   initialize: function(){

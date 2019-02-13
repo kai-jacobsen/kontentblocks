@@ -261,14 +261,14 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
     {
         $args = array(
             'baseId' => $this->getBaseId(),
-            'mid' => $this->getBaseId(),
-            'id' => $this->getBaseId(),
+            'mid' => $this->getBaseId() . '_' . $this->environment->getId(),
+            'id' => $this->getBaseId() . '_' . $this->environment->getId(),
             'entityData' => $this->model->export(),
             'area' => '_internal',
             'type' => 'static',
             'settings' => $this->args,
-            'postId' => get_the_ID(),
-            'parentObjectId' => get_the_ID()
+            'postId' => $this->environment->getId(),
+            'parentObjectId' => $this->environment->getId()
         );
 
         return $args;

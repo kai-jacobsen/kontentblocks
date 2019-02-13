@@ -46,6 +46,7 @@ var EditableText = Backbone.View.extend({
     if (this.el.id) {
       this.id = this.el.id;
     }
+    console.trace();
     this.Toolbar.show();
 
   },

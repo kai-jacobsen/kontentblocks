@@ -109,6 +109,11 @@ abstract class Module implements EntityInterface, FieldEntityInterface
         return $this->properties->mid;
     }
 
+    public function getRelId(){
+        return $this->properties->mid . '_' . $this->environment->getId();
+
+    }
+
     /**
      * @param $data
      * @return ModuleModel
@@ -438,7 +443,8 @@ abstract class Module implements EntityInterface, FieldEntityInterface
             'settings' => $this->properties->settings,
             'state' => $this->properties->state,
             'mid' => $this->getId(),
-            'id' => $this->getId(), // only for backbone compatibility
+            'id' => $this->getRelId(), // only for backbone compatibility
+            'relId' => $this->getRelId(),
             'entityData' => apply_filters(
                 'kb.module.modify.data',
                 $this->model->export(),

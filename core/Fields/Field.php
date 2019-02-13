@@ -54,6 +54,10 @@ abstract class Field implements ExportableFieldInterface
      */
     public $controller;
     /**
+     * @var FieldContext
+     */
+    public $context;
+    /**
      * Base id/key for the field
      * may get modified if a subkey is present
      * @var string
@@ -81,18 +85,17 @@ abstract class Field implements ExportableFieldInterface
      * @var mixed
      */
     protected $userValue;
-
     /**
      * @var FieldTabGroup
      */
     protected $tabGroup;
-
     /**
      * @var FieldFormRenderer
      */
     protected $formRenderer;
 
 
+    protected $relId;
     /**
      * Return Object
      * @var InterfaceFieldReturn
@@ -149,6 +152,8 @@ abstract class Field implements ExportableFieldInterface
     public function setController(StandardFieldController $controller)
     {
         $this->controller = $controller;
+        $this->context = new FieldContext([], $controller->getEntity());
+        $this->relId =  $controller->getEntity()->getId() . '_' . $this->context->parentObjectId;
     }
 
     /**
@@ -374,7 +379,7 @@ abstract class Field implements ExportableFieldInterface
             $base = $this->baseId . $this->key . $state . $this->getArg('index', '') . $this->getArg(
                     'arrayKey',
                     ''
-                ) . md5(json_encode($this->value));
+                ) . md5(json_encode($this->context));
             $this->uniqueId = 'kb-' . hash('crc32', $base);
         }
         return $this->uniqueId;
@@ -430,9 +435,12 @@ abstract class Field implements ExportableFieldInterface
         $def['type'] = $this->type;
         $def['baseId'] = $this->getBaseId();
         $def['fieldId'] = $this->fieldId;
+        $def['relId'] = $this->relId;
         $def['fieldkey'] = $this->getKey();
         $def['arrayKey'] = $this->getArg('arrayKey', null);
         $def['kpath'] = $this->createKPath();
+        $def['context'] = $this->context;
+        $def['parentObjectId'] = $this->context->parentObjectId;
         return wp_parse_args($args, $def);
     }
 
