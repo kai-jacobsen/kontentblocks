@@ -9690,6 +9690,9 @@ module.exports = BaseView.extend({
     'click': 'toggleDraft'
   },
   isValid: function () {
+    if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
+      return false;
+    }
     return true;
   },
   render: function () {

@@ -52,7 +52,7 @@ module.exports = Backbone.View.extend({
   initialize: function () {
     // Setup Elements
     this.open = false;
-    if (this.model.get('globalModule') == true) {
+    if (this.model.get('globalModule') === true) {
       this.open = true;
     }
     this.$head = jQuery('.kb-module__header', this.$el);

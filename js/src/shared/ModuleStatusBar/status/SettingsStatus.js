@@ -11,6 +11,9 @@ module.exports = BaseView.extend({
     this.moduleView = options.parent;
   },
   isValid: function () {
+    if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
+      return false;
+    }
     return true;
   },
   render: function () {

@@ -9,6 +9,9 @@ module.exports = BaseView.extend({
     this.listenTo(this.model, 'override:loggedinonly', this.rerender);
   },
   isValid: function () {
+    if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
+      return false;
+    }
     return true;
   },
   render: function () {

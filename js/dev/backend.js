@@ -165,6 +165,7 @@ KB.App = (function () {
    */
   function createModuleViews(module) {
     // create view
+
     KB.Views.Modules.add(module.get('mid'), new ModuleView({
       model: module,
       el: '#' + module.get('mid')
@@ -1706,7 +1707,7 @@ module.exports = Backbone.View.extend({
   initialize: function () {
     // Setup Elements
     this.open = false;
-    if (this.model.get('globalModule') == true) {
+    if (this.model.get('globalModule') === true) {
       this.open = true;
     }
     this.$head = jQuery('.kb-module__header', this.$el);
@@ -8347,6 +8348,10 @@ module.exports = BaseView.extend({
     'click': 'toggleDraft'
   },
   isValid: function () {
+    if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
+      return false;
+    }
+
     return true;
   },
   render: function () {
@@ -8386,6 +8391,9 @@ module.exports = BaseView.extend({
     this.listenTo(this.model, 'override:loggedinonly', this.rerender);
   },
   isValid: function () {
+    if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
+      return false;
+    }
     return true;
   },
   render: function () {
@@ -8424,6 +8432,9 @@ module.exports = BaseView.extend({
     'click': 'toggleDraft'
   },
   isValid: function () {
+    if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
+      return false;
+    }
     return true;
   },
   render: function () {
@@ -8651,6 +8662,9 @@ module.exports = BaseView.extend({
     this.moduleView = options.parent;
   },
   isValid: function () {
+    if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
+      return false;
+    }
     return true;
   },
   render: function () {
@@ -8685,6 +8699,9 @@ module.exports = BaseView.extend({
     this.moduleView = options.parent;
   },
   isValid: function () {
+    if (this.model.get('class') === "ModuleGlobalModuleProxy"){
+      return false;
+    }
     return Config.get('moduleTemplateEditor');
   },
   render: function () {

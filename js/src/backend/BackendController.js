@@ -164,6 +164,7 @@ KB.App = (function () {
    */
   function createModuleViews(module) {
     // create view
+
     KB.Views.Modules.add(module.get('mid'), new ModuleView({
       model: module,
       el: '#' + module.get('mid')

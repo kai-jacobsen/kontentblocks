@@ -1,17 +1,21 @@
 <div id="kontentblocks-core-ui" class="postbox">
     <h3>{{ strings.editGmodulesTitle }}</h3>
-    <div class="inside kb-module" id="{{ module.mid }}">
+    <div class="inside kb-module" id="{{ module.getId() }}">
         <div class="kb-area-context-select">
             <label for="area-context-select">{{ strings.editGmodulesLabel }}</label>
             <select name="area-context" onchange="KB.Menus.reloadContext(this)" id="area-context-select">
                 {% for context in contexts %}
-                    <option {% if module.properties.areaContext == context.id %} selected="selected" {% endif %} value="{{ context.id }}">{{ context.title }}</option>
+                    <option {% if module.properties.areaContext == context.id %} selected="selected" {% endif %}
+                            value="{{ context.id }}">{{ context.title }}</option>
                 {% endfor %}
             </select>
         </div>
 
+        <div class='kb-module--status-bar'></div>
         <div class="kb-module__controls-inner">
-            {{ module.form() }}
+            <div class="kb-module__controls-inner-form">
+                {{ module.form() }}
+            </div>
         </div>
     </div>
     <div class="global-module--attached">

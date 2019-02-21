@@ -12,6 +12,9 @@ module.exports = BaseView.extend({
     this.moduleView = options.parent;
   },
   isValid: function () {
+    if (this.model.get('class') === "ModuleGlobalModuleProxy"){
+      return false;
+    }
     return Config.get('moduleTemplateEditor');
   },
   render: function () {
