@@ -61,7 +61,7 @@ abstract class OptionPanel extends AbstractPanel
         $this->setupArgs($this->args);
         $this->dataProvider = new SerOptionsDataProvider($this->baseId);
         $savedData = $this->dataProvider->export();
-        $this->model = new PanelModel($savedData, $this);
+        $this->model = new $this->args['modelClass']($savedData, $this);
         $this->setupFields();
         $this->prepareModel();
     }
@@ -77,7 +77,8 @@ abstract class OptionPanel extends AbstractPanel
             'baseId' => null,
             'menu' => false,
             'frontend' => false,
-            'customizer' => false
+            'customizer' => false,
+            'modelClass' => PanelModel::class
         );
 
         return wp_parse_args($args, $defaults);

@@ -33,12 +33,31 @@ class PanelRegistry
     {
         include_once $file;
         $classname = str_replace('.php', '', basename($file));
+        $modelArg = '';
+        $modelName = $classname . 'Model';
+        $modelFile = trailingslashit(dirname($file)) . $modelName . '.php';
+        if (file_exists($modelFile)) {
+            include_once $modelFile;
+            if (class_exists($modelName)) {
+                $reflection = new \ReflectionClass($modelName);
+                if ($reflection->isSubclassOf(PanelModel::class)) {
+                    $modelArg = $modelName;
+                }
+            }
+        }
+
+
         if (property_exists($classname, 'settings')) {
             $args = $classname::$settings;
             if (empty($args['id'])) {
                 $args['id'] = sanitize_key($classname);
             }
             $args['class'] = $classname;
+
+            if (!(empty($modelArg))) {
+                $args['modelClass'] = $modelArg;
+            }
+
             $args['baseId'] = $args['id'];
             if (!isset($this->panels[$args['baseId']])) {
                 $this->add($args['baseId'], $args);

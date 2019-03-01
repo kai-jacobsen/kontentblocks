@@ -101,7 +101,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
         $savedData = $this->dataProvider->get(Utilities::buildContextKey($this->baseId));
-        $this->model = new PanelModel($savedData, $this);
+        $this->model = new $this->args['modelClass']($savedData, $this);
         $this->setupFields();
         $this->model = $this->prepareModel();
     }
@@ -121,7 +121,8 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
             'postTypes' => array(),
             'pageTemplates' => array('default'),
             'frontend' => true,
-            'integratePost' => true
+            'integratePost' => true,
+            'modelClass' => PanelModel::class
         );
         return wp_parse_args($args, $defaults);
     }

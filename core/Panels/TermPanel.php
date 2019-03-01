@@ -68,7 +68,7 @@ abstract class TermPanel extends AbstractPanel
         $this->term = $environment->termObj;
         $this->context = new TermPanelContext($environment->export(), $this);
         $savedData = $this->dataProvider->get(Utilities::buildContextKey($this->baseId));
-        $this->model = new PanelModel($savedData, $this);
+        $this->model = new $this->args['modelClass']($savedData, $this);
         $this->setupFields();
         $this->model = $this->prepareModel();
     }
@@ -84,7 +84,8 @@ abstract class TermPanel extends AbstractPanel
             'taxonomy' => 'category',
             'insideTable' => true,
             'saveAsSingle' => false,
-            'hideDescription' => false
+            'hideDescription' => false,
+            'modelClass' => PanelModel::class
         );
 
         return wp_parse_args($args, $defaults);

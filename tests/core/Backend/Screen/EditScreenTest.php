@@ -70,7 +70,7 @@ class EditScreenTest extends \WP_UnitTestCase
         $out = $this->EditScreen->userInterface();
         $this->assertContains("id='kontentblocks-core-ui'", $out);
         $this->assertContains("</div> <!--end ks -->", $out);
-        $this->assertContains("id='dump-container'", $out);
+        $this->assertContains("id='dump-kb-container'", $out);
     }
 
     public function tearDown()

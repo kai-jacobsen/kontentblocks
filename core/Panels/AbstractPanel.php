@@ -217,7 +217,7 @@ abstract class AbstractPanel implements EntityInterface, FieldEntityInterface
                 unset($this->model[$key]);
             }
         }
-        $fModel = new PanelModel($prepData, $this);
+        $fModel = new $this->args['modelClass']($prepData, $this);
         $this->frontendModel = $fModel;
 
         return $this->frontendModel;

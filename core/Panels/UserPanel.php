@@ -65,7 +65,7 @@ abstract class UserPanel extends AbstractPanel
         $this->user = $environment->userObj;
         $this->fields = new UserPanelFieldController($this->getBaseId(), $this);
         $savedData = $this->dataProvider->get($this->getBaseId());
-        $this->model = new PanelModel($savedData, $this);
+        $this->model = new $this->args['modelClass']($savedData, $this);
         $this->fields();
         $this->model = $this->prepareModel();
     }
@@ -78,7 +78,8 @@ abstract class UserPanel extends AbstractPanel
     public function parseDefaults($args)
     {
         $defaults = array(
-            'insideTable' => true
+            'insideTable' => true,
+            'modelClass' => PanelModel::class
         );
 
         return wp_parse_args($args, $defaults);
