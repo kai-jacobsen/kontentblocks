@@ -3545,6 +3545,7 @@ module.exports = Backbone.Model.extend({
   initialize: function () {
     this.cleanUp(); //remove self from linked fields
     var module = this.get('relId'); // fieldId equals baseId equals the parent object id (Panel or Module)
+    console.log(module);
     if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) { // if object exists and this field type is valid
       this.set('ModuleModel', this.ModuleModel); // assign the parent object model
       this.setData(); // get data from the parent object and assign to this

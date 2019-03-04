@@ -44,6 +44,11 @@ abstract class TermPanel extends AbstractPanel
      * @var false
      */
     public $saveAsSingle;
+
+    /**
+     * @var TermEnvironment
+     */
+    public $environment;
     /**
      * @var
      */
@@ -62,6 +67,7 @@ abstract class TermPanel extends AbstractPanel
      */
     public function __construct($args, TermEnvironment $environment)
     {
+        $this->environment = $environment;
         $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
@@ -161,7 +167,7 @@ abstract class TermPanel extends AbstractPanel
         return array(
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
-            'id' => $this->getBaseId(),
+            'id' => $this->getBaseId() . '_' . $this->environment->getId(),
             'entityData' => $this->model->export(),
             'area' => '_internal',
             'type' => 'term',
@@ -215,8 +221,10 @@ abstract class TermPanel extends AbstractPanel
      */
     private function beforeForm()
     {
+        $elementId = 'kbp-' . $this->getBaseId() . '-kb-container';
+
         $out = '';
-        $out .= "<div class='postbox kb-taxpanel {$this->renderer->getIdString()}'>
+        $out .= "<div id='{$elementId}' class='postbox kb-taxpanel {$this->renderer->getIdString()}'>
                 <div class='kb-custom-wrapper'>
                 <div class='handlediv' title='Zum Umschalten klicken'></div><div class='inside'>";
         return $out;

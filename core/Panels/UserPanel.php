@@ -40,6 +40,11 @@ abstract class UserPanel extends AbstractPanel
     public $fields;
 
     /**
+     * @var UserEnvironment
+     */
+    public $environment;
+
+    /**
      * @var
      */
     private $renderer;
@@ -58,6 +63,7 @@ abstract class UserPanel extends AbstractPanel
      */
     public function __construct($args, UserEnvironment $environment)
     {
+        $this->environment = $environment;
         $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
@@ -85,6 +91,8 @@ abstract class UserPanel extends AbstractPanel
         return wp_parse_args($args, $defaults);
     }
 
+    abstract public function fields();
+
     /**
      * @return PanelModel
      */
@@ -107,8 +115,6 @@ abstract class UserPanel extends AbstractPanel
         }
         return $model;
     }
-
-    abstract public function fields();
 
     public function init()
     {
@@ -133,7 +139,7 @@ abstract class UserPanel extends AbstractPanel
         return array(
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
-            'id' => $this->getBaseId(),
+            'id' => $this->getBaseId() . '_' . $this->environment->getId(),
             'entityData' => $this->model->export(),
             'area' => '_internal',
             'type' => 'user',
@@ -146,6 +152,8 @@ abstract class UserPanel extends AbstractPanel
      */
     public function form()
     {
+        $elementId = 'kbp-' . $this->getBaseId() . '-kb-container';
+
         // @TODO what? deprecate, replace
         do_action('kb.do.enqueue.admin.files');
         if (!current_user_can('edit_kontentblocks')) {
@@ -156,7 +164,7 @@ abstract class UserPanel extends AbstractPanel
         $this->fields->setFormRenderClass('\Kontentblocks\Fields\FieldFormRendererWP');
         $this->fields->updateData();
         $this->renderer = $this->fields->getFieldRenderClass();
-        echo "<table class='form-table'><tbody>";
+        echo "<table id='{$elementId}' class='form-table'><tbody>";
         $this->preRender();
         echo $this->renderFields();
         echo "</tbody></table>";

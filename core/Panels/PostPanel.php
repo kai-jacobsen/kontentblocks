@@ -220,7 +220,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
     public function beforeForm()
     {
         $class = (is_array($this->metaBox)) ? 'kb-postbox' : '';
-        $elementId = 'kbp-' . $this->getBaseId() . '-container';
+        $elementId = 'kbp-' . $this->getBaseId() . '-kb-container';
         $renderId = $this->fields->getFieldRenderClass()->getIdString();
 
         echo "<div id='{$elementId}' data-kbpuid='{$this->uid}' class='postbox {$class} {$renderId}' data-kb-field-renderer='{$renderId}'>
@@ -274,6 +274,8 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
 
         return $args;
     }
+
+
 
     /**
      * @return array

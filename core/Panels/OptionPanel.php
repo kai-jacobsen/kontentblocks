@@ -252,7 +252,7 @@ abstract class OptionPanel extends AbstractPanel
         $args = array(
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
-            'id' => $this->getBaseId(),
+            'id' => $this->getBaseId() . '_' . $this->getType(),
             'entityData' => $this->model->export(),
             'area' => '_internal',
             'type' => 'option',
@@ -266,11 +266,13 @@ abstract class OptionPanel extends AbstractPanel
      */
     private function beforeForm()
     {
+        $elementId = 'kbp-' . $this->getBaseId() . '-kb-container';
+
         $out = '';
         $out .= "<div class='wrap'>";
         $out .= "<h2>{$this->menu['title']}</h2>";
         $out .= "<form method='post' action=''>";
-        $out .= "<div class='postbox option-panel-postbox'>
+        $out .= "<div id='{$elementId}' class='postbox option-panel-postbox'>
                 <div class='kb-custom-wrapper'>
                 <div class='inside'>";
         return $out;

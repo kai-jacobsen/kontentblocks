@@ -111,7 +111,6 @@ abstract class Module implements EntityInterface, FieldEntityInterface
 
     public function getRelId(){
         return $this->properties->mid . '_' . $this->environment->getId();
-
     }
 
     /**
