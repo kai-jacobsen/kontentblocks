@@ -223,6 +223,9 @@ class StandardFieldController
         /** @var StandardFieldSection $section */
         foreach ($this->sections as $section) {
             $return = ($section->save($data, $oldData));
+            if (!is_array($return)){
+                continue;
+            }
             $collection = $collection + $return;
         }
         return $collection;

@@ -328,6 +328,8 @@ class ImageReturn extends StandardFieldReturn
     public function size($width, $height = null)
     {
 
+        $this->reset();
+
         if (is_string($width) && is_null($height)) {
             return $this->nsize($width);
         }

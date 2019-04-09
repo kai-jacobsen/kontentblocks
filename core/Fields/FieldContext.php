@@ -21,11 +21,11 @@ class FieldContext extends EntityContext
     {
         parent::__construct($args, $entity);
         if (property_exists($entity, 'environment')) {
+
             $this->parentObjectId = $entity->environment->getId();
         } else {
-
+            $this->parentObjectId = $entity->getType();
         }
-        $this->parentObjectId = $entity->getType();
         $this->entityType = $entity->getType();
     }
 }
