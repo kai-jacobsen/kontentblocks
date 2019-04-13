@@ -2775,12 +2775,14 @@ module.exports = Backbone.View.extend({
           value: fielddata || '',
           arrayKey: this.model.get('arrayKey'),
           fieldkey: this.model.get('fieldkey'),
+          relId: this.model.get('relId'),
           primeKey: field.key,
           fieldId: this.model.get('fieldId'),
           index: itemId,
           type: field.type
         });
         field.view = KB.FieldsAPI.getRefByType(field.type, itemData);
+
         if (!fielddata) {
           field.view.setDefaults();
         }

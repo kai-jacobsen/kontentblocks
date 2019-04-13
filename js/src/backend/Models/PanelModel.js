@@ -1,6 +1,6 @@
 //KB.Backbone.PanelModel
 module.exports = Backbone.Model.extend({
-  idAttribute: 'baseId',
+  idAttribute: 'id',
   attachedFields: {},
   attachField: function (FieldModel) {
     this.attachedFields[FieldModel.id] = FieldModel;

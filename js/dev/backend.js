@@ -197,7 +197,7 @@ KB.App = (function () {
   }
 
   function createPanelViews(panel) {
-    KB.Views.Areas.add(panel.get('baseId'), new PanelView({
+    KB.Views.Areas.add(panel.get('id'), new PanelView({
       model: panel,
       el: '#kbp-' + panel.get('baseId') + '-kb-container'
     }));
@@ -413,7 +413,7 @@ module.exports = Backbone.Model.extend({
 },{"common/Ajax":50,"common/Config":53,"common/Notice":57}],7:[function(require,module,exports){
 //KB.Backbone.PanelModel
 module.exports = Backbone.Model.extend({
-  idAttribute: 'baseId',
+  idAttribute: 'id',
   attachedFields: {},
   attachField: function (FieldModel) {
     this.attachedFields[FieldModel.id] = FieldModel;
@@ -4522,12 +4522,14 @@ module.exports = Backbone.View.extend({
           value: fielddata || '',
           arrayKey: this.model.get('arrayKey'),
           fieldkey: this.model.get('fieldkey'),
+          relId: this.model.get('relId'),
           primeKey: field.key,
           fieldId: this.model.get('fieldId'),
           index: itemId,
           type: field.type
         });
         field.view = KB.FieldsAPI.getRefByType(field.type, itemData);
+
         if (!fielddata) {
           field.view.setDefaults();
         }

@@ -196,7 +196,7 @@ KB.App = (function () {
   }
 
   function createPanelViews(panel) {
-    KB.Views.Areas.add(panel.get('baseId'), new PanelView({
+    KB.Views.Areas.add(panel.get('id'), new PanelView({
       model: panel,
       el: '#kbp-' + panel.get('baseId') + '-kb-container'
     }));

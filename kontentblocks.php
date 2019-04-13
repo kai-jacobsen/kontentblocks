@@ -3,7 +3,7 @@
   Plugin Name: Kontentblocks
   Plugin URI: https://github.com/kai-jacobsen/kontentblocks
   Description: Content modularization framework
-  Version: 0.11.5
+  Version: 0.11.6
   Author: Kai Jacobsen
   Author URI: https://github.com/kai-jacobsen/kontentblocks-plugin
   Text Domain: Kontentblocks
@@ -48,7 +48,7 @@ use Pimple;
 Class Kontentblocks
 {
 
-    const VERSION = '0.11.5';
+    const VERSION = '0.11.6';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.16';
     const DEBUG = true;
@@ -275,17 +275,22 @@ Class Kontentblocks
         Capabilities::setup();
         add_theme_support('kontentblocks:clipboard');
 
-        if (file_exists(get_template_directory() . '/kontentblocks.php')) {
-            add_theme_support('kontentblocks');
-            include_once(get_template_directory() . '/kontentblocks.php');
-            _K::info('kontentblocks.php loaded from main theme');
-        }
-
         if (is_child_theme() && file_exists(get_stylesheet_directory() . '/kontentblocks.php')) {
             add_theme_support('kontentblocks');
             include_once(get_stylesheet_directory() . '/kontentblocks.php');
             _K::info('kontentblocks.php loaded from childtheme');
         }
+
+        if (file_exists(get_template_directory() . '/kontentblocks.php')) {
+            if (apply_filters('kb.load.parent.config', true)) {
+
+                add_theme_support('kontentblocks');
+                include_once(get_template_directory() . '/kontentblocks.php');
+                _K::info('kontentblocks.php loaded from main theme');
+            }
+
+        }
+
 
         do_action('kb.configphp.setup');
 
