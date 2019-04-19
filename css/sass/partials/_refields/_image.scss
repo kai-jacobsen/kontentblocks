@@ -1,21 +1,31 @@
 .kb-field--image, .kb-field--cropimage {
 
   padding-bottom: 10px;
+  display: none;
 
   .kb-field-image-wrapper {
     overflow: hidden;
   }
 
+  img{
+    max-width: 100%;
+  }
+
   .kb-js-add-image {
     cursor: pointer;
-    background: #fcfcfc;
+    background: #fafafa;
     border: 1px solid #f2f2f2;
-    max-height: 350px;
+    background-image: url("assets/images/transp_bg.png");
+    background-repeat: repeat;
+    max-height: 400px;
+    max-width: 400px;
     min-width: 150px;
     min-height: 150px;
-    padding: 10px;
+    padding: 0;
     margin-right: 15px;
     display: inline-block;
+
+
   }
 
   .kb-js-image-meta-wrapper {
@@ -32,10 +42,10 @@
     }
   }
 
-  .kb-field-image-title{
+  .kb-field-image-title {
     margin-bottom: $halfpadding;
 
-    input{
+    input {
       //border: none !important;
       background-color: transparent !important;
       box-shadow: none !important;
@@ -43,17 +53,17 @@
 
     }
 
-    label{
+    label {
       display: block;
     }
   }
 
-  .kb-field-image-meta{
+  .kb-field-image-meta {
     display: inline-block;
     vertical-align: top;
     padding: 8px;
 
-    textarea{
+    textarea {
       width: 100%;
       background-color: transparent !important;
       //border: none !important;
@@ -63,16 +73,16 @@
 
   }
 
-  .kb-field-image--footer{
+  .kb-field-image--footer {
     clear: both;
     margin-top: 10px;
     padding: 8px 0;
   }
 }
 
-.kb-image-frame{
+.kb-image-frame {
 
-  .attachment-display-settings, [data-setting="alt"],[data-setting="description"]{
+  .attachment-display-settings, [data-setting="alt"], [data-setting="description"] {
     display: none !important;
   }
 

@@ -51,16 +51,17 @@ class Utilities
      */
     public static function getPostEnvironment($storageId = null, $actualPostId = null)
     {
+        $cacheKey = get_current_blog_id() . ':' . $storageId;
         if ($storageId && is_numeric($storageId) && $storageId !== -1) {
-            if (isset(self::$postEnvironments[$storageId])) {
-                _K::info("cached PostEnvironment found for post ID {$storageId}");
-                return self::$postEnvironments[$storageId];
+            if (isset(self::$postEnvironments[$cacheKey])) {
+                _K::info("cached PostEnvironment found for post ID {$cacheKey}");
+                return self::$postEnvironments[$cacheKey];
             } else {
                 $realId = (is_null($actualPostId)) ? $storageId : $actualPostId;
                 $postObj = get_post($realId);
                 if (!is_null($postObj)) {
-                    _K::info("new PostEnvironment built for post ID {$storageId}");
-                    return self::$postEnvironments[$storageId] = new PostEnvironment($storageId, $postObj);
+                    _K::info("new PostEnvironment built for post ID {$cacheKey}");
+                    return self::$postEnvironments[$cacheKey] = new PostEnvironment($storageId, $postObj);
                 }
                 return null;
             }
@@ -599,6 +600,17 @@ class Utilities
         }
     }
 
+    /**
+     * @return Request
+     */
+    public static function getRequest()
+    {
+        if (is_null(self::$request)) {
+            self::$request = Request::createFromGlobals();
+        }
+        return self::$request;
+    }
+
     public static function filterPostId($postId)
     {
         $postId = absint($postId);
@@ -608,7 +620,6 @@ class Utilities
 
 
     }
-
 
     /**
      * @return string
@@ -636,7 +647,6 @@ class Utilities
         update_option('kbimagesizes', $kbimagesizes, false);
     }
 
-
     /**
      * @param array $args
      * @return Null
@@ -653,16 +663,5 @@ class Utilities
             return $val->value;
         }
         return $val;
-    }
-
-    /**
-     * @return Request
-     */
-    public static function getRequest()
-    {
-        if (is_null(self::$request)) {
-            self::$request = Request::createFromGlobals();
-        }
-        return self::$request;
     }
 }
