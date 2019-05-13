@@ -6,6 +6,7 @@ KB.FieldsAPI.register(require('fieldsAPI/definitions/image'));
 KB.FieldsAPI.register(require('fieldsAPI/definitions/link'));
 KB.FieldsAPI.register(require('fieldsAPI/definitions/text'));
 KB.FieldsAPI.register(require('fieldsAPI/definitions/file'));
+KB.FieldsAPI.register(require('fieldsAPI/definitions/file-multiple'));
 KB.FieldsAPI.register(require('fieldsAPI/definitions/select'));
 KB.FieldsAPI.register(require('fieldsAPI/definitions/checkbox'));
 KB.FieldsAPI.register(require('fieldsAPI/definitions/text-multiple'));

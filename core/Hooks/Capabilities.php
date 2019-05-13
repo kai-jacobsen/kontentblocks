@@ -55,7 +55,9 @@ class Capabilities
                     'delete_kontentblocks', // delete single blocks
                     'create_kontentblocks', // create new blocks
                     'deactivate_kontentblocks', // set a block inactive/active
-                    'sort_kontentblocks' // sort blocks
+                    'sort_kontentblocks', // sort blocks
+                    'manage_kontentblocks_global_modules',
+                    'manage_kontentblocks_dynamic_areas'
                 ),
                 'editor' => array
                 (
@@ -65,7 +67,9 @@ class Capabilities
                     'sort_kontentblocks',
                     'lock_kontentblocks',
                     'create_kontentblocks',
-                    'delete_kontentblocks'
+                    'delete_kontentblocks',
+                    'manage_kontentblocks_global_modules',
+                    'manage_kontentblocks_dynamic_areas'
                 ),
                 'contributor' => array
                 (

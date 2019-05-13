@@ -450,7 +450,6 @@ class StandardFieldSection implements ExportableFieldInterface
                 }
             }
         }
-
         return $collect;
     }
 

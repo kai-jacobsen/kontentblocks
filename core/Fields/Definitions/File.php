@@ -49,6 +49,7 @@ Class File extends Field
 
             return $param;
         }
+        return $param;
 
     }
 

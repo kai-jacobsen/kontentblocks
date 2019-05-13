@@ -51,7 +51,7 @@ class GlobalModulesMenu
             add_menu_page(
                 'kontentblocks',
                 'Kontentblocks',
-                'manage_kontentblocks',
+                'manage_kontentblocks_global_modules',
                 '/edit.php?post_type=kb-gmd',
                 false,
                 false
@@ -62,7 +62,7 @@ class GlobalModulesMenu
             '/edit.php?post_type=kb-dyar',
             $i18n['global']['menuTitle'],
             $i18n['global']['menuTitle'],
-            'manage_kontentblocks',
+            'manage_kontentblocks_global_modules',
             '/edit.php?post_type=kb-gmd',
             false
         );

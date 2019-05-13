@@ -1,0 +1,52 @@
+
+.kb-field--file-multiple-control{
+  display: inline-block;
+  color: $dark-grey;
+
+  &.kbf-sort{
+    cursor: move;
+  }
+  &.kbf-delete{
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    cursor: pointer;
+  }
+
+
+}
+.kb-field--file-multiple-item{
+  margin-bottom: 12px;
+  position: relative;
+
+  input{
+    display: inline-block;
+  }
+}
+.kb-field--file-multiple-item{
+  background-color: #fafafa;
+  padding: 12px;
+
+  table{
+    margin: 12px 0;
+    table-layout: auto;
+    width: 100%;
+  }
+
+
+  .heading{
+    display: inline !important;
+  }
+
+  .kb-file-input{
+    width: 100%;
+  }
+
+
+  table tr td:first-child{
+    font-weight: bold;
+    padding-right: 10px;padding-bottom: 12px;
+    width: 200px;
+  }
+
+}

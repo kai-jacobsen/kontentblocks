@@ -62,7 +62,7 @@ class DynamicAreas
             add_menu_page(
                 'kontentblocks',
                 'Kontentblocks',
-                'manage_kontentblocks',
+                'manage_kontentblocks_dynamic_areas',
                 '/edit.php?post_type=kb-dyar',
                 false,
                 false
@@ -72,7 +72,7 @@ class DynamicAreas
             '/edit.php?post_type=kb-dyar',
             'Areas',
             'Areas',
-            'manage_kontentblocks',
+            'manage_kontentblocks_dynamic_areas',
             '/edit.php?post_type=kb-dyar',
             false
         );

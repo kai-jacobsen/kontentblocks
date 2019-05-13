@@ -173,7 +173,8 @@ class Enqueues
         if (is_admin()) {
 
             // Main Stylesheet
-            wp_enqueue_style('kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css',array(), Kontentblocks::VERSION);
+            wp_enqueue_style('kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css', array(),
+                Kontentblocks::VERSION);
             self::enqueueStyles();
 
             wp_enqueue_script('kb-backend');
@@ -206,7 +207,7 @@ class Enqueues
         $data = array(
             'frontend' => !is_admin(),
             'preview' => is_preview(),
-            'wpVersion' => str_replace('.','-',substr($wp_version,0,3)),
+            'wpVersion' => str_replace('.', '-', substr($wp_version, 0, 3)),
             'loggedIn' => is_user_logged_in(),
             'user' => (is_admin()) ? wp_get_current_user() : false,
             'ajax_url' => (is_user_logged_in()) ? admin_url('admin-ajax.php') : null,
@@ -248,11 +249,27 @@ class Enqueues
 
         // if, for some reason, caps not set, fallback to defaults
         $setup_caps = (!empty($option)) ? $option : Capabilities::defaultCapabilities();
-
         // prepare cap collection for current user
         $caps = array();
         if (is_array($roles)) {
             foreach ($roles as $role) {
+                $set = get_role($role);
+                if (property_exists($set, 'capabilities')) {
+                    $rolecaps = $set->capabilities;
+                    $onlytrue = [];
+                    foreach ($rolecaps as $cap => $value) {
+                        if ($value === true) {
+                            $onlytrue[] = $cap;
+                        }
+                    }
+
+                    if (isset($setup_caps[$role])){
+                        $onlytrue = array_merge($onlytrue, $setup_caps[$role]);
+                    }
+
+                    $setup_caps[$role] = $onlytrue;
+
+                }
                 if (!empty($setup_caps[$role])) {
                     foreach ($setup_caps[$role] as $cap) {
                         $caps[] = $cap;
@@ -306,8 +323,10 @@ class Enqueues
     {
         if (is_user_logged_in() && !is_admin() && current_user_can('edit_kontentblocks')) {
             wp_enqueue_style('wp-color-picker');
-            wp_enqueue_style('kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css', array(),Kontentblocks::VERSION);
-            wp_enqueue_style('kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css', array(), Kontentblocks::VERSION);
+            wp_enqueue_style('kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css', array(),
+                Kontentblocks::VERSION);
+            wp_enqueue_style('kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css', array(),
+                Kontentblocks::VERSION);
             self::enqueueStyles();
         }
     }

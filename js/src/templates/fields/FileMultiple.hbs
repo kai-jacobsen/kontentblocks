@@ -1,0 +1,38 @@
+<div class="kb-field--file-multiple-item">
+    <div class="kb-field--file-multiple-control kbf-sort"><span class="dashicons dashicons-menu"></span></div>
+    <div class='kb-field-file-wrapper {{ isEmpty }}'>
+        <table>
+            <tbody>
+            <tr>
+                <td>{{ i18n.customtitle }}</td>
+                <td><input class="kb-file-input" name="{{ model.baseId }}[{{ model.uniqueId }}][title]" value="{{{ model.value.title }}}"></td>
+            </tr>
+            <tr>
+                <td>ID:</td>
+                <td><span class="kb-file-id">{{ model.value.file.id }}</span></td>
+            </tr>
+            <tr>
+                <td>{{ i18n.filetitle }}</td>
+                <td><span class="kb-file-title">{{ model.value.file.title }}</span></td>
+            </tr>
+            <tr>
+                <td>{{ i18n.filename }}</td>
+                <td><span class="kb-file-filename">{{ model.value.file.filename }}</span></td>
+            </tr>
+            <tr>
+                <td>{{ i18n.editLink }}</td>
+                <td><a class="kb-file-editLink" href="{{ model.value.file.editLink }}">edit</a></td>
+            </tr>
+            <tr>
+                <td>{{ i18n.comment }}</td>
+                <td><textarea class="kb-file-input" name="{{ model.baseId }}[{{ model.uniqueId }}][comment]">{{{ model.value.comment}}}</textarea></td>
+            </tr>
+            </tbody>
+        </table>
+        <input type="hidden" class="kb-file-attachment-id" value="{{ model.value.file.id}}"
+               name="{{ model.baseId }}[{{ model.uniqueId }}][id]">
+    </div>
+    <a class="button primary kb-js-add-file">{{ i18n.selectFile }}</a>
+    <a class="kb-js-reset-file {{ isEmpty }}">{{ i18n.reset }}</a>
+    <div data-kbfaction="delete" class="kb-field--file-multiple-control kbf-delete"><span class="dashicons dashicons-trash" ></span></div>
+</div>

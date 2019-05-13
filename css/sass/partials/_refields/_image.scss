@@ -1,13 +1,12 @@
 .kb-field--image, .kb-field--cropimage {
 
   padding-bottom: 10px;
-  display: none;
 
   .kb-field-image-wrapper {
     overflow: hidden;
   }
 
-  img{
+  img {
     max-width: 100%;
   }
 

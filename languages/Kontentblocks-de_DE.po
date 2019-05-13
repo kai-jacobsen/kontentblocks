@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kontentblocks 1.0.0\n"
-"POT-Creation-Date: 2017-10-24 23:38+0200\n"
-"PO-Revision-Date: 2017-10-24 23:39+0200\n"
+"POT-Creation-Date: 2019-04-20 16:26+0200\n"
+"PO-Revision-Date: 2019-04-20 16:27+0200\n"
 "Last-Translator: \n"
 "Language-Team: Kai Jacobsen\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.6\n"
 "X-Poedit-KeywordsList: __;_e;_x\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -20,187 +20,187 @@ msgstr ""
 msgid "Image could not be processed. Please go back and try again."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:165
+#: ../core/./Backend/Dynamic/DynamicAreas.php:166
 msgid "Dynamic"
 msgstr "Dynamisch"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:381
-#: ../core/./Backend/Dynamic/DynamicAreas.php:383
+#: ../core/./Backend/Dynamic/DynamicAreas.php:382
 #: ../core/./Backend/Dynamic/DynamicAreas.php:384
+#: ../core/./Backend/Dynamic/DynamicAreas.php:385
 msgid "Areas"
 msgstr "Areas"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:382
+#: ../core/./Backend/Dynamic/DynamicAreas.php:383
 msgid "Area"
 msgstr "Area"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:385
+#: ../core/./Backend/Dynamic/DynamicAreas.php:386
 msgid "Add New"
 msgstr "Hinzufügen"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:386
+#: ../core/./Backend/Dynamic/DynamicAreas.php:387
 msgid "Add New Area"
 msgstr "Neue Area hinzufügen"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:387
+#: ../core/./Backend/Dynamic/DynamicAreas.php:388
 msgid "New Area"
 msgstr "Neue Area"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:388
+#: ../core/./Backend/Dynamic/DynamicAreas.php:389
 msgid "Edit Area"
 msgstr "Area bearbeiten"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:389
+#: ../core/./Backend/Dynamic/DynamicAreas.php:390
 msgid "View Area"
 msgstr "Area ansehen"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:390
+#: ../core/./Backend/Dynamic/DynamicAreas.php:391
 msgid "All Areas"
 msgstr "Alle Areas"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:391
+#: ../core/./Backend/Dynamic/DynamicAreas.php:392
 msgid "Search Areas"
 msgstr "Areas durchsuchen"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:392
+#: ../core/./Backend/Dynamic/DynamicAreas.php:393
 msgid "Parent Area:"
 msgstr "Elternarea"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:393
+#: ../core/./Backend/Dynamic/DynamicAreas.php:394
 msgid "No Areas found."
 msgstr "Keine Areas gefunden."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:394
+#: ../core/./Backend/Dynamic/DynamicAreas.php:395
 msgid "No Areas found in Trash."
 msgstr "Keine Areas im Papierkorb."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:430
-#: ../core/./Backend/Dynamic/DynamicAreas.php:433
+#: ../core/./Backend/Dynamic/DynamicAreas.php:431
+#: ../core/./Backend/Dynamic/DynamicAreas.php:434
 msgid "Area updated."
 msgstr "Area wurde aktualisiert."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:431
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:525
+#: ../core/./Backend/Dynamic/DynamicAreas.php:432
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:524
 msgid "Custom field updated."
 msgstr "Custom field aktualisiert."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:432
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:526
+#: ../core/./Backend/Dynamic/DynamicAreas.php:433
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:525
 msgid "Custom field deleted."
 msgstr "Custom field gelöscht."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:436
+#: ../core/./Backend/Dynamic/DynamicAreas.php:437
 #, php-format
 msgid "Area restored to revision from %s"
 msgstr ""
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:439
+#: ../core/./Backend/Dynamic/DynamicAreas.php:440
 msgid "Area published."
 msgstr "Area wurde veröffentlicht."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:440
+#: ../core/./Backend/Dynamic/DynamicAreas.php:441
 msgid "Area saved."
 msgstr "Area wurde gespeichert."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:441
+#: ../core/./Backend/Dynamic/DynamicAreas.php:442
 msgid "Area submitted."
 msgstr "Area abgesendet"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:443
+#: ../core/./Backend/Dynamic/DynamicAreas.php:444
 #, php-format
 msgid "Area scheduled for: <strong>%1$s</strong>."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:445
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:542
+#: ../core/./Backend/Dynamic/DynamicAreas.php:446
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:541
 msgid "M j, Y @ G:i"
 msgstr ""
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:447
+#: ../core/./Backend/Dynamic/DynamicAreas.php:448
 msgid "Area draft updated."
 msgstr "Area Entwurf aktualisiert"
 
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:474
 #: ../core/./Backend/Dynamic/GlobalModulesMenu.php:475
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:476
 msgid "Global Module"
 msgstr "Globales Modul"
 
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:476
 #: ../core/./Backend/Dynamic/GlobalModulesMenu.php:477
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:478
-#: ../core/./Language/packages/i18n_Modules.php:53
-#: ../core/./Utils/Utilities.php:519
-#: ../core/Language/./packages/i18n_Modules.php:53
+#: ../core/./Language/packages/i18n_Modules.php:54
+#: ../core/./Utils/Utilities.php:525
+#: ../core/Language/./packages/i18n_Modules.php:54
 msgid "Global Modules"
 msgstr "Globale Module"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:479
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:478
 msgid "add New"
 msgstr "neu hinzufügen"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:480
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:479
 msgid "add New global module"
 msgstr "neues globales Modul hinzufügen"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:481
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:480
 msgid "new global module"
 msgstr "neues globales Modul"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:482
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:481
 msgid "edit global module"
 msgstr "globales Modul bearbeiten"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:483
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:482
 msgid "view global module"
 msgstr "globales Modul ansehen"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:484
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:483
 msgid "all global modules"
 msgstr "alle globalen Module"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:485
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:484
 msgid "search global modules"
 msgstr "globale Module durchsuchen"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:486
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:485
 msgid "parent global modules:"
 msgstr ""
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:487
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:486
 msgid "No global modules found."
 msgstr "Keine globalen Module gefunden"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:488
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:487
 msgid "No global modules found in Trash."
 msgstr "Keine globalen Module im Papierkorb"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:524
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:527
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:523
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:526
 msgid "global modules updated."
 msgstr "globales Modul wurde aktualisiert"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:531
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:530
 #, php-format
 msgid "global module restored to revision from %s"
 msgstr ""
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:536
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:535
 msgid "global module published."
 msgstr "globales Modul veröffentlicht."
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:537
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:536
 msgid "global module saved."
 msgstr "globales Modul gespeichert"
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:538
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:537
 msgid "global module submitted."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:540
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:539
 #, php-format
 msgid "global module scheduled for: <strong>%1$s</strong>."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:544
+#: ../core/./Backend/Dynamic/GlobalModulesMenu.php:543
 msgid "global module draft updated."
 msgstr ""
 
@@ -228,15 +228,15 @@ msgstr "Footer"
 msgid "Allowed Image Files"
 msgstr "Erlaubte Bilddateien"
 
-#: ../core/./Hooks/Enqueues.php:336
+#: ../core/./Hooks/Enqueues.php:337
 msgid "Clear"
 msgstr "Reset"
 
-#: ../core/./Hooks/Enqueues.php:337
+#: ../core/./Hooks/Enqueues.php:338
 msgid "Default"
 msgstr "Standardvorlage"
 
-#: ../core/./Hooks/Enqueues.php:338
+#: ../core/./Hooks/Enqueues.php:339
 msgid "Select Color"
 msgstr "Farbe wählen"
 
@@ -354,9 +354,9 @@ msgid "View"
 msgstr "Ansehen"
 
 #: ../core/./Language/packages/i18n_Common.php:9
-#: ../core/./Language/packages/i18n_Refields.php:33
+#: ../core/./Language/packages/i18n_Refields.php:38
 #: ../core/Language/./packages/i18n_Common.php:9
-#: ../core/Language/./packages/i18n_Refields.php:33
+#: ../core/Language/./packages/i18n_Refields.php:38
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -593,91 +593,96 @@ msgstr "Drag n' Drop um die Reihenfolge zu ändern"
 msgid "Toggle Fullscreen"
 msgstr "Große Ansicht umschalten"
 
-#: ../core/./Language/packages/i18n_Modules.php:37
-#: ../core/Language/./packages/i18n_Modules.php:37
-msgid "remove module or hold strg/cmd key to select multiple"
-msgstr "Module entfernen, strg/cmd gedrückt halten für Mehrfachauswahl"
+#: ../core/./Language/packages/i18n_Modules.php:33
+#: ../core/Language/./packages/i18n_Modules.php:33
+msgid "Toggle Module open / close"
+msgstr ""
 
 #: ../core/./Language/packages/i18n_Modules.php:38
 #: ../core/Language/./packages/i18n_Modules.php:38
-msgid "duplicate module"
-msgstr "Modul duplizieren"
+msgid "remove module or hold strg/cmd key to select multiple"
+msgstr "Module entfernen, strg/cmd gedrückt halten für Mehrfachauswahl"
 
 #: ../core/./Language/packages/i18n_Modules.php:39
 #: ../core/Language/./packages/i18n_Modules.php:39
+msgid "duplicate module"
+msgstr "Modul duplizieren"
+
+#: ../core/./Language/packages/i18n_Modules.php:40
+#: ../core/Language/./packages/i18n_Modules.php:40
 msgid "save module data"
 msgstr "Speichern"
 
-#: ../core/./Language/packages/i18n_Modules.php:41
-#: ../core/Language/./packages/i18n_Modules.php:41
+#: ../core/./Language/packages/i18n_Modules.php:42
+#: ../core/Language/./packages/i18n_Modules.php:42
 msgid "activate module"
 msgstr "Modul aktivieren"
 
-#: ../core/./Language/packages/i18n_Modules.php:42
-#: ../core/Language/./packages/i18n_Modules.php:42
+#: ../core/./Language/packages/i18n_Modules.php:43
+#: ../core/Language/./packages/i18n_Modules.php:43
 msgid "deactivate module"
 msgstr "Modul deaktivieren"
 
-#: ../core/./Language/packages/i18n_Modules.php:48
-#: ../core/Language/./packages/i18n_Modules.php:48
+#: ../core/./Language/packages/i18n_Modules.php:49
+#: ../core/Language/./packages/i18n_Modules.php:49
 msgid "Create a new global module"
 msgstr "Neues global Modul anlegen"
 
-#: ../core/./Language/packages/i18n_Modules.php:49
-#: ../core/Language/./packages/i18n_Modules.php:49
+#: ../core/./Language/packages/i18n_Modules.php:50
+#: ../core/Language/./packages/i18n_Modules.php:50
 msgid "Please chose the module type and provide an unique name."
 msgstr ""
 "Bitte wähle die Art des Moduls und gebe eine eindeutige Bezeichnung an."
 
-#: ../core/./Language/packages/i18n_Modules.php:50
-#: ../core/Language/./packages/i18n_Modules.php:50
+#: ../core/./Language/packages/i18n_Modules.php:51
+#: ../core/Language/./packages/i18n_Modules.php:51
 msgid "New global module"
 msgstr "neues globales Modul"
 
-#: ../core/./Language/packages/i18n_Modules.php:51
-#: ../core/Language/./packages/i18n_Modules.php:51
+#: ../core/./Language/packages/i18n_Modules.php:52
+#: ../core/Language/./packages/i18n_Modules.php:52
 msgid "Module name"
 msgstr "Modulname"
 
-#: ../core/./Language/packages/i18n_Modules.php:52
-#: ../core/Language/./packages/i18n_Modules.php:52
+#: ../core/./Language/packages/i18n_Modules.php:53
+#: ../core/Language/./packages/i18n_Modules.php:53
 msgid "Chose the module type"
 msgstr "Modultyp"
 
-#: ../core/./Language/packages/i18n_Modules.php:57
-#: ../core/Language/./packages/i18n_Modules.php:57
+#: ../core/./Language/packages/i18n_Modules.php:58
+#: ../core/Language/./packages/i18n_Modules.php:58
 msgid "Visible for"
 msgstr "sichtbar für"
 
-#: ../core/./Language/packages/i18n_Modules.php:58
-#: ../core/Language/./packages/i18n_Modules.php:58
+#: ../core/./Language/packages/i18n_Modules.php:59
+#: ../core/Language/./packages/i18n_Modules.php:59
 msgid "Logged in users"
 msgstr "angemeldete Benutzer"
 
-#: ../core/./Language/packages/i18n_Modules.php:59
-#: ../core/Language/./packages/i18n_Modules.php:59
+#: ../core/./Language/packages/i18n_Modules.php:60
+#: ../core/Language/./packages/i18n_Modules.php:60
 msgid "Anyone"
 msgstr "Jeden"
 
-#: ../core/./Language/packages/i18n_Modules.php:62
-#: ../core/Language/./packages/i18n_Modules.php:62
+#: ../core/./Language/packages/i18n_Modules.php:63
+#: ../core/Language/./packages/i18n_Modules.php:63
 msgid "Additional wrapper classes"
 msgstr "zusätzliche CSS Container-Klassen"
 
-#: ../core/./Language/packages/i18n_Modules.php:63
-#: ../core/./Language/packages/i18n_Modules.php:66
-#: ../core/Language/./packages/i18n_Modules.php:63
-#: ../core/Language/./packages/i18n_Modules.php:66
+#: ../core/./Language/packages/i18n_Modules.php:64
+#: ../core/./Language/packages/i18n_Modules.php:67
+#: ../core/Language/./packages/i18n_Modules.php:64
+#: ../core/Language/./packages/i18n_Modules.php:67
 msgid "Visibility"
 msgstr "Sichtbarkeit"
 
-#: ../core/./Language/packages/i18n_Modules.php:64
-#: ../core/Language/./packages/i18n_Modules.php:64
+#: ../core/./Language/packages/i18n_Modules.php:65
+#: ../core/Language/./packages/i18n_Modules.php:65
 msgid "Visible for logged-in users only"
 msgstr "Sichtbar für angemeldete Benutzer"
 
-#: ../core/./Language/packages/i18n_Modules.php:67
-#: ../core/Language/./packages/i18n_Modules.php:67
+#: ../core/./Language/packages/i18n_Modules.php:68
+#: ../core/Language/./packages/i18n_Modules.php:68
 msgid "Details"
 msgstr "Details"
 
@@ -692,7 +697,9 @@ msgid "Insert"
 msgstr "Einfügen"
 
 #: ../core/./Language/packages/i18n_Refields.php:11
+#: ../core/./Language/packages/i18n_Refields.php:20
 #: ../core/Language/./packages/i18n_Refields.php:11
+#: ../core/Language/./packages/i18n_Refields.php:20
 msgid "Reset"
 msgstr "Reset"
 
@@ -703,171 +710,191 @@ msgstr "Dateinamen"
 
 #: ../core/./Language/packages/i18n_Refields.php:16
 #: ../core/Language/./packages/i18n_Refields.php:16
-msgid "Edit link"
-msgstr "Bearbeiten URL"
+msgid "Filetitle"
+msgstr "Dateititel"
 
 #: ../core/./Language/packages/i18n_Refields.php:17
 #: ../core/Language/./packages/i18n_Refields.php:17
-msgid "Select file"
-msgstr "Datei wählen"
+msgid "Edit link"
+msgstr "Bearbeiten URL"
 
 #: ../core/./Language/packages/i18n_Refields.php:18
 #: ../core/Language/./packages/i18n_Refields.php:18
-msgid "Remove"
-msgstr "Entfernen"
+msgid "Select file"
+msgstr "Datei wählen"
 
 #: ../core/./Language/packages/i18n_Refields.php:19
 #: ../core/Language/./packages/i18n_Refields.php:19
-msgid "Select a file or upload a new one"
-msgstr "Eine Datei auswählen oder hochladen"
+msgid "Remove"
+msgstr "Entfernen"
+
+#: ../core/./Language/packages/i18n_Refields.php:21
+#: ../core/Language/./packages/i18n_Refields.php:21
+msgid "Custom title"
+msgstr "Eigener Titel"
+
+#: ../core/./Language/packages/i18n_Refields.php:22
+#: ../core/Language/./packages/i18n_Refields.php:22
+msgid "Comment"
+msgstr "Kommentar"
 
 #: ../core/./Language/packages/i18n_Refields.php:23
 #: ../core/Language/./packages/i18n_Refields.php:23
+msgid "Select a file or upload a new one"
+msgstr "Eine Datei auswählen oder hochladen"
+
+#: ../core/./Language/packages/i18n_Refields.php:27
+#: ../core/Language/./packages/i18n_Refields.php:27
 msgid "Buttonlabel"
 msgstr "Buttontext"
 
-#: ../core/./Language/packages/i18n_Refields.php:24
-#: ../core/Language/./packages/i18n_Refields.php:24
+#: ../core/./Language/packages/i18n_Refields.php:28
+#: ../core/Language/./packages/i18n_Refields.php:28
 msgid "Titleattribute"
 msgstr "Titelattribut"
 
-#: ../core/./Language/packages/i18n_Refields.php:25
-#: ../core/Language/./packages/i18n_Refields.php:25
+#: ../core/./Language/packages/i18n_Refields.php:29
+#: ../core/Language/./packages/i18n_Refields.php:29
 msgid "URL"
 msgstr "URL"
 
-#: ../core/./Language/packages/i18n_Refields.php:26
-#: ../core/Language/./packages/i18n_Refields.php:26
-msgid "Add link"
-msgstr "Link hinzufügen"
-
 #: ../core/./Language/packages/i18n_Refields.php:30
 #: ../core/Language/./packages/i18n_Refields.php:30
-msgid "Caption"
-msgstr "Bildunterschrift"
+msgid "open in new tab"
+msgstr ""
 
 #: ../core/./Language/packages/i18n_Refields.php:31
 #: ../core/Language/./packages/i18n_Refields.php:31
+msgid "Add link"
+msgstr "Link hinzufügen"
+
+#: ../core/./Language/packages/i18n_Refields.php:35
+#: ../core/Language/./packages/i18n_Refields.php:35
+msgid "Caption"
+msgstr "Bildunterschrift"
+
+#: ../core/./Language/packages/i18n_Refields.php:36
+#: ../core/Language/./packages/i18n_Refields.php:36
 msgid "Select an image or upload a new one"
 msgstr "Ein Bild auswählen oder neu hochladen"
 
-#: ../core/./Language/packages/i18n_Refields.php:32
-#: ../core/Language/./packages/i18n_Refields.php:32
+#: ../core/./Language/packages/i18n_Refields.php:37
+#: ../core/Language/./packages/i18n_Refields.php:37
 msgid "Hold STRG/CMD to select multiple images"
 msgstr "STRG/CMD gedrückt halten um mehrere Bilder auszuwählen"
 
-#: ../core/./Language/packages/i18n_Refields.php:34
-#: ../core/Language/./packages/i18n_Refields.php:34
+#: ../core/./Language/packages/i18n_Refields.php:39
+#: ../core/Language/./packages/i18n_Refields.php:39
 msgid "add images"
 msgstr "Bilder hinzufügen"
 
-#: ../core/./Language/packages/i18n_Refields.php:37
-#: ../core/Language/./packages/i18n_Refields.php:37
+#: ../core/./Language/packages/i18n_Refields.php:42
+#: ../core/Language/./packages/i18n_Refields.php:42
 msgid "edit gallery"
 msgstr "Galerie anpassen"
 
-#: ../core/./Language/packages/i18n_Refields.php:41
-#: ../core/Language/./packages/i18n_Refields.php:41
+#: ../core/./Language/packages/i18n_Refields.php:46
+#: ../core/Language/./packages/i18n_Refields.php:46
 msgid "Please provide a Taxonomy identifier"
 msgstr "Es wurde keine registrierte Taxonomie angegeben."
 
-#: ../core/./Language/packages/i18n_Refields.php:42
-#: ../core/Language/./packages/i18n_Refields.php:42
+#: ../core/./Language/packages/i18n_Refields.php:47
+#: ../core/Language/./packages/i18n_Refields.php:47
 msgid "There is no such Taxonomy registered"
 msgstr "Anegegebene Taxonomie existiert nicht."
 
-#: ../core/./Language/packages/i18n_Refields.php:43
-#: ../core/Language/./packages/i18n_Refields.php:43
+#: ../core/./Language/packages/i18n_Refields.php:48
+#: ../core/Language/./packages/i18n_Refields.php:48
 msgid "Please chose"
 msgstr "Bitte wählen"
 
-#: ../core/./Language/packages/i18n_Refields.php:44
-#: ../core/Language/./packages/i18n_Refields.php:44
+#: ../core/./Language/packages/i18n_Refields.php:49
+#: ../core/Language/./packages/i18n_Refields.php:49
 msgid "Please use either name,id or slug as field"
 msgstr "Bitte 'name', 'id' oder 'slug' als Feld benutzen"
 
-#: ../core/./Language/packages/i18n_Refields.php:47
-#: ../core/Language/./packages/i18n_Refields.php:47
+#: ../core/./Language/packages/i18n_Refields.php:52
+#: ../core/Language/./packages/i18n_Refields.php:52
 msgid "Add new element"
 msgstr "Element hinzufügen"
 
-#: ../core/./Language/packages/i18n_Refields.php:51
-#: ../core/Language/./packages/i18n_Refields.php:51
+#: ../core/./Language/packages/i18n_Refields.php:56
+#: ../core/Language/./packages/i18n_Refields.php:56
 msgid "and"
 msgstr "und"
 
-#: ../core/./Language/packages/i18n_Refields.php:52
-#: ../core/Language/./packages/i18n_Refields.php:52
+#: ../core/./Language/packages/i18n_Refields.php:57
+#: ../core/Language/./packages/i18n_Refields.php:57
 msgid "until"
 msgstr "bis"
 
-#: ../core/./Language/packages/i18n_Refields.php:54
-#: ../core/Language/./packages/i18n_Refields.php:54
+#: ../core/./Language/packages/i18n_Refields.php:59
+#: ../core/Language/./packages/i18n_Refields.php:59
 msgid "Mon"
 msgstr "Mo"
 
-#: ../core/./Language/packages/i18n_Refields.php:55
-#: ../core/Language/./packages/i18n_Refields.php:55
+#: ../core/./Language/packages/i18n_Refields.php:60
+#: ../core/Language/./packages/i18n_Refields.php:60
 msgid "Monday"
 msgstr "Montag"
 
-#: ../core/./Language/packages/i18n_Refields.php:58
-#: ../core/Language/./packages/i18n_Refields.php:58
+#: ../core/./Language/packages/i18n_Refields.php:63
+#: ../core/Language/./packages/i18n_Refields.php:63
 msgid "Tue"
 msgstr "Di"
 
-#: ../core/./Language/packages/i18n_Refields.php:59
-#: ../core/Language/./packages/i18n_Refields.php:59
+#: ../core/./Language/packages/i18n_Refields.php:64
+#: ../core/Language/./packages/i18n_Refields.php:64
 msgid "Tuesday"
 msgstr "Dienstag"
 
-#: ../core/./Language/packages/i18n_Refields.php:62
-#: ../core/Language/./packages/i18n_Refields.php:62
+#: ../core/./Language/packages/i18n_Refields.php:67
+#: ../core/Language/./packages/i18n_Refields.php:67
 msgid "Wed"
 msgstr "Mi"
 
-#: ../core/./Language/packages/i18n_Refields.php:63
-#: ../core/Language/./packages/i18n_Refields.php:63
+#: ../core/./Language/packages/i18n_Refields.php:68
+#: ../core/Language/./packages/i18n_Refields.php:68
 msgid "Wednesday"
 msgstr "Mittwoch"
 
-#: ../core/./Language/packages/i18n_Refields.php:66
-#: ../core/Language/./packages/i18n_Refields.php:66
+#: ../core/./Language/packages/i18n_Refields.php:71
+#: ../core/Language/./packages/i18n_Refields.php:71
 msgid "Thu"
 msgstr "Do"
 
-#: ../core/./Language/packages/i18n_Refields.php:67
-#: ../core/Language/./packages/i18n_Refields.php:67
+#: ../core/./Language/packages/i18n_Refields.php:72
+#: ../core/Language/./packages/i18n_Refields.php:72
 msgid "Thursday"
 msgstr "Donnerstag"
 
-#: ../core/./Language/packages/i18n_Refields.php:70
-#: ../core/Language/./packages/i18n_Refields.php:70
+#: ../core/./Language/packages/i18n_Refields.php:75
+#: ../core/Language/./packages/i18n_Refields.php:75
 msgid "Fri"
 msgstr "Fr"
 
-#: ../core/./Language/packages/i18n_Refields.php:71
-#: ../core/Language/./packages/i18n_Refields.php:71
+#: ../core/./Language/packages/i18n_Refields.php:76
+#: ../core/Language/./packages/i18n_Refields.php:76
 msgid "Friday"
 msgstr "Freitag"
 
-#: ../core/./Language/packages/i18n_Refields.php:74
-#: ../core/Language/./packages/i18n_Refields.php:74
+#: ../core/./Language/packages/i18n_Refields.php:79
+#: ../core/Language/./packages/i18n_Refields.php:79
 msgid "Sat"
 msgstr "Sa"
 
-#: ../core/./Language/packages/i18n_Refields.php:75
-#: ../core/Language/./packages/i18n_Refields.php:75
+#: ../core/./Language/packages/i18n_Refields.php:80
+#: ../core/Language/./packages/i18n_Refields.php:80
 msgid "Saturday"
 msgstr "Samstag"
 
-#: ../core/./Language/packages/i18n_Refields.php:78
-#: ../core/Language/./packages/i18n_Refields.php:78
+#: ../core/./Language/packages/i18n_Refields.php:83
+#: ../core/Language/./packages/i18n_Refields.php:83
 msgid "Sun"
 msgstr "So"
 
-#: ../core/./Language/packages/i18n_Refields.php:79
-#: ../core/Language/./packages/i18n_Refields.php:79
+#: ../core/./Language/packages/i18n_Refields.php:84
+#: ../core/Language/./packages/i18n_Refields.php:84
 msgid "Sunday"
 msgstr "Sonntag"
 
@@ -878,19 +905,19 @@ msgstr ""
 "Es gibt ungespeicherte Änderungen. <span class=\"kb-button\">Jetzt "
 "speichern</span>"
 
-#: ../core/./Utils/Utilities.php:512
+#: ../core/./Utils/Utilities.php:518
 msgid "Standard"
 msgstr "Standard"
 
-#: ../core/./Utils/Utilities.php:516
+#: ../core/./Utils/Utilities.php:522
 msgid "Media"
 msgstr "Media"
 
-#: ../core/./Utils/Utilities.php:517
+#: ../core/./Utils/Utilities.php:523
 msgid "Spezial"
 msgstr "Spezial"
 
-#: ../core/./Utils/Utilities.php:518
+#: ../core/./Utils/Utilities.php:524
 msgid "System"
 msgstr "System"
 

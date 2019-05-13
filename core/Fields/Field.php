@@ -521,7 +521,6 @@ abstract class Field implements ExportableFieldInterface
         if ($this->getCallback('save.value')) {
             $data = call_user_func($this->getCallback('save.value'), $new, $old, $data);
         }
-
         return $data;
 
     }

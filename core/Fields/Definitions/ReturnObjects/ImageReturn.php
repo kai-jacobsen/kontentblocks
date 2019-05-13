@@ -162,7 +162,6 @@ class ImageReturn extends StandardFieldReturn
             $resizeargs['crop'] = $this->setupCropFromSetting();
         }
 
-
         $processed = ImageResize::getInstance()->process(
             $this->attId,
             $resizeargs['width'],

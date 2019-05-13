@@ -128,6 +128,7 @@ abstract class AbstractPanel implements EntityInterface, FieldEntityInterface
     {
         $old = $this->dataProvider->get($this->baseId);
         $new = $this->fields->save($postData->request->get($this->baseId), $old);
+
         $merged = Utilities::arrayMergeRecursive($new, $old);
         $this->model->set($merged)->sync();
         if ($this->saveAsSingle) {

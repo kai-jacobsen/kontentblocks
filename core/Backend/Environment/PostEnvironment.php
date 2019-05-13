@@ -90,6 +90,11 @@ class PostEnvironment implements JsonSerializable, EnvironmentInterface
      */
     protected $areasByContext;
 
+    /**
+     * @var int
+     */
+    protected $blogId;
+
 
     /**
      * Class constructor
@@ -109,6 +114,7 @@ class PostEnvironment implements JsonSerializable, EnvironmentInterface
         $this->areasToContext();
         $this->panelRepository = new PostPanelRepository($this);
         $this->panels = $this->panelRepository->getPanelObjects();
+        $this->blogId = get_current_blog_id();
     }
 
     /**

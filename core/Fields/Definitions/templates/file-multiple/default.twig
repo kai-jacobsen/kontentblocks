@@ -1,0 +1,8 @@
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    <div class="kbf-field--file-multiple-stage" data-kftype="file-multiple">
+        <div data-kfel="list"></div>
+        <a class="button button-secondary"
+           data-kfui="add-entry">{{ Field.getArg('buttonlabel')|default('add entry') }}</a>
+    </div>
+{% endblock %}

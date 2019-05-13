@@ -39,7 +39,6 @@ module.exports = Backbone.View.extend({
     });
     var view = KB.FieldsAPI.getRefByType(this.type, itemData);
     this.$list.append(view.render());
-
     _.defer(function () {
       if (view.postRender) {
         view.postRender.call(view);
@@ -78,7 +77,7 @@ module.exports = Backbone.View.extend({
   },
   handleEmptyList: function () {
     var items = jQuery('.kb-field--' + this.type + '-item', this.$list).length;
-    if (items == 0) {
+    if (items === 0) {
       this.createElement('');
     }
   }

@@ -156,17 +156,27 @@ body .kb-field-wrapper {
 @media screen and (min-width: 1200px) {
 
   .kb-field-flex.klearfix {
-    display: flex !important;
-
+    //display: flex !important;
+    flex-direction: row;
     &.kb-field {
       padding: 0;
     }
 
     .kb-field--label-wrap {
-      width: 150px;
+      //width: 150px;
       margin-right: 0;
       //background-color: $grey-100;
       padding: 20px;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+
+      &:after{
+        content: '';
+        display: block;
+        border-bottom: 1px solid $grey-300;
+        width: 100px;
+
+      }
 
       label.heading {
         font-size: 13px;
@@ -175,8 +185,9 @@ body .kb-field-wrapper {
     }
 
     .kb-field--field-wrap {
-      flex-grow: 1;
-      padding: 20px 0;
+      //flex-grow: 1;
+      padding: 20px 20px;
+      padding-top: 0;
 
     }
 

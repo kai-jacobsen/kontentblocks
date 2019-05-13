@@ -1231,7 +1231,7 @@ var _logger = require('./logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var VERSION = '4.0.11';
+var VERSION = '4.1.2';
 exports.VERSION = VERSION;
 var COMPILER_REVISION = 7;
 
@@ -1697,7 +1697,13 @@ exports.__esModule = true;
 
 exports['default'] = function (instance) {
   instance.registerHelper('lookup', function (obj, field) {
-    return obj && obj[field];
+    if (!obj) {
+      return obj;
+    }
+    if (field === 'constructor' && !obj.propertyIsEnumerable(field)) {
+      return undefined;
+    }
+    return obj[field];
   });
 };
 

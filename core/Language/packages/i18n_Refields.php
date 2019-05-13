@@ -13,9 +13,13 @@
         // Field::File
         'file' => array(
             'filename' => __( 'Filename', 'Kontentblocks' ),
+            'filetitle' => __( 'Filetitle', 'Kontentblocks' ),
             'editLink' => __( 'Edit link', 'Kontentblocks' ),
             'selectFile' => __( 'Select file', 'Kontentblocks' ),
             'remove' => __( 'Remove', 'Kontentblocks' ),
+            'reset' => __( 'Reset', 'Kontentblocks' ),
+            'customtitle' => __( 'Custom title', 'Kontentblocks' ),
+            'comment' => __( 'Comment', 'Kontentblocks' ),
             'modalTitle' => __( 'Select a file or upload a new one', 'Kontentblocks' )
         ),
         // Field::Link

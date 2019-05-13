@@ -102,7 +102,6 @@ Class Select extends Field
                 if (!is_array($new)) {
                     $new = array();
                 }
-
                 if (is_array($old)) {
                     foreach (array_keys($old) as $index) {
                         if (!isset($new[$index])) {

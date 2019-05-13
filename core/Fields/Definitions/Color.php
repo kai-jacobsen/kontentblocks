@@ -54,6 +54,10 @@ Class Color extends Field
             return $color;
         }
 
+        if (strpos($color,'rgb') !== false){
+            return $color;
+        }
+
         return null;
 
 

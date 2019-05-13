@@ -88,6 +88,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
 
     protected $integratePost;
 
+
     /**
      * @param array $args
      * @param PostEnvironment $environment

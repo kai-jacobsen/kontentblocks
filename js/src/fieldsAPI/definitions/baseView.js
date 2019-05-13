@@ -1,4 +1,6 @@
 module.exports = Backbone.View.extend({
+  tagName: 'div',
+  className: 'kb-dyn-field',
   initialize: function () {
     this.defaults = this.getDefaults() || {};
     this.extendModel();
