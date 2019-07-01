@@ -92,6 +92,7 @@ class SaveRevision
             return false;
         }
 
+
         $areas = $this->originalEnv->getAreas();
 //        $panels = $this->originalEnv->getPanels();
         // Bail out if no areas are set

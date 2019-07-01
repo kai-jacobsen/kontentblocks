@@ -19,7 +19,7 @@ class Revisions
     function __construct()
     {
         global $pagenow;
-        add_filter('_wp_post_revision_fields', array($this, 'revisionFields'));
+        add_filter('_wp_post_revision_fields', array($this, 'revisionFields'),99);
         add_action('wp_restore_post_revision', array($this, 'restoreRevision'), 10, 2);
     }
 
@@ -45,6 +45,7 @@ class Revisions
         $revIndex = $revEnvironment->getStorage()->getIndex();
         $postEnvironment->getStorage()->deleteAll();
         $postEnvironment->getStorage()->saveIndex($revIndex);
+
 
         /*
          * Modules
@@ -122,10 +123,13 @@ class Revisions
         }
 
 
+
         // get field objects
         $environment = Utilities::getPostEnvironment($postId);
         $panels = $environment->getPanels();
         $modules = $environment->getModuleRepository()->getModules();
+
+
 
 
         /** @var PostPanel $panel */
@@ -159,7 +163,6 @@ class Revisions
 
         /** @var Module $module */
         foreach ($modules as $module) {
-
             if (!is_a($module->fields, StandardFieldController::class)) {
                 continue;
             }
@@ -192,8 +195,6 @@ class Revisions
                 }
             }
         }
-
-
         return $return;
 
     }
@@ -288,7 +289,9 @@ class Revisions
         $workshop = new ModuleWorkshop($environment, $moduleDef);
         $module = $workshop->getModule();
         $fieldController = $module->fields;
+        $fieldController->updateData();
         $fields = $fieldController->collectAllFields();
+
         if (isset($fields[$field])) {
             /** @var Field $field */
             $field = $fields[$field];
