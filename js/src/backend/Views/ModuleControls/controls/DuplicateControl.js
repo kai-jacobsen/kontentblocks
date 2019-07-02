@@ -28,6 +28,11 @@ module.exports = BaseView.extend({
 
   },
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (!this.model.get('predefined') && !this.model.get('disabled') && !this.model.get('submodule') &&
       Checks.userCan('edit_kontentblocks')) {
       return true;
@@ -42,7 +47,12 @@ module.exports = BaseView.extend({
       Notice.notice('Request Error', 'error');
       return false;
     }
+
+
+
     this.model.Area.View.$modulesList.append(res.data.html);
+
+
 
     module = res.data.module;
 

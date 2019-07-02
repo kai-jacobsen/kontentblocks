@@ -160,6 +160,7 @@ abstract class Module implements EntityInterface, FieldEntityInterface
             'templates' => array(),
             'fieldRenderer' => 'Kontentblocks\Fields\Renderer\FieldRendererTabs',
             'iconclass' => 'dashicons-screenoptions',
+            'cap' => '',
             'subarea' => false
         );
 
@@ -212,6 +213,14 @@ abstract class Module implements EntityInterface, FieldEntityInterface
     {
         $concat = '';
 
+        $cap = $this->properties->getSetting('cap');
+        if (!empty($cap) && is_string($cap)){
+            if (!current_user_can($cap)){
+                $concat .= $this->renderDisallowedForm();
+                return $concat;
+            }
+        }
+
         // render fields if set
         if (isset($this->fields) && is_object($this->fields)) {
             $rendererClass = $this->properties->getSetting('fieldRenderer');
@@ -232,6 +241,16 @@ abstract class Module implements EntityInterface, FieldEntityInterface
     private function renderEmptyForm()
     {
         $tpl = new CoreView('no-module-options.twig');
+        return $tpl->render();
+    }
+
+    /**
+     * No fields or form method override / fallback
+     * @since 0.1.0
+     */
+    private function renderDisallowedForm()
+    {
+        $tpl = new CoreView('cap-restriction.twig');
         return $tpl->render();
     }
 

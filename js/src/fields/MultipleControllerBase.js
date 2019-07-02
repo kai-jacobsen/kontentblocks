@@ -22,7 +22,7 @@ module.exports = Backbone.View.extend({
       this.handleLimit();
     }
   },
-  setupData: function(){
+  setupData: function () {
     return this.model.get('value');
   },
   createElement: function (value) {

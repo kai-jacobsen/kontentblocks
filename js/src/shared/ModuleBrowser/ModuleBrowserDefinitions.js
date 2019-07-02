@@ -1,4 +1,6 @@
 var Payload = require('common/Payload');
+var Checks = require('common/Checks');
+
 module.exports = Backbone.Collection.extend({
 
   initialize: function (models, options) {
@@ -28,6 +30,11 @@ module.exports = Backbone.Collection.extend({
     });
   },
   validateVisibility: function (m) {
+
+    if (!Checks.userCan(m.get('settings').cap)){
+      return false;
+    }
+
     if (m.get('settings').hidden) {
       return false;
     }

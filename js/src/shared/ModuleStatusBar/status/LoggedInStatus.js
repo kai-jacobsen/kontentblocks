@@ -1,5 +1,7 @@
 var BaseView = require('backend/Views/BaseControlView');
 var tplLoggedInStatus = require('templates/backend/status/loggedin.hbs');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   id: 'loggedIn',
   controller: null,
@@ -9,6 +11,9 @@ module.exports = BaseView.extend({
     this.listenTo(this.model, 'override:loggedinonly', this.rerender);
   },
   isValid: function () {
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
     if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
       return false;
     }

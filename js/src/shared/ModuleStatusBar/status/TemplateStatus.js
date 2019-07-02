@@ -1,6 +1,8 @@
 var BaseView = require('backend/Views/BaseControlView');
 var tplTemplatesStatus = require('templates/backend/status/templates.hbs');
 var CodemirrorOverlay = require('backend/Views/TemplateEditor/CodemirrorOverlay');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   id: 'templates',
   controller: null,
@@ -16,6 +18,9 @@ module.exports = BaseView.extend({
     'dblclick': 'openEditor'
   },
   isValid: function () {
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
     return true;
   },
   render: function (views) {

@@ -32,6 +32,11 @@ module.exports = BaseView.extend({
 
   },
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (!this.model.get('disabled') &&
       Checks.userCan('deactivate_kontentblocks') && (this.model.get('globalModule') !== true) && !this.model.get('submodule')) {
       return true;

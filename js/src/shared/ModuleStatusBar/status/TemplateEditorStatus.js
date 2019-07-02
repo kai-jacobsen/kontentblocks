@@ -1,6 +1,8 @@
 var BaseView = require('backend/Views/BaseControlView');
 var CodemirrorOverlay = require('backend/Views/TemplateEditor/CodemirrorOverlay');
 var Config = require('common/Config');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   id: 'templateEditor',
   controller: null,
@@ -12,6 +14,11 @@ module.exports = BaseView.extend({
     this.moduleView = options.parent;
   },
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (this.model.get('class') === "ModuleGlobalModuleProxy"){
       return false;
     }

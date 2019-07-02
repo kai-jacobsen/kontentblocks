@@ -3,6 +3,8 @@ var tplPublishStatus = require('templates/backend/status/publish.hbs');
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var I18n = require('common/I18n');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   id: 'publish',
   className: 'kb-status-draft',
@@ -10,6 +12,11 @@ module.exports = BaseView.extend({
     'click': 'toggleDraft'
   },
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
       return false;
     }

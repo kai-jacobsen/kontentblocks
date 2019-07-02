@@ -1166,7 +1166,8 @@ module.exports = Backbone.View.extend({
   id: '',
   $menuWrap: {}, // wrap container jQuery element
   $menuList: {}, // ul item
-  initialize: function () {
+  initialize: function (options) {
+    this.parent = options.parent;
     this.$menuWrap = jQuery('.menu-wrap', this.$el); //set outer element
     this.$menuWrap.append("<div class='module-actions'></div>"); // render template
     this.$menuList = jQuery('.module-actions', this.$menuWrap);
@@ -1177,6 +1178,9 @@ module.exports = Backbone.View.extend({
    */
   addItem: function (view) {
     this.controls = this.controls || {};
+    // var cap = this.parent.model.get('settings').cap;
+    // console.log(cap);
+
     // 'backend' to add menu items
     // actually happens in ModuleView.js
     // this functions validates action by calling 'isValid' on menu item view
@@ -1256,6 +1260,11 @@ module.exports = BaseView.extend({
     this.marked = false;
   },
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     return !!(!this.model.get('predefined') && !this.model.get('disabled') && !this.model.get('submodule') &&
       Checks.userCan('delete_kontentblocks'));
   },
@@ -1314,6 +1323,11 @@ module.exports = BaseView.extend({
 
   },
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (!this.model.get('predefined') && !this.model.get('disabled') && !this.model.get('submodule') &&
       Checks.userCan('edit_kontentblocks')) {
       return true;
@@ -1328,7 +1342,12 @@ module.exports = BaseView.extend({
       Notice.notice('Request Error', 'error');
       return false;
     }
+
+
+
     this.model.Area.View.$modulesList.append(res.data.html);
+
+
 
     module = res.data.module;
 
@@ -1401,6 +1420,11 @@ module.exports = BaseView.extend({
     this.$el.removeClass('is-dirty');
   },
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (this.model.get('master')) {
       return false;
     }
@@ -1461,6 +1485,10 @@ module.exports = BaseView.extend({
 
   },
   isValid: function () {
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (!this.model.get('disabled') &&
       Checks.userCan('deactivate_kontentblocks')) {
       return true;
@@ -2562,6 +2590,11 @@ module.exports = {
 
   },
   userCan: function (cap) {
+
+    if (cap === ''){
+      return true;
+    }
+
     var check = jQuery.inArray(cap, Config.get('caps'));
     return check !== -1;
   }
@@ -3851,7 +3884,7 @@ module.exports = Backbone.View.extend({
       this.handleLimit();
     }
   },
-  setupData: function(){
+  setupData: function () {
     return this.model.get('value');
   },
   createElement: function (value) {
@@ -8206,6 +8239,8 @@ module.exports = Backbone.View.extend({
 });
 },{"common/Ajax":50,"common/Checks":52,"common/Config":53,"common/Notice":57,"common/Payload":58,"common/TinyMCE":59,"shared/ModuleBrowser/ModuleBrowserDefinitions":146,"shared/ModuleBrowser/ModuleBrowserDescriptions":147,"shared/ModuleBrowser/ModuleBrowserNavigation":150,"shared/ModuleBrowser/ModuleDefinitionModel":152,"templates/backend/modulebrowser/module-browser.hbs":176}],146:[function(require,module,exports){
 var Payload = require('common/Payload');
+var Checks = require('common/Checks');
+
 module.exports = Backbone.Collection.extend({
 
   initialize: function (models, options) {
@@ -8235,6 +8270,11 @@ module.exports = Backbone.Collection.extend({
     });
   },
   validateVisibility: function (m) {
+
+    if (!Checks.userCan(m.get('settings').cap)){
+      return false;
+    }
+
     if (m.get('settings').hidden) {
       return false;
     }
@@ -8259,7 +8299,7 @@ module.exports = Backbone.Collection.extend({
     return cats;
   }
 });
-},{"common/Payload":58}],147:[function(require,module,exports){
+},{"common/Checks":52,"common/Payload":58}],147:[function(require,module,exports){
 //KB.Backbone.ModuleBrowserModuleDescription
 var tplModuleTemplateDescription = require('templates/backend/modulebrowser/module-template-description.hbs');
 var tplModuleDescription = require('templates/backend/modulebrowser/module-description.hbs');
@@ -8503,6 +8543,8 @@ var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var I18n = require('common/I18n');
 var Notice = require('common/Notice');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   className: 'kb-status-draft',
   id: 'status',
@@ -8510,6 +8552,10 @@ module.exports = BaseView.extend({
     'click': 'toggleDraft'
   },
   isValid: function () {
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
       return false;
     }
@@ -8541,9 +8587,11 @@ module.exports = BaseView.extend({
   }
 
 });
-},{"backend/Views/BaseControlView":13,"common/Ajax":50,"common/Config":53,"common/I18n":54,"common/Notice":57,"templates/backend/status/draft.hbs":182}],155:[function(require,module,exports){
+},{"backend/Views/BaseControlView":13,"common/Ajax":50,"common/Checks":52,"common/Config":53,"common/I18n":54,"common/Notice":57,"templates/backend/status/draft.hbs":182}],155:[function(require,module,exports){
 var BaseView = require('backend/Views/BaseControlView');
 var tplLoggedInStatus = require('templates/backend/status/loggedin.hbs');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   id: 'loggedIn',
   controller: null,
@@ -8553,6 +8601,9 @@ module.exports = BaseView.extend({
     this.listenTo(this.model, 'override:loggedinonly', this.rerender);
   },
   isValid: function () {
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
     if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
       return false;
     }
@@ -8567,7 +8618,7 @@ module.exports = BaseView.extend({
   }
 
 });
-},{"backend/Views/BaseControlView":13,"templates/backend/status/loggedin.hbs":183}],156:[function(require,module,exports){
+},{"backend/Views/BaseControlView":13,"common/Checks":52,"templates/backend/status/loggedin.hbs":183}],156:[function(require,module,exports){
 //KB.Backbone.Backend.ModuleDelete
 var BaseView = require('backend/Views/BaseControlView');
 module.exports = BaseView.extend({
@@ -8587,6 +8638,8 @@ var tplPublishStatus = require('templates/backend/status/publish.hbs');
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var I18n = require('common/I18n');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   id: 'publish',
   className: 'kb-status-draft',
@@ -8594,6 +8647,11 @@ module.exports = BaseView.extend({
     'click': 'toggleDraft'
   },
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
       return false;
     }
@@ -8627,7 +8685,7 @@ module.exports = BaseView.extend({
   }
 
 });
-},{"backend/Views/BaseControlView":13,"common/Ajax":50,"common/Config":53,"common/I18n":54,"templates/backend/status/publish.hbs":184}],158:[function(require,module,exports){
+},{"backend/Views/BaseControlView":13,"common/Ajax":50,"common/Checks":52,"common/Config":53,"common/I18n":54,"templates/backend/status/publish.hbs":184}],158:[function(require,module,exports){
 var tplSettingsModal = require('templates/backend/status/settings/modal-inner.hbs');
 var SettingsTabController = require('./SettingsTabsController');
 var LoggedInOnly = require('./controls/LoggedInOnly');
@@ -8813,6 +8871,8 @@ module.exports = ControlView.extend({
 },{"./ControlView":161,"templates/backend/status/settings/wrapperClasses.hbs":187}],164:[function(require,module,exports){
 var BaseView = require('backend/Views/BaseControlView');
 var SettingsController = require('shared/ModuleStatusBar/status/Settings/SettingsStatusController');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   id: 'settings',
   controller: null,
@@ -8824,6 +8884,11 @@ module.exports = BaseView.extend({
     this.moduleView = options.parent;
   },
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
       return false;
     }
@@ -8846,10 +8911,12 @@ module.exports = BaseView.extend({
   }
 
 });
-},{"backend/Views/BaseControlView":13,"shared/ModuleStatusBar/status/Settings/SettingsStatusController":158}],165:[function(require,module,exports){
+},{"backend/Views/BaseControlView":13,"common/Checks":52,"shared/ModuleStatusBar/status/Settings/SettingsStatusController":158}],165:[function(require,module,exports){
 var BaseView = require('backend/Views/BaseControlView');
 var CodemirrorOverlay = require('backend/Views/TemplateEditor/CodemirrorOverlay');
 var Config = require('common/Config');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   id: 'templateEditor',
   controller: null,
@@ -8861,6 +8928,11 @@ module.exports = BaseView.extend({
     this.moduleView = options.parent;
   },
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (this.model.get('class') === "ModuleGlobalModuleProxy"){
       return false;
     }
@@ -8877,10 +8949,12 @@ module.exports = BaseView.extend({
   }
 
 });
-},{"backend/Views/BaseControlView":13,"backend/Views/TemplateEditor/CodemirrorOverlay":38,"common/Config":53}],166:[function(require,module,exports){
+},{"backend/Views/BaseControlView":13,"backend/Views/TemplateEditor/CodemirrorOverlay":38,"common/Checks":52,"common/Config":53}],166:[function(require,module,exports){
 var BaseView = require('backend/Views/BaseControlView');
 var tplTemplatesStatus = require('templates/backend/status/templates.hbs');
 var CodemirrorOverlay = require('backend/Views/TemplateEditor/CodemirrorOverlay');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   id: 'templates',
   controller: null,
@@ -8896,6 +8970,9 @@ module.exports = BaseView.extend({
     'dblclick': 'openEditor'
   },
   isValid: function () {
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
     return true;
   },
   render: function (views) {
@@ -8914,7 +8991,7 @@ module.exports = BaseView.extend({
     }, this);
   }
 });
-},{"backend/Views/BaseControlView":13,"backend/Views/TemplateEditor/CodemirrorOverlay":38,"templates/backend/status/templates.hbs":188}],167:[function(require,module,exports){
+},{"backend/Views/BaseControlView":13,"backend/Views/TemplateEditor/CodemirrorOverlay":38,"common/Checks":52,"templates/backend/status/templates.hbs":188}],167:[function(require,module,exports){
 /*
  Simple Get/Set implementation to set and get views
  No magic here

@@ -9,6 +9,11 @@ module.exports = {
 
   },
   userCan: function (cap) {
+
+    if (cap === ''){
+      return true;
+    }
+
     var check = jQuery.inArray(cap, Config.get('caps'));
     return check !== -1;
   }

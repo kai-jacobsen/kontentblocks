@@ -1,5 +1,7 @@
 var BaseView = require('backend/Views/BaseControlView');
 var SettingsController = require('shared/ModuleStatusBar/status/Settings/SettingsStatusController');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   id: 'settings',
   controller: null,
@@ -11,6 +13,11 @@ module.exports = BaseView.extend({
     this.moduleView = options.parent;
   },
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
       return false;
     }

@@ -4,6 +4,8 @@ var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var I18n = require('common/I18n');
 var Notice = require('common/Notice');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   className: 'kb-status-draft',
   id: 'status',
@@ -11,6 +13,10 @@ module.exports = BaseView.extend({
     'click': 'toggleDraft'
   },
   isValid: function () {
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
       return false;
     }

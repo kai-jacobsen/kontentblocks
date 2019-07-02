@@ -309,7 +309,8 @@ module.exports = Backbone.View.extend({
   id: '',
   $menuWrap: {}, // wrap container jQuery element
   $menuList: {}, // ul item
-  initialize: function () {
+  initialize: function (options) {
+    this.parent = options.parent;
     this.$menuWrap = jQuery('.menu-wrap', this.$el); //set outer element
     this.$menuWrap.append("<div class='module-actions'></div>"); // render template
     this.$menuList = jQuery('.module-actions', this.$menuWrap);
@@ -320,6 +321,9 @@ module.exports = Backbone.View.extend({
    */
   addItem: function (view) {
     this.controls = this.controls || {};
+    // var cap = this.parent.model.get('settings').cap;
+    // console.log(cap);
+
     // 'backend' to add menu items
     // actually happens in ModuleView.js
     // this functions validates action by calling 'isValid' on menu item view
@@ -832,6 +836,11 @@ module.exports = {
 
   },
   userCan: function (cap) {
+
+    if (cap === ''){
+      return true;
+    }
+
     var check = jQuery.inArray(cap, Config.get('caps'));
     return check !== -1;
   }
@@ -2104,7 +2113,7 @@ module.exports = Backbone.View.extend({
       this.handleLimit();
     }
   },
-  setupData: function(){
+  setupData: function () {
     return this.model.get('value');
   },
   createElement: function (value) {
@@ -6441,7 +6450,7 @@ var EditableText = Backbone.View.extend({
     if (this.el.id) {
       this.id = this.el.id;
     }
-    console.trace();
+
     this.Toolbar.show();
 
   },
@@ -9549,6 +9558,8 @@ module.exports = Backbone.View.extend({
 });
 },{"common/Ajax":20,"common/Checks":21,"common/Config":22,"common/Notice":25,"common/Payload":26,"common/TinyMCE":28,"shared/ModuleBrowser/ModuleBrowserDefinitions":150,"shared/ModuleBrowser/ModuleBrowserDescriptions":151,"shared/ModuleBrowser/ModuleBrowserNavigation":154,"shared/ModuleBrowser/ModuleDefinitionModel":156,"templates/backend/modulebrowser/module-browser.hbs":163}],150:[function(require,module,exports){
 var Payload = require('common/Payload');
+var Checks = require('common/Checks');
+
 module.exports = Backbone.Collection.extend({
 
   initialize: function (models, options) {
@@ -9578,6 +9589,11 @@ module.exports = Backbone.Collection.extend({
     });
   },
   validateVisibility: function (m) {
+
+    if (!Checks.userCan(m.get('settings').cap)){
+      return false;
+    }
+
     if (m.get('settings').hidden) {
       return false;
     }
@@ -9602,7 +9618,7 @@ module.exports = Backbone.Collection.extend({
     return cats;
   }
 });
-},{"common/Payload":26}],151:[function(require,module,exports){
+},{"common/Checks":21,"common/Payload":26}],151:[function(require,module,exports){
 //KB.Backbone.ModuleBrowserModuleDescription
 var tplModuleTemplateDescription = require('templates/backend/modulebrowser/module-template-description.hbs');
 var tplModuleDescription = require('templates/backend/modulebrowser/module-description.hbs');
@@ -9845,6 +9861,8 @@ var tplPublishStatus = require('templates/backend/status/publish.hbs');
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var I18n = require('common/I18n');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   id: 'publish',
   className: 'kb-status-draft',
@@ -9852,6 +9870,11 @@ module.exports = BaseView.extend({
     'click': 'toggleDraft'
   },
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
+
     if (KB.Environment && KB.Environment.postType === "kb-gmd" ){
       return false;
     }
@@ -9885,10 +9908,12 @@ module.exports = BaseView.extend({
   }
 
 });
-},{"backend/Views/BaseControlView":1,"common/Ajax":20,"common/Config":22,"common/I18n":23,"templates/backend/status/publish.hbs":169}],159:[function(require,module,exports){
+},{"backend/Views/BaseControlView":1,"common/Ajax":20,"common/Checks":21,"common/Config":22,"common/I18n":23,"templates/backend/status/publish.hbs":169}],159:[function(require,module,exports){
 var BaseView = require('backend/Views/BaseControlView');
 var tplTemplatesStatus = require('templates/backend/status/templates.hbs');
 var CodemirrorOverlay = require('backend/Views/TemplateEditor/CodemirrorOverlay');
+var Checks = require('common/Checks');
+
 module.exports = BaseView.extend({
   id: 'templates',
   controller: null,
@@ -9904,6 +9929,9 @@ module.exports = BaseView.extend({
     'dblclick': 'openEditor'
   },
   isValid: function () {
+    if (!Checks.userCan(this.model.get('settings').cap)){
+      return false;
+    }
     return true;
   },
   render: function (views) {
@@ -9922,7 +9950,7 @@ module.exports = BaseView.extend({
     }, this);
   }
 });
-},{"backend/Views/BaseControlView":1,"backend/Views/TemplateEditor/CodemirrorOverlay":9,"templates/backend/status/templates.hbs":170}],160:[function(require,module,exports){
+},{"backend/Views/BaseControlView":1,"backend/Views/TemplateEditor/CodemirrorOverlay":9,"common/Checks":21,"templates/backend/status/templates.hbs":170}],160:[function(require,module,exports){
 /*
  Simple Get/Set implementation to set and get views
  No magic here
