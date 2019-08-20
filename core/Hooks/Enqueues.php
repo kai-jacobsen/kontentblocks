@@ -263,12 +263,11 @@ class Enqueues
                         }
                     }
 
-                    if (isset($setup_caps[$role])){
+                    if (isset($setup_caps[$role])) {
                         $onlytrue = array_merge($onlytrue, $setup_caps[$role]);
                     }
 
                     $setup_caps[$role] = $onlytrue;
-
                 }
                 if (!empty($setup_caps[$role])) {
                     foreach ($setup_caps[$role] as $cap) {

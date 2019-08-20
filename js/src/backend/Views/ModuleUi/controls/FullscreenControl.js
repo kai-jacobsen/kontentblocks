@@ -19,6 +19,11 @@ module.exports = BaseView.extend({
   },
   className: 'ui-fullscreen kb-fullscreen block-menu-icon',
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)) {
+      return false;
+    }
+
     if (!this.model.get('settings').disabled &&
       Checks.userCan('edit_kontentblocks')) {
       return true;

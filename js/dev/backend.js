@@ -1420,8 +1420,7 @@ module.exports = BaseView.extend({
     this.$el.removeClass('is-dirty');
   },
   isValid: function () {
-
-    if (!Checks.userCan(this.model.get('settings').cap)){
+    if (!Checks.userCan(this.model.get('settings').cap)) {
       return false;
     }
 
@@ -1561,6 +1560,11 @@ module.exports = BaseView.extend({
   },
   className: 'ui-fullscreen kb-fullscreen block-menu-icon',
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)) {
+      return false;
+    }
+
     if (!this.model.get('settings').disabled &&
       Checks.userCan('edit_kontentblocks')) {
       return true;
@@ -1600,6 +1604,11 @@ module.exports = BaseView.extend({
   },
   className: 'ui-move kb-move block-menu-icon',
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)) {
+      return false;
+    }
+
     if (!this.model.get('settings').disabled &&
       Checks.userCan('edit_kontentblocks') && !this.model.get('submodule')) {
       return true;
@@ -1644,6 +1653,11 @@ module.exports = BaseView.extend({
   },
   className: 'ui-toggle kb-toggle block-menu-icon',
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)) {
+      return false;
+    }
+
     if (!this.model.get('settings').disabled && !this.model.get('submodule') &&
       Checks.userCan('edit_kontentblocks')) {
       return true;
@@ -2591,12 +2605,20 @@ module.exports = {
   },
   userCan: function (cap) {
 
-    if (cap === ''){
+    if (cap === '') {
       return true;
     }
 
-    var check = jQuery.inArray(cap, Config.get('caps'));
-    return check !== -1;
+    if (_.isString(cap)) {
+      cap = [cap];
+    }
+    var valid = _.filter(cap, function (c) {
+
+      var check = jQuery.inArray(c, Config.get('caps'));
+      return check !== -1;
+    })
+    return valid.length ===  cap.length;
+
   }
 }
 },{"common/Config":53}],53:[function(require,module,exports){

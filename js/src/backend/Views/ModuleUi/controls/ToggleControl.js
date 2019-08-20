@@ -33,6 +33,11 @@ module.exports = BaseView.extend({
   },
   className: 'ui-toggle kb-toggle block-menu-icon',
   isValid: function () {
+
+    if (!Checks.userCan(this.model.get('settings').cap)) {
+      return false;
+    }
+
     if (!this.model.get('settings').disabled && !this.model.get('submodule') &&
       Checks.userCan('edit_kontentblocks')) {
       return true;

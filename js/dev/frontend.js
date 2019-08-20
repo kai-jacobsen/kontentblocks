@@ -837,12 +837,20 @@ module.exports = {
   },
   userCan: function (cap) {
 
-    if (cap === ''){
+    if (cap === '') {
       return true;
     }
 
-    var check = jQuery.inArray(cap, Config.get('caps'));
-    return check !== -1;
+    if (_.isString(cap)) {
+      cap = [cap];
+    }
+    var valid = _.filter(cap, function (c) {
+
+      var check = jQuery.inArray(c, Config.get('caps'));
+      return check !== -1;
+    })
+    return valid.length ===  cap.length;
+
   }
 }
 },{"common/Config":22}],22:[function(require,module,exports){

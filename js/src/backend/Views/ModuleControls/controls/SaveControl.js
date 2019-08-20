@@ -34,8 +34,7 @@ module.exports = BaseView.extend({
     this.$el.removeClass('is-dirty');
   },
   isValid: function () {
-
-    if (!Checks.userCan(this.model.get('settings').cap)){
+    if (!Checks.userCan(this.model.get('settings').cap)) {
       return false;
     }
 
