@@ -29,8 +29,8 @@ class Utilities
     /**
      * @param null $storageId
      * @param null $actualPostId
-     * @deprecated use getPostEnvironment instead
      * @return PostEnvironment
+     * @deprecated use getPostEnvironment instead
      */
     public static function getEnvironment($storageId = null, $actualPostId = null)
     {
@@ -246,6 +246,7 @@ class Utilities
                     if (array_key_exists($key, $merged) && isset($merged[$key]) && $merged[$key] !== null) {
                         // key exists and is not null, dig further into the array until actual values are reached
                         $merged[$key] = self::arrayMergeRecursive($merged[$key], $old[$key]);
+
                     } elseif (array_key_exists($key, $merged) && $merged[$key] === null) {
                         unset($merged[$key]);
                     } else {
@@ -257,7 +258,6 @@ class Utilities
                         // key was set to null on purpose, and gets removed finally
                         unset($merged[$key]);
                     } elseif (!isset($merged[$key])) {
-
                         // there is something missing in current(new) data, add it
                         $merged[$key] = $val;
                     }

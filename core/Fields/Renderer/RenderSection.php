@@ -44,6 +44,9 @@ class RenderSection
     {
         $out = '';
         $subtabs = apply_filters('kb.fields.subtabs', false);
+        if ($this->section->args['subtabs'] === true) {
+            $subtabs = true;
+        }
         if (!empty($this->fields) && $subtabs) {
             $container = new CoreView(
                 'renderer/sections-subtabs.twig', array(

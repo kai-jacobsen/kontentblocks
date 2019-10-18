@@ -22,7 +22,8 @@ class StandardFieldSection implements ExportableFieldInterface
      * @var array
      */
     public static $defaults = array(
-        'attributes' => array('class' => 'kbf-section-wrap')
+        'attributes' => array('class' => 'kbf-section-wrap'),
+        'subtabs' => false,
     );
 
     /**

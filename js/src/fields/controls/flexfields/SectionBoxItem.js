@@ -25,7 +25,7 @@ module.exports = ToggleBoxItem.extend({
       inputName: inputName,
       uid: this.model.get('itemId'),
       fftype: this.model.get('fftype'),
-      visible: visible
+      visible: true
     }));
     this.renderTabs($skeleton); // insert the tabs markup
     return $skeleton;

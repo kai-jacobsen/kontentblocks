@@ -26,6 +26,7 @@ Class FlexibleFields extends Field
 
     public function setValue($data)
     {
+
         if (is_array($data) && !empty($data)) {
             foreach ($data as $key => $value) {
                 if (!is_array($value) || !isset($value['_meta'])) {
@@ -36,7 +37,6 @@ Class FlexibleFields extends Field
         } else {
             return array();
         }
-
         return $data;
     }
 

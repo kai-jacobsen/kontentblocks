@@ -88,6 +88,11 @@ class OpeningTimesReturn extends StandardFieldReturn
                 $d = $i18n[$day];
                 $v['day']['short'] = $d['short'];
                 $v['day']['long'] = $d['long'];
+
+                if (!isset($v[1])){
+                    $v[1] = ['open' => [], 'close' => []];
+                }
+
                 $t2 = $v[1];
 
                 $v['isToday'] = false;

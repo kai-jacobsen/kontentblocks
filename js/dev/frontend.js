@@ -2899,6 +2899,7 @@ module.exports = Backbone.View.extend({
   initialSetup: function () {
     var data, types;
     data = this.model.get('value'); // model equals FieldControlModel, value equals parent obj data for this field key
+
     types = this.model.get('fields');
     if (!_.isEmpty(data)) {
       _.each(data, function (dataobj, index) {
@@ -3030,7 +3031,7 @@ module.exports = ToggleBoxItem.extend({
       inputName: inputName,
       uid: this.model.get('itemId'),
       fftype: this.model.get('fftype'),
-      visible: visible
+      visible: true
     }));
     this.renderTabs($skeleton); // insert the tabs markup
     return $skeleton;

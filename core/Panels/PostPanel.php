@@ -177,6 +177,18 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
     {
         if (is_admin()) {
             $postType = $this->environment->getPostType();
+            if (function_exists('get_current_screen')) {
+                $currentScreen = get_current_screen();
+                if (property_exists($currentScreen, 'post_type')) {
+                    $postType = $currentScreen->post_type;
+                }
+            }
+
+            if (is_array($this->args['postTypes']) && !in_array($postType, $this->args['postTypes'])) {
+                return;
+            }
+
+
             if (!post_type_supports($postType, 'kontentblocks')) {
                 return null;
             }
@@ -275,7 +287,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
 
         return $args;
     }
-
 
 
     /**

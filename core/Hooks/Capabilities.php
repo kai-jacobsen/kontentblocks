@@ -95,4 +95,22 @@ class Capabilities
         );
 
     }
+
+    public static function checkAllCapabilities($caps)
+    {
+        if (!is_array($caps)) {
+            $caps = [$caps];
+        }
+
+        $allowed = true;
+        foreach ($caps as $item) {
+            if (!current_user_can($item)) {
+                return false;
+            }
+            continue;
+
+        }
+
+        return $allowed;
+    }
 }

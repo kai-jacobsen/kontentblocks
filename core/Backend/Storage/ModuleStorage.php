@@ -66,7 +66,6 @@ class ModuleStorage implements \Countable
             return $this;
         }
         $this->modules = $this->setupModuleData();
-
         return $this;
 
     }

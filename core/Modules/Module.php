@@ -7,6 +7,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Common\Interfaces\FieldEntityInterface;
 use Kontentblocks\Fields\ModuleFieldController;
+use Kontentblocks\Hooks\Capabilities;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Templating\ModuleView;
@@ -214,8 +215,8 @@ abstract class Module implements EntityInterface, FieldEntityInterface
         $concat = '';
 
         $cap = $this->properties->getSetting('cap');
-        if (!empty($cap) && is_string($cap)){
-            if (!current_user_can($cap)){
+        if (!empty($cap)){
+            if (!Capabilities::checkAllCapabilities($cap)){
                 $concat .= $this->renderDisallowedForm();
                 return $concat;
             }

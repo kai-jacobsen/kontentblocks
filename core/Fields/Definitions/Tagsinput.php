@@ -16,7 +16,8 @@ Class Tagsinput extends Field
 
     // Defaults
     public static $settings = array(
-        'type' => 'tagsinput'
+        'type' => 'tagsinput',
+        'forceSave' => true
     );
 
     /**
@@ -29,6 +30,13 @@ Class Tagsinput extends Field
     {
 
         return $val;
+    }
+
+
+    public function save($new, $old)
+    {
+        $terms = wp_get_post_terms($this->context->parentObjectId, $this->getArg('taxonomy'));
+        return wp_list_pluck($terms, 'term_id');
     }
 
 

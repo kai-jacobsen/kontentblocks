@@ -40,7 +40,10 @@ Class OpeningTimes extends Field
         $hasSplit = false;
         if (is_array($value)) {
             $splitValues = array_map(function ($item) {
-                return $item[1];
+                if (isset($item['1'])){
+                    return $item['1'];
+                }
+                return [];
             }, $value);
             array_walk_recursive($splitValues, function ($v) use (&$hasSplit) {
                 if (!empty($v)) {
