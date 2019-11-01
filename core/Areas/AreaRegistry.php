@@ -400,9 +400,7 @@ class AreaRegistry
 
         $pageTemplate = $environment->getPageTemplate();
         $postType = $environment->getPostType();
-
         $areas = array();
-
         if ($postType === 'kb-gmd') {
             return array('global-module' => $this->getArea('global-module'));
         }

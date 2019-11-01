@@ -70,7 +70,6 @@ class AreaBackendRenderer implements RendererInterface, ModuleLookAheadInterface
         $this->context = $context;
 
         $this->area = $area;
-
         // environment
         $this->environment = $environment;
 

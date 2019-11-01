@@ -147,7 +147,6 @@ function renderContext($context, $postId, $areaSettings = array(), $moduleSettin
     global $post;
     $postId = (null === $postId) ? $post->ID : $postId;
     $Environment = Utilities::getPostEnvironment($postId);
-
     if (is_null($Environment)) {
         return [];
     }
@@ -167,7 +166,6 @@ function renderContext($context, $postId, $areaSettings = array(), $moduleSettin
             } else {
                 $margs = $areaSettings;
             }
-
             renderSingleArea($area, $postId, $args, $margs);
         }
     }
@@ -361,6 +359,7 @@ function getOptionsPanel($panelId)
 {
     /** @var \Kontentblocks\Panels\PanelRegistry $registry */
     $registry = Kontentblocks()->getService('registry.panels');
+
     $panel = $registry->get($panelId);
     if (!empty($panel) && class_exists($panel['class'])) {
         return new $panel['class']($panel);
@@ -373,6 +372,7 @@ function getOptionsPanel($panelId)
  */
 function getOptionsPanelModel($panelId)
 {
+
     $panel = getOptionsPanel($panelId);
     if (is_a($panel, '\Kontentblocks\Panels\OptionPanel')) {
         return $panel->setupViewModel();

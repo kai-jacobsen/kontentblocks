@@ -40,6 +40,18 @@ Class Select extends Field
             $this->setArgs(['options' => $options]);
         }
 
+        if ($this->getArg('postType', false)) {
+            $posts = get_posts(['post_type' => $this->getArg('postType'), 'posts_per_page' => -1]);
+            $options = [];
+            foreach ($posts as $post) {
+                $options[] = [
+                    'name' => $post->post_title,
+                    'value' => $post->ID
+                ];
+            }
+            $this->setArgs(['options' => $options]);
+        }
+
         return $data;
     }
 
@@ -145,7 +157,6 @@ Class Select extends Field
                             $new[$index] = $term->term_id;
                         }
                     }
-
                     if (is_array($newTerm) && isset($newTerm['term_id'])) {
                         $new[$index] = $newTerm['term_id'];
                     }
@@ -162,7 +173,6 @@ Class Select extends Field
                 }
             }
         }
-
         return $new;
     }
 }
