@@ -204,7 +204,16 @@ class ModuleView implements \JsonSerializable
      */
     public function isTemplate($needle)
     {
-        return strpos($this->tplFile->filename,$needle) !== false;
+        if (!is_array($needle)) {
+            $needle = [$needle];
+        }
+        foreach ($needle as $item) {
+            if (strpos($this->tplFile->filename, $item) !== false) {
+                return true;
+            }
+            continue;
+        }
+        return false;
     }
 
 }

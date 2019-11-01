@@ -175,8 +175,8 @@ class ScreenContext
 
     /**
      * @param AreaProperties $area
-     * @since 0.3.0
      * @return AreaProperties
+     * @since 0.3.0
      */
     private function augmentAreaforBackend(AreaProperties $area)
     {
