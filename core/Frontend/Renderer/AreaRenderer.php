@@ -245,7 +245,8 @@ class AreaRenderer implements RendererInterface, ModuleLookAheadInterface, \Json
         }
 
 
-        if (is_a($this->previousModule, Module::class) && $this->previousModule->properties->getSetting('hash') === $module->properties->getSetting('hash')) {
+        if (is_a($this->previousModule,
+                Module::class) && $this->previousModule->properties->getSetting('hash') === $module->properties->getSetting('hash')) {
             if ($this->repeating && ($nextHash !== $module->properties->getSetting('hash'))) {
                 $classes[] = 'repeater';
                 $classes[] = 'last-repeater';

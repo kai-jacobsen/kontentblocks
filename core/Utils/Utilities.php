@@ -113,7 +113,6 @@ class Utilities
     {
         global $kbHiddenEditorCalled;
 
-
         if (!$kbHiddenEditorCalled) {
             echo "<div style='display: none;'>";
             self::editor('ghost', '', 'ghost', true, array('tinymce' => array('wp_skip_init' => false)));
@@ -478,6 +477,7 @@ class Utilities
 
         $url = add_query_arg('concat', 'true', $base);
         $url = add_query_arg('contime', time(), $url);
+
         if ($url !== false) {
             $args = wp_parse_args($args, array('timeout' => 5, 'blocking' => $blocking));
             $args = apply_filters('kb.remote.concat.args', $args, $url);
