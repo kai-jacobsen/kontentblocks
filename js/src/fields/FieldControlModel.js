@@ -128,8 +128,6 @@ module.exports = Backbone.Model.extend({
     }, true);
   },
   unbind: function () {
-    console.log('unbind');
-
     if (this.FieldControlView && this.FieldControlView.derender) {
       this.FieldControlView.derender(); // call derender
     }

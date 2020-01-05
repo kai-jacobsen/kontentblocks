@@ -1076,7 +1076,7 @@ module.exports = Backbone.View.extend({
 },{"templates/backend/modulebrowser/module-list-item.hbs":27,"templates/backend/modulebrowser/module-template-list-item.hbs":28,"templates/backend/modulebrowser/poster.hbs":29}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<h4>"
@@ -1092,14 +1092,14 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":49}],25:[function(require,module,exports){
+},{"hbsfy/runtime":48}],25:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=container.escapeExpression, alias2=container.lambda;
 
   return "<li>\n    <details>\n        <summary>\n            "
-    + alias1(((helper = (helper = helpers.time || (depth0 != null ? depth0.time : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"time","hash":{},"data":data}) : helper)))
+    + alias1(((helper = (helper = helpers.time || (depth0 != null ? depth0.time : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"time","hash":{},"data":data,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":22}}}) : helper)))
     + "\n        </summary>\n        <div class='actions' data-id='"
     + alias1(alias2(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.id : stack1), depth0))
     + "'>\n            <span class='js-restore'>Restore</span>\n            <p class='description'><b>Comment:</b> "
@@ -1109,23 +1109,23 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + ")</p>\n        </div>\n    </details>\n</li>";
 },"useData":true});
 
-},{"hbsfy/runtime":49}],26:[function(require,module,exports){
+},{"hbsfy/runtime":48}],26:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function";
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function";
 
   return "<option value='"
-    + ((stack1 = ((helper = (helper = helpers.key || (depth0 != null ? depth0.key : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper))) != null ? stack1 : "")
+    + ((stack1 = ((helper = (helper = helpers.key || (depth0 != null ? depth0.key : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":26}}}) : helper))) != null ? stack1 : "")
     + "'>"
-    + ((stack1 = ((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper))) != null ? stack1 : "")
+    + ((stack1 = ((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":40}}}) : helper))) != null ? stack1 : "")
     + "</option>";
 },"useData":true});
 
-},{"hbsfy/runtime":49}],27:[function(require,module,exports){
+},{"hbsfy/runtime":48}],27:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kbmb-icon "
@@ -1137,10 +1137,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":49}],28:[function(require,module,exports){
+},{"hbsfy/runtime":48}],28:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div class=\"dashicons dashicons-plus kb-js-create-module\"></div>\n<div class=\"kbmb-hl\">"
@@ -1148,10 +1148,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":49}],29:[function(require,module,exports){
+},{"hbsfy/runtime":48}],29:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div class=\"module-browser--poster-wrap\">\n    <img src=\""
@@ -1159,7 +1159,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "\" >\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":49}],30:[function(require,module,exports){
+},{"hbsfy/runtime":48}],30:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1250,11 +1250,13 @@ var _logger = require('./logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var VERSION = '4.1.2';
+var VERSION = '4.5.3';
 exports.VERSION = VERSION;
-var COMPILER_REVISION = 7;
-
+var COMPILER_REVISION = 8;
 exports.COMPILER_REVISION = COMPILER_REVISION;
+var LAST_COMPATIBLE_COMPILER_REVISION = 7;
+
+exports.LAST_COMPATIBLE_COMPILER_REVISION = LAST_COMPATIBLE_COMPILER_REVISION;
 var REVISION_CHANGES = {
   1: '<= 1.0.rc.2', // 1.0.rc.2 is actually rev2 but doesn't report it
   2: '== 1.0.0-rc.3',
@@ -1262,7 +1264,8 @@ var REVISION_CHANGES = {
   4: '== 1.x.x',
   5: '== 2.0.0-alpha.x',
   6: '>= 2.0.0-beta.1',
-  7: '>= 4.0.0'
+  7: '>= 4.0.0 <4.3.0',
+  8: '>= 4.3.0'
 };
 
 exports.REVISION_CHANGES = REVISION_CHANGES;
@@ -1387,15 +1390,20 @@ module.exports = exports['default'];
 
 exports.__esModule = true;
 
-var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
+var errorProps = ['description', 'fileName', 'lineNumber', 'endLineNumber', 'message', 'name', 'number', 'stack'];
 
 function Exception(message, node) {
   var loc = node && node.loc,
       line = undefined,
-      column = undefined;
+      endLineNumber = undefined,
+      column = undefined,
+      endColumn = undefined;
+
   if (loc) {
     line = loc.start.line;
+    endLineNumber = loc.end.line;
     column = loc.start.column;
+    endColumn = loc.end.column;
 
     message += ' - ' + line + ':' + column;
   }
@@ -1415,6 +1423,7 @@ function Exception(message, node) {
   try {
     if (loc) {
       this.lineNumber = line;
+      this.endLineNumber = endLineNumber;
 
       // Work around issue under safari where we can't directly set the column value
       /* istanbul ignore next */
@@ -1423,8 +1432,13 @@ function Exception(message, node) {
           value: column,
           enumerable: true
         });
+        Object.defineProperty(this, 'endColumn', {
+          value: endColumn,
+          enumerable: true
+        });
       } else {
         this.column = column;
+        this.endColumn = endColumn;
       }
     }
   } catch (nop) {
@@ -1443,6 +1457,7 @@ module.exports = exports['default'];
 
 exports.__esModule = true;
 exports.registerDefaultHelpers = registerDefaultHelpers;
+exports.moveHelperToHooks = moveHelperToHooks;
 // istanbul ignore next
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -1483,6 +1498,15 @@ function registerDefaultHelpers(instance) {
   _helpersLog2['default'](instance);
   _helpersLookup2['default'](instance);
   _helpersWith2['default'](instance);
+}
+
+function moveHelperToHooks(instance, helperName, keepHelper) {
+  if (instance.helpers[helperName]) {
+    instance.hooks[helperName] = instance.helpers[helperName];
+    if (!keepHelper) {
+      delete instance.helpers[helperName];
+    }
+  }
 }
 
 
@@ -1591,11 +1615,21 @@ exports['default'] = function (instance) {
             execIteration(i, i, i === context.length - 1);
           }
         }
+      } else if (global.Symbol && context[global.Symbol.iterator]) {
+        var newContext = [];
+        var iterator = context[global.Symbol.iterator]();
+        for (var it = iterator.next(); !it.done; it = iterator.next()) {
+          newContext.push(it.value);
+        }
+        context = newContext;
+        for (var j = context.length; i < j; i++) {
+          execIteration(i, i, i === context.length - 1);
+        }
       } else {
-        var priorKey = undefined;
+        (function () {
+          var priorKey = undefined;
 
-        for (var key in context) {
-          if (context.hasOwnProperty(key)) {
+          Object.keys(context).forEach(function (key) {
             // We're running the iterations one step out of sync so we can detect
             // the last iteration without have to scan the object twice and create
             // an itermediate keys array.
@@ -1604,11 +1638,11 @@ exports['default'] = function (instance) {
             }
             priorKey = key;
             i++;
+          });
+          if (priorKey !== undefined) {
+            execIteration(priorKey, i - 1, true);
           }
-        }
-        if (priorKey !== undefined) {
-          execIteration(priorKey, i - 1, true);
-        }
+        })();
       }
     }
 
@@ -1654,11 +1688,21 @@ module.exports = exports['default'];
 'use strict';
 
 exports.__esModule = true;
+// istanbul ignore next
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _utils = require('../utils');
 
+var _exception = require('../exception');
+
+var _exception2 = _interopRequireDefault(_exception);
+
 exports['default'] = function (instance) {
   instance.registerHelper('if', function (conditional, options) {
+    if (arguments.length != 2) {
+      throw new _exception2['default']('#if requires exactly one argument');
+    }
     if (_utils.isFunction(conditional)) {
       conditional = conditional.call(this);
     }
@@ -1674,6 +1718,9 @@ exports['default'] = function (instance) {
   });
 
   instance.registerHelper('unless', function (conditional, options) {
+    if (arguments.length != 2) {
+      throw new _exception2['default']('#unless requires exactly one argument');
+    }
     return instance.helpers['if'].call(this, conditional, { fn: options.inverse, inverse: options.fn, hash: options.hash });
   });
 };
@@ -1681,7 +1728,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../utils":47}],40:[function(require,module,exports){
+},{"../exception":34,"../utils":47}],40:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1713,31 +1760,42 @@ module.exports = exports['default'];
 'use strict';
 
 exports.__esModule = true;
+var dangerousPropertyRegex = /^(constructor|__defineGetter__|__defineSetter__|__lookupGetter__|__proto__)$/;
+
+exports.dangerousPropertyRegex = dangerousPropertyRegex;
 
 exports['default'] = function (instance) {
   instance.registerHelper('lookup', function (obj, field) {
     if (!obj) {
       return obj;
     }
-    if (field === 'constructor' && !obj.propertyIsEnumerable(field)) {
+    if (dangerousPropertyRegex.test(String(field)) && !Object.prototype.propertyIsEnumerable.call(obj, field)) {
       return undefined;
     }
     return obj[field];
   });
 };
 
-module.exports = exports['default'];
-
 
 },{}],42:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
+// istanbul ignore next
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _utils = require('../utils');
 
+var _exception = require('../exception');
+
+var _exception2 = _interopRequireDefault(_exception);
+
 exports['default'] = function (instance) {
   instance.registerHelper('with', function (context, options) {
+    if (arguments.length != 2) {
+      throw new _exception2['default']('#with requires exactly one argument');
+    }
     if (_utils.isFunction(context)) {
       context = context.call(this);
     }
@@ -1764,7 +1822,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../utils":47}],43:[function(require,module,exports){
+},{"../exception":34,"../utils":47}],43:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1863,23 +1921,28 @@ var _exception2 = _interopRequireDefault(_exception);
 
 var _base = require('./base');
 
+var _helpers = require('./helpers');
+
 function checkRevision(compilerInfo) {
   var compilerRevision = compilerInfo && compilerInfo[0] || 1,
       currentRevision = _base.COMPILER_REVISION;
 
-  if (compilerRevision !== currentRevision) {
-    if (compilerRevision < currentRevision) {
-      var runtimeVersions = _base.REVISION_CHANGES[currentRevision],
-          compilerVersions = _base.REVISION_CHANGES[compilerRevision];
-      throw new _exception2['default']('Template was precompiled with an older version of Handlebars than the current runtime. ' + 'Please update your precompiler to a newer version (' + runtimeVersions + ') or downgrade your runtime to an older version (' + compilerVersions + ').');
-    } else {
-      // Use the embedded version info since the runtime doesn't know about this revision yet
-      throw new _exception2['default']('Template was precompiled with a newer version of Handlebars than the current runtime. ' + 'Please update your runtime to a newer version (' + compilerInfo[1] + ').');
-    }
+  if (compilerRevision >= _base.LAST_COMPATIBLE_COMPILER_REVISION && compilerRevision <= _base.COMPILER_REVISION) {
+    return;
+  }
+
+  if (compilerRevision < _base.LAST_COMPATIBLE_COMPILER_REVISION) {
+    var runtimeVersions = _base.REVISION_CHANGES[currentRevision],
+        compilerVersions = _base.REVISION_CHANGES[compilerRevision];
+    throw new _exception2['default']('Template was precompiled with an older version of Handlebars than the current runtime. ' + 'Please update your precompiler to a newer version (' + runtimeVersions + ') or downgrade your runtime to an older version (' + compilerVersions + ').');
+  } else {
+    // Use the embedded version info since the runtime doesn't know about this revision yet
+    throw new _exception2['default']('Template was precompiled with a newer version of Handlebars than the current runtime. ' + 'Please update your runtime to a newer version (' + compilerInfo[1] + ').');
   }
 }
 
 function template(templateSpec, env) {
+
   /* istanbul ignore next */
   if (!env) {
     throw new _exception2['default']('No environment passed to template');
@@ -1891,8 +1954,11 @@ function template(templateSpec, env) {
   templateSpec.main.decorator = templateSpec.main_d;
 
   // Note: Using env.VM references rather than local var references throughout this section to allow
-  // for external users to override these as psuedo-supported APIs.
+  // for external users to override these as pseudo-supported APIs.
   env.VM.checkRevision(templateSpec.compiler);
+
+  // backwards compatibility for precompiled templates with compiler-version 7 (<4.3.0)
+  var templateWasPrecompiledWithCompilerV7 = templateSpec.compiler && templateSpec.compiler[0] === 7;
 
   function invokePartialWrapper(partial, context, options) {
     if (options.hash) {
@@ -1901,13 +1967,15 @@ function template(templateSpec, env) {
         options.ids[0] = true;
       }
     }
-
     partial = env.VM.resolvePartial.call(this, partial, context, options);
-    var result = env.VM.invokePartial.call(this, partial, context, options);
+
+    var optionsWithHooks = Utils.extend({}, options, { hooks: this.hooks });
+
+    var result = env.VM.invokePartial.call(this, partial, context, optionsWithHooks);
 
     if (result == null && env.compile) {
       options.partials[options.name] = env.compile(partial, templateSpec.compilerOptions, env);
-      result = options.partials[options.name](context, options);
+      result = options.partials[options.name](context, optionsWithHooks);
     }
     if (result != null) {
       if (options.indent) {
@@ -1929,9 +1997,9 @@ function template(templateSpec, env) {
 
   // Just add water
   var container = {
-    strict: function strict(obj, name) {
-      if (!(name in obj)) {
-        throw new _exception2['default']('"' + name + '" not defined in ' + obj);
+    strict: function strict(obj, name, loc) {
+      if (!obj || !(name in obj)) {
+        throw new _exception2['default']('"' + name + '" not defined in ' + obj, { loc: loc });
       }
       return obj[name];
     },
@@ -1974,15 +2042,6 @@ function template(templateSpec, env) {
       }
       return value;
     },
-    merge: function merge(param, common) {
-      var obj = param || common;
-
-      if (param && common && param !== common) {
-        obj = Utils.extend({}, common, param);
-      }
-
-      return obj;
-    },
     // An empty object to use as replacement for null-contexts
     nullContext: Object.seal({}),
 
@@ -2019,18 +2078,25 @@ function template(templateSpec, env) {
 
   ret._setup = function (options) {
     if (!options.partial) {
-      container.helpers = container.merge(options.helpers, env.helpers);
+      container.helpers = Utils.extend({}, env.helpers, options.helpers);
 
       if (templateSpec.usePartial) {
-        container.partials = container.merge(options.partials, env.partials);
+        container.partials = Utils.extend({}, env.partials, options.partials);
       }
       if (templateSpec.usePartial || templateSpec.useDecorators) {
-        container.decorators = container.merge(options.decorators, env.decorators);
+        container.decorators = Utils.extend({}, env.decorators, options.decorators);
       }
+
+      container.hooks = {};
+
+      var keepHelperInHelpers = options.allowCallsToHelperMissing || templateWasPrecompiledWithCompilerV7;
+      _helpers.moveHelperToHooks(container, 'helperMissing', keepHelperInHelpers);
+      _helpers.moveHelperToHooks(container, 'blockHelperMissing', keepHelperInHelpers);
     } else {
       container.helpers = options.helpers;
       container.partials = options.partials;
       container.decorators = options.decorators;
+      container.hooks = options.hooks;
     }
   };
 
@@ -2066,6 +2132,10 @@ function wrapProgram(container, i, fn, data, declaredBlockParams, blockParams, d
   prog.blockParams = declaredBlockParams || 0;
   return prog;
 }
+
+/**
+ * This is currently part of the official API, therefore implementation details should not be changed.
+ */
 
 function resolvePartial(partial, context, options) {
   if (!partial) {
@@ -2144,7 +2214,7 @@ function executeDecorators(fn, prog, container, depths, data, blockParams) {
 }
 
 
-},{"./base":31,"./exception":34,"./utils":47}],46:[function(require,module,exports){
+},{"./base":31,"./exception":34,"./helpers":35,"./utils":47}],46:[function(require,module,exports){
 // Build out our basic SafeString type
 'use strict';
 
@@ -2172,6 +2242,7 @@ exports.isEmpty = isEmpty;
 exports.createFrame = createFrame;
 exports.blockParams = blockParams;
 exports.appendContextPath = appendContextPath;
+
 var escape = {
   '&': '&amp;',
   '<': '&lt;',
@@ -2288,11 +2359,6 @@ function appendContextPath(contextPath, id) {
 
 
 },{}],48:[function(require,module,exports){
-// Create a simple path alias to allow browserify to resolve
-// the runtime on a supported path.
-module.exports = require('./dist/cjs/handlebars.runtime')['default'];
-
-},{"./dist/cjs/handlebars.runtime":30}],49:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":48}]},{},[12]);
+},{"handlebars/runtime":30}]},{},[12]);

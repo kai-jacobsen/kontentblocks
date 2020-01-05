@@ -1,7 +1,7 @@
 module.exports = function (grunt) {
 
   require('time-grunt')(grunt);
-
+  var envify = require('envify/custom')
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -64,6 +64,11 @@ module.exports = function (grunt) {
         dest: 'js/tmp/wpMediaExt.concat.js',
         nonull: true
       },
+    },
+    env: {
+      prod: {
+        NODE_ENV: 'production'
+      }
     },
     browserify: {
       options: {
@@ -227,21 +232,21 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-notify');
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-sass');
+  grunt.loadNpmTasks('grunt-env');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-concurrent');
 
-
   // Default task(s).
-  grunt.registerTask('default', ['concat', 'browserify', 'uglify:dev', 'uglify:dist', 'sass:dist', 'autoprefixer', 'clean', 'bash', 'exec:removeHash', 'exec:createId']);
+  grunt.registerTask('default', ['concat', 'env', 'browserify', 'uglify:dev', 'uglify:dist', 'sass:dist', 'autoprefixer', 'clean', 'bash', 'exec:removeHash', 'exec:createId']);
   grunt.registerTask('cssdev', ['sass:dev', 'autoprefixer']);
-  grunt.registerTask('jsfrontend', ['browserify:frontend']);
-  grunt.registerTask('jsclient', ['uglify:dev']);
-  grunt.registerTask('jsbackend', ['browserify:backend']);
-  grunt.registerTask('jsextensions', ['browserify:extensions']);
-  grunt.registerTask('jsrefields', ['browserify:backend']);
+  grunt.registerTask('jsfrontend', ['env', 'browserify:frontend']);
+  grunt.registerTask('jsclient', ['env', 'uglify:dev']);
+  grunt.registerTask('jsbackend', ['env', 'browserify:backend']);
+  grunt.registerTask('jsextensions', ['env', 'browserify:extensions']);
+  grunt.registerTask('jsrefields', ['env', 'browserify:backend']);
   grunt.registerTask('jsplugins', ['concat', 'uglify:dev', 'clean']);
-  grunt.registerTask('jsfieldsAPI', ['browserify:backend']);
-  grunt.registerTask('jsCustomizer', ['browserify:customizer']);
+  grunt.registerTask('jsfieldsAPI', ['env', 'browserify:backend']);
+  grunt.registerTask('jsCustomizer', ['env', 'browserify:customizer']);
   grunt.registerTask('jshbs', ['cc']);
   grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
 

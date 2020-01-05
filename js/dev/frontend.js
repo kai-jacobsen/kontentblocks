@@ -1488,9 +1488,12 @@ var Ui = {
         // doesn't work very well
         $('.kb-open').toggleClass('kb-open');
         $('.kb-module__body').hide();
-
         // tinyMCE doesn't like to be moved in the DOM
-        TinyMCE.removeEditors();
+        if (areaOver.View && areaOver.View.$el){
+          TinyMCE.removeEditors(areaOver.View.$el);
+        } else {
+          TinyMCE.removeEditors();
+        }
 
         // Add a global trigger to sortable.start, maybe other Blocks might need it
         $(document).trigger('kb_sortable_start', [event, ui]);
@@ -1936,8 +1939,6 @@ module.exports = Backbone.Model.extend({
     }, true);
   },
   unbind: function () {
-    console.log('unbind');
-
     if (this.FieldControlView && this.FieldControlView.derender) {
       this.FieldControlView.derender(); // call derender
     }
@@ -4819,14 +4820,14 @@ module.exports = Backbone.View.extend({
 },{"common/Config":22,"common/Logger":24,"fields/controls/subarea/SlotView":73,"frontend/Views/ModuleView":132}],75:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"kb-submodule\">\n    <div class=\"kbsm-empty add-modules\">\n        <div>Modul auswählen</div>\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],76:[function(require,module,exports){
+},{"hbsfy/runtime":253}],76:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kbsm-details\">\n    <div class=\"kbsm--name\">"
@@ -4836,7 +4837,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</div>\n</div>\n<div class=\"kbsm-actions\">\n    <div class=\"kbsm-action kbms-action--open\" data-kbtooltip=\"open form\"><span\n            class=\"dashicons dashicons-admin-generic\"></span></div>\n    <div class=\"kbsm-action kbms-action--delete\" data-kbtooltip=\"delete\"><span\n            class=\"dashicons dashicons-welcome-comments\"></span></div>\n    <div class=\"kbsm-action kbms-action--update\" data-kbtooltip=\"update\"><span\n            class=\"dashicons dashicons-update\"></span></div>\n</div>\n<div class=\"kbsm-inner\">\n    <div class=\"kbsm-button kbms-action--open\">Bearbeiten</div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],77:[function(require,module,exports){
+},{"hbsfy/runtime":253}],77:[function(require,module,exports){
 var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -5626,7 +5627,7 @@ Handlebars.registerHelper('trimString', function(passedString, length) {
 
   return new Handlebars.SafeString(theString)
 });
-},{"hbsfy/runtime":254}],102:[function(require,module,exports){
+},{"hbsfy/runtime":253}],102:[function(require,module,exports){
 var Utilities = require('common/Utilities');
 var Config = require('common/Config');
 module.exports = {
@@ -6006,7 +6007,7 @@ jQuery(document).ready(function () {
 
 });
 
-},{"./GlobalEvents":106,"./InlineSetup":115,"./Views/AreaView":120,"./Views/LayoutAreaView":123,"./Views/ModuleView":132,"./Views/PanelView":133,"common/Checks":21,"common/Config":22,"common/Logger":24,"common/Payload":26,"common/UI":29,"fields/FieldControlsCollection":34,"fields/RefieldsController":37,"fieldsAPI/FieldsAPIController":83,"frontend/AdminBar":102,"frontend/Collections/ModuleCollection":104,"frontend/Models/AreaModel":116,"frontend/Models/ModuleModel":117,"frontend/Models/PanelModel":118,"frontend/Views/EditModalModules":122,"frontend/Views/Sidebar":134,"shared/ChangeObserver":147,"shared/Collections/ObjectProxyCollection":148,"shared/ViewsCollection":160,"tether":255}],106:[function(require,module,exports){
+},{"./GlobalEvents":106,"./InlineSetup":115,"./Views/AreaView":120,"./Views/LayoutAreaView":123,"./Views/ModuleView":132,"./Views/PanelView":133,"common/Checks":21,"common/Config":22,"common/Logger":24,"common/Payload":26,"common/UI":29,"fields/FieldControlsCollection":34,"fields/RefieldsController":37,"fieldsAPI/FieldsAPIController":83,"frontend/AdminBar":102,"frontend/Collections/ModuleCollection":104,"frontend/Models/AreaModel":116,"frontend/Models/ModuleModel":117,"frontend/Models/PanelModel":118,"frontend/Views/EditModalModules":122,"frontend/Views/Sidebar":134,"shared/ChangeObserver":147,"shared/Collections/ObjectProxyCollection":148,"shared/ViewsCollection":160,"tether":254}],106:[function(require,module,exports){
 var Logger = require('common/Logger');
 KB.Events.on('module.before.sync panel.before.sync', function(Model){
   if (window.tinymce){
@@ -6667,7 +6668,7 @@ module.exports = Backbone.View.extend({
   }
 
 });
-},{"tether":255}],111:[function(require,module,exports){
+},{"tether":254}],111:[function(require,module,exports){
 var Check = require('common/Checks');
 module.exports = Backbone.View.extend({
   initialize: function (options) {
@@ -10023,32 +10024,32 @@ module.exports = KB.ViewsCollection;
 },{}],161:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"kb-context-bar grid__col grid__col--12-of-12\" aria-hidden=\"true\">\n    <div class=\"kb-context-bar--actions\">\n\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],162:[function(require,module,exports){
+},{"hbsfy/runtime":253}],162:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"kb-fullscreen--holder-wrap\">\n    <div class=\"kb-fullscreen--controls\">\n        <div class=\"kb-fullscreen-js-close\"><span class=\"dashicons dashicons-no-alt\"></span></div>\n    </div>\n    <div class=\"kb-nano\">\n        <div class=\"kb-fullscreen--inner kb-nano-content\">\n\n        </div>\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],163:[function(require,module,exports){
+},{"hbsfy/runtime":253}],163:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "<div class=\"module-browser-wrapper "
-    + container.escapeExpression(((helper = (helper = helpers.viewMode || (depth0 != null ? depth0.viewMode : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"viewMode","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(((helper = (helper = helpers.viewMode || (depth0 != null ? depth0.viewMode : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"viewMode","hash":{},"data":data,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":49}}}) : helper)))
     + "\">\n\n    <div class=\"module-browser-header module-categories\">\n        <div class=\"genericon genericon-close-alt close-browser kb-button\"></div>\n        <div class=\"dashicons dashicons-list-view module-browser--switch__list-view kb-hide\"></div>\n        <div class=\"dashicons dashicons-exerpt-view module-browser--switch__excerpt-view kb-hide\"></div>\n        <div class=\"dashicons dashicons-grid-view module-browser--switch__grid-view kb-hide\"></div>\n    </div>\n\n    <div class=\"module-browser__left-column kb-nano\">\n        <div class=\"modules-list kb-nano-content\">\n\n        </div>\n    </div>\n\n    <div class=\"module-browser__right-column kb-nano\">\n        <div class=\"module-description kb-nano-content\">\n\n        </div>\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],164:[function(require,module,exports){
+},{"hbsfy/runtime":253}],164:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<h3>"
@@ -10058,10 +10059,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</div>\n</h3>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],165:[function(require,module,exports){
+},{"hbsfy/runtime":253}],165:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kbmb-icon "
@@ -10073,10 +10074,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],166:[function(require,module,exports){
+},{"hbsfy/runtime":253}],166:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<h3>"
@@ -10084,10 +10085,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</h3>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],167:[function(require,module,exports){
+},{"hbsfy/runtime":253}],167:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div class=\"dashicons dashicons-plus kb-js-create-module\"></div>\n<div class=\"kbmb-hl\">"
@@ -10095,10 +10096,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],168:[function(require,module,exports){
+},{"hbsfy/runtime":253}],168:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div class=\"module-browser--poster-wrap\">\n    <img src=\""
@@ -10106,7 +10107,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "\" >\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],169:[function(require,module,exports){
+},{"hbsfy/runtime":253}],169:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
@@ -10125,13 +10126,13 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.published : stack1), depth0))
     + "</div>\n";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.draft : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "");
+  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.draft : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":7}}})) != null ? stack1 : "");
 },"useData":true});
 
-},{"hbsfy/runtime":254}],170:[function(require,module,exports){
+},{"hbsfy/runtime":253}],170:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
@@ -10142,7 +10143,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "\" name=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.mid : stack1), depth0))
     + "[viewfile]\">\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.views : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.views : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":5,"column":16},"end":{"line":8,"column":25}}})) != null ? stack1 : "")
     + "            </select>\n        </div>\n    </div>\n";
 },"2":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
@@ -10164,17 +10165,17 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "[viewfile]\" type=\"hidden\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.viewfile : stack1), depth0))
     + "\">\n";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.show : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(4, data, 0),"data":data})) != null ? stack1 : "")
+  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.show : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":14,"column":7}}})) != null ? stack1 : "")
     + "\n";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],171:[function(require,module,exports){
+},{"hbsfy/runtime":253}],171:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kb-tpled--field-item\">\n    <div><strong>Label:</strong>"
@@ -10190,10 +10191,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</div>\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],172:[function(require,module,exports){
+},{"hbsfy/runtime":253}],172:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div class=\"kb-template-edditor--file-item\">\n    "
@@ -10201,42 +10202,42 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],173:[function(require,module,exports){
+},{"hbsfy/runtime":253}],173:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"kb-tpled--wrap\">\n\n    <div class=\"kb-tpled--header\">\n        <div class=\"kb-fullscreen--controls\">\n            <div class=\"kb-tpled--close\"><span class=\"dashicons dashicons-no-alt\"></span></div>\n        </div>\n    </div>\n    <div class=\"kb-tpled--inner kbflexwrap\">\n        <div class=\"kb-tpled--sidebar kbflex\">\n            <div class=\"kb-tpled--views\">\n                <h5>Templates</h5>\n                <div data-views></div>\n            </div>\n            <div class=\"kb-tpled--actions\">\n                <h5>Actions</h5>\n                <div data-controls></div>\n            </div>\n        </div>\n        <div class=\"kb-tpled--content kbflex\">\n            <div id=\"codemirror\"></div>\n\n        </div>\n        <div class=\"kb-tpled--sidebar kb-tpled--sidebar-right kbflex\">\n            <div class=\"kb-tpled--fields\">\n                <h5>Available Datafields</h5>\n                <div data-fields></div>\n            </div>\n        </div>\n    </div>\n    <div class=\"kb-tpled--footer\">\n\n    </div>\n\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],174:[function(require,module,exports){
+},{"hbsfy/runtime":253}],174:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
     return "checked=\"checked\"";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=container.hooks.helperMissing;
 
   return "<div class=\"kb-field kb-js-field field-api-checkbox kb-field--checkbox\">\n    <label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "\n        <input type=\"checkbox\""
-    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1),"==",true,{"name":"ifCond","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond||(depth0 && depth0.ifCond)||alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1),"==",true,{"name":"ifCond","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":30},"end":{"line":3,"column":92}}})) != null ? stack1 : "")
     + "\n               name=\""
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":4,"column":21},"end":{"line":4,"column":76}}}))
     + "\">\n    </label>\n    <p class=\"description\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
     + "</p>\n</div>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],175:[function(require,module,exports){
+},{"hbsfy/runtime":253}],175:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kb-field kb-js-field field-api-text kb-field--text\">\n    <label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "</label>\n    <input class='kb-color-picker' data-alpha=\"true\" type='text' name='"
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||container.hooks.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":3,"column":71},"end":{"line":3,"column":126}}}))
     + "' }}'\n    value='"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1), depth0))
     + "' size='7'/>\n    <p class=\"description\">"
@@ -10244,10 +10245,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</p>\n</div>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],176:[function(require,module,exports){
+},{"hbsfy/runtime":253}],176:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kb-field--date-multiple-item\">\n    <div class=\"kb-field--date-multiple-control kbf-sort\"><span class=\"dashicons dashicons-menu hide\"></span></div>\n    <input type='text'  name='"
@@ -10271,24 +10272,24 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "'\n           class='kb-datetimepicker--js-sql'>\n    <div data-kbfaction=\"delete\" class=\"kb-field--text-multiple-control kbf-delete\"><span class=\"dashicons dashicons-trash\" ></span></div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],177:[function(require,module,exports){
+},{"hbsfy/runtime":253}],177:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=container.hooks.helperMissing;
 
   return "<div class=\"kb-field kb-js-field kb-field--datetime field-api-datetime\">\n<label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "</label>\n<div class=\"kb-field--datetime-item\">\n\n    <input type=\"text\" name='"
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":5,"column":29},"end":{"line":5,"column":84}}}))
     + "[human]'\n           value='"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.human : stack1), depth0))
     + "' class='kb-datetimepicker'>\n    <input type='hidden' name='"
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":7,"column":31},"end":{"line":7,"column":86}}}))
     + "[unix]' value='"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.unix : stack1), depth0))
     + "'\n           class='kb-datetimepicker--js-unix'>\n    <input type='hidden' name='"
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":9,"column":31},"end":{"line":9,"column":86}}}))
     + "[sql]' value='"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.sql : stack1), depth0))
     + "'\n           class='kb-datetimepicker--js-sql'>\n</div>\n<p class=\"description\">"
@@ -10296,10 +10297,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</p>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],178:[function(require,module,exports){
+},{"hbsfy/runtime":253}],178:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kb-field kb-js-field field-api-editor\">\n    <label class=\"heading\">"
@@ -10313,16 +10314,16 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</p>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],179:[function(require,module,exports){
+},{"hbsfy/runtime":253}],179:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing, alias5="function";
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=container.hooks.helperMissing, alias5="function";
 
   return "<label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "</label>\n<div class='kb-field-file-wrapper "
-    + alias2(((helper = (helper = helpers.isEmpty || (depth0 != null ? depth0.isEmpty : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"isEmpty","hash":{},"data":data}) : helper)))
+    + alias2(((helper = (helper = helpers.isEmpty || (depth0 != null ? depth0.isEmpty : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"isEmpty","hash":{},"data":data,"loc":{"start":{"line":2,"column":34},"end":{"line":2,"column":47}}}) : helper)))
     + "'>\n    <table>\n        <tbody>\n        <tr>\n            <td>ID:</td>\n            <td><span class=\"kb-file-id\">"
     + alias2(alias1(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.file : stack1)) != null ? stack1.id : stack1), depth0))
     + "</span></td>\n        </tr>\n        <tr>\n            <td>"
@@ -10340,11 +10341,11 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "\">edit</a></td>\n        </tr>\n        </tbody>\n    </table>\n    <input type=\"hidden\" class=\"kb-file-attachment-id\" value=\""
     + alias2(alias1(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.file : stack1)) != null ? stack1.id : stack1), depth0))
     + "\"\n           name=\""
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":24,"column":17},"end":{"line":24,"column":72}}}))
     + "[id]\">\n</div>\n<a class=\"button primary kb-js-add-file\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.selectFile : stack1), depth0))
     + "</a>\n<a class=\"kb-js-reset-file "
-    + alias2(((helper = (helper = helpers.isEmpty || (depth0 != null ? depth0.isEmpty : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"isEmpty","hash":{},"data":data}) : helper)))
+    + alias2(((helper = (helper = helpers.isEmpty || (depth0 != null ? depth0.isEmpty : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"isEmpty","hash":{},"data":data,"loc":{"start":{"line":27,"column":27},"end":{"line":27,"column":40}}}) : helper)))
     + "\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.remove : stack1), depth0))
     + "</a>\n<p class=\"description\">"
@@ -10352,14 +10353,14 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</p>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],180:[function(require,module,exports){
+},{"hbsfy/runtime":253}],180:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression, alias5=container.lambda;
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, alias5=container.lambda;
 
   return "<div class=\"kb-field--file-multiple-item\">\n    <div class=\"kb-field--file-multiple-control kbf-sort\"><span class=\"dashicons dashicons-menu\"></span></div>\n    <div class='kb-field-file-wrapper "
-    + alias4(((helper = (helper = helpers.isEmpty || (depth0 != null ? depth0.isEmpty : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"isEmpty","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.isEmpty || (depth0 != null ? depth0.isEmpty : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"isEmpty","hash":{},"data":data,"loc":{"start":{"line":3,"column":38},"end":{"line":3,"column":51}}}) : helper)))
     + "'>\n        <table>\n            <tbody>\n            <tr>\n                <td>"
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.customtitle : stack1), depth0))
     + "</td>\n                <td><input class=\"kb-file-input\" name=\""
@@ -10399,137 +10400,137 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "][id]\">\n    </div>\n    <a class=\"button primary kb-js-add-file\">"
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.selectFile : stack1), depth0))
     + "</a>\n    <a class=\"kb-js-reset-file "
-    + alias4(((helper = (helper = helpers.isEmpty || (depth0 != null ? depth0.isEmpty : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"isEmpty","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.isEmpty || (depth0 != null ? depth0.isEmpty : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"isEmpty","hash":{},"data":data,"loc":{"start":{"line":36,"column":31},"end":{"line":36,"column":44}}}) : helper)))
     + "\">"
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.reset : stack1), depth0))
     + "</a>\n    <div data-kbfaction=\"delete\" class=\"kb-field--file-multiple-control kbf-delete\"><span class=\"dashicons dashicons-trash\" ></span></div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],181:[function(require,module,exports){
+},{"hbsfy/runtime":253}],181:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "<input type=\"hidden\" name=\""
-    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":42}}}) : helper)))
     + "[_meta][uid]\" value=\""
-    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data,"loc":{"start":{"line":1,"column":63},"end":{"line":1,"column":72}}}) : helper)))
     + "\">\n<input type=\"hidden\" name=\""
-    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":2,"column":27},"end":{"line":2,"column":42}}}) : helper)))
     + "[_meta][type]\" value=\""
-    + alias4(((helper = (helper = helpers.fftype || (depth0 != null ? depth0.fftype : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"fftype","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.fftype || (depth0 != null ? depth0.fftype : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"fftype","hash":{},"data":data,"loc":{"start":{"line":2,"column":64},"end":{"line":2,"column":76}}}) : helper)))
     + "\">\n<input data-flexfield-visible type=\"hidden\" name=\""
-    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":3,"column":50},"end":{"line":3,"column":65}}}) : helper)))
     + "[_meta][status]\" value=\""
-    + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data,"loc":{"start":{"line":3,"column":89},"end":{"line":3,"column":101}}}) : helper)))
     + "\">\n\n<div class=\"flexible-fields--section-box\">\n    <div class=\"flexible-fields--section-title\">\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n        <input type=\"text\" value=\""
     + alias4(container.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.title : stack1), depth0))
     + "\" name=\""
-    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":9,"column":58},"end":{"line":9,"column":73}}}) : helper)))
     + "[_meta][title] \">\n    </div>\n    <div class=\"flexible-fields--section-box-inner\">\n\n    </div>\n    <div class=\"kb-field--tabs\">\n        <ul class=\"flexible-field--tab-nav\">\n        </ul>\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],182:[function(require,module,exports){
+},{"hbsfy/runtime":253}],182:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "<input type=\"hidden\" name=\""
-    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":42}}}) : helper)))
     + "[_meta][uid]\" value=\""
-    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data,"loc":{"start":{"line":1,"column":63},"end":{"line":1,"column":72}}}) : helper)))
     + "\">\n<input type=\"hidden\" name=\""
-    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":2,"column":27},"end":{"line":2,"column":42}}}) : helper)))
     + "[_meta][type]\" value=\""
-    + alias4(((helper = (helper = helpers.fftype || (depth0 != null ? depth0.fftype : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"fftype","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.fftype || (depth0 != null ? depth0.fftype : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"fftype","hash":{},"data":data,"loc":{"start":{"line":2,"column":64},"end":{"line":2,"column":76}}}) : helper)))
     + "\">\n<input data-flexfield-visible type=\"hidden\" name=\""
-    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":3,"column":50},"end":{"line":3,"column":65}}}) : helper)))
     + "[_meta][status]\" value=\""
-    + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data,"loc":{"start":{"line":3,"column":89},"end":{"line":3,"column":101}}}) : helper)))
     + "\">\n<div class=\"flexible-fields--toggle-title\">\n    <h3>\n        <span class=\"genericon genericon-draggable flexible-fields--js-drag-handle\"></span>\n        <span class=\"genericon genericon-expand flexible-fields--js-toggle\" data-flexfields-toggle></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-duplicate\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-trash\"></span>\n        <span class=\"dashicons dashicons-trash flexible-fields--js-visibility\"></span>\n        <input type=\"text\" value=\""
     + alias4(container.lambda(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.title : stack1), depth0))
     + "\" name=\""
-    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":11,"column":58},"end":{"line":11,"column":73}}}) : helper)))
     + "[_meta][title]\">\n    </h3>\n</div>\n<div class=\"flexible-fields--toggle-box kb-hide\">\n    <div class=\"kb-field--tabs\">\n        <ul class=\"flexible-field--tab-nav\">\n\n        </ul>\n    </div>\n\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],183:[function(require,module,exports){
+},{"hbsfy/runtime":253}],183:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=container.escapeExpression, alias2=container.lambda;
 
   return "        <a class=\"button button-primary kb-flexible-fields--js-add-item\"\n           data-kbf-addtype=\""
-    + alias1(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"key","hash":{},"data":data}) : helper)))
+    + alias1(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"key","hash":{},"data":data,"loc":{"start":{"line":5,"column":29},"end":{"line":5,"column":37}}}) : helper)))
     + "\">"
     + alias1(alias2(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.addNewItem : stack1), depth0))
     + alias1(alias2(((stack1 = (depth0 != null ? depth0.args : depth0)) != null ? stack1.buttontext : stack1), depth0))
     + "</a>\n";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<ul class=\"flexible-fields--item-list\"></ul>\n<div class=\"flexible-fields--header\">\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.fields : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.fields : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":4},"end":{"line":6,"column":13}}})) != null ? stack1 : "")
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],184:[function(require,module,exports){
+},{"hbsfy/runtime":253}],184:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression, alias5=container.lambda;
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, alias5=container.lambda;
 
   return "<div class=\"kb-gallery--header\">\n    <h3>Image Details</h3>\n</div>\n<div class=\"kb-gallery--left-column\">\n    <div class=\"kb-gallery--image-meta\" style=\"display: none;\">\n        <span class=\"genericon genericon-close-alt kb-gallery--js-meta-close\"></span>\n\n        <div class=\"kb-field--tabs\">\n            <ul class=\"kb-gallery--tabs-nav\">\n                <li><a href=\"#tab"
-    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data,"loc":{"start":{"line":10,"column":33},"end":{"line":10,"column":42}}}) : helper)))
     + "-1\">Details</a></li>\n                <li><a href=\"#tab"
-    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data,"loc":{"start":{"line":11,"column":33},"end":{"line":11,"column":42}}}) : helper)))
     + "-2\">Beschreibung</a></li>\n            </ul>\n            <div id=\"tab"
-    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data,"loc":{"start":{"line":13,"column":24},"end":{"line":13,"column":33}}}) : helper)))
     + "-1\">\n                <div class=\"kb-gallery--meta-field kb-field\">\n                    <label class=\"heading\">Titel</label>\n                    <input class=\"large\" type=\"text\" name=\""
-    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":16,"column":59},"end":{"line":16,"column":74}}}) : helper)))
     + "[details][title]\" value=\""
     + alias4(alias5(((stack1 = ((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.details : stack1)) != null ? stack1.title : stack1), depth0))
     + "\">\n                </div>\n                <div class=\"kb-gallery--meta-field kb-field\">\n                    <label class=\"heading\">Alt</label>\n                    <input class=\"large\" type=\"text\" name=\""
-    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":20,"column":59},"end":{"line":20,"column":74}}}) : helper)))
     + "[details][alt]\" value=\""
     + alias4(alias5(((stack1 = ((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.details : stack1)) != null ? stack1.alt : stack1), depth0))
     + "\">\n                </div>\n            </div>\n\n            <div id=\"tab"
-    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data,"loc":{"start":{"line":24,"column":24},"end":{"line":24,"column":33}}}) : helper)))
     + "-2\">\n                <div class=\"kb-js--remote-editor\" data-uid=\""
-    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"uid","hash":{},"data":data,"loc":{"start":{"line":25,"column":60},"end":{"line":25,"column":69}}}) : helper)))
     + "\">\n                    <textarea name=\""
-    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":26,"column":36},"end":{"line":26,"column":51}}}) : helper)))
     + "[details][description]\">"
     + alias4(alias5(((stack1 = ((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.details : stack1)) != null ? stack1.description : stack1), depth0))
     + "</textarea>\n                </div>\n\n            </div>\n        </div>\n    </div>\n</div>\n<div class=\"kb-gallery--right-column\">\n    <div class=\"kb-gallery--image-holder\">\n        <img src=\""
     + alias4(alias5(((stack1 = ((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.file : stack1)) != null ? stack1.sizes : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.url : stack1), depth0))
     + "\">\n        <span class=\"genericon genericon-edit kb-gallery--js-edit\"></span>\n        <span class=\"genericon genericon-close-alt kb-gallery--js-delete\"></span>\n        <input type=\"hidden\" name=\""
-    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":38,"column":35},"end":{"line":38,"column":50}}}) : helper)))
     + "[id]\" value=\""
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.id : stack1), depth0))
     + "\">\n        <input type=\"hidden\" class=\"kb-gallery--image-remove\" name=\""
-    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":39,"column":68},"end":{"line":39,"column":83}}}) : helper)))
     + "[remove]\" value=\"\">\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],185:[function(require,module,exports){
+},{"hbsfy/runtime":253}],185:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kb-gallery--right-column\">\n    <div class=\"kb-gallery--image-holder\">\n        <img src=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.previewUrl : stack1), depth0))
     + "\">\n        <input type=\"hidden\" name=\""
-    + alias2(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"inputName","hash":{},"data":data}) : helper)))
+    + alias2(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"inputName","hash":{},"data":data,"loc":{"start":{"line":4,"column":35},"end":{"line":4,"column":50}}}) : helper)))
     + "\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.id : stack1), depth0))
     + "\">\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],186:[function(require,module,exports){
+},{"hbsfy/runtime":253}],186:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
@@ -10540,33 +10541,33 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "\">\n";
 },"3":function(container,depth0,helpers,partials,data) {
     return " kb-hide ";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.lambda, alias3=container.escapeExpression, alias4=helpers.helperMissing;
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.lambda, alias3=container.escapeExpression, alias4=container.hooks.helperMissing;
 
   return "<div class=\"kb-field kb-field kb-field--image kb-fieldapi-field\">\n    <div class='kb-field-image-wrapper' data-kbfield=\"image\">\n        <div role=\"button\" aria-label=\"Datei auswählen\" tabindex=\"0\" class='kb-js-add-image kb-field-image-container'>\n"
-    + ((stack1 = helpers["if"].call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.url : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.url : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":4,"column":12},"end":{"line":6,"column":19}}})) != null ? stack1 : "")
     + "        </div>\n        <div class=\"kb-field-image-meta "
-    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.hideMeta : stack1),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.hideMeta : stack1),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":8,"column":40},"end":{"line":8,"column":79}}})) != null ? stack1 : "")
     + " \">\n            <div class=\"kb-field-image-title\">\n                <label>"
     + alias3(alias2(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.title : stack1), depth0))
     + "</label>\n                <input class='kb-js-image-title kb-observe' type=\"text\"\n                       name='"
-    + alias3((helpers.fieldName || (depth0 && depth0.fieldName) || alias4).call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias3((helpers.fieldName||(depth0 && depth0.fieldName)||alias4).call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":12,"column":29},"end":{"line":12,"column":83}}}))
     + "[title]'\n                       value='"
     + ((stack1 = alias2(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.title : stack1), depth0)) != null ? stack1 : "")
     + "'>\n            </div>\n            <div class=\"kb-field-image-description\">\n                <label>"
     + alias3(alias2(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.description : stack1), depth0))
     + "</label>\n        <textarea class='kb-js-image-description kb-observe'\n                  name='"
-    + alias3((helpers.fieldName || (depth0 && depth0.fieldName) || alias4).call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias3((helpers.fieldName||(depth0 && depth0.fieldName)||alias4).call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":18,"column":24},"end":{"line":18,"column":79}}}))
     + "[caption]'>"
     + ((stack1 = alias2(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.caption : stack1), depth0)) != null ? stack1 : "")
     + "\n        </textarea>\n            </div>\n        </div>\n        <input class='kb-js-image-id' type='hidden'\n               name='"
-    + alias3((helpers.fieldName || (depth0 && depth0.fieldName) || alias4).call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias3((helpers.fieldName||(depth0 && depth0.fieldName)||alias4).call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":23,"column":21},"end":{"line":23,"column":76}}}))
     + "[id]'\n               value='"
     + ((stack1 = alias2(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.id : stack1), depth0)) != null ? stack1 : "")
     + "'>\n    </div>\n    <div class=\"kb-field-image--footer\">\n        <a class=\"button kb-js-reset-image\">Reset</a>\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],187:[function(require,module,exports){
+},{"hbsfy/runtime":253}],187:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
@@ -10577,7 +10578,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "-linktext'>"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.linktext : stack1), depth0))
     + "</label><br>\n            <input\n                    type='text' data-kbf-link-linktext\n                    name=\""
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||container.hooks.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":13,"column":26},"end":{"line":13,"column":81}}}))
     + "[linktext]\"\n                    class='kb-field--link-linktext'\n                    id='"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1), depth0))
     + "-linktext'\n                    value='"
@@ -10591,7 +10592,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "-linktitle'>"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.linktitle : stack1), depth0))
     + "</label><br>\n            <input\n                    type='text'\n                    name=\""
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||container.hooks.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":24,"column":26},"end":{"line":24,"column":81}}}))
     + "[linktitle]\"\n                    class='kb-field--link-linktitle'\n                    id='"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1), depth0))
     + "-linktitle'\n                    value='"
@@ -10605,17 +10606,17 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "-linktarget'>\n                <input data-kbf-link-target type='checkbox' class='kb-field--link-target'\n                       id='"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1), depth0))
     + "-linktarget'\n"
-    + ((stack1 = helpers["if"].call(alias3,((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.target : stack1),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.target : stack1),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":36,"column":20},"end":{"line":38,"column":27}}})) != null ? stack1 : "")
     + "                       value='"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.target : stack1), depth0))
     + "'\n                       name='"
-    + alias2((helpers.fieldname || (depth0 && depth0.fieldname) || helpers.helperMissing).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldname","hash":{},"data":data}))
+    + alias2((helpers.fieldname||(depth0 && depth0.fieldname)||container.hooks.helperMissing).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldname","hash":{},"data":data,"loc":{"start":{"line":40,"column":29},"end":{"line":40,"column":84}}}))
     + "[linktarget]'>\n                "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.linktarget : stack1), depth0))
     + " </label>\n        </div>\n\n";
 },"6":function(container,depth0,helpers,partials,data) {
     return "                       checked=\"checked\"\n";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {});
 
   return "<div class=\"kb-field kb-js-field kb-field--link field-api-link\">\n    <label class=\"heading\">"
@@ -10623,30 +10624,30 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "</label>\n    <input class=\"kb-js-link-input\" data-kbf-link-url\n           id=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1), depth0))
     + "_link_input\"\n           type=\"text\"\n           name=\""
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||container.hooks.helperMissing).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":6,"column":17},"end":{"line":6,"column":72}}}))
     + "[link]\"\n           value=\""
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.link : stack1), depth0))
     + "\">\n    <a class='button kb-js-add-link'>Add internal link</a>\n"
-    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.linktext : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.linktext : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":9,"column":4},"end":{"line":18,"column":11}}})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.linktitle : stack1),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.linktitle : stack1),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":20,"column":4},"end":{"line":29,"column":11}}})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.showtarget : stack1),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.showtarget : stack1),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":31,"column":4},"end":{"line":44,"column":11}}})) != null ? stack1 : "")
     + "    <p class=\"description\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
     + "</p>\n\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],188:[function(require,module,exports){
+},{"hbsfy/runtime":253}],188:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kb-field kb-js-field field-api-medium\">\n    <label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "</label>\n    <textarea class=\"kb-medium-editable\" id=\"random\" name='"
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||container.hooks.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":3,"column":59},"end":{"line":3,"column":114}}}))
     + "'>"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1), depth0))
     + "</textarea>\n    <p class=\"description\">"
@@ -10654,16 +10655,16 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</p>\n</div>\n\n";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],189:[function(require,module,exports){
+},{"hbsfy/runtime":253}],189:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kb-field--oembed kb-field kb-js-field field-api-oembed\">\n    <label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "</label>\n    <input data-kbf-link-url\n    name='"
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||container.hooks.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":4,"column":10},"end":{"line":4,"column":65}}}))
     + "'\n    value='"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1), depth0))
     + "' />\n    <div class=\"kb-oembed-preview\" data-kb-oembed-preview>\n\n    </div>\n    <p class=\"description\">"
@@ -10671,36 +10672,36 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</p>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],190:[function(require,module,exports){
+},{"hbsfy/runtime":253}],190:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
 
   return "    <div class='kb-radioset-item'>\n        <label>\n        <input type='radio' name='"
-    + alias3((helpers.fieldName || (depth0 && depth0.fieldName) || alias2).call(alias1,((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.baseId : stack1),((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.index : stack1),((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias3((helpers.fieldName||(depth0 && depth0.fieldName)||alias2).call(alias1,((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.baseId : stack1),((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.index : stack1),((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":6,"column":34},"end":{"line":6,"column":98}}}))
     + "'\n               value='"
     + alias3(alias4((depth0 != null ? depth0.value : depth0), depth0))
     + "'\n               "
-    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.value : depth0),"==",((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.value : stack1),{"name":"ifCond","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond||(depth0 && depth0.ifCond)||alias2).call(alias1,(depth0 != null ? depth0.value : depth0),"==",((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.value : stack1),{"name":"ifCond","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":8,"column":15},"end":{"line":8,"column":86}}})) != null ? stack1 : "")
     + "/>"
     + ((stack1 = alias4((depth0 != null ? depth0.name : depth0), depth0)) != null ? stack1 : "")
     + "</label>\n    </div>\n";
 },"2":function(container,depth0,helpers,partials,data) {
     return "checked=\"checked\"";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kb-field kb-js-field field-api-radioset kb-field--radioset\">\n    <label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "</label>\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.options : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.options : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":4},"end":{"line":10,"column":13}}})) != null ? stack1 : "")
     + "    <p class=\"description\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
     + "</p>\n</div>";
 },"useData":true,"useDepths":true});
 
-},{"hbsfy/runtime":254}],191:[function(require,module,exports){
+},{"hbsfy/runtime":253}],191:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
@@ -10713,7 +10714,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     var stack1, alias1=container.lambda;
 
   return "            <option "
-    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.value : depth0),"==",((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.value : stack1),{"name":"ifCond","hash":{},"fn":container.program(8, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond||(depth0 && depth0.ifCond)||container.hooks.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.value : depth0),"==",((stack1 = (depths[1] != null ? depths[1].model : depths[1])) != null ? stack1.value : stack1),{"name":"ifCond","hash":{},"fn":container.program(8, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":16,"column":20},"end":{"line":16,"column":93}}})) != null ? stack1 : "")
     + "\n                    value=\""
     + container.escapeExpression(alias1((depth0 != null ? depth0.value : depth0), depth0))
     + "\">"
@@ -10721,44 +10722,44 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "</option>\n";
 },"8":function(container,depth0,helpers,partials,data) {
     return "selected=\"selected\"";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=container.hooks.helperMissing;
 
   return "<div class=\"kb-field kb-js-field field-api-text kb-field--select\">\n    <label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "</label>\n    <select\n            name=\""
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":73}}}))
     + "\"\n"
-    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.select2 : stack1),"===",true,{"name":"ifCond","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.multiple : stack1),"===",true,{"name":"ifCond","hash":{},"fn":container.program(3, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond||(depth0 && depth0.ifCond)||alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.select2 : stack1),"===",true,{"name":"ifCond","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":5,"column":8},"end":{"line":7,"column":19}}})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ifCond||(depth0 && depth0.ifCond)||alias4).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.multiple : stack1),"===",true,{"name":"ifCond","hash":{},"fn":container.program(3, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":8,"column":8},"end":{"line":10,"column":19}}})) != null ? stack1 : "")
     + "    >\n"
-    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.showempty : stack1),{"name":"if","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.options : stack1),{"name":"each","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.showempty : stack1),{"name":"if","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":12,"column":8},"end":{"line":14,"column":15}}})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.options : stack1),{"name":"each","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":15,"column":8},"end":{"line":18,"column":17}}})) != null ? stack1 : "")
     + "    </select>\n    <p class=\"description\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
     + "</p>\n</div>";
 },"useData":true,"useDepths":true});
 
-},{"hbsfy/runtime":254}],192:[function(require,module,exports){
+},{"hbsfy/runtime":253}],192:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
     var helper, alias1=container.escapeExpression;
 
   return "        "
-    + alias1(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"key","hash":{},"data":data}) : helper)))
+    + alias1(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"key","hash":{},"data":data,"loc":{"start":{"line":5,"column":8},"end":{"line":5,"column":16}}}) : helper)))
     + "=\""
     + alias1(container.lambda(depth0, depth0))
     + "\"\n";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {});
 
   return "<div class=\"kb-field kb-js-field field-api-text kb-field--text kb-field--reset\">\n    <label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "</label>\n    <input type=\"text\"\n"
-    + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.attributes : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.attributes : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":4,"column":4},"end":{"line":6,"column":13}}})) != null ? stack1 : "")
     + "    name=\""
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||container.hooks.helperMissing).call(alias3,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":7,"column":10},"end":{"line":7,"column":65}}}))
     + "\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1), depth0))
     + "\" >\n    <p class=\"description\">"
@@ -10766,10 +10767,10 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "</p>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],193:[function(require,module,exports){
+},{"hbsfy/runtime":253}],193:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kb-field--text-multiple-item\">\n    <div class=\"kb-field--text-multiple-control kbf-sort\"><span class=\"dashicons dashicons-menu\"></span></div>\n    <input type=\"text\" name=\""
@@ -10779,16 +10780,16 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "\">\n    <div data-kbfaction=\"delete\" class=\"kb-field--text-multiple-control kbf-delete\"><span class=\"dashicons dashicons-trash\" ></span></div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],194:[function(require,module,exports){
+},{"hbsfy/runtime":253}],194:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kb-field kb-js-field field-api-textarea\">\n    <label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "</label>\n    <textarea name=\""
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName||(depth0 && depth0.fieldName)||container.hooks.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":75}}}))
     + "\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1), depth0))
     + "</textarea>\n    <p class=\"description\">"
@@ -10796,10 +10797,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</p>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],195:[function(require,module,exports){
+},{"hbsfy/runtime":253}],195:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div class=\"kb-area__empty-placeholder\">\n    <div class=\"kb-module-trigger\">"
@@ -10807,10 +10808,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],196:[function(require,module,exports){
+},{"hbsfy/runtime":253}],196:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div>"
@@ -10818,29 +10819,29 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],197:[function(require,module,exports){
+},{"hbsfy/runtime":253}],197:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
     return " kb-dynamic-module ";
 },"3":function(container,depth0,helpers,partials,data) {
     return " global-module ";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
   return "<div data-kb-mcontrols=\""
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.mid : stack1), depth0))
     + "\" class='kb-module-controls "
-    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.inDynamic : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.inDynamic : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":1,"column":65},"end":{"line":1,"column":115}}})) != null ? stack1 : "")
     + " "
-    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.globalModule : stack1),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.globalModule : stack1),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":1,"column":116},"end":{"line":1,"column":165}}})) != null ? stack1 : "")
     + "'>\n    <div class=\"kb-controls-wrap\"></div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],198:[function(require,module,exports){
+},{"hbsfy/runtime":253}],198:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"controls-title\">Module: <span> "
@@ -10854,10 +10855,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</div>\n\n</div>\n<form id=\"onsite-form\" class=\"wp-core-ui wp-admin kb-nano\">\n    <div class=\"kb-nano-content\" id=\"onsite-content\">\n\n        <div class=\"os-content-inner kb-module\">\n\n        </div>\n    </div>\n</form>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],199:[function(require,module,exports){
+},{"hbsfy/runtime":253}],199:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div class=\"kb-module__placeholder\">\n    <p>"
@@ -10865,32 +10866,32 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "\n    <span>Start here.</span>\n    </p>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],200:[function(require,module,exports){
+},{"hbsfy/runtime":253}],200:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "<div class=\"kb-sidebar__subheader\">\n    <span>You are editing area:</span> "
-    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data,"loc":{"start":{"line":2,"column":39},"end":{"line":2,"column":49}}}) : helper)))
     + "\n</div>\n<div class=\"kb-sidebar-area-details__settings\" style=\"display: none\">\n\n</div>\n<!--<div class=\"kb-sidebar-area-details__subheader\">Categories</div>-->";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],201:[function(require,module,exports){
+},{"hbsfy/runtime":253}],201:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "<div class=\"kb-sidebar__category-item\">\n    <div class=\"kb-sidebar__category-item__title\">\n        Category: "
-    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":28}}}) : helper)))
     + "\n    </div>\n    <div class=\"kb-sidebar__category-item__module-list\">\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],202:[function(require,module,exports){
+},{"hbsfy/runtime":253}],202:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "<div class=\"kb-sidebar__cat-module-item\">\n    "
@@ -10898,17 +10899,17 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "\n    <div class=\"kb-sidebar__cat-module-item__actions\">\n    </div>\n</div>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],203:[function(require,module,exports){
+},{"hbsfy/runtime":253}],203:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<li class=\"kb-sidebar__no-modules\">No Modules attached yet</li>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],204:[function(require,module,exports){
+},{"hbsfy/runtime":253}],204:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div class=\"kb-sidebar-item__wrapper\">\n    <div class=\"kb-sidebar-item__name\">"
@@ -10924,67 +10925,67 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "</span></a>\n    <a class='kb-sidebar__module-delete kb-js-inline-delete'><span\n            class=\"dashicons dashicons-trash\"></span></a>\n    <a class='kb-sidebar__module-update kb-js-inline-update'><span\n            class=\"dashicons dashicons-update\"></span></a>\n\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],205:[function(require,module,exports){
+},{"hbsfy/runtime":253}],205:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "<div class=\"kb-sidebar__header-wrap\">\n    <div class=\"kb-sidebar__subheader\">\n        "
-    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data,"loc":{"start":{"line":3,"column":8},"end":{"line":3,"column":18}}}) : helper)))
     + "\n    </div>\n    <span class=\"genericon genericon-close-alt kb-sidebar-action--close\"></span>\n    <div class=\"kb-sidebar-action--update kb-fx-button kb-fx-button--effect-boris\"><span class=\"dashicons dashicons-update\"></span></div>\n\n</div>\n<form class=\"kb-sidebar__form-container\">\n\n</form>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],206:[function(require,module,exports){
+},{"hbsfy/runtime":253}],206:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "<div class=\"kb-sidebar--panel-item kb-sidebar__item\">\n    "
-    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":14}}}) : helper)))
     + "\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],207:[function(require,module,exports){
+},{"hbsfy/runtime":253}],207:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "<div class=\"kb-sidebar__item kb-sidebar__item--root\" data-kb-action=\""
-    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":1,"column":69},"end":{"line":1,"column":77}}}) : helper)))
     + "\">\n    "
-    + alias4(((helper = (helper = helpers.text || (depth0 != null ? depth0.text : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"text","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.text || (depth0 != null ? depth0.text : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"text","hash":{},"data":data,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":14}}}) : helper)))
     + "\n    <span class=\"dashicons dashicons-arrow-right-alt2 kb-sidebar__add-module kb-js-sidebar-add-module\"></span>\n\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],208:[function(require,module,exports){
+},{"hbsfy/runtime":253}],208:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "<div class=\"kb-sidebar-areaview kb-sidebar-areaview--inactive\">\n    <div class=\"kb-sidebar-areaview__title\"> "
-    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data,"loc":{"start":{"line":2,"column":45},"end":{"line":2,"column":55}}}) : helper)))
     + "</div>\n    <span class=\"dashicons dashicons-arrow-right-alt2 kb-sidebar__add-module kb-js-sidebar-add-module\"></span>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],209:[function(require,module,exports){
+},{"hbsfy/runtime":253}],209:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"kb-sidebar__header-wrap\">\n    <div class=\"kb-sidebar__subheader\">\n        Kontentblocks\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],210:[function(require,module,exports){
+},{"hbsfy/runtime":253}],210:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"kb-sidebar__nav-controls\">\n    <div class=\"kb-sidebar__nav-button kb-js-sidebar-nav-back\">\n        <span class=\"dashicons dashicons-arrow-left-alt2 cbutton cbutton--effect-boris\"></span>\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":254}],211:[function(require,module,exports){
+},{"hbsfy/runtime":253}],211:[function(require,module,exports){
 
 },{}],212:[function(require,module,exports){
 'use strict';
@@ -11036,6 +11037,7 @@ function create() {
   hb.JavaScriptCompiler = _handlebarsCompilerJavascriptCompiler2['default'];
   hb.Parser = _handlebarsCompilerBase.parser;
   hb.parse = _handlebarsCompilerBase.parse;
+  hb.parseWithoutProcessing = _handlebarsCompilerBase.parseWithoutProcessing;
 
   return hb;
 }
@@ -11144,11 +11146,13 @@ var _logger = require('./logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var VERSION = '4.1.2';
+var VERSION = '4.5.3';
 exports.VERSION = VERSION;
-var COMPILER_REVISION = 7;
-
+var COMPILER_REVISION = 8;
 exports.COMPILER_REVISION = COMPILER_REVISION;
+var LAST_COMPATIBLE_COMPILER_REVISION = 7;
+
+exports.LAST_COMPATIBLE_COMPILER_REVISION = LAST_COMPATIBLE_COMPILER_REVISION;
 var REVISION_CHANGES = {
   1: '<= 1.0.rc.2', // 1.0.rc.2 is actually rev2 but doesn't report it
   2: '== 1.0.0-rc.3',
@@ -11156,7 +11160,8 @@ var REVISION_CHANGES = {
   4: '== 1.x.x',
   5: '== 2.0.0-alpha.x',
   6: '>= 2.0.0-beta.1',
-  7: '>= 4.0.0'
+  7: '>= 4.0.0 <4.3.0',
+  8: '>= 4.3.0'
 };
 
 exports.REVISION_CHANGES = REVISION_CHANGES;
@@ -11264,6 +11269,7 @@ module.exports = exports['default'];
 'use strict';
 
 exports.__esModule = true;
+exports.parseWithoutProcessing = parseWithoutProcessing;
 exports.parse = parse;
 // istanbul ignore next
 
@@ -11292,7 +11298,7 @@ exports.parser = _parser2['default'];
 var yy = {};
 _utils.extend(yy, Helpers);
 
-function parse(input, options) {
+function parseWithoutProcessing(input, options) {
   // Just return if an already-compiled AST was passed in.
   if (input.type === 'Program') {
     return input;
@@ -11305,8 +11311,16 @@ function parse(input, options) {
     return new yy.SourceLocation(options && options.srcName, locInfo);
   };
 
+  var ast = _parser2['default'].parse(input);
+
+  return ast;
+}
+
+function parse(input, options) {
+  var ast = parseWithoutProcessing(input, options);
   var strip = new _whitespaceControl2['default'](options);
-  return strip.accept(_parser2['default'].parse(input));
+
+  return strip.accept(ast);
 }
 
 
@@ -11434,16 +11448,18 @@ CodeGen.prototype = {
   },
 
   objectLiteral: function objectLiteral(obj) {
+    // istanbul ignore next
+
+    var _this = this;
+
     var pairs = [];
 
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        var value = castChunk(obj[key], this);
-        if (value !== 'undefined') {
-          pairs.push([this.quotedString(key), ':', value]);
-        }
+    Object.keys(obj).forEach(function (key) {
+      var value = castChunk(obj[key], _this);
+      if (value !== 'undefined') {
+        pairs.push([_this.quotedString(key), ':', value]);
       }
-    }
+    });
 
     var ret = this.generateList(pairs);
     ret.prepend('{');
@@ -11551,9 +11567,7 @@ Compiler.prototype = {
 
     options.blockParams = options.blockParams || [];
 
-    // These changes will propagate to the other compiler components
-    var knownHelpers = options.knownHelpers;
-    options.knownHelpers = {
+    options.knownHelpers = _utils.extend(Object.create(null), {
       'helperMissing': true,
       'blockHelperMissing': true,
       'each': true,
@@ -11562,15 +11576,7 @@ Compiler.prototype = {
       'with': true,
       'log': true,
       'lookup': true
-    };
-    if (knownHelpers) {
-      // the next line should use "Object.keys", but the code has been like this a long time and changing it, might
-      // cause backwards-compatibility issues... It's an old library...
-      // eslint-disable-next-line guard-for-in
-      for (var _name in knownHelpers) {
-        this.options.knownHelpers[_name] = knownHelpers[_name];
-      }
-    }
+    }, options.knownHelpers);
 
     return this.accept(program);
   },
@@ -11864,10 +11870,9 @@ Compiler.prototype = {
     // if ambiguous, we can possibly resolve the ambiguity now
     // An eligible helper is one that does not have a complex path, i.e. `this.foo`, `../foo` etc.
     if (isEligible && !isHelper) {
-      var _name2 = sexpr.path.parts[0],
+      var _name = sexpr.path.parts[0],
           options = this.options;
-
-      if (options.knownHelpers[_name2]) {
+      if (options.knownHelpers[_name]) {
         isHelper = true;
       } else if (options.knownHelpersOnly) {
         isEligible = false;
@@ -12303,6 +12308,8 @@ var _codeGen = require('./code-gen');
 
 var _codeGen2 = _interopRequireDefault(_codeGen);
 
+var _helpersLookup = require('../helpers/lookup');
+
 function Literal(value) {
   this.value = value;
 }
@@ -12313,13 +12320,18 @@ JavaScriptCompiler.prototype = {
   // PUBLIC API: You can override these methods in a subclass to provide
   // alternative compiled forms for name lookup and buffering semantics
   nameLookup: function nameLookup(parent, name /* , type*/) {
-    if (name === 'constructor') {
-      return ['(', parent, '.propertyIsEnumerable(\'constructor\') ? ', parent, '.constructor : undefined', ')'];
+    if (_helpersLookup.dangerousPropertyRegex.test(name)) {
+      var isEnumerable = [this.aliasable('container.propertyIsEnumerable'), '.call(', parent, ',', JSON.stringify(name), ')'];
+      return ['(', isEnumerable, '?', _actualLookup(), ' : undefined)'];
     }
-    if (JavaScriptCompiler.isValidJavaScriptVariableName(name)) {
-      return [parent, '.', name];
-    } else {
-      return [parent, '[', JSON.stringify(name), ']'];
+    return _actualLookup();
+
+    function _actualLookup() {
+      if (JavaScriptCompiler.isValidJavaScriptVariableName(name)) {
+        return [parent, '.', name];
+      } else {
+        return [parent, '[', JSON.stringify(name), ']'];
+      }
     }
   },
   depthedLookup: function depthedLookup(name) {
@@ -12501,6 +12513,10 @@ JavaScriptCompiler.prototype = {
   },
 
   createFunctionContext: function createFunctionContext(asObject) {
+    // istanbul ignore next
+
+    var _this = this;
+
     var varDeclarations = '';
 
     var locals = this.stackVars.concat(this.registers.list);
@@ -12515,15 +12531,13 @@ JavaScriptCompiler.prototype = {
     // aliases will not be used, but this case is already being run on the client and
     // we aren't concern about minimizing the template size.
     var aliasCount = 0;
-    for (var alias in this.aliases) {
-      // eslint-disable-line guard-for-in
-      var node = this.aliases[alias];
-
-      if (this.aliases.hasOwnProperty(alias) && node.children && node.referenceCount > 1) {
+    Object.keys(this.aliases).forEach(function (alias) {
+      var node = _this.aliases[alias];
+      if (node.children && node.referenceCount > 1) {
         varDeclarations += ', alias' + ++aliasCount + '=' + alias;
         node.children[0] = 'alias' + aliasCount;
       }
-    }
+    });
 
     var params = ['container', 'depth0', 'helpers', 'partials', 'data'];
 
@@ -12613,7 +12627,7 @@ JavaScriptCompiler.prototype = {
   // replace it on the stack with the result of properly
   // invoking blockHelperMissing.
   blockValue: function blockValue(name) {
-    var blockHelperMissing = this.aliasable('helpers.blockHelperMissing'),
+    var blockHelperMissing = this.aliasable('container.hooks.blockHelperMissing'),
         params = [this.contextName(0)];
     this.setupHelperArgs(name, 0, params);
 
@@ -12631,7 +12645,7 @@ JavaScriptCompiler.prototype = {
   // On stack, after, if lastHelper: value
   ambiguousBlockValue: function ambiguousBlockValue() {
     // We're being a bit cheeky and reusing the options value from the prior exec
-    var blockHelperMissing = this.aliasable('helpers.blockHelperMissing'),
+    var blockHelperMissing = this.aliasable('container.hooks.blockHelperMissing'),
         params = [this.contextName(0)];
     this.setupHelperArgs('', 0, params, true);
 
@@ -12769,7 +12783,7 @@ JavaScriptCompiler.prototype = {
   resolvePath: function resolvePath(type, parts, i, falsy, strict) {
     // istanbul ignore next
 
-    var _this = this;
+    var _this2 = this;
 
     if (this.options.strict || this.options.assumeObjects) {
       this.push(strictLookup(this.options.strict && strict, this, parts, type));
@@ -12780,7 +12794,7 @@ JavaScriptCompiler.prototype = {
     for (; i < len; i++) {
       /* eslint-disable no-loop-func */
       this.replaceStack(function (current) {
-        var lookup = _this.nameLookup(current, parts[i], type);
+        var lookup = _this2.nameLookup(current, parts[i], type);
         // We want to ensure that zero and false are handled properly if the context (falsy flag)
         // needs to have the special handling for these values.
         if (!falsy) {
@@ -12842,7 +12856,7 @@ JavaScriptCompiler.prototype = {
     if (this.hash) {
       this.hashes.push(this.hash);
     }
-    this.hash = { values: [], types: [], contexts: [], ids: [] };
+    this.hash = { values: {}, types: [], contexts: [], ids: [] };
   },
   popHash: function popHash() {
     var hash = this.hash;
@@ -12922,18 +12936,33 @@ JavaScriptCompiler.prototype = {
   // If the helper is not found, `helperMissing` is called.
   invokeHelper: function invokeHelper(paramSize, name, isSimple) {
     var nonHelper = this.popStack(),
-        helper = this.setupHelper(paramSize, name),
-        simple = isSimple ? [helper.name, ' || '] : '';
+        helper = this.setupHelper(paramSize, name);
 
-    var lookup = ['('].concat(simple, nonHelper);
-    if (!this.options.strict) {
-      lookup.push(' || ', this.aliasable('helpers.helperMissing'));
+    var possibleFunctionCalls = [];
+
+    if (isSimple) {
+      // direct call to helper
+      possibleFunctionCalls.push(helper.name);
     }
-    lookup.push(')');
+    // call a function from the input object
+    possibleFunctionCalls.push(nonHelper);
+    if (!this.options.strict) {
+      possibleFunctionCalls.push(this.aliasable('container.hooks.helperMissing'));
+    }
 
-    this.push(this.source.functionCall(lookup, 'call', helper.callParams));
+    var functionLookupCode = ['(', this.itemsSeparatedBy(possibleFunctionCalls, '||'), ')'];
+    var functionCall = this.source.functionCall(functionLookupCode, 'call', helper.callParams);
+    this.push(functionCall);
   },
 
+  itemsSeparatedBy: function itemsSeparatedBy(items, separator) {
+    var result = [];
+    result.push(items[0]);
+    for (var i = 1; i < items.length; i++) {
+      result.push(separator, items[i]);
+    }
+    return result;
+  },
   // [invokeKnownHelper]
   //
   // On stack, before: hash, inverse, program, params..., ...
@@ -12971,7 +13000,7 @@ JavaScriptCompiler.prototype = {
     var lookup = ['(', '(helper = ', helperName, ' || ', nonHelper, ')'];
     if (!this.options.strict) {
       lookup[0] = '(helper = ';
-      lookup.push(' != null ? helper : ', this.aliasable('helpers.helperMissing'));
+      lookup.push(' != null ? helper : ', this.aliasable('container.hooks.helperMissing'));
     }
 
     this.push(['(', lookup, helper.paramsInit ? ['),(', helper.paramsInit] : [], '),', '(typeof helper === ', this.aliasable('"function"'), ' ? ', this.source.functionCall('helper', 'call', helper.callParams), ' : helper))']);
@@ -13365,6 +13394,7 @@ JavaScriptCompiler.prototype = {
 
   setupHelperArgs: function setupHelperArgs(helper, paramSize, params, useRegister) {
     var options = this.setupParams(helper, paramSize, params);
+    options.loc = JSON.stringify(this.source.currentLocation);
     options = this.objectLiteral(options);
     if (useRegister) {
       this.useRegister('options');
@@ -13406,7 +13436,7 @@ function strictLookup(requireTerminal, compiler, parts, type) {
   }
 
   if (requireTerminal) {
-    return [compiler.aliasable('container.strict'), '(', stack, ', ', compiler.quotedString(parts[i]), ')'];
+    return [compiler.aliasable('container.strict'), '(', stack, ', ', compiler.quotedString(parts[i]), ', ', JSON.stringify(compiler.source.currentLocation), ' )'];
   } else {
     return stack;
   }
@@ -13416,7 +13446,7 @@ exports['default'] = JavaScriptCompiler;
 module.exports = exports['default'];
 
 
-},{"../base":214,"../exception":227,"../utils":240,"./code-gen":217}],221:[function(require,module,exports){
+},{"../base":214,"../exception":227,"../helpers/lookup":234,"../utils":240,"./code-gen":217}],221:[function(require,module,exports){
 // File ignored in coverage tests via setting in .istanbul.yml
 /* Jison generated parser */
 "use strict";
@@ -13425,9 +13455,9 @@ exports.__esModule = true;
 var handlebars = (function () {
     var parser = { trace: function trace() {},
         yy: {},
-        symbols_: { "error": 2, "root": 3, "program": 4, "EOF": 5, "program_repetition0": 6, "statement": 7, "mustache": 8, "block": 9, "rawBlock": 10, "partial": 11, "partialBlock": 12, "content": 13, "COMMENT": 14, "CONTENT": 15, "openRawBlock": 16, "rawBlock_repetition_plus0": 17, "END_RAW_BLOCK": 18, "OPEN_RAW_BLOCK": 19, "helperName": 20, "openRawBlock_repetition0": 21, "openRawBlock_option0": 22, "CLOSE_RAW_BLOCK": 23, "openBlock": 24, "block_option0": 25, "closeBlock": 26, "openInverse": 27, "block_option1": 28, "OPEN_BLOCK": 29, "openBlock_repetition0": 30, "openBlock_option0": 31, "openBlock_option1": 32, "CLOSE": 33, "OPEN_INVERSE": 34, "openInverse_repetition0": 35, "openInverse_option0": 36, "openInverse_option1": 37, "openInverseChain": 38, "OPEN_INVERSE_CHAIN": 39, "openInverseChain_repetition0": 40, "openInverseChain_option0": 41, "openInverseChain_option1": 42, "inverseAndProgram": 43, "INVERSE": 44, "inverseChain": 45, "inverseChain_option0": 46, "OPEN_ENDBLOCK": 47, "OPEN": 48, "mustache_repetition0": 49, "mustache_option0": 50, "OPEN_UNESCAPED": 51, "mustache_repetition1": 52, "mustache_option1": 53, "CLOSE_UNESCAPED": 54, "OPEN_PARTIAL": 55, "partialName": 56, "partial_repetition0": 57, "partial_option0": 58, "openPartialBlock": 59, "OPEN_PARTIAL_BLOCK": 60, "openPartialBlock_repetition0": 61, "openPartialBlock_option0": 62, "param": 63, "sexpr": 64, "OPEN_SEXPR": 65, "sexpr_repetition0": 66, "sexpr_option0": 67, "CLOSE_SEXPR": 68, "hash": 69, "hash_repetition_plus0": 70, "hashSegment": 71, "ID": 72, "EQUALS": 73, "blockParams": 74, "OPEN_BLOCK_PARAMS": 75, "blockParams_repetition_plus0": 76, "CLOSE_BLOCK_PARAMS": 77, "path": 78, "dataName": 79, "STRING": 80, "NUMBER": 81, "BOOLEAN": 82, "UNDEFINED": 83, "NULL": 84, "DATA": 85, "pathSegments": 86, "SEP": 87, "$accept": 0, "$end": 1 },
+        symbols_: { "error": 2, "root": 3, "program": 4, "EOF": 5, "program_repetition0": 6, "statement": 7, "mustache": 8, "block": 9, "rawBlock": 10, "partial": 11, "partialBlock": 12, "content": 13, "COMMENT": 14, "CONTENT": 15, "openRawBlock": 16, "rawBlock_repetition0": 17, "END_RAW_BLOCK": 18, "OPEN_RAW_BLOCK": 19, "helperName": 20, "openRawBlock_repetition0": 21, "openRawBlock_option0": 22, "CLOSE_RAW_BLOCK": 23, "openBlock": 24, "block_option0": 25, "closeBlock": 26, "openInverse": 27, "block_option1": 28, "OPEN_BLOCK": 29, "openBlock_repetition0": 30, "openBlock_option0": 31, "openBlock_option1": 32, "CLOSE": 33, "OPEN_INVERSE": 34, "openInverse_repetition0": 35, "openInverse_option0": 36, "openInverse_option1": 37, "openInverseChain": 38, "OPEN_INVERSE_CHAIN": 39, "openInverseChain_repetition0": 40, "openInverseChain_option0": 41, "openInverseChain_option1": 42, "inverseAndProgram": 43, "INVERSE": 44, "inverseChain": 45, "inverseChain_option0": 46, "OPEN_ENDBLOCK": 47, "OPEN": 48, "mustache_repetition0": 49, "mustache_option0": 50, "OPEN_UNESCAPED": 51, "mustache_repetition1": 52, "mustache_option1": 53, "CLOSE_UNESCAPED": 54, "OPEN_PARTIAL": 55, "partialName": 56, "partial_repetition0": 57, "partial_option0": 58, "openPartialBlock": 59, "OPEN_PARTIAL_BLOCK": 60, "openPartialBlock_repetition0": 61, "openPartialBlock_option0": 62, "param": 63, "sexpr": 64, "OPEN_SEXPR": 65, "sexpr_repetition0": 66, "sexpr_option0": 67, "CLOSE_SEXPR": 68, "hash": 69, "hash_repetition_plus0": 70, "hashSegment": 71, "ID": 72, "EQUALS": 73, "blockParams": 74, "OPEN_BLOCK_PARAMS": 75, "blockParams_repetition_plus0": 76, "CLOSE_BLOCK_PARAMS": 77, "path": 78, "dataName": 79, "STRING": 80, "NUMBER": 81, "BOOLEAN": 82, "UNDEFINED": 83, "NULL": 84, "DATA": 85, "pathSegments": 86, "SEP": 87, "$accept": 0, "$end": 1 },
         terminals_: { 2: "error", 5: "EOF", 14: "COMMENT", 15: "CONTENT", 18: "END_RAW_BLOCK", 19: "OPEN_RAW_BLOCK", 23: "CLOSE_RAW_BLOCK", 29: "OPEN_BLOCK", 33: "CLOSE", 34: "OPEN_INVERSE", 39: "OPEN_INVERSE_CHAIN", 44: "INVERSE", 47: "OPEN_ENDBLOCK", 48: "OPEN", 51: "OPEN_UNESCAPED", 54: "CLOSE_UNESCAPED", 55: "OPEN_PARTIAL", 60: "OPEN_PARTIAL_BLOCK", 65: "OPEN_SEXPR", 68: "CLOSE_SEXPR", 72: "ID", 73: "EQUALS", 75: "OPEN_BLOCK_PARAMS", 77: "CLOSE_BLOCK_PARAMS", 80: "STRING", 81: "NUMBER", 82: "BOOLEAN", 83: "UNDEFINED", 84: "NULL", 85: "DATA", 87: "SEP" },
-        productions_: [0, [3, 2], [4, 1], [7, 1], [7, 1], [7, 1], [7, 1], [7, 1], [7, 1], [7, 1], [13, 1], [10, 3], [16, 5], [9, 4], [9, 4], [24, 6], [27, 6], [38, 6], [43, 2], [45, 3], [45, 1], [26, 3], [8, 5], [8, 5], [11, 5], [12, 3], [59, 5], [63, 1], [63, 1], [64, 5], [69, 1], [71, 3], [74, 3], [20, 1], [20, 1], [20, 1], [20, 1], [20, 1], [20, 1], [20, 1], [56, 1], [56, 1], [79, 2], [78, 1], [86, 3], [86, 1], [6, 0], [6, 2], [17, 1], [17, 2], [21, 0], [21, 2], [22, 0], [22, 1], [25, 0], [25, 1], [28, 0], [28, 1], [30, 0], [30, 2], [31, 0], [31, 1], [32, 0], [32, 1], [35, 0], [35, 2], [36, 0], [36, 1], [37, 0], [37, 1], [40, 0], [40, 2], [41, 0], [41, 1], [42, 0], [42, 1], [46, 0], [46, 1], [49, 0], [49, 2], [50, 0], [50, 1], [52, 0], [52, 2], [53, 0], [53, 1], [57, 0], [57, 2], [58, 0], [58, 1], [61, 0], [61, 2], [62, 0], [62, 1], [66, 0], [66, 2], [67, 0], [67, 1], [70, 1], [70, 2], [76, 1], [76, 2]],
+        productions_: [0, [3, 2], [4, 1], [7, 1], [7, 1], [7, 1], [7, 1], [7, 1], [7, 1], [7, 1], [13, 1], [10, 3], [16, 5], [9, 4], [9, 4], [24, 6], [27, 6], [38, 6], [43, 2], [45, 3], [45, 1], [26, 3], [8, 5], [8, 5], [11, 5], [12, 3], [59, 5], [63, 1], [63, 1], [64, 5], [69, 1], [71, 3], [74, 3], [20, 1], [20, 1], [20, 1], [20, 1], [20, 1], [20, 1], [20, 1], [56, 1], [56, 1], [79, 2], [78, 1], [86, 3], [86, 1], [6, 0], [6, 2], [17, 0], [17, 2], [21, 0], [21, 2], [22, 0], [22, 1], [25, 0], [25, 1], [28, 0], [28, 1], [30, 0], [30, 2], [31, 0], [31, 1], [32, 0], [32, 1], [35, 0], [35, 2], [36, 0], [36, 1], [37, 0], [37, 1], [40, 0], [40, 2], [41, 0], [41, 1], [42, 0], [42, 1], [46, 0], [46, 1], [49, 0], [49, 2], [50, 0], [50, 1], [52, 0], [52, 2], [53, 0], [53, 1], [57, 0], [57, 2], [58, 0], [58, 1], [61, 0], [61, 2], [62, 0], [62, 1], [66, 0], [66, 2], [67, 0], [67, 1], [70, 1], [70, 2], [76, 1], [76, 2]],
         performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate, $$, _$) {
 
             var $0 = $$.length - 1;
@@ -13607,7 +13637,7 @@ var handlebars = (function () {
                     $$[$0 - 1].push($$[$0]);
                     break;
                 case 48:
-                    this.$ = [$$[$0]];
+                    this.$ = [];
                     break;
                 case 49:
                     $$[$0 - 1].push($$[$0]);
@@ -13680,8 +13710,8 @@ var handlebars = (function () {
                     break;
             }
         },
-        table: [{ 3: 1, 4: 2, 5: [2, 46], 6: 3, 14: [2, 46], 15: [2, 46], 19: [2, 46], 29: [2, 46], 34: [2, 46], 48: [2, 46], 51: [2, 46], 55: [2, 46], 60: [2, 46] }, { 1: [3] }, { 5: [1, 4] }, { 5: [2, 2], 7: 5, 8: 6, 9: 7, 10: 8, 11: 9, 12: 10, 13: 11, 14: [1, 12], 15: [1, 20], 16: 17, 19: [1, 23], 24: 15, 27: 16, 29: [1, 21], 34: [1, 22], 39: [2, 2], 44: [2, 2], 47: [2, 2], 48: [1, 13], 51: [1, 14], 55: [1, 18], 59: 19, 60: [1, 24] }, { 1: [2, 1] }, { 5: [2, 47], 14: [2, 47], 15: [2, 47], 19: [2, 47], 29: [2, 47], 34: [2, 47], 39: [2, 47], 44: [2, 47], 47: [2, 47], 48: [2, 47], 51: [2, 47], 55: [2, 47], 60: [2, 47] }, { 5: [2, 3], 14: [2, 3], 15: [2, 3], 19: [2, 3], 29: [2, 3], 34: [2, 3], 39: [2, 3], 44: [2, 3], 47: [2, 3], 48: [2, 3], 51: [2, 3], 55: [2, 3], 60: [2, 3] }, { 5: [2, 4], 14: [2, 4], 15: [2, 4], 19: [2, 4], 29: [2, 4], 34: [2, 4], 39: [2, 4], 44: [2, 4], 47: [2, 4], 48: [2, 4], 51: [2, 4], 55: [2, 4], 60: [2, 4] }, { 5: [2, 5], 14: [2, 5], 15: [2, 5], 19: [2, 5], 29: [2, 5], 34: [2, 5], 39: [2, 5], 44: [2, 5], 47: [2, 5], 48: [2, 5], 51: [2, 5], 55: [2, 5], 60: [2, 5] }, { 5: [2, 6], 14: [2, 6], 15: [2, 6], 19: [2, 6], 29: [2, 6], 34: [2, 6], 39: [2, 6], 44: [2, 6], 47: [2, 6], 48: [2, 6], 51: [2, 6], 55: [2, 6], 60: [2, 6] }, { 5: [2, 7], 14: [2, 7], 15: [2, 7], 19: [2, 7], 29: [2, 7], 34: [2, 7], 39: [2, 7], 44: [2, 7], 47: [2, 7], 48: [2, 7], 51: [2, 7], 55: [2, 7], 60: [2, 7] }, { 5: [2, 8], 14: [2, 8], 15: [2, 8], 19: [2, 8], 29: [2, 8], 34: [2, 8], 39: [2, 8], 44: [2, 8], 47: [2, 8], 48: [2, 8], 51: [2, 8], 55: [2, 8], 60: [2, 8] }, { 5: [2, 9], 14: [2, 9], 15: [2, 9], 19: [2, 9], 29: [2, 9], 34: [2, 9], 39: [2, 9], 44: [2, 9], 47: [2, 9], 48: [2, 9], 51: [2, 9], 55: [2, 9], 60: [2, 9] }, { 20: 25, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 36, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 4: 37, 6: 3, 14: [2, 46], 15: [2, 46], 19: [2, 46], 29: [2, 46], 34: [2, 46], 39: [2, 46], 44: [2, 46], 47: [2, 46], 48: [2, 46], 51: [2, 46], 55: [2, 46], 60: [2, 46] }, { 4: 38, 6: 3, 14: [2, 46], 15: [2, 46], 19: [2, 46], 29: [2, 46], 34: [2, 46], 44: [2, 46], 47: [2, 46], 48: [2, 46], 51: [2, 46], 55: [2, 46], 60: [2, 46] }, { 13: 40, 15: [1, 20], 17: 39 }, { 20: 42, 56: 41, 64: 43, 65: [1, 44], 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 4: 45, 6: 3, 14: [2, 46], 15: [2, 46], 19: [2, 46], 29: [2, 46], 34: [2, 46], 47: [2, 46], 48: [2, 46], 51: [2, 46], 55: [2, 46], 60: [2, 46] }, { 5: [2, 10], 14: [2, 10], 15: [2, 10], 18: [2, 10], 19: [2, 10], 29: [2, 10], 34: [2, 10], 39: [2, 10], 44: [2, 10], 47: [2, 10], 48: [2, 10], 51: [2, 10], 55: [2, 10], 60: [2, 10] }, { 20: 46, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 47, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 48, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 42, 56: 49, 64: 43, 65: [1, 44], 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 33: [2, 78], 49: 50, 65: [2, 78], 72: [2, 78], 80: [2, 78], 81: [2, 78], 82: [2, 78], 83: [2, 78], 84: [2, 78], 85: [2, 78] }, { 23: [2, 33], 33: [2, 33], 54: [2, 33], 65: [2, 33], 68: [2, 33], 72: [2, 33], 75: [2, 33], 80: [2, 33], 81: [2, 33], 82: [2, 33], 83: [2, 33], 84: [2, 33], 85: [2, 33] }, { 23: [2, 34], 33: [2, 34], 54: [2, 34], 65: [2, 34], 68: [2, 34], 72: [2, 34], 75: [2, 34], 80: [2, 34], 81: [2, 34], 82: [2, 34], 83: [2, 34], 84: [2, 34], 85: [2, 34] }, { 23: [2, 35], 33: [2, 35], 54: [2, 35], 65: [2, 35], 68: [2, 35], 72: [2, 35], 75: [2, 35], 80: [2, 35], 81: [2, 35], 82: [2, 35], 83: [2, 35], 84: [2, 35], 85: [2, 35] }, { 23: [2, 36], 33: [2, 36], 54: [2, 36], 65: [2, 36], 68: [2, 36], 72: [2, 36], 75: [2, 36], 80: [2, 36], 81: [2, 36], 82: [2, 36], 83: [2, 36], 84: [2, 36], 85: [2, 36] }, { 23: [2, 37], 33: [2, 37], 54: [2, 37], 65: [2, 37], 68: [2, 37], 72: [2, 37], 75: [2, 37], 80: [2, 37], 81: [2, 37], 82: [2, 37], 83: [2, 37], 84: [2, 37], 85: [2, 37] }, { 23: [2, 38], 33: [2, 38], 54: [2, 38], 65: [2, 38], 68: [2, 38], 72: [2, 38], 75: [2, 38], 80: [2, 38], 81: [2, 38], 82: [2, 38], 83: [2, 38], 84: [2, 38], 85: [2, 38] }, { 23: [2, 39], 33: [2, 39], 54: [2, 39], 65: [2, 39], 68: [2, 39], 72: [2, 39], 75: [2, 39], 80: [2, 39], 81: [2, 39], 82: [2, 39], 83: [2, 39], 84: [2, 39], 85: [2, 39] }, { 23: [2, 43], 33: [2, 43], 54: [2, 43], 65: [2, 43], 68: [2, 43], 72: [2, 43], 75: [2, 43], 80: [2, 43], 81: [2, 43], 82: [2, 43], 83: [2, 43], 84: [2, 43], 85: [2, 43], 87: [1, 51] }, { 72: [1, 35], 86: 52 }, { 23: [2, 45], 33: [2, 45], 54: [2, 45], 65: [2, 45], 68: [2, 45], 72: [2, 45], 75: [2, 45], 80: [2, 45], 81: [2, 45], 82: [2, 45], 83: [2, 45], 84: [2, 45], 85: [2, 45], 87: [2, 45] }, { 52: 53, 54: [2, 82], 65: [2, 82], 72: [2, 82], 80: [2, 82], 81: [2, 82], 82: [2, 82], 83: [2, 82], 84: [2, 82], 85: [2, 82] }, { 25: 54, 38: 56, 39: [1, 58], 43: 57, 44: [1, 59], 45: 55, 47: [2, 54] }, { 28: 60, 43: 61, 44: [1, 59], 47: [2, 56] }, { 13: 63, 15: [1, 20], 18: [1, 62] }, { 15: [2, 48], 18: [2, 48] }, { 33: [2, 86], 57: 64, 65: [2, 86], 72: [2, 86], 80: [2, 86], 81: [2, 86], 82: [2, 86], 83: [2, 86], 84: [2, 86], 85: [2, 86] }, { 33: [2, 40], 65: [2, 40], 72: [2, 40], 80: [2, 40], 81: [2, 40], 82: [2, 40], 83: [2, 40], 84: [2, 40], 85: [2, 40] }, { 33: [2, 41], 65: [2, 41], 72: [2, 41], 80: [2, 41], 81: [2, 41], 82: [2, 41], 83: [2, 41], 84: [2, 41], 85: [2, 41] }, { 20: 65, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 26: 66, 47: [1, 67] }, { 30: 68, 33: [2, 58], 65: [2, 58], 72: [2, 58], 75: [2, 58], 80: [2, 58], 81: [2, 58], 82: [2, 58], 83: [2, 58], 84: [2, 58], 85: [2, 58] }, { 33: [2, 64], 35: 69, 65: [2, 64], 72: [2, 64], 75: [2, 64], 80: [2, 64], 81: [2, 64], 82: [2, 64], 83: [2, 64], 84: [2, 64], 85: [2, 64] }, { 21: 70, 23: [2, 50], 65: [2, 50], 72: [2, 50], 80: [2, 50], 81: [2, 50], 82: [2, 50], 83: [2, 50], 84: [2, 50], 85: [2, 50] }, { 33: [2, 90], 61: 71, 65: [2, 90], 72: [2, 90], 80: [2, 90], 81: [2, 90], 82: [2, 90], 83: [2, 90], 84: [2, 90], 85: [2, 90] }, { 20: 75, 33: [2, 80], 50: 72, 63: 73, 64: 76, 65: [1, 44], 69: 74, 70: 77, 71: 78, 72: [1, 79], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 72: [1, 80] }, { 23: [2, 42], 33: [2, 42], 54: [2, 42], 65: [2, 42], 68: [2, 42], 72: [2, 42], 75: [2, 42], 80: [2, 42], 81: [2, 42], 82: [2, 42], 83: [2, 42], 84: [2, 42], 85: [2, 42], 87: [1, 51] }, { 20: 75, 53: 81, 54: [2, 84], 63: 82, 64: 76, 65: [1, 44], 69: 83, 70: 77, 71: 78, 72: [1, 79], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 26: 84, 47: [1, 67] }, { 47: [2, 55] }, { 4: 85, 6: 3, 14: [2, 46], 15: [2, 46], 19: [2, 46], 29: [2, 46], 34: [2, 46], 39: [2, 46], 44: [2, 46], 47: [2, 46], 48: [2, 46], 51: [2, 46], 55: [2, 46], 60: [2, 46] }, { 47: [2, 20] }, { 20: 86, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 4: 87, 6: 3, 14: [2, 46], 15: [2, 46], 19: [2, 46], 29: [2, 46], 34: [2, 46], 47: [2, 46], 48: [2, 46], 51: [2, 46], 55: [2, 46], 60: [2, 46] }, { 26: 88, 47: [1, 67] }, { 47: [2, 57] }, { 5: [2, 11], 14: [2, 11], 15: [2, 11], 19: [2, 11], 29: [2, 11], 34: [2, 11], 39: [2, 11], 44: [2, 11], 47: [2, 11], 48: [2, 11], 51: [2, 11], 55: [2, 11], 60: [2, 11] }, { 15: [2, 49], 18: [2, 49] }, { 20: 75, 33: [2, 88], 58: 89, 63: 90, 64: 76, 65: [1, 44], 69: 91, 70: 77, 71: 78, 72: [1, 79], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 65: [2, 94], 66: 92, 68: [2, 94], 72: [2, 94], 80: [2, 94], 81: [2, 94], 82: [2, 94], 83: [2, 94], 84: [2, 94], 85: [2, 94] }, { 5: [2, 25], 14: [2, 25], 15: [2, 25], 19: [2, 25], 29: [2, 25], 34: [2, 25], 39: [2, 25], 44: [2, 25], 47: [2, 25], 48: [2, 25], 51: [2, 25], 55: [2, 25], 60: [2, 25] }, { 20: 93, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 75, 31: 94, 33: [2, 60], 63: 95, 64: 76, 65: [1, 44], 69: 96, 70: 77, 71: 78, 72: [1, 79], 75: [2, 60], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 75, 33: [2, 66], 36: 97, 63: 98, 64: 76, 65: [1, 44], 69: 99, 70: 77, 71: 78, 72: [1, 79], 75: [2, 66], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 75, 22: 100, 23: [2, 52], 63: 101, 64: 76, 65: [1, 44], 69: 102, 70: 77, 71: 78, 72: [1, 79], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 75, 33: [2, 92], 62: 103, 63: 104, 64: 76, 65: [1, 44], 69: 105, 70: 77, 71: 78, 72: [1, 79], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 33: [1, 106] }, { 33: [2, 79], 65: [2, 79], 72: [2, 79], 80: [2, 79], 81: [2, 79], 82: [2, 79], 83: [2, 79], 84: [2, 79], 85: [2, 79] }, { 33: [2, 81] }, { 23: [2, 27], 33: [2, 27], 54: [2, 27], 65: [2, 27], 68: [2, 27], 72: [2, 27], 75: [2, 27], 80: [2, 27], 81: [2, 27], 82: [2, 27], 83: [2, 27], 84: [2, 27], 85: [2, 27] }, { 23: [2, 28], 33: [2, 28], 54: [2, 28], 65: [2, 28], 68: [2, 28], 72: [2, 28], 75: [2, 28], 80: [2, 28], 81: [2, 28], 82: [2, 28], 83: [2, 28], 84: [2, 28], 85: [2, 28] }, { 23: [2, 30], 33: [2, 30], 54: [2, 30], 68: [2, 30], 71: 107, 72: [1, 108], 75: [2, 30] }, { 23: [2, 98], 33: [2, 98], 54: [2, 98], 68: [2, 98], 72: [2, 98], 75: [2, 98] }, { 23: [2, 45], 33: [2, 45], 54: [2, 45], 65: [2, 45], 68: [2, 45], 72: [2, 45], 73: [1, 109], 75: [2, 45], 80: [2, 45], 81: [2, 45], 82: [2, 45], 83: [2, 45], 84: [2, 45], 85: [2, 45], 87: [2, 45] }, { 23: [2, 44], 33: [2, 44], 54: [2, 44], 65: [2, 44], 68: [2, 44], 72: [2, 44], 75: [2, 44], 80: [2, 44], 81: [2, 44], 82: [2, 44], 83: [2, 44], 84: [2, 44], 85: [2, 44], 87: [2, 44] }, { 54: [1, 110] }, { 54: [2, 83], 65: [2, 83], 72: [2, 83], 80: [2, 83], 81: [2, 83], 82: [2, 83], 83: [2, 83], 84: [2, 83], 85: [2, 83] }, { 54: [2, 85] }, { 5: [2, 13], 14: [2, 13], 15: [2, 13], 19: [2, 13], 29: [2, 13], 34: [2, 13], 39: [2, 13], 44: [2, 13], 47: [2, 13], 48: [2, 13], 51: [2, 13], 55: [2, 13], 60: [2, 13] }, { 38: 56, 39: [1, 58], 43: 57, 44: [1, 59], 45: 112, 46: 111, 47: [2, 76] }, { 33: [2, 70], 40: 113, 65: [2, 70], 72: [2, 70], 75: [2, 70], 80: [2, 70], 81: [2, 70], 82: [2, 70], 83: [2, 70], 84: [2, 70], 85: [2, 70] }, { 47: [2, 18] }, { 5: [2, 14], 14: [2, 14], 15: [2, 14], 19: [2, 14], 29: [2, 14], 34: [2, 14], 39: [2, 14], 44: [2, 14], 47: [2, 14], 48: [2, 14], 51: [2, 14], 55: [2, 14], 60: [2, 14] }, { 33: [1, 114] }, { 33: [2, 87], 65: [2, 87], 72: [2, 87], 80: [2, 87], 81: [2, 87], 82: [2, 87], 83: [2, 87], 84: [2, 87], 85: [2, 87] }, { 33: [2, 89] }, { 20: 75, 63: 116, 64: 76, 65: [1, 44], 67: 115, 68: [2, 96], 69: 117, 70: 77, 71: 78, 72: [1, 79], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 33: [1, 118] }, { 32: 119, 33: [2, 62], 74: 120, 75: [1, 121] }, { 33: [2, 59], 65: [2, 59], 72: [2, 59], 75: [2, 59], 80: [2, 59], 81: [2, 59], 82: [2, 59], 83: [2, 59], 84: [2, 59], 85: [2, 59] }, { 33: [2, 61], 75: [2, 61] }, { 33: [2, 68], 37: 122, 74: 123, 75: [1, 121] }, { 33: [2, 65], 65: [2, 65], 72: [2, 65], 75: [2, 65], 80: [2, 65], 81: [2, 65], 82: [2, 65], 83: [2, 65], 84: [2, 65], 85: [2, 65] }, { 33: [2, 67], 75: [2, 67] }, { 23: [1, 124] }, { 23: [2, 51], 65: [2, 51], 72: [2, 51], 80: [2, 51], 81: [2, 51], 82: [2, 51], 83: [2, 51], 84: [2, 51], 85: [2, 51] }, { 23: [2, 53] }, { 33: [1, 125] }, { 33: [2, 91], 65: [2, 91], 72: [2, 91], 80: [2, 91], 81: [2, 91], 82: [2, 91], 83: [2, 91], 84: [2, 91], 85: [2, 91] }, { 33: [2, 93] }, { 5: [2, 22], 14: [2, 22], 15: [2, 22], 19: [2, 22], 29: [2, 22], 34: [2, 22], 39: [2, 22], 44: [2, 22], 47: [2, 22], 48: [2, 22], 51: [2, 22], 55: [2, 22], 60: [2, 22] }, { 23: [2, 99], 33: [2, 99], 54: [2, 99], 68: [2, 99], 72: [2, 99], 75: [2, 99] }, { 73: [1, 109] }, { 20: 75, 63: 126, 64: 76, 65: [1, 44], 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 5: [2, 23], 14: [2, 23], 15: [2, 23], 19: [2, 23], 29: [2, 23], 34: [2, 23], 39: [2, 23], 44: [2, 23], 47: [2, 23], 48: [2, 23], 51: [2, 23], 55: [2, 23], 60: [2, 23] }, { 47: [2, 19] }, { 47: [2, 77] }, { 20: 75, 33: [2, 72], 41: 127, 63: 128, 64: 76, 65: [1, 44], 69: 129, 70: 77, 71: 78, 72: [1, 79], 75: [2, 72], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 5: [2, 24], 14: [2, 24], 15: [2, 24], 19: [2, 24], 29: [2, 24], 34: [2, 24], 39: [2, 24], 44: [2, 24], 47: [2, 24], 48: [2, 24], 51: [2, 24], 55: [2, 24], 60: [2, 24] }, { 68: [1, 130] }, { 65: [2, 95], 68: [2, 95], 72: [2, 95], 80: [2, 95], 81: [2, 95], 82: [2, 95], 83: [2, 95], 84: [2, 95], 85: [2, 95] }, { 68: [2, 97] }, { 5: [2, 21], 14: [2, 21], 15: [2, 21], 19: [2, 21], 29: [2, 21], 34: [2, 21], 39: [2, 21], 44: [2, 21], 47: [2, 21], 48: [2, 21], 51: [2, 21], 55: [2, 21], 60: [2, 21] }, { 33: [1, 131] }, { 33: [2, 63] }, { 72: [1, 133], 76: 132 }, { 33: [1, 134] }, { 33: [2, 69] }, { 15: [2, 12] }, { 14: [2, 26], 15: [2, 26], 19: [2, 26], 29: [2, 26], 34: [2, 26], 47: [2, 26], 48: [2, 26], 51: [2, 26], 55: [2, 26], 60: [2, 26] }, { 23: [2, 31], 33: [2, 31], 54: [2, 31], 68: [2, 31], 72: [2, 31], 75: [2, 31] }, { 33: [2, 74], 42: 135, 74: 136, 75: [1, 121] }, { 33: [2, 71], 65: [2, 71], 72: [2, 71], 75: [2, 71], 80: [2, 71], 81: [2, 71], 82: [2, 71], 83: [2, 71], 84: [2, 71], 85: [2, 71] }, { 33: [2, 73], 75: [2, 73] }, { 23: [2, 29], 33: [2, 29], 54: [2, 29], 65: [2, 29], 68: [2, 29], 72: [2, 29], 75: [2, 29], 80: [2, 29], 81: [2, 29], 82: [2, 29], 83: [2, 29], 84: [2, 29], 85: [2, 29] }, { 14: [2, 15], 15: [2, 15], 19: [2, 15], 29: [2, 15], 34: [2, 15], 39: [2, 15], 44: [2, 15], 47: [2, 15], 48: [2, 15], 51: [2, 15], 55: [2, 15], 60: [2, 15] }, { 72: [1, 138], 77: [1, 137] }, { 72: [2, 100], 77: [2, 100] }, { 14: [2, 16], 15: [2, 16], 19: [2, 16], 29: [2, 16], 34: [2, 16], 44: [2, 16], 47: [2, 16], 48: [2, 16], 51: [2, 16], 55: [2, 16], 60: [2, 16] }, { 33: [1, 139] }, { 33: [2, 75] }, { 33: [2, 32] }, { 72: [2, 101], 77: [2, 101] }, { 14: [2, 17], 15: [2, 17], 19: [2, 17], 29: [2, 17], 34: [2, 17], 39: [2, 17], 44: [2, 17], 47: [2, 17], 48: [2, 17], 51: [2, 17], 55: [2, 17], 60: [2, 17] }],
-        defaultActions: { 4: [2, 1], 55: [2, 55], 57: [2, 20], 61: [2, 57], 74: [2, 81], 83: [2, 85], 87: [2, 18], 91: [2, 89], 102: [2, 53], 105: [2, 93], 111: [2, 19], 112: [2, 77], 117: [2, 97], 120: [2, 63], 123: [2, 69], 124: [2, 12], 136: [2, 75], 137: [2, 32] },
+        table: [{ 3: 1, 4: 2, 5: [2, 46], 6: 3, 14: [2, 46], 15: [2, 46], 19: [2, 46], 29: [2, 46], 34: [2, 46], 48: [2, 46], 51: [2, 46], 55: [2, 46], 60: [2, 46] }, { 1: [3] }, { 5: [1, 4] }, { 5: [2, 2], 7: 5, 8: 6, 9: 7, 10: 8, 11: 9, 12: 10, 13: 11, 14: [1, 12], 15: [1, 20], 16: 17, 19: [1, 23], 24: 15, 27: 16, 29: [1, 21], 34: [1, 22], 39: [2, 2], 44: [2, 2], 47: [2, 2], 48: [1, 13], 51: [1, 14], 55: [1, 18], 59: 19, 60: [1, 24] }, { 1: [2, 1] }, { 5: [2, 47], 14: [2, 47], 15: [2, 47], 19: [2, 47], 29: [2, 47], 34: [2, 47], 39: [2, 47], 44: [2, 47], 47: [2, 47], 48: [2, 47], 51: [2, 47], 55: [2, 47], 60: [2, 47] }, { 5: [2, 3], 14: [2, 3], 15: [2, 3], 19: [2, 3], 29: [2, 3], 34: [2, 3], 39: [2, 3], 44: [2, 3], 47: [2, 3], 48: [2, 3], 51: [2, 3], 55: [2, 3], 60: [2, 3] }, { 5: [2, 4], 14: [2, 4], 15: [2, 4], 19: [2, 4], 29: [2, 4], 34: [2, 4], 39: [2, 4], 44: [2, 4], 47: [2, 4], 48: [2, 4], 51: [2, 4], 55: [2, 4], 60: [2, 4] }, { 5: [2, 5], 14: [2, 5], 15: [2, 5], 19: [2, 5], 29: [2, 5], 34: [2, 5], 39: [2, 5], 44: [2, 5], 47: [2, 5], 48: [2, 5], 51: [2, 5], 55: [2, 5], 60: [2, 5] }, { 5: [2, 6], 14: [2, 6], 15: [2, 6], 19: [2, 6], 29: [2, 6], 34: [2, 6], 39: [2, 6], 44: [2, 6], 47: [2, 6], 48: [2, 6], 51: [2, 6], 55: [2, 6], 60: [2, 6] }, { 5: [2, 7], 14: [2, 7], 15: [2, 7], 19: [2, 7], 29: [2, 7], 34: [2, 7], 39: [2, 7], 44: [2, 7], 47: [2, 7], 48: [2, 7], 51: [2, 7], 55: [2, 7], 60: [2, 7] }, { 5: [2, 8], 14: [2, 8], 15: [2, 8], 19: [2, 8], 29: [2, 8], 34: [2, 8], 39: [2, 8], 44: [2, 8], 47: [2, 8], 48: [2, 8], 51: [2, 8], 55: [2, 8], 60: [2, 8] }, { 5: [2, 9], 14: [2, 9], 15: [2, 9], 19: [2, 9], 29: [2, 9], 34: [2, 9], 39: [2, 9], 44: [2, 9], 47: [2, 9], 48: [2, 9], 51: [2, 9], 55: [2, 9], 60: [2, 9] }, { 20: 25, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 36, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 4: 37, 6: 3, 14: [2, 46], 15: [2, 46], 19: [2, 46], 29: [2, 46], 34: [2, 46], 39: [2, 46], 44: [2, 46], 47: [2, 46], 48: [2, 46], 51: [2, 46], 55: [2, 46], 60: [2, 46] }, { 4: 38, 6: 3, 14: [2, 46], 15: [2, 46], 19: [2, 46], 29: [2, 46], 34: [2, 46], 44: [2, 46], 47: [2, 46], 48: [2, 46], 51: [2, 46], 55: [2, 46], 60: [2, 46] }, { 15: [2, 48], 17: 39, 18: [2, 48] }, { 20: 41, 56: 40, 64: 42, 65: [1, 43], 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 4: 44, 6: 3, 14: [2, 46], 15: [2, 46], 19: [2, 46], 29: [2, 46], 34: [2, 46], 47: [2, 46], 48: [2, 46], 51: [2, 46], 55: [2, 46], 60: [2, 46] }, { 5: [2, 10], 14: [2, 10], 15: [2, 10], 18: [2, 10], 19: [2, 10], 29: [2, 10], 34: [2, 10], 39: [2, 10], 44: [2, 10], 47: [2, 10], 48: [2, 10], 51: [2, 10], 55: [2, 10], 60: [2, 10] }, { 20: 45, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 46, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 47, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 41, 56: 48, 64: 42, 65: [1, 43], 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 33: [2, 78], 49: 49, 65: [2, 78], 72: [2, 78], 80: [2, 78], 81: [2, 78], 82: [2, 78], 83: [2, 78], 84: [2, 78], 85: [2, 78] }, { 23: [2, 33], 33: [2, 33], 54: [2, 33], 65: [2, 33], 68: [2, 33], 72: [2, 33], 75: [2, 33], 80: [2, 33], 81: [2, 33], 82: [2, 33], 83: [2, 33], 84: [2, 33], 85: [2, 33] }, { 23: [2, 34], 33: [2, 34], 54: [2, 34], 65: [2, 34], 68: [2, 34], 72: [2, 34], 75: [2, 34], 80: [2, 34], 81: [2, 34], 82: [2, 34], 83: [2, 34], 84: [2, 34], 85: [2, 34] }, { 23: [2, 35], 33: [2, 35], 54: [2, 35], 65: [2, 35], 68: [2, 35], 72: [2, 35], 75: [2, 35], 80: [2, 35], 81: [2, 35], 82: [2, 35], 83: [2, 35], 84: [2, 35], 85: [2, 35] }, { 23: [2, 36], 33: [2, 36], 54: [2, 36], 65: [2, 36], 68: [2, 36], 72: [2, 36], 75: [2, 36], 80: [2, 36], 81: [2, 36], 82: [2, 36], 83: [2, 36], 84: [2, 36], 85: [2, 36] }, { 23: [2, 37], 33: [2, 37], 54: [2, 37], 65: [2, 37], 68: [2, 37], 72: [2, 37], 75: [2, 37], 80: [2, 37], 81: [2, 37], 82: [2, 37], 83: [2, 37], 84: [2, 37], 85: [2, 37] }, { 23: [2, 38], 33: [2, 38], 54: [2, 38], 65: [2, 38], 68: [2, 38], 72: [2, 38], 75: [2, 38], 80: [2, 38], 81: [2, 38], 82: [2, 38], 83: [2, 38], 84: [2, 38], 85: [2, 38] }, { 23: [2, 39], 33: [2, 39], 54: [2, 39], 65: [2, 39], 68: [2, 39], 72: [2, 39], 75: [2, 39], 80: [2, 39], 81: [2, 39], 82: [2, 39], 83: [2, 39], 84: [2, 39], 85: [2, 39] }, { 23: [2, 43], 33: [2, 43], 54: [2, 43], 65: [2, 43], 68: [2, 43], 72: [2, 43], 75: [2, 43], 80: [2, 43], 81: [2, 43], 82: [2, 43], 83: [2, 43], 84: [2, 43], 85: [2, 43], 87: [1, 50] }, { 72: [1, 35], 86: 51 }, { 23: [2, 45], 33: [2, 45], 54: [2, 45], 65: [2, 45], 68: [2, 45], 72: [2, 45], 75: [2, 45], 80: [2, 45], 81: [2, 45], 82: [2, 45], 83: [2, 45], 84: [2, 45], 85: [2, 45], 87: [2, 45] }, { 52: 52, 54: [2, 82], 65: [2, 82], 72: [2, 82], 80: [2, 82], 81: [2, 82], 82: [2, 82], 83: [2, 82], 84: [2, 82], 85: [2, 82] }, { 25: 53, 38: 55, 39: [1, 57], 43: 56, 44: [1, 58], 45: 54, 47: [2, 54] }, { 28: 59, 43: 60, 44: [1, 58], 47: [2, 56] }, { 13: 62, 15: [1, 20], 18: [1, 61] }, { 33: [2, 86], 57: 63, 65: [2, 86], 72: [2, 86], 80: [2, 86], 81: [2, 86], 82: [2, 86], 83: [2, 86], 84: [2, 86], 85: [2, 86] }, { 33: [2, 40], 65: [2, 40], 72: [2, 40], 80: [2, 40], 81: [2, 40], 82: [2, 40], 83: [2, 40], 84: [2, 40], 85: [2, 40] }, { 33: [2, 41], 65: [2, 41], 72: [2, 41], 80: [2, 41], 81: [2, 41], 82: [2, 41], 83: [2, 41], 84: [2, 41], 85: [2, 41] }, { 20: 64, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 26: 65, 47: [1, 66] }, { 30: 67, 33: [2, 58], 65: [2, 58], 72: [2, 58], 75: [2, 58], 80: [2, 58], 81: [2, 58], 82: [2, 58], 83: [2, 58], 84: [2, 58], 85: [2, 58] }, { 33: [2, 64], 35: 68, 65: [2, 64], 72: [2, 64], 75: [2, 64], 80: [2, 64], 81: [2, 64], 82: [2, 64], 83: [2, 64], 84: [2, 64], 85: [2, 64] }, { 21: 69, 23: [2, 50], 65: [2, 50], 72: [2, 50], 80: [2, 50], 81: [2, 50], 82: [2, 50], 83: [2, 50], 84: [2, 50], 85: [2, 50] }, { 33: [2, 90], 61: 70, 65: [2, 90], 72: [2, 90], 80: [2, 90], 81: [2, 90], 82: [2, 90], 83: [2, 90], 84: [2, 90], 85: [2, 90] }, { 20: 74, 33: [2, 80], 50: 71, 63: 72, 64: 75, 65: [1, 43], 69: 73, 70: 76, 71: 77, 72: [1, 78], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 72: [1, 79] }, { 23: [2, 42], 33: [2, 42], 54: [2, 42], 65: [2, 42], 68: [2, 42], 72: [2, 42], 75: [2, 42], 80: [2, 42], 81: [2, 42], 82: [2, 42], 83: [2, 42], 84: [2, 42], 85: [2, 42], 87: [1, 50] }, { 20: 74, 53: 80, 54: [2, 84], 63: 81, 64: 75, 65: [1, 43], 69: 82, 70: 76, 71: 77, 72: [1, 78], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 26: 83, 47: [1, 66] }, { 47: [2, 55] }, { 4: 84, 6: 3, 14: [2, 46], 15: [2, 46], 19: [2, 46], 29: [2, 46], 34: [2, 46], 39: [2, 46], 44: [2, 46], 47: [2, 46], 48: [2, 46], 51: [2, 46], 55: [2, 46], 60: [2, 46] }, { 47: [2, 20] }, { 20: 85, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 4: 86, 6: 3, 14: [2, 46], 15: [2, 46], 19: [2, 46], 29: [2, 46], 34: [2, 46], 47: [2, 46], 48: [2, 46], 51: [2, 46], 55: [2, 46], 60: [2, 46] }, { 26: 87, 47: [1, 66] }, { 47: [2, 57] }, { 5: [2, 11], 14: [2, 11], 15: [2, 11], 19: [2, 11], 29: [2, 11], 34: [2, 11], 39: [2, 11], 44: [2, 11], 47: [2, 11], 48: [2, 11], 51: [2, 11], 55: [2, 11], 60: [2, 11] }, { 15: [2, 49], 18: [2, 49] }, { 20: 74, 33: [2, 88], 58: 88, 63: 89, 64: 75, 65: [1, 43], 69: 90, 70: 76, 71: 77, 72: [1, 78], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 65: [2, 94], 66: 91, 68: [2, 94], 72: [2, 94], 80: [2, 94], 81: [2, 94], 82: [2, 94], 83: [2, 94], 84: [2, 94], 85: [2, 94] }, { 5: [2, 25], 14: [2, 25], 15: [2, 25], 19: [2, 25], 29: [2, 25], 34: [2, 25], 39: [2, 25], 44: [2, 25], 47: [2, 25], 48: [2, 25], 51: [2, 25], 55: [2, 25], 60: [2, 25] }, { 20: 92, 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 74, 31: 93, 33: [2, 60], 63: 94, 64: 75, 65: [1, 43], 69: 95, 70: 76, 71: 77, 72: [1, 78], 75: [2, 60], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 74, 33: [2, 66], 36: 96, 63: 97, 64: 75, 65: [1, 43], 69: 98, 70: 76, 71: 77, 72: [1, 78], 75: [2, 66], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 74, 22: 99, 23: [2, 52], 63: 100, 64: 75, 65: [1, 43], 69: 101, 70: 76, 71: 77, 72: [1, 78], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 20: 74, 33: [2, 92], 62: 102, 63: 103, 64: 75, 65: [1, 43], 69: 104, 70: 76, 71: 77, 72: [1, 78], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 33: [1, 105] }, { 33: [2, 79], 65: [2, 79], 72: [2, 79], 80: [2, 79], 81: [2, 79], 82: [2, 79], 83: [2, 79], 84: [2, 79], 85: [2, 79] }, { 33: [2, 81] }, { 23: [2, 27], 33: [2, 27], 54: [2, 27], 65: [2, 27], 68: [2, 27], 72: [2, 27], 75: [2, 27], 80: [2, 27], 81: [2, 27], 82: [2, 27], 83: [2, 27], 84: [2, 27], 85: [2, 27] }, { 23: [2, 28], 33: [2, 28], 54: [2, 28], 65: [2, 28], 68: [2, 28], 72: [2, 28], 75: [2, 28], 80: [2, 28], 81: [2, 28], 82: [2, 28], 83: [2, 28], 84: [2, 28], 85: [2, 28] }, { 23: [2, 30], 33: [2, 30], 54: [2, 30], 68: [2, 30], 71: 106, 72: [1, 107], 75: [2, 30] }, { 23: [2, 98], 33: [2, 98], 54: [2, 98], 68: [2, 98], 72: [2, 98], 75: [2, 98] }, { 23: [2, 45], 33: [2, 45], 54: [2, 45], 65: [2, 45], 68: [2, 45], 72: [2, 45], 73: [1, 108], 75: [2, 45], 80: [2, 45], 81: [2, 45], 82: [2, 45], 83: [2, 45], 84: [2, 45], 85: [2, 45], 87: [2, 45] }, { 23: [2, 44], 33: [2, 44], 54: [2, 44], 65: [2, 44], 68: [2, 44], 72: [2, 44], 75: [2, 44], 80: [2, 44], 81: [2, 44], 82: [2, 44], 83: [2, 44], 84: [2, 44], 85: [2, 44], 87: [2, 44] }, { 54: [1, 109] }, { 54: [2, 83], 65: [2, 83], 72: [2, 83], 80: [2, 83], 81: [2, 83], 82: [2, 83], 83: [2, 83], 84: [2, 83], 85: [2, 83] }, { 54: [2, 85] }, { 5: [2, 13], 14: [2, 13], 15: [2, 13], 19: [2, 13], 29: [2, 13], 34: [2, 13], 39: [2, 13], 44: [2, 13], 47: [2, 13], 48: [2, 13], 51: [2, 13], 55: [2, 13], 60: [2, 13] }, { 38: 55, 39: [1, 57], 43: 56, 44: [1, 58], 45: 111, 46: 110, 47: [2, 76] }, { 33: [2, 70], 40: 112, 65: [2, 70], 72: [2, 70], 75: [2, 70], 80: [2, 70], 81: [2, 70], 82: [2, 70], 83: [2, 70], 84: [2, 70], 85: [2, 70] }, { 47: [2, 18] }, { 5: [2, 14], 14: [2, 14], 15: [2, 14], 19: [2, 14], 29: [2, 14], 34: [2, 14], 39: [2, 14], 44: [2, 14], 47: [2, 14], 48: [2, 14], 51: [2, 14], 55: [2, 14], 60: [2, 14] }, { 33: [1, 113] }, { 33: [2, 87], 65: [2, 87], 72: [2, 87], 80: [2, 87], 81: [2, 87], 82: [2, 87], 83: [2, 87], 84: [2, 87], 85: [2, 87] }, { 33: [2, 89] }, { 20: 74, 63: 115, 64: 75, 65: [1, 43], 67: 114, 68: [2, 96], 69: 116, 70: 76, 71: 77, 72: [1, 78], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 33: [1, 117] }, { 32: 118, 33: [2, 62], 74: 119, 75: [1, 120] }, { 33: [2, 59], 65: [2, 59], 72: [2, 59], 75: [2, 59], 80: [2, 59], 81: [2, 59], 82: [2, 59], 83: [2, 59], 84: [2, 59], 85: [2, 59] }, { 33: [2, 61], 75: [2, 61] }, { 33: [2, 68], 37: 121, 74: 122, 75: [1, 120] }, { 33: [2, 65], 65: [2, 65], 72: [2, 65], 75: [2, 65], 80: [2, 65], 81: [2, 65], 82: [2, 65], 83: [2, 65], 84: [2, 65], 85: [2, 65] }, { 33: [2, 67], 75: [2, 67] }, { 23: [1, 123] }, { 23: [2, 51], 65: [2, 51], 72: [2, 51], 80: [2, 51], 81: [2, 51], 82: [2, 51], 83: [2, 51], 84: [2, 51], 85: [2, 51] }, { 23: [2, 53] }, { 33: [1, 124] }, { 33: [2, 91], 65: [2, 91], 72: [2, 91], 80: [2, 91], 81: [2, 91], 82: [2, 91], 83: [2, 91], 84: [2, 91], 85: [2, 91] }, { 33: [2, 93] }, { 5: [2, 22], 14: [2, 22], 15: [2, 22], 19: [2, 22], 29: [2, 22], 34: [2, 22], 39: [2, 22], 44: [2, 22], 47: [2, 22], 48: [2, 22], 51: [2, 22], 55: [2, 22], 60: [2, 22] }, { 23: [2, 99], 33: [2, 99], 54: [2, 99], 68: [2, 99], 72: [2, 99], 75: [2, 99] }, { 73: [1, 108] }, { 20: 74, 63: 125, 64: 75, 65: [1, 43], 72: [1, 35], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 5: [2, 23], 14: [2, 23], 15: [2, 23], 19: [2, 23], 29: [2, 23], 34: [2, 23], 39: [2, 23], 44: [2, 23], 47: [2, 23], 48: [2, 23], 51: [2, 23], 55: [2, 23], 60: [2, 23] }, { 47: [2, 19] }, { 47: [2, 77] }, { 20: 74, 33: [2, 72], 41: 126, 63: 127, 64: 75, 65: [1, 43], 69: 128, 70: 76, 71: 77, 72: [1, 78], 75: [2, 72], 78: 26, 79: 27, 80: [1, 28], 81: [1, 29], 82: [1, 30], 83: [1, 31], 84: [1, 32], 85: [1, 34], 86: 33 }, { 5: [2, 24], 14: [2, 24], 15: [2, 24], 19: [2, 24], 29: [2, 24], 34: [2, 24], 39: [2, 24], 44: [2, 24], 47: [2, 24], 48: [2, 24], 51: [2, 24], 55: [2, 24], 60: [2, 24] }, { 68: [1, 129] }, { 65: [2, 95], 68: [2, 95], 72: [2, 95], 80: [2, 95], 81: [2, 95], 82: [2, 95], 83: [2, 95], 84: [2, 95], 85: [2, 95] }, { 68: [2, 97] }, { 5: [2, 21], 14: [2, 21], 15: [2, 21], 19: [2, 21], 29: [2, 21], 34: [2, 21], 39: [2, 21], 44: [2, 21], 47: [2, 21], 48: [2, 21], 51: [2, 21], 55: [2, 21], 60: [2, 21] }, { 33: [1, 130] }, { 33: [2, 63] }, { 72: [1, 132], 76: 131 }, { 33: [1, 133] }, { 33: [2, 69] }, { 15: [2, 12], 18: [2, 12] }, { 14: [2, 26], 15: [2, 26], 19: [2, 26], 29: [2, 26], 34: [2, 26], 47: [2, 26], 48: [2, 26], 51: [2, 26], 55: [2, 26], 60: [2, 26] }, { 23: [2, 31], 33: [2, 31], 54: [2, 31], 68: [2, 31], 72: [2, 31], 75: [2, 31] }, { 33: [2, 74], 42: 134, 74: 135, 75: [1, 120] }, { 33: [2, 71], 65: [2, 71], 72: [2, 71], 75: [2, 71], 80: [2, 71], 81: [2, 71], 82: [2, 71], 83: [2, 71], 84: [2, 71], 85: [2, 71] }, { 33: [2, 73], 75: [2, 73] }, { 23: [2, 29], 33: [2, 29], 54: [2, 29], 65: [2, 29], 68: [2, 29], 72: [2, 29], 75: [2, 29], 80: [2, 29], 81: [2, 29], 82: [2, 29], 83: [2, 29], 84: [2, 29], 85: [2, 29] }, { 14: [2, 15], 15: [2, 15], 19: [2, 15], 29: [2, 15], 34: [2, 15], 39: [2, 15], 44: [2, 15], 47: [2, 15], 48: [2, 15], 51: [2, 15], 55: [2, 15], 60: [2, 15] }, { 72: [1, 137], 77: [1, 136] }, { 72: [2, 100], 77: [2, 100] }, { 14: [2, 16], 15: [2, 16], 19: [2, 16], 29: [2, 16], 34: [2, 16], 44: [2, 16], 47: [2, 16], 48: [2, 16], 51: [2, 16], 55: [2, 16], 60: [2, 16] }, { 33: [1, 138] }, { 33: [2, 75] }, { 33: [2, 32] }, { 72: [2, 101], 77: [2, 101] }, { 14: [2, 17], 15: [2, 17], 19: [2, 17], 29: [2, 17], 34: [2, 17], 39: [2, 17], 44: [2, 17], 47: [2, 17], 48: [2, 17], 51: [2, 17], 55: [2, 17], 60: [2, 17] }],
+        defaultActions: { 4: [2, 1], 54: [2, 55], 56: [2, 20], 60: [2, 57], 73: [2, 81], 82: [2, 85], 86: [2, 18], 90: [2, 89], 101: [2, 53], 104: [2, 93], 110: [2, 19], 111: [2, 77], 116: [2, 97], 119: [2, 63], 122: [2, 69], 135: [2, 75], 136: [2, 32] },
         parseError: function parseError(str, hash) {
             throw new Error(str);
         },
@@ -14142,7 +14172,7 @@ var handlebars = (function () {
                     break;
             }
         };
-        lexer.rules = [/^(?:[^\x00]*?(?=(\{\{)))/, /^(?:[^\x00]+)/, /^(?:[^\x00]{2,}?(?=(\{\{|\\\{\{|\\\\\{\{|$)))/, /^(?:\{\{\{\{(?=[^\/]))/, /^(?:\{\{\{\{\/[^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=[=}\s\/.])\}\}\}\})/, /^(?:[^\x00]*?(?=(\{\{\{\{)))/, /^(?:[\s\S]*?--(~)?\}\})/, /^(?:\()/, /^(?:\))/, /^(?:\{\{\{\{)/, /^(?:\}\}\}\})/, /^(?:\{\{(~)?>)/, /^(?:\{\{(~)?#>)/, /^(?:\{\{(~)?#\*?)/, /^(?:\{\{(~)?\/)/, /^(?:\{\{(~)?\^\s*(~)?\}\})/, /^(?:\{\{(~)?\s*else\s*(~)?\}\})/, /^(?:\{\{(~)?\^)/, /^(?:\{\{(~)?\s*else\b)/, /^(?:\{\{(~)?\{)/, /^(?:\{\{(~)?&)/, /^(?:\{\{(~)?!--)/, /^(?:\{\{(~)?![\s\S]*?\}\})/, /^(?:\{\{(~)?\*?)/, /^(?:=)/, /^(?:\.\.)/, /^(?:\.(?=([=~}\s\/.)|])))/, /^(?:[\/.])/, /^(?:\s+)/, /^(?:\}(~)?\}\})/, /^(?:(~)?\}\})/, /^(?:"(\\["]|[^"])*")/, /^(?:'(\\[']|[^'])*')/, /^(?:@)/, /^(?:true(?=([~}\s)])))/, /^(?:false(?=([~}\s)])))/, /^(?:undefined(?=([~}\s)])))/, /^(?:null(?=([~}\s)])))/, /^(?:-?[0-9]+(?:\.[0-9]+)?(?=([~}\s)])))/, /^(?:as\s+\|)/, /^(?:\|)/, /^(?:([^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=([=~}\s\/.)|]))))/, /^(?:\[(\\\]|[^\]])*\])/, /^(?:.)/, /^(?:$)/];
+        lexer.rules = [/^(?:[^\x00]*?(?=(\{\{)))/, /^(?:[^\x00]+)/, /^(?:[^\x00]{2,}?(?=(\{\{|\\\{\{|\\\\\{\{|$)))/, /^(?:\{\{\{\{(?=[^\/]))/, /^(?:\{\{\{\{\/[^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=[=}\s\/.])\}\}\}\})/, /^(?:[^\x00]+?(?=(\{\{\{\{)))/, /^(?:[\s\S]*?--(~)?\}\})/, /^(?:\()/, /^(?:\))/, /^(?:\{\{\{\{)/, /^(?:\}\}\}\})/, /^(?:\{\{(~)?>)/, /^(?:\{\{(~)?#>)/, /^(?:\{\{(~)?#\*?)/, /^(?:\{\{(~)?\/)/, /^(?:\{\{(~)?\^\s*(~)?\}\})/, /^(?:\{\{(~)?\s*else\s*(~)?\}\})/, /^(?:\{\{(~)?\^)/, /^(?:\{\{(~)?\s*else\b)/, /^(?:\{\{(~)?\{)/, /^(?:\{\{(~)?&)/, /^(?:\{\{(~)?!--)/, /^(?:\{\{(~)?![\s\S]*?\}\})/, /^(?:\{\{(~)?\*?)/, /^(?:=)/, /^(?:\.\.)/, /^(?:\.(?=([=~}\s\/.)|])))/, /^(?:[\/.])/, /^(?:\s+)/, /^(?:\}(~)?\}\})/, /^(?:(~)?\}\})/, /^(?:"(\\["]|[^"])*")/, /^(?:'(\\[']|[^'])*')/, /^(?:@)/, /^(?:true(?=([~}\s)])))/, /^(?:false(?=([~}\s)])))/, /^(?:undefined(?=([~}\s)])))/, /^(?:null(?=([~}\s)])))/, /^(?:-?[0-9]+(?:\.[0-9]+)?(?=([~}\s)])))/, /^(?:as\s+\|)/, /^(?:\|)/, /^(?:([^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=([=~}\s\/.)|]))))/, /^(?:\[(\\\]|[^\]])*\])/, /^(?:.)/, /^(?:$)/];
         lexer.conditions = { "mu": { "rules": [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44], "inclusive": false }, "emu": { "rules": [2], "inclusive": false }, "com": { "rules": [6], "inclusive": false }, "raw": { "rules": [3, 4, 5], "inclusive": false }, "INITIAL": { "rules": [0, 1, 44], "inclusive": true } };
         return lexer;
     })();
@@ -14697,7 +14727,7 @@ function omitLeft(body, i, multiple) {
     return;
   }
 
-  // We omit the last node if it's whitespace only and not preceeded by a non-content node.
+  // We omit the last node if it's whitespace only and not preceded by a non-content node.
   var original = current.value;
   current.value = current.value.replace(multiple ? /\s+$/ : /[ \t]+$/, '');
   current.leftStripped = current.value !== original;
@@ -14762,15 +14792,20 @@ module.exports = exports['default'];
 
 exports.__esModule = true;
 
-var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
+var errorProps = ['description', 'fileName', 'lineNumber', 'endLineNumber', 'message', 'name', 'number', 'stack'];
 
 function Exception(message, node) {
   var loc = node && node.loc,
       line = undefined,
-      column = undefined;
+      endLineNumber = undefined,
+      column = undefined,
+      endColumn = undefined;
+
   if (loc) {
     line = loc.start.line;
+    endLineNumber = loc.end.line;
     column = loc.start.column;
+    endColumn = loc.end.column;
 
     message += ' - ' + line + ':' + column;
   }
@@ -14790,6 +14825,7 @@ function Exception(message, node) {
   try {
     if (loc) {
       this.lineNumber = line;
+      this.endLineNumber = endLineNumber;
 
       // Work around issue under safari where we can't directly set the column value
       /* istanbul ignore next */
@@ -14798,8 +14834,13 @@ function Exception(message, node) {
           value: column,
           enumerable: true
         });
+        Object.defineProperty(this, 'endColumn', {
+          value: endColumn,
+          enumerable: true
+        });
       } else {
         this.column = column;
+        this.endColumn = endColumn;
       }
     }
   } catch (nop) {
@@ -14818,6 +14859,7 @@ module.exports = exports['default'];
 
 exports.__esModule = true;
 exports.registerDefaultHelpers = registerDefaultHelpers;
+exports.moveHelperToHooks = moveHelperToHooks;
 // istanbul ignore next
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -14858,6 +14900,15 @@ function registerDefaultHelpers(instance) {
   _helpersLog2['default'](instance);
   _helpersLookup2['default'](instance);
   _helpersWith2['default'](instance);
+}
+
+function moveHelperToHooks(instance, helperName, keepHelper) {
+  if (instance.helpers[helperName]) {
+    instance.hooks[helperName] = instance.helpers[helperName];
+    if (!keepHelper) {
+      delete instance.helpers[helperName];
+    }
+  }
 }
 
 
@@ -14966,11 +15017,21 @@ exports['default'] = function (instance) {
             execIteration(i, i, i === context.length - 1);
           }
         }
+      } else if (global.Symbol && context[global.Symbol.iterator]) {
+        var newContext = [];
+        var iterator = context[global.Symbol.iterator]();
+        for (var it = iterator.next(); !it.done; it = iterator.next()) {
+          newContext.push(it.value);
+        }
+        context = newContext;
+        for (var j = context.length; i < j; i++) {
+          execIteration(i, i, i === context.length - 1);
+        }
       } else {
-        var priorKey = undefined;
+        (function () {
+          var priorKey = undefined;
 
-        for (var key in context) {
-          if (context.hasOwnProperty(key)) {
+          Object.keys(context).forEach(function (key) {
             // We're running the iterations one step out of sync so we can detect
             // the last iteration without have to scan the object twice and create
             // an itermediate keys array.
@@ -14979,11 +15040,11 @@ exports['default'] = function (instance) {
             }
             priorKey = key;
             i++;
+          });
+          if (priorKey !== undefined) {
+            execIteration(priorKey, i - 1, true);
           }
-        }
-        if (priorKey !== undefined) {
-          execIteration(priorKey, i - 1, true);
-        }
+        })();
       }
     }
 
@@ -15029,11 +15090,21 @@ module.exports = exports['default'];
 'use strict';
 
 exports.__esModule = true;
+// istanbul ignore next
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _utils = require('../utils');
 
+var _exception = require('../exception');
+
+var _exception2 = _interopRequireDefault(_exception);
+
 exports['default'] = function (instance) {
   instance.registerHelper('if', function (conditional, options) {
+    if (arguments.length != 2) {
+      throw new _exception2['default']('#if requires exactly one argument');
+    }
     if (_utils.isFunction(conditional)) {
       conditional = conditional.call(this);
     }
@@ -15049,6 +15120,9 @@ exports['default'] = function (instance) {
   });
 
   instance.registerHelper('unless', function (conditional, options) {
+    if (arguments.length != 2) {
+      throw new _exception2['default']('#unless requires exactly one argument');
+    }
     return instance.helpers['if'].call(this, conditional, { fn: options.inverse, inverse: options.fn, hash: options.hash });
   });
 };
@@ -15056,7 +15130,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../utils":240}],233:[function(require,module,exports){
+},{"../exception":227,"../utils":240}],233:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -15088,31 +15162,42 @@ module.exports = exports['default'];
 'use strict';
 
 exports.__esModule = true;
+var dangerousPropertyRegex = /^(constructor|__defineGetter__|__defineSetter__|__lookupGetter__|__proto__)$/;
+
+exports.dangerousPropertyRegex = dangerousPropertyRegex;
 
 exports['default'] = function (instance) {
   instance.registerHelper('lookup', function (obj, field) {
     if (!obj) {
       return obj;
     }
-    if (field === 'constructor' && !obj.propertyIsEnumerable(field)) {
+    if (dangerousPropertyRegex.test(String(field)) && !Object.prototype.propertyIsEnumerable.call(obj, field)) {
       return undefined;
     }
     return obj[field];
   });
 };
 
-module.exports = exports['default'];
-
 
 },{}],235:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
+// istanbul ignore next
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _utils = require('../utils');
 
+var _exception = require('../exception');
+
+var _exception2 = _interopRequireDefault(_exception);
+
 exports['default'] = function (instance) {
   instance.registerHelper('with', function (context, options) {
+    if (arguments.length != 2) {
+      throw new _exception2['default']('#with requires exactly one argument');
+    }
     if (_utils.isFunction(context)) {
       context = context.call(this);
     }
@@ -15139,7 +15224,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../utils":240}],236:[function(require,module,exports){
+},{"../exception":227,"../utils":240}],236:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -15238,23 +15323,28 @@ var _exception2 = _interopRequireDefault(_exception);
 
 var _base = require('./base');
 
+var _helpers = require('./helpers');
+
 function checkRevision(compilerInfo) {
   var compilerRevision = compilerInfo && compilerInfo[0] || 1,
       currentRevision = _base.COMPILER_REVISION;
 
-  if (compilerRevision !== currentRevision) {
-    if (compilerRevision < currentRevision) {
-      var runtimeVersions = _base.REVISION_CHANGES[currentRevision],
-          compilerVersions = _base.REVISION_CHANGES[compilerRevision];
-      throw new _exception2['default']('Template was precompiled with an older version of Handlebars than the current runtime. ' + 'Please update your precompiler to a newer version (' + runtimeVersions + ') or downgrade your runtime to an older version (' + compilerVersions + ').');
-    } else {
-      // Use the embedded version info since the runtime doesn't know about this revision yet
-      throw new _exception2['default']('Template was precompiled with a newer version of Handlebars than the current runtime. ' + 'Please update your runtime to a newer version (' + compilerInfo[1] + ').');
-    }
+  if (compilerRevision >= _base.LAST_COMPATIBLE_COMPILER_REVISION && compilerRevision <= _base.COMPILER_REVISION) {
+    return;
+  }
+
+  if (compilerRevision < _base.LAST_COMPATIBLE_COMPILER_REVISION) {
+    var runtimeVersions = _base.REVISION_CHANGES[currentRevision],
+        compilerVersions = _base.REVISION_CHANGES[compilerRevision];
+    throw new _exception2['default']('Template was precompiled with an older version of Handlebars than the current runtime. ' + 'Please update your precompiler to a newer version (' + runtimeVersions + ') or downgrade your runtime to an older version (' + compilerVersions + ').');
+  } else {
+    // Use the embedded version info since the runtime doesn't know about this revision yet
+    throw new _exception2['default']('Template was precompiled with a newer version of Handlebars than the current runtime. ' + 'Please update your runtime to a newer version (' + compilerInfo[1] + ').');
   }
 }
 
 function template(templateSpec, env) {
+
   /* istanbul ignore next */
   if (!env) {
     throw new _exception2['default']('No environment passed to template');
@@ -15266,8 +15356,11 @@ function template(templateSpec, env) {
   templateSpec.main.decorator = templateSpec.main_d;
 
   // Note: Using env.VM references rather than local var references throughout this section to allow
-  // for external users to override these as psuedo-supported APIs.
+  // for external users to override these as pseudo-supported APIs.
   env.VM.checkRevision(templateSpec.compiler);
+
+  // backwards compatibility for precompiled templates with compiler-version 7 (<4.3.0)
+  var templateWasPrecompiledWithCompilerV7 = templateSpec.compiler && templateSpec.compiler[0] === 7;
 
   function invokePartialWrapper(partial, context, options) {
     if (options.hash) {
@@ -15276,13 +15369,15 @@ function template(templateSpec, env) {
         options.ids[0] = true;
       }
     }
-
     partial = env.VM.resolvePartial.call(this, partial, context, options);
-    var result = env.VM.invokePartial.call(this, partial, context, options);
+
+    var optionsWithHooks = Utils.extend({}, options, { hooks: this.hooks });
+
+    var result = env.VM.invokePartial.call(this, partial, context, optionsWithHooks);
 
     if (result == null && env.compile) {
       options.partials[options.name] = env.compile(partial, templateSpec.compilerOptions, env);
-      result = options.partials[options.name](context, options);
+      result = options.partials[options.name](context, optionsWithHooks);
     }
     if (result != null) {
       if (options.indent) {
@@ -15304,9 +15399,9 @@ function template(templateSpec, env) {
 
   // Just add water
   var container = {
-    strict: function strict(obj, name) {
-      if (!(name in obj)) {
-        throw new _exception2['default']('"' + name + '" not defined in ' + obj);
+    strict: function strict(obj, name, loc) {
+      if (!obj || !(name in obj)) {
+        throw new _exception2['default']('"' + name + '" not defined in ' + obj, { loc: loc });
       }
       return obj[name];
     },
@@ -15349,15 +15444,6 @@ function template(templateSpec, env) {
       }
       return value;
     },
-    merge: function merge(param, common) {
-      var obj = param || common;
-
-      if (param && common && param !== common) {
-        obj = Utils.extend({}, common, param);
-      }
-
-      return obj;
-    },
     // An empty object to use as replacement for null-contexts
     nullContext: Object.seal({}),
 
@@ -15394,18 +15480,25 @@ function template(templateSpec, env) {
 
   ret._setup = function (options) {
     if (!options.partial) {
-      container.helpers = container.merge(options.helpers, env.helpers);
+      container.helpers = Utils.extend({}, env.helpers, options.helpers);
 
       if (templateSpec.usePartial) {
-        container.partials = container.merge(options.partials, env.partials);
+        container.partials = Utils.extend({}, env.partials, options.partials);
       }
       if (templateSpec.usePartial || templateSpec.useDecorators) {
-        container.decorators = container.merge(options.decorators, env.decorators);
+        container.decorators = Utils.extend({}, env.decorators, options.decorators);
       }
+
+      container.hooks = {};
+
+      var keepHelperInHelpers = options.allowCallsToHelperMissing || templateWasPrecompiledWithCompilerV7;
+      _helpers.moveHelperToHooks(container, 'helperMissing', keepHelperInHelpers);
+      _helpers.moveHelperToHooks(container, 'blockHelperMissing', keepHelperInHelpers);
     } else {
       container.helpers = options.helpers;
       container.partials = options.partials;
       container.decorators = options.decorators;
+      container.hooks = options.hooks;
     }
   };
 
@@ -15441,6 +15534,10 @@ function wrapProgram(container, i, fn, data, declaredBlockParams, blockParams, d
   prog.blockParams = declaredBlockParams || 0;
   return prog;
 }
+
+/**
+ * This is currently part of the official API, therefore implementation details should not be changed.
+ */
 
 function resolvePartial(partial, context, options) {
   if (!partial) {
@@ -15519,7 +15616,7 @@ function executeDecorators(fn, prog, container, depths, data, blockParams) {
 }
 
 
-},{"./base":214,"./exception":227,"./utils":240}],239:[function(require,module,exports){
+},{"./base":214,"./exception":227,"./helpers":228,"./utils":240}],239:[function(require,module,exports){
 // Build out our basic SafeString type
 'use strict';
 
@@ -15547,6 +15644,7 @@ exports.isEmpty = isEmpty;
 exports.createFrame = createFrame;
 exports.blockParams = blockParams;
 exports.appendContextPath = appendContextPath;
+
 var escape = {
   '&': '&amp;',
   '<': '&lt;',
@@ -18823,69 +18921,47 @@ exports.SourceMapConsumer = require('./lib/source-map-consumer').SourceMapConsum
 exports.SourceNode = require('./lib/source-node').SourceNode;
 
 },{"./lib/source-map-consumer":248,"./lib/source-map-generator":249,"./lib/source-node":250}],253:[function(require,module,exports){
-// Create a simple path alias to allow browserify to resolve
-// the runtime on a supported path.
-module.exports = require('./dist/cjs/handlebars.runtime')['default'];
-
-},{"./dist/cjs/handlebars.runtime":213}],254:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":253}],255:[function(require,module,exports){
-/*! tether 1.4.6 */
+},{"handlebars/runtime":213}],254:[function(require,module,exports){
+/*! tether 1.4.7 */
 
 (function(root, factory) {
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     define([], factory);
-  } else if (typeof exports === "object") {
+  } else if (typeof exports === 'object') {
     module.exports = factory();
   } else {
     root.Tether = factory();
   }
-})(this, function() {
-  "use strict";
+}(this, function() {
 
-  var _createClass = (function() {
-    function defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-    return function(Constructor, protoProps, staticProps) {
-      if (protoProps) defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) defineProperties(Constructor, staticProps);
-      return Constructor;
-    };
-  })();
+'use strict';
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var TetherBase = undefined;
+if (typeof TetherBase === 'undefined') {
+  TetherBase = { modules: [] };
+}
+
+var zeroElement = null;
+
+// Same as native getBoundingClientRect, except it takes into account parent <frame> offsets
+// if the element lies within a nested document (<frame> or <iframe>-like).
+function getActualBoundingClientRect(node) {
+  var boundingRect = node.getBoundingClientRect();
+
+  // The original object returned by getBoundingClientRect is immutable, so we clone it
+  // We can't use extend because the properties are not considered part of the object by hasOwnProperty in IE9
+  var rect = {};
+  for (var k in boundingRect) {
+    rect[k] = boundingRect[k];
   }
 
-  var TetherBase = undefined;
-  if (typeof TetherBase === "undefined") {
-    TetherBase = { modules: [] };
-  }
-
-  var zeroElement = null;
-
-  // Same as native getBoundingClientRect, except it takes into account parent <frame> offsets
-  // if the element lies within a nested document (<frame> or <iframe>-like).
-  function getActualBoundingClientRect(node) {
-    var boundingRect = node.getBoundingClientRect();
-
-    // The original object returned by getBoundingClientRect is immutable, so we clone it
-    // We can't use extend because the properties are not considered part of the object by hasOwnProperty in IE9
-    var rect = {};
-    for (var k in boundingRect) {
-      rect[k] = boundingRect[k];
-    }
-
+  try {
     if (node.ownerDocument !== document) {
       var _frameElement = node.ownerDocument.defaultView.frameElement;
       if (_frameElement) {
@@ -18896,2184 +18972,1777 @@ module.exports = require("handlebars/runtime")["default"];
         rect.right += frameRect.left;
       }
     }
-
-    return rect;
+  } catch (err) {
+    // Ignore "Access is denied" in IE11/Edge
   }
 
-  function getScrollParents(el) {
-    // In firefox if the el is inside an iframe with display: none; window.getComputedStyle() will return null;
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=548397
-    var computedStyle = getComputedStyle(el) || {};
-    var position = computedStyle.position;
-    var parents = [];
+  return rect;
+}
 
-    if (position === "fixed") {
-      return [el];
+function getScrollParents(el) {
+  // In firefox if the el is inside an iframe with display: none; window.getComputedStyle() will return null;
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=548397
+  var computedStyle = getComputedStyle(el) || {};
+  var position = computedStyle.position;
+  var parents = [];
+
+  if (position === 'fixed') {
+    return [el];
+  }
+
+  var parent = el;
+  while ((parent = parent.parentNode) && parent && parent.nodeType === 1) {
+    var style = undefined;
+    try {
+      style = getComputedStyle(parent);
+    } catch (err) {}
+
+    if (typeof style === 'undefined' || style === null) {
+      parents.push(parent);
+      return parents;
     }
 
-    var parent = el;
-    while ((parent = parent.parentNode) && parent && parent.nodeType === 1) {
-      var style = undefined;
-      try {
-        style = getComputedStyle(parent);
-      } catch (err) {}
+    var _style = style;
+    var overflow = _style.overflow;
+    var overflowX = _style.overflowX;
+    var overflowY = _style.overflowY;
 
-      if (typeof style === "undefined" || style === null) {
+    if (/(auto|scroll|overlay)/.test(overflow + overflowY + overflowX)) {
+      if (position !== 'absolute' || ['relative', 'absolute', 'fixed'].indexOf(style.position) >= 0) {
         parents.push(parent);
-        return parents;
-      }
-
-      var _style = style;
-      var overflow = _style.overflow;
-      var overflowX = _style.overflowX;
-      var overflowY = _style.overflowY;
-
-      if (/(auto|scroll|overlay)/.test(overflow + overflowY + overflowX)) {
-        if (
-          position !== "absolute" ||
-          ["relative", "absolute", "fixed"].indexOf(style.position) >= 0
-        ) {
-          parents.push(parent);
-        }
       }
     }
-
-    parents.push(el.ownerDocument.body);
-
-    // If the node is within a frame, account for the parent window scroll
-    if (el.ownerDocument !== document) {
-      parents.push(el.ownerDocument.defaultView);
-    }
-
-    return parents;
   }
 
-  var uniqueId = (function() {
-    var id = 0;
-    return function() {
-      return ++id;
-    };
-  })();
+  parents.push(el.ownerDocument.body);
 
-  var zeroPosCache = {};
-  var getOrigin = function getOrigin() {
-    // getBoundingClientRect is unfortunately too accurate.  It introduces a pixel or two of
-    // jitter as the user scrolls that messes with our ability to detect if two positions
-    // are equivilant or not.  We place an element at the top left of the page that will
-    // get the same jitter, so we can cancel the two out.
-    var node = zeroElement;
-    if (!node || !document.body.contains(node)) {
-      node = document.createElement("div");
-      node.setAttribute("data-tether-id", uniqueId());
-      extend(node.style, {
-        top: 0,
-        left: 0,
-        position: "absolute"
-      });
+  // If the node is within a frame, account for the parent window scroll
+  if (el.ownerDocument !== document) {
+    parents.push(el.ownerDocument.defaultView);
+  }
 
-      document.body.appendChild(node);
+  return parents;
+}
 
-      zeroElement = node;
-    }
-
-    var id = node.getAttribute("data-tether-id");
-    if (typeof zeroPosCache[id] === "undefined") {
-      zeroPosCache[id] = getActualBoundingClientRect(node);
-
-      // Clear the cache when this position call is done
-      defer(function() {
-        delete zeroPosCache[id];
-      });
-    }
-
-    return zeroPosCache[id];
+var uniqueId = (function () {
+  var id = 0;
+  return function () {
+    return ++id;
   };
+})();
 
-  function removeUtilElements() {
-    if (zeroElement) {
-      document.body.removeChild(zeroElement);
-    }
-    zeroElement = null;
-  }
-
-  function getBounds(el) {
-    var doc = undefined;
-    if (el === document) {
-      doc = document;
-      el = document.documentElement;
-    } else {
-      doc = el.ownerDocument;
-    }
-
-    var docEl = doc.documentElement;
-
-    var box = getActualBoundingClientRect(el);
-
-    var origin = getOrigin();
-
-    box.top -= origin.top;
-    box.left -= origin.left;
-
-    if (typeof box.width === "undefined") {
-      box.width = document.body.scrollWidth - box.left - box.right;
-    }
-    if (typeof box.height === "undefined") {
-      box.height = document.body.scrollHeight - box.top - box.bottom;
-    }
-
-    box.top = box.top - docEl.clientTop;
-    box.left = box.left - docEl.clientLeft;
-    box.right = doc.body.clientWidth - box.width - box.left;
-    box.bottom = doc.body.clientHeight - box.height - box.top;
-
-    return box;
-  }
-
-  function getOffsetParent(el) {
-    return el.offsetParent || document.documentElement;
-  }
-
-  var _scrollBarSize = null;
-  function getScrollBarSize() {
-    if (_scrollBarSize) {
-      return _scrollBarSize;
-    }
-    var inner = document.createElement("div");
-    inner.style.width = "100%";
-    inner.style.height = "200px";
-
-    var outer = document.createElement("div");
-    extend(outer.style, {
-      position: "absolute",
+var zeroPosCache = {};
+var getOrigin = function getOrigin() {
+  // getBoundingClientRect is unfortunately too accurate.  It introduces a pixel or two of
+  // jitter as the user scrolls that messes with our ability to detect if two positions
+  // are equivilant or not.  We place an element at the top left of the page that will
+  // get the same jitter, so we can cancel the two out.
+  var node = zeroElement;
+  if (!node || !document.body.contains(node)) {
+    node = document.createElement('div');
+    node.setAttribute('data-tether-id', uniqueId());
+    extend(node.style, {
       top: 0,
       left: 0,
-      pointerEvents: "none",
-      visibility: "hidden",
-      width: "200px",
-      height: "150px",
-      overflow: "hidden"
+      position: 'absolute'
     });
 
-    outer.appendChild(inner);
+    document.body.appendChild(node);
 
-    document.body.appendChild(outer);
+    zeroElement = node;
+  }
 
-    var widthContained = inner.offsetWidth;
-    outer.style.overflow = "scroll";
-    var widthScroll = inner.offsetWidth;
+  var id = node.getAttribute('data-tether-id');
+  if (typeof zeroPosCache[id] === 'undefined') {
+    zeroPosCache[id] = getActualBoundingClientRect(node);
 
-    if (widthContained === widthScroll) {
-      widthScroll = outer.clientWidth;
-    }
+    // Clear the cache when this position call is done
+    defer(function () {
+      delete zeroPosCache[id];
+    });
+  }
 
-    document.body.removeChild(outer);
+  return zeroPosCache[id];
+};
 
-    var width = widthContained - widthScroll;
+function removeUtilElements() {
+  if (zeroElement) {
+    document.body.removeChild(zeroElement);
+  }
+  zeroElement = null;
+};
 
-    _scrollBarSize = { width: width, height: width };
+function getBounds(el) {
+  var doc = undefined;
+  if (el === document) {
+    doc = document;
+    el = document.documentElement;
+  } else {
+    doc = el.ownerDocument;
+  }
+
+  var docEl = doc.documentElement;
+
+  var box = getActualBoundingClientRect(el);
+
+  var origin = getOrigin();
+
+  box.top -= origin.top;
+  box.left -= origin.left;
+
+  if (typeof box.width === 'undefined') {
+    box.width = document.body.scrollWidth - box.left - box.right;
+  }
+  if (typeof box.height === 'undefined') {
+    box.height = document.body.scrollHeight - box.top - box.bottom;
+  }
+
+  box.top = box.top - docEl.clientTop;
+  box.left = box.left - docEl.clientLeft;
+  box.right = doc.body.clientWidth - box.width - box.left;
+  box.bottom = doc.body.clientHeight - box.height - box.top;
+
+  return box;
+}
+
+function getOffsetParent(el) {
+  return el.offsetParent || document.documentElement;
+}
+
+var _scrollBarSize = null;
+function getScrollBarSize() {
+  if (_scrollBarSize) {
     return _scrollBarSize;
   }
+  var inner = document.createElement('div');
+  inner.style.width = '100%';
+  inner.style.height = '200px';
 
-  function extend() {
-    var out =
-      arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+  var outer = document.createElement('div');
+  extend(outer.style, {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    pointerEvents: 'none',
+    visibility: 'hidden',
+    width: '200px',
+    height: '150px',
+    overflow: 'hidden'
+  });
 
-    var args = [];
+  outer.appendChild(inner);
 
-    Array.prototype.push.apply(args, arguments);
+  document.body.appendChild(outer);
 
-    args.slice(1).forEach(function(obj) {
-      if (obj) {
-        for (var key in obj) {
-          if ({}.hasOwnProperty.call(obj, key)) {
-            out[key] = obj[key];
-          }
+  var widthContained = inner.offsetWidth;
+  outer.style.overflow = 'scroll';
+  var widthScroll = inner.offsetWidth;
+
+  if (widthContained === widthScroll) {
+    widthScroll = outer.clientWidth;
+  }
+
+  document.body.removeChild(outer);
+
+  var width = widthContained - widthScroll;
+
+  _scrollBarSize = { width: width, height: width };
+  return _scrollBarSize;
+}
+
+function extend() {
+  var out = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+  var args = [];
+
+  Array.prototype.push.apply(args, arguments);
+
+  args.slice(1).forEach(function (obj) {
+    if (obj) {
+      for (var key in obj) {
+        if (({}).hasOwnProperty.call(obj, key)) {
+          out[key] = obj[key];
         }
       }
-    });
-
-    return out;
-  }
-
-  function removeClass(el, name) {
-    if (typeof el.classList !== "undefined") {
-      name.split(" ").forEach(function(cls) {
-        if (cls.trim()) {
-          el.classList.remove(cls);
-        }
-      });
-    } else {
-      var regex = new RegExp(
-        "(^| )" + name.split(" ").join("|") + "( |$)",
-        "gi"
-      );
-      var className = getClassName(el).replace(regex, " ");
-      setClassName(el, className);
     }
-  }
+  });
 
-  function addClass(el, name) {
-    if (typeof el.classList !== "undefined") {
-      name.split(" ").forEach(function(cls) {
-        if (cls.trim()) {
-          el.classList.add(cls);
-        }
-      });
-    } else {
-      removeClass(el, name);
-      var cls = getClassName(el) + (" " + name);
-      setClassName(el, cls);
-    }
-  }
+  return out;
+}
 
-  function hasClass(el, name) {
-    if (typeof el.classList !== "undefined") {
-      return el.classList.contains(name);
-    }
-    var className = getClassName(el);
-    return new RegExp("(^| )" + name + "( |$)", "gi").test(className);
-  }
-
-  function getClassName(el) {
-    // Can't use just SVGAnimatedString here since nodes within a Frame in IE have
-    // completely separately SVGAnimatedString base classes
-    if (
-      el.className instanceof el.ownerDocument.defaultView.SVGAnimatedString
-    ) {
-      return el.className.baseVal;
-    }
-    return el.className;
-  }
-
-  function setClassName(el, className) {
-    el.setAttribute("class", className);
-  }
-
-  function updateClasses(el, add, all) {
-    // Of the set of 'all' classes, we need the 'add' classes, and only the
-    // 'add' classes to be set.
-    all.forEach(function(cls) {
-      if (add.indexOf(cls) === -1 && hasClass(el, cls)) {
-        removeClass(el, cls);
+function removeClass(el, name) {
+  if (typeof el.classList !== 'undefined') {
+    name.split(' ').forEach(function (cls) {
+      if (cls.trim()) {
+        el.classList.remove(cls);
       }
     });
+  } else {
+    var regex = new RegExp('(^| )' + name.split(' ').join('|') + '( |$)', 'gi');
+    var className = getClassName(el).replace(regex, ' ');
+    setClassName(el, className);
+  }
+}
 
-    add.forEach(function(cls) {
-      if (!hasClass(el, cls)) {
-        addClass(el, cls);
+function addClass(el, name) {
+  if (typeof el.classList !== 'undefined') {
+    name.split(' ').forEach(function (cls) {
+      if (cls.trim()) {
+        el.classList.add(cls);
       }
     });
+  } else {
+    removeClass(el, name);
+    var cls = getClassName(el) + (' ' + name);
+    setClassName(el, cls);
+  }
+}
+
+function hasClass(el, name) {
+  if (typeof el.classList !== 'undefined') {
+    return el.classList.contains(name);
+  }
+  var className = getClassName(el);
+  return new RegExp('(^| )' + name + '( |$)', 'gi').test(className);
+}
+
+function getClassName(el) {
+  // Can't use just SVGAnimatedString here since nodes within a Frame in IE have
+  // completely separately SVGAnimatedString base classes
+  if (el.className instanceof el.ownerDocument.defaultView.SVGAnimatedString) {
+    return el.className.baseVal;
+  }
+  return el.className;
+}
+
+function setClassName(el, className) {
+  el.setAttribute('class', className);
+}
+
+function updateClasses(el, add, all) {
+  // Of the set of 'all' classes, we need the 'add' classes, and only the
+  // 'add' classes to be set.
+  all.forEach(function (cls) {
+    if (add.indexOf(cls) === -1 && hasClass(el, cls)) {
+      removeClass(el, cls);
+    }
+  });
+
+  add.forEach(function (cls) {
+    if (!hasClass(el, cls)) {
+      addClass(el, cls);
+    }
+  });
+}
+
+var deferred = [];
+
+var defer = function defer(fn) {
+  deferred.push(fn);
+};
+
+var flush = function flush() {
+  var fn = undefined;
+  while (fn = deferred.pop()) {
+    fn();
+  }
+};
+
+var Evented = (function () {
+  function Evented() {
+    _classCallCheck(this, Evented);
   }
 
-  var deferred = [];
+  _createClass(Evented, [{
+    key: 'on',
+    value: function on(event, handler, ctx) {
+      var once = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
 
-  var defer = function defer(fn) {
-    deferred.push(fn);
-  };
-
-  var flush = function flush() {
-    var fn = undefined;
-    while ((fn = deferred.pop())) {
-      fn();
+      if (typeof this.bindings === 'undefined') {
+        this.bindings = {};
+      }
+      if (typeof this.bindings[event] === 'undefined') {
+        this.bindings[event] = [];
+      }
+      this.bindings[event].push({ handler: handler, ctx: ctx, once: once });
     }
-  };
-
-  var Evented = (function() {
-    function Evented() {
-      _classCallCheck(this, Evented);
+  }, {
+    key: 'once',
+    value: function once(event, handler, ctx) {
+      this.on(event, handler, ctx, true);
     }
+  }, {
+    key: 'off',
+    value: function off(event, handler) {
+      if (typeof this.bindings === 'undefined' || typeof this.bindings[event] === 'undefined') {
+        return;
+      }
 
-    _createClass(Evented, [
-      {
-        key: "on",
-        value: function on(event, handler, ctx) {
-          var once =
-            arguments.length <= 3 || arguments[3] === undefined
-              ? false
-              : arguments[3];
-
-          if (typeof this.bindings === "undefined") {
-            this.bindings = {};
-          }
-          if (typeof this.bindings[event] === "undefined") {
-            this.bindings[event] = [];
-          }
-          this.bindings[event].push({ handler: handler, ctx: ctx, once: once });
-        }
-      },
-      {
-        key: "once",
-        value: function once(event, handler, ctx) {
-          this.on(event, handler, ctx, true);
-        }
-      },
-      {
-        key: "off",
-        value: function off(event, handler) {
-          if (
-            typeof this.bindings === "undefined" ||
-            typeof this.bindings[event] === "undefined"
-          ) {
-            return;
-          }
-
-          if (typeof handler === "undefined") {
-            delete this.bindings[event];
+      if (typeof handler === 'undefined') {
+        delete this.bindings[event];
+      } else {
+        var i = 0;
+        while (i < this.bindings[event].length) {
+          if (this.bindings[event][i].handler === handler) {
+            this.bindings[event].splice(i, 1);
           } else {
-            var i = 0;
-            while (i < this.bindings[event].length) {
-              if (this.bindings[event][i].handler === handler) {
-                this.bindings[event].splice(i, 1);
-              } else {
-                ++i;
-              }
-            }
-          }
-        }
-      },
-      {
-        key: "trigger",
-        value: function trigger(event) {
-          if (typeof this.bindings !== "undefined" && this.bindings[event]) {
-            var i = 0;
-
-            for (
-              var _len = arguments.length,
-                args = Array(_len > 1 ? _len - 1 : 0),
-                _key = 1;
-              _key < _len;
-              _key++
-            ) {
-              args[_key - 1] = arguments[_key];
-            }
-
-            while (i < this.bindings[event].length) {
-              var _bindings$event$i = this.bindings[event][i];
-              var handler = _bindings$event$i.handler;
-              var ctx = _bindings$event$i.ctx;
-              var once = _bindings$event$i.once;
-
-              var context = ctx;
-              if (typeof context === "undefined") {
-                context = this;
-              }
-
-              handler.apply(context, args);
-
-              if (once) {
-                this.bindings[event].splice(i, 1);
-              } else {
-                ++i;
-              }
-            }
+            ++i;
           }
         }
       }
-    ]);
-
-    return Evented;
-  })();
-
-  TetherBase.Utils = {
-    getActualBoundingClientRect: getActualBoundingClientRect,
-    getScrollParents: getScrollParents,
-    getBounds: getBounds,
-    getOffsetParent: getOffsetParent,
-    extend: extend,
-    addClass: addClass,
-    removeClass: removeClass,
-    hasClass: hasClass,
-    updateClasses: updateClasses,
-    defer: defer,
-    flush: flush,
-    uniqueId: uniqueId,
-    Evented: Evented,
-    getScrollBarSize: getScrollBarSize,
-    removeUtilElements: removeUtilElements
-  };
-  /* globals TetherBase, performance */
-
-  ("use strict");
-
-  var _slicedToArray = (function() {
-    function sliceIterator(arr, i) {
-      var _arr = [];
-      var _n = true;
-      var _d = false;
-      var _e = undefined;
-      try {
-        for (
-          var _i = arr[Symbol.iterator](), _s;
-          !(_n = (_s = _i.next()).done);
-          _n = true
-        ) {
-          _arr.push(_s.value);
-          if (i && _arr.length === i) break;
-        }
-      } catch (err) {
-        _d = true;
-        _e = err;
-      } finally {
-        try {
-          if (!_n && _i["return"]) _i["return"]();
-        } finally {
-          if (_d) throw _e;
-        }
-      }
-      return _arr;
     }
-    return function(arr, i) {
-      if (Array.isArray(arr)) {
-        return arr;
-      } else if (Symbol.iterator in Object(arr)) {
-        return sliceIterator(arr, i);
-      } else {
-        throw new TypeError(
-          "Invalid attempt to destructure non-iterable instance"
-        );
-      }
-    };
-  })();
+  }, {
+    key: 'trigger',
+    value: function trigger(event) {
+      if (typeof this.bindings !== 'undefined' && this.bindings[event]) {
+        var i = 0;
 
-  var _createClass = (function() {
-    function defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
+        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          args[_key - 1] = arguments[_key];
+        }
+
+        while (i < this.bindings[event].length) {
+          var _bindings$event$i = this.bindings[event][i];
+          var handler = _bindings$event$i.handler;
+          var ctx = _bindings$event$i.ctx;
+          var once = _bindings$event$i.once;
+
+          var context = ctx;
+          if (typeof context === 'undefined') {
+            context = this;
+          }
+
+          handler.apply(context, args);
+
+          if (once) {
+            this.bindings[event].splice(i, 1);
+          } else {
+            ++i;
+          }
+        }
       }
     }
-    return function(Constructor, protoProps, staticProps) {
-      if (protoProps) defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) defineProperties(Constructor, staticProps);
-      return Constructor;
-    };
-  })();
+  }]);
 
-  var _get = function get(_x6, _x7, _x8) {
-    var _again = true;
-    _function: while (_again) {
-      var object = _x6,
-        property = _x7,
-        receiver = _x8;
-      _again = false;
-      if (object === null) object = Function.prototype;
-      var desc = Object.getOwnPropertyDescriptor(object, property);
-      if (desc === undefined) {
-        var parent = Object.getPrototypeOf(object);
-        if (parent === null) {
-          return undefined;
-        } else {
-          _x6 = parent;
-          _x7 = property;
-          _x8 = receiver;
-          _again = true;
-          desc = parent = undefined;
-          continue _function;
-        }
-      } else if ("value" in desc) {
-        return desc.value;
-      } else {
-        var getter = desc.get;
-        if (getter === undefined) {
-          return undefined;
-        }
-        return getter.call(receiver);
-      }
-    }
-  };
+  return Evented;
+})();
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
+TetherBase.Utils = {
+  getActualBoundingClientRect: getActualBoundingClientRect,
+  getScrollParents: getScrollParents,
+  getBounds: getBounds,
+  getOffsetParent: getOffsetParent,
+  extend: extend,
+  addClass: addClass,
+  removeClass: removeClass,
+  hasClass: hasClass,
+  updateClasses: updateClasses,
+  defer: defer,
+  flush: flush,
+  uniqueId: uniqueId,
+  Evented: Evented,
+  getScrollBarSize: getScrollBarSize,
+  removeUtilElements: removeUtilElements
+};
+/* globals TetherBase, performance */
+
+'use strict';
+
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x6, _x7, _x8) { var _again = true; _function: while (_again) { var object = _x6, property = _x7, receiver = _x8; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x6 = parent; _x7 = property; _x8 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+if (typeof TetherBase === 'undefined') {
+  throw new Error('You must include the utils.js file before tether.js');
+}
+
+var _TetherBase$Utils = TetherBase.Utils;
+var getScrollParents = _TetherBase$Utils.getScrollParents;
+var getBounds = _TetherBase$Utils.getBounds;
+var getOffsetParent = _TetherBase$Utils.getOffsetParent;
+var extend = _TetherBase$Utils.extend;
+var addClass = _TetherBase$Utils.addClass;
+var removeClass = _TetherBase$Utils.removeClass;
+var updateClasses = _TetherBase$Utils.updateClasses;
+var defer = _TetherBase$Utils.defer;
+var flush = _TetherBase$Utils.flush;
+var getScrollBarSize = _TetherBase$Utils.getScrollBarSize;
+var removeUtilElements = _TetherBase$Utils.removeUtilElements;
+
+function within(a, b) {
+  var diff = arguments.length <= 2 || arguments[2] === undefined ? 1 : arguments[2];
+
+  return a + diff >= b && b >= a - diff;
+}
+
+var transformKey = (function () {
+  if (typeof document === 'undefined') {
+    return '';
+  }
+  var el = document.createElement('div');
+
+  var transforms = ['transform', 'WebkitTransform', 'OTransform', 'MozTransform', 'msTransform'];
+  for (var i = 0; i < transforms.length; ++i) {
+    var key = transforms[i];
+    if (el.style[key] !== undefined) {
+      return key;
     }
   }
+})();
 
-  function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError(
-        "Super expression must either be null or a function, not " +
-          typeof superClass
-      );
+var tethers = [];
+
+var position = function position() {
+  tethers.forEach(function (tether) {
+    tether.position(false);
+  });
+  flush();
+};
+
+function now() {
+  if (typeof performance === 'object' && typeof performance.now === 'function') {
+    return performance.now();
+  }
+  return +new Date();
+}
+
+(function () {
+  var lastCall = null;
+  var lastDuration = null;
+  var pendingTimeout = null;
+
+  var tick = function tick() {
+    if (typeof lastDuration !== 'undefined' && lastDuration > 16) {
+      // We voluntarily throttle ourselves if we can't manage 60fps
+      lastDuration = Math.min(lastDuration - 16, 250);
+
+      // Just in case this is the last event, remember to position just once more
+      pendingTimeout = setTimeout(tick, 250);
+      return;
     }
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        enumerable: false,
-        writable: true,
-        configurable: true
+
+    if (typeof lastCall !== 'undefined' && now() - lastCall < 10) {
+      // Some browsers call events a little too frequently, refuse to run more than is reasonable
+      return;
+    }
+
+    if (pendingTimeout != null) {
+      clearTimeout(pendingTimeout);
+      pendingTimeout = null;
+    }
+
+    lastCall = now();
+    position();
+    lastDuration = now() - lastCall;
+  };
+
+  if (typeof window !== 'undefined' && typeof window.addEventListener !== 'undefined') {
+    ['resize', 'scroll', 'touchmove'].forEach(function (event) {
+      window.addEventListener(event, tick);
+    });
+  }
+})();
+
+var MIRROR_LR = {
+  center: 'center',
+  left: 'right',
+  right: 'left'
+};
+
+var MIRROR_TB = {
+  middle: 'middle',
+  top: 'bottom',
+  bottom: 'top'
+};
+
+var OFFSET_MAP = {
+  top: 0,
+  left: 0,
+  middle: '50%',
+  center: '50%',
+  bottom: '100%',
+  right: '100%'
+};
+
+var autoToFixedAttachment = function autoToFixedAttachment(attachment, relativeToAttachment) {
+  var left = attachment.left;
+  var top = attachment.top;
+
+  if (left === 'auto') {
+    left = MIRROR_LR[relativeToAttachment.left];
+  }
+
+  if (top === 'auto') {
+    top = MIRROR_TB[relativeToAttachment.top];
+  }
+
+  return { left: left, top: top };
+};
+
+var attachmentToOffset = function attachmentToOffset(attachment) {
+  var left = attachment.left;
+  var top = attachment.top;
+
+  if (typeof OFFSET_MAP[attachment.left] !== 'undefined') {
+    left = OFFSET_MAP[attachment.left];
+  }
+
+  if (typeof OFFSET_MAP[attachment.top] !== 'undefined') {
+    top = OFFSET_MAP[attachment.top];
+  }
+
+  return { left: left, top: top };
+};
+
+function addOffset() {
+  var out = { top: 0, left: 0 };
+
+  for (var _len = arguments.length, offsets = Array(_len), _key = 0; _key < _len; _key++) {
+    offsets[_key] = arguments[_key];
+  }
+
+  offsets.forEach(function (_ref) {
+    var top = _ref.top;
+    var left = _ref.left;
+
+    if (typeof top === 'string') {
+      top = parseFloat(top, 10);
+    }
+    if (typeof left === 'string') {
+      left = parseFloat(left, 10);
+    }
+
+    out.top += top;
+    out.left += left;
+  });
+
+  return out;
+}
+
+function offsetToPx(offset, size) {
+  if (typeof offset.left === 'string' && offset.left.indexOf('%') !== -1) {
+    offset.left = parseFloat(offset.left, 10) / 100 * size.width;
+  }
+  if (typeof offset.top === 'string' && offset.top.indexOf('%') !== -1) {
+    offset.top = parseFloat(offset.top, 10) / 100 * size.height;
+  }
+
+  return offset;
+}
+
+var parseOffset = function parseOffset(value) {
+  var _value$split = value.split(' ');
+
+  var _value$split2 = _slicedToArray(_value$split, 2);
+
+  var top = _value$split2[0];
+  var left = _value$split2[1];
+
+  return { top: top, left: left };
+};
+var parseAttachment = parseOffset;
+
+var TetherClass = (function (_Evented) {
+  _inherits(TetherClass, _Evented);
+
+  function TetherClass(options) {
+    var _this = this;
+
+    _classCallCheck(this, TetherClass);
+
+    _get(Object.getPrototypeOf(TetherClass.prototype), 'constructor', this).call(this);
+    this.position = this.position.bind(this);
+
+    tethers.push(this);
+
+    this.history = [];
+
+    this.setOptions(options, false);
+
+    TetherBase.modules.forEach(function (module) {
+      if (typeof module.initialize !== 'undefined') {
+        module.initialize.call(_this);
       }
     });
-    if (superClass)
-      Object.setPrototypeOf
-        ? Object.setPrototypeOf(subClass, superClass)
-        : (subClass.__proto__ = superClass);
+
+    this.position();
   }
 
-  if (typeof TetherBase === "undefined") {
-    throw new Error("You must include the utils.js file before tether.js");
-  }
+  _createClass(TetherClass, [{
+    key: 'getClass',
+    value: function getClass() {
+      var key = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+      var classes = this.options.classes;
 
-  var _TetherBase$Utils = TetherBase.Utils;
-  var getScrollParents = _TetherBase$Utils.getScrollParents;
-  var getBounds = _TetherBase$Utils.getBounds;
-  var getOffsetParent = _TetherBase$Utils.getOffsetParent;
-  var extend = _TetherBase$Utils.extend;
-  var addClass = _TetherBase$Utils.addClass;
-  var removeClass = _TetherBase$Utils.removeClass;
-  var updateClasses = _TetherBase$Utils.updateClasses;
-  var defer = _TetherBase$Utils.defer;
-  var flush = _TetherBase$Utils.flush;
-  var getScrollBarSize = _TetherBase$Utils.getScrollBarSize;
-  var removeUtilElements = _TetherBase$Utils.removeUtilElements;
-
-  function within(a, b) {
-    var diff =
-      arguments.length <= 2 || arguments[2] === undefined ? 1 : arguments[2];
-
-    return a + diff >= b && b >= a - diff;
-  }
-
-  var transformKey = (function() {
-    if (typeof document === "undefined") {
-      return "";
-    }
-    var el = document.createElement("div");
-
-    var transforms = [
-      "transform",
-      "WebkitTransform",
-      "OTransform",
-      "MozTransform",
-      "msTransform"
-    ];
-    for (var i = 0; i < transforms.length; ++i) {
-      var key = transforms[i];
-      if (el.style[key] !== undefined) {
+      if (typeof classes !== 'undefined' && classes[key]) {
+        return this.options.classes[key];
+      } else if (this.options.classPrefix) {
+        return this.options.classPrefix + '-' + key;
+      } else {
         return key;
       }
     }
-  })();
+  }, {
+    key: 'setOptions',
+    value: function setOptions(options) {
+      var _this2 = this;
 
-  var tethers = [];
+      var pos = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
-  var position = function position() {
-    tethers.forEach(function(tether) {
-      tether.position(false);
-    });
-    flush();
-  };
+      var defaults = {
+        offset: '0 0',
+        targetOffset: '0 0',
+        targetAttachment: 'auto auto',
+        classPrefix: 'tether'
+      };
 
-  function now() {
-    if (
-      typeof performance === "object" &&
-      typeof performance.now === "function"
-    ) {
-      return performance.now();
-    }
-    return +new Date();
-  }
+      this.options = extend(defaults, options);
 
-  (function() {
-    var lastCall = null;
-    var lastDuration = null;
-    var pendingTimeout = null;
+      var _options = this.options;
+      var element = _options.element;
+      var target = _options.target;
+      var targetModifier = _options.targetModifier;
 
-    var tick = function tick() {
-      if (typeof lastDuration !== "undefined" && lastDuration > 16) {
-        // We voluntarily throttle ourselves if we can't manage 60fps
-        lastDuration = Math.min(lastDuration - 16, 250);
+      this.element = element;
+      this.target = target;
+      this.targetModifier = targetModifier;
 
-        // Just in case this is the last event, remember to position just once more
-        pendingTimeout = setTimeout(tick, 250);
-        return;
+      if (this.target === 'viewport') {
+        this.target = document.body;
+        this.targetModifier = 'visible';
+      } else if (this.target === 'scroll-handle') {
+        this.target = document.body;
+        this.targetModifier = 'scroll-handle';
       }
 
-      if (typeof lastCall !== "undefined" && now() - lastCall < 10) {
-        // Some browsers call events a little too frequently, refuse to run more than is reasonable
-        return;
-      }
+      ['element', 'target'].forEach(function (key) {
+        if (typeof _this2[key] === 'undefined') {
+          throw new Error('Tether Error: Both element and target must be defined');
+        }
 
-      if (pendingTimeout != null) {
-        clearTimeout(pendingTimeout);
-        pendingTimeout = null;
-      }
-
-      lastCall = now();
-      position();
-      lastDuration = now() - lastCall;
-    };
-
-    if (
-      typeof window !== "undefined" &&
-      typeof window.addEventListener !== "undefined"
-    ) {
-      ["resize", "scroll", "touchmove"].forEach(function(event) {
-        window.addEventListener(event, tick);
-      });
-    }
-  })();
-
-  var MIRROR_LR = {
-    center: "center",
-    left: "right",
-    right: "left"
-  };
-
-  var MIRROR_TB = {
-    middle: "middle",
-    top: "bottom",
-    bottom: "top"
-  };
-
-  var OFFSET_MAP = {
-    top: 0,
-    left: 0,
-    middle: "50%",
-    center: "50%",
-    bottom: "100%",
-    right: "100%"
-  };
-
-  var autoToFixedAttachment = function autoToFixedAttachment(
-    attachment,
-    relativeToAttachment
-  ) {
-    var left = attachment.left;
-    var top = attachment.top;
-
-    if (left === "auto") {
-      left = MIRROR_LR[relativeToAttachment.left];
-    }
-
-    if (top === "auto") {
-      top = MIRROR_TB[relativeToAttachment.top];
-    }
-
-    return { left: left, top: top };
-  };
-
-  var attachmentToOffset = function attachmentToOffset(attachment) {
-    var left = attachment.left;
-    var top = attachment.top;
-
-    if (typeof OFFSET_MAP[attachment.left] !== "undefined") {
-      left = OFFSET_MAP[attachment.left];
-    }
-
-    if (typeof OFFSET_MAP[attachment.top] !== "undefined") {
-      top = OFFSET_MAP[attachment.top];
-    }
-
-    return { left: left, top: top };
-  };
-
-  function addOffset() {
-    var out = { top: 0, left: 0 };
-
-    for (
-      var _len = arguments.length, offsets = Array(_len), _key = 0;
-      _key < _len;
-      _key++
-    ) {
-      offsets[_key] = arguments[_key];
-    }
-
-    offsets.forEach(function(_ref) {
-      var top = _ref.top;
-      var left = _ref.left;
-
-      if (typeof top === "string") {
-        top = parseFloat(top, 10);
-      }
-      if (typeof left === "string") {
-        left = parseFloat(left, 10);
-      }
-
-      out.top += top;
-      out.left += left;
-    });
-
-    return out;
-  }
-
-  function offsetToPx(offset, size) {
-    if (typeof offset.left === "string" && offset.left.indexOf("%") !== -1) {
-      offset.left = (parseFloat(offset.left, 10) / 100) * size.width;
-    }
-    if (typeof offset.top === "string" && offset.top.indexOf("%") !== -1) {
-      offset.top = (parseFloat(offset.top, 10) / 100) * size.height;
-    }
-
-    return offset;
-  }
-
-  var parseOffset = function parseOffset(value) {
-    var _value$split = value.split(" ");
-
-    var _value$split2 = _slicedToArray(_value$split, 2);
-
-    var top = _value$split2[0];
-    var left = _value$split2[1];
-
-    return { top: top, left: left };
-  };
-  var parseAttachment = parseOffset;
-
-  var TetherClass = (function(_Evented) {
-    _inherits(TetherClass, _Evented);
-
-    function TetherClass(options) {
-      var _this = this;
-
-      _classCallCheck(this, TetherClass);
-
-      _get(
-        Object.getPrototypeOf(TetherClass.prototype),
-        "constructor",
-        this
-      ).call(this);
-      this.position = this.position.bind(this);
-
-      tethers.push(this);
-
-      this.history = [];
-
-      this.setOptions(options, false);
-
-      TetherBase.modules.forEach(function(module) {
-        if (typeof module.initialize !== "undefined") {
-          module.initialize.call(_this);
+        if (typeof _this2[key].jquery !== 'undefined') {
+          _this2[key] = _this2[key][0];
+        } else if (typeof _this2[key] === 'string') {
+          _this2[key] = document.querySelector(_this2[key]);
         }
       });
 
-      this.position();
-    }
-
-    _createClass(TetherClass, [
-      {
-        key: "getClass",
-        value: function getClass() {
-          var key =
-            arguments.length <= 0 || arguments[0] === undefined
-              ? ""
-              : arguments[0];
-          var classes = this.options.classes;
-
-          if (typeof classes !== "undefined" && classes[key]) {
-            return this.options.classes[key];
-          } else if (this.options.classPrefix) {
-            return this.options.classPrefix + "-" + key;
-          } else {
-            return key;
-          }
-        }
-      },
-      {
-        key: "setOptions",
-        value: function setOptions(options) {
-          var _this2 = this;
-
-          var pos =
-            arguments.length <= 1 || arguments[1] === undefined
-              ? true
-              : arguments[1];
-
-          var defaults = {
-            offset: "0 0",
-            targetOffset: "0 0",
-            targetAttachment: "auto auto",
-            classPrefix: "tether"
-          };
-
-          this.options = extend(defaults, options);
-
-          var _options = this.options;
-          var element = _options.element;
-          var target = _options.target;
-          var targetModifier = _options.targetModifier;
-
-          this.element = element;
-          this.target = target;
-          this.targetModifier = targetModifier;
-
-          if (this.target === "viewport") {
-            this.target = document.body;
-            this.targetModifier = "visible";
-          } else if (this.target === "scroll-handle") {
-            this.target = document.body;
-            this.targetModifier = "scroll-handle";
-          }
-
-          ["element", "target"].forEach(function(key) {
-            if (typeof _this2[key] === "undefined") {
-              throw new Error(
-                "Tether Error: Both element and target must be defined"
-              );
-            }
-
-            if (typeof _this2[key].jquery !== "undefined") {
-              _this2[key] = _this2[key][0];
-            } else if (typeof _this2[key] === "string") {
-              _this2[key] = document.querySelector(_this2[key]);
-            }
-          });
-
-          addClass(this.element, this.getClass("element"));
-          if (!(this.options.addTargetClasses === false)) {
-            addClass(this.target, this.getClass("target"));
-          }
-
-          if (!this.options.attachment) {
-            throw new Error("Tether Error: You must provide an attachment");
-          }
-
-          this.targetAttachment = parseAttachment(
-            this.options.targetAttachment
-          );
-          this.attachment = parseAttachment(this.options.attachment);
-          this.offset = parseOffset(this.options.offset);
-          this.targetOffset = parseOffset(this.options.targetOffset);
-
-          if (typeof this.scrollParents !== "undefined") {
-            this.disable();
-          }
-
-          if (this.targetModifier === "scroll-handle") {
-            this.scrollParents = [this.target];
-          } else {
-            this.scrollParents = getScrollParents(this.target);
-          }
-
-          if (!(this.options.enabled === false)) {
-            this.enable(pos);
-          }
-        }
-      },
-      {
-        key: "getTargetBounds",
-        value: function getTargetBounds() {
-          if (typeof this.targetModifier !== "undefined") {
-            if (this.targetModifier === "visible") {
-              if (this.target === document.body) {
-                return {
-                  top: pageYOffset,
-                  left: pageXOffset,
-                  height: innerHeight,
-                  width: innerWidth
-                };
-              } else {
-                var bounds = getBounds(this.target);
-
-                var out = {
-                  height: bounds.height,
-                  width: bounds.width,
-                  top: bounds.top,
-                  left: bounds.left
-                };
-
-                out.height = Math.min(
-                  out.height,
-                  bounds.height - (pageYOffset - bounds.top)
-                );
-                out.height = Math.min(
-                  out.height,
-                  bounds.height -
-                    (bounds.top + bounds.height - (pageYOffset + innerHeight))
-                );
-                out.height = Math.min(innerHeight, out.height);
-                out.height -= 2;
-
-                out.width = Math.min(
-                  out.width,
-                  bounds.width - (pageXOffset - bounds.left)
-                );
-                out.width = Math.min(
-                  out.width,
-                  bounds.width -
-                    (bounds.left + bounds.width - (pageXOffset + innerWidth))
-                );
-                out.width = Math.min(innerWidth, out.width);
-                out.width -= 2;
-
-                if (out.top < pageYOffset) {
-                  out.top = pageYOffset;
-                }
-                if (out.left < pageXOffset) {
-                  out.left = pageXOffset;
-                }
-
-                return out;
-              }
-            } else if (this.targetModifier === "scroll-handle") {
-              var bounds = undefined;
-              var target = this.target;
-              if (target === document.body) {
-                target = document.documentElement;
-
-                bounds = {
-                  left: pageXOffset,
-                  top: pageYOffset,
-                  height: innerHeight,
-                  width: innerWidth
-                };
-              } else {
-                bounds = getBounds(target);
-              }
-
-              var style = getComputedStyle(target);
-
-              var hasBottomScroll =
-                target.scrollWidth > target.clientWidth ||
-                [style.overflow, style.overflowX].indexOf("scroll") >= 0 ||
-                this.target !== document.body;
-
-              var scrollBottom = 0;
-              if (hasBottomScroll) {
-                scrollBottom = 15;
-              }
-
-              var height =
-                bounds.height -
-                parseFloat(style.borderTopWidth) -
-                parseFloat(style.borderBottomWidth) -
-                scrollBottom;
-
-              var out = {
-                width: 15,
-                height: height * 0.975 * (height / target.scrollHeight),
-                left:
-                  bounds.left +
-                  bounds.width -
-                  parseFloat(style.borderLeftWidth) -
-                  15
-              };
-
-              var fitAdj = 0;
-              if (height < 408 && this.target === document.body) {
-                fitAdj =
-                  -0.00011 * Math.pow(height, 2) - 0.00727 * height + 22.58;
-              }
-
-              if (this.target !== document.body) {
-                out.height = Math.max(out.height, 24);
-              }
-
-              var scrollPercentage =
-                this.target.scrollTop / (target.scrollHeight - height);
-              out.top =
-                scrollPercentage * (height - out.height - fitAdj) +
-                bounds.top +
-                parseFloat(style.borderTopWidth);
-
-              if (this.target === document.body) {
-                out.height = Math.max(out.height, 24);
-              }
-
-              return out;
-            }
-          } else {
-            return getBounds(this.target);
-          }
-        }
-      },
-      {
-        key: "clearCache",
-        value: function clearCache() {
-          this._cache = {};
-        }
-      },
-      {
-        key: "cache",
-        value: function cache(k, getter) {
-          // More than one module will often need the same DOM info, so
-          // we keep a cache which is cleared on each position call
-          if (typeof this._cache === "undefined") {
-            this._cache = {};
-          }
-
-          if (typeof this._cache[k] === "undefined") {
-            this._cache[k] = getter.call(this);
-          }
-
-          return this._cache[k];
-        }
-      },
-      {
-        key: "enable",
-        value: function enable() {
-          var _this3 = this;
-
-          var pos =
-            arguments.length <= 0 || arguments[0] === undefined
-              ? true
-              : arguments[0];
-
-          if (!(this.options.addTargetClasses === false)) {
-            addClass(this.target, this.getClass("enabled"));
-          }
-          addClass(this.element, this.getClass("enabled"));
-          this.enabled = true;
-
-          this.scrollParents.forEach(function(parent) {
-            if (parent !== _this3.target.ownerDocument) {
-              parent.addEventListener("scroll", _this3.position);
-            }
-          });
-
-          if (pos) {
-            this.position();
-          }
-        }
-      },
-      {
-        key: "disable",
-        value: function disable() {
-          var _this4 = this;
-
-          removeClass(this.target, this.getClass("enabled"));
-          removeClass(this.element, this.getClass("enabled"));
-          this.enabled = false;
-
-          if (typeof this.scrollParents !== "undefined") {
-            this.scrollParents.forEach(function(parent) {
-              parent.removeEventListener("scroll", _this4.position);
-            });
-          }
-        }
-      },
-      {
-        key: "destroy",
-        value: function destroy() {
-          var _this5 = this;
-
-          this.disable();
-
-          tethers.forEach(function(tether, i) {
-            if (tether === _this5) {
-              tethers.splice(i, 1);
-            }
-          });
-
-          // Remove any elements we were using for convenience from the DOM
-          if (tethers.length === 0) {
-            removeUtilElements();
-          }
-        }
-      },
-      {
-        key: "updateAttachClasses",
-        value: function updateAttachClasses(elementAttach, targetAttach) {
-          var _this6 = this;
-
-          elementAttach = elementAttach || this.attachment;
-          targetAttach = targetAttach || this.targetAttachment;
-          var sides = ["left", "top", "bottom", "right", "middle", "center"];
-
-          if (
-            typeof this._addAttachClasses !== "undefined" &&
-            this._addAttachClasses.length
-          ) {
-            // updateAttachClasses can be called more than once in a position call, so
-            // we need to clean up after ourselves such that when the last defer gets
-            // ran it doesn't add any extra classes from previous calls.
-            this._addAttachClasses.splice(0, this._addAttachClasses.length);
-          }
-
-          if (typeof this._addAttachClasses === "undefined") {
-            this._addAttachClasses = [];
-          }
-          var add = this._addAttachClasses;
-
-          if (elementAttach.top) {
-            add.push(
-              this.getClass("element-attached") + "-" + elementAttach.top
-            );
-          }
-          if (elementAttach.left) {
-            add.push(
-              this.getClass("element-attached") + "-" + elementAttach.left
-            );
-          }
-          if (targetAttach.top) {
-            add.push(this.getClass("target-attached") + "-" + targetAttach.top);
-          }
-          if (targetAttach.left) {
-            add.push(
-              this.getClass("target-attached") + "-" + targetAttach.left
-            );
-          }
-
-          var all = [];
-          sides.forEach(function(side) {
-            all.push(_this6.getClass("element-attached") + "-" + side);
-            all.push(_this6.getClass("target-attached") + "-" + side);
-          });
-
-          defer(function() {
-            if (!(typeof _this6._addAttachClasses !== "undefined")) {
-              return;
-            }
-
-            updateClasses(_this6.element, _this6._addAttachClasses, all);
-            if (!(_this6.options.addTargetClasses === false)) {
-              updateClasses(_this6.target, _this6._addAttachClasses, all);
-            }
-
-            delete _this6._addAttachClasses;
-          });
-        }
-      },
-      {
-        key: "position",
-        value: function position() {
-          var _this7 = this;
-
-          var flushChanges =
-            arguments.length <= 0 || arguments[0] === undefined
-              ? true
-              : arguments[0];
-
-          // flushChanges commits the changes immediately, leave true unless you are positioning multiple
-          // tethers (in which case call Tether.Utils.flush yourself when you're done)
-
-          if (!this.enabled) {
-            return;
-          }
-
-          this.clearCache();
-
-          // Turn 'auto' attachments into the appropriate corner or edge
-          var targetAttachment = autoToFixedAttachment(
-            this.targetAttachment,
-            this.attachment
-          );
-
-          this.updateAttachClasses(this.attachment, targetAttachment);
-
-          var elementPos = this.cache("element-bounds", function() {
-            return getBounds(_this7.element);
-          });
-
-          var width = elementPos.width;
-          var height = elementPos.height;
-
-          if (
-            width === 0 &&
-            height === 0 &&
-            typeof this.lastSize !== "undefined"
-          ) {
-            var _lastSize = this.lastSize;
-
-            // We cache the height and width to make it possible to position elements that are
-            // getting hidden.
-            width = _lastSize.width;
-            height = _lastSize.height;
-          } else {
-            this.lastSize = { width: width, height: height };
-          }
-
-          var targetPos = this.cache("target-bounds", function() {
-            return _this7.getTargetBounds();
-          });
-          var targetSize = targetPos;
-
-          // Get an actual px offset from the attachment
-          var offset = offsetToPx(attachmentToOffset(this.attachment), {
-            width: width,
-            height: height
-          });
-          var targetOffset = offsetToPx(
-            attachmentToOffset(targetAttachment),
-            targetSize
-          );
-
-          var manualOffset = offsetToPx(this.offset, {
-            width: width,
-            height: height
-          });
-          var manualTargetOffset = offsetToPx(this.targetOffset, targetSize);
-
-          // Add the manually provided offset
-          offset = addOffset(offset, manualOffset);
-          targetOffset = addOffset(targetOffset, manualTargetOffset);
-
-          // It's now our goal to make (element position + offset) == (target position + target offset)
-          var left = targetPos.left + targetOffset.left - offset.left;
-          var top = targetPos.top + targetOffset.top - offset.top;
-
-          for (var i = 0; i < TetherBase.modules.length; ++i) {
-            var _module2 = TetherBase.modules[i];
-            var ret = _module2.position.call(this, {
-              left: left,
-              top: top,
-              targetAttachment: targetAttachment,
-              targetPos: targetPos,
-              elementPos: elementPos,
-              offset: offset,
-              targetOffset: targetOffset,
-              manualOffset: manualOffset,
-              manualTargetOffset: manualTargetOffset,
-              scrollbarSize: scrollbarSize,
-              attachment: this.attachment
-            });
-
-            if (ret === false) {
-              return false;
-            } else if (typeof ret === "undefined" || typeof ret !== "object") {
-              continue;
-            } else {
-              top = ret.top;
-              left = ret.left;
-            }
-          }
-
-          // We describe the position three different ways to give the optimizer
-          // a chance to decide the best possible way to position the element
-          // with the fewest repaints.
-          var next = {
-            // It's position relative to the page (absolute positioning when
-            // the element is a child of the body)
-            page: {
-              top: top,
-              left: left
-            },
-
-            // It's position relative to the viewport (fixed positioning)
-            viewport: {
-              top: top - pageYOffset,
-              bottom: pageYOffset - top - height + innerHeight,
-              left: left - pageXOffset,
-              right: pageXOffset - left - width + innerWidth
-            }
-          };
-
-          var doc = this.target.ownerDocument;
-          var win = doc.defaultView;
-
-          var scrollbarSize = undefined;
-          if (win.innerHeight > doc.documentElement.clientHeight) {
-            scrollbarSize = this.cache("scrollbar-size", getScrollBarSize);
-            next.viewport.bottom -= scrollbarSize.height;
-          }
-
-          if (win.innerWidth > doc.documentElement.clientWidth) {
-            scrollbarSize = this.cache("scrollbar-size", getScrollBarSize);
-            next.viewport.right -= scrollbarSize.width;
-          }
-
-          if (
-            ["", "static"].indexOf(doc.body.style.position) === -1 ||
-            ["", "static"].indexOf(doc.body.parentElement.style.position) === -1
-          ) {
-            // Absolute positioning in the body will be relative to the page, not the 'initial containing block'
-            next.page.bottom = doc.body.scrollHeight - top - height;
-            next.page.right = doc.body.scrollWidth - left - width;
-          }
-
-          if (
-            typeof this.options.optimizations !== "undefined" &&
-            this.options.optimizations.moveElement !== false &&
-            !(typeof this.targetModifier !== "undefined")
-          ) {
-            (function() {
-              var offsetParent = _this7.cache(
-                "target-offsetparent",
-                function() {
-                  return getOffsetParent(_this7.target);
-                }
-              );
-              var offsetPosition = _this7.cache(
-                "target-offsetparent-bounds",
-                function() {
-                  return getBounds(offsetParent);
-                }
-              );
-              var offsetParentStyle = getComputedStyle(offsetParent);
-              var offsetParentSize = offsetPosition;
-
-              var offsetBorder = {};
-              ["Top", "Left", "Bottom", "Right"].forEach(function(side) {
-                offsetBorder[side.toLowerCase()] = parseFloat(
-                  offsetParentStyle["border" + side + "Width"]
-                );
-              });
-
-              offsetPosition.right =
-                doc.body.scrollWidth -
-                offsetPosition.left -
-                offsetParentSize.width +
-                offsetBorder.right;
-              offsetPosition.bottom =
-                doc.body.scrollHeight -
-                offsetPosition.top -
-                offsetParentSize.height +
-                offsetBorder.bottom;
-
-              if (
-                next.page.top >= offsetPosition.top + offsetBorder.top &&
-                next.page.bottom >= offsetPosition.bottom
-              ) {
-                if (
-                  next.page.left >= offsetPosition.left + offsetBorder.left &&
-                  next.page.right >= offsetPosition.right
-                ) {
-                  // We're within the visible part of the target's scroll parent
-                  var scrollTop = offsetParent.scrollTop;
-                  var scrollLeft = offsetParent.scrollLeft;
-
-                  // It's position relative to the target's offset parent (absolute positioning when
-                  // the element is moved to be a child of the target's offset parent).
-                  next.offset = {
-                    top:
-                      next.page.top -
-                      offsetPosition.top +
-                      scrollTop -
-                      offsetBorder.top,
-                    left:
-                      next.page.left -
-                      offsetPosition.left +
-                      scrollLeft -
-                      offsetBorder.left
-                  };
-                }
-              }
-            })();
-          }
-
-          // We could also travel up the DOM and try each containing context, rather than only
-          // looking at the body, but we're gonna get diminishing returns.
-
-          this.move(next);
-
-          this.history.unshift(next);
-
-          if (this.history.length > 3) {
-            this.history.pop();
-          }
-
-          if (flushChanges) {
-            flush();
-          }
-
-          return true;
-        }
-
-        // THE ISSUE
-      },
-      {
-        key: "move",
-        value: function move(pos) {
-          var _this8 = this;
-
-          if (!(typeof this.element.parentNode !== "undefined")) {
-            return;
-          }
-
-          var same = {};
-
-          for (var type in pos) {
-            same[type] = {};
-
-            for (var key in pos[type]) {
-              var found = false;
-
-              for (var i = 0; i < this.history.length; ++i) {
-                var point = this.history[i];
-                if (
-                  typeof point[type] !== "undefined" &&
-                  !within(point[type][key], pos[type][key])
-                ) {
-                  found = true;
-                  break;
-                }
-              }
-
-              if (!found) {
-                same[type][key] = true;
-              }
-            }
-          }
-
-          var css = { top: "", left: "", right: "", bottom: "" };
-
-          var transcribe = function transcribe(_same, _pos) {
-            var hasOptimizations =
-              typeof _this8.options.optimizations !== "undefined";
-            var gpu = hasOptimizations
-              ? _this8.options.optimizations.gpu
-              : null;
-            if (gpu !== false) {
-              var yPos = undefined,
-                xPos = undefined;
-              if (_same.top) {
-                css.top = 0;
-                yPos = _pos.top;
-              } else {
-                css.bottom = 0;
-                yPos = -_pos.bottom;
-              }
-
-              if (_same.left) {
-                css.left = 0;
-                xPos = _pos.left;
-              } else {
-                css.right = 0;
-                xPos = -_pos.right;
-              }
-
-              if (
-                typeof window.devicePixelRatio === "number" &&
-                devicePixelRatio % 1 === 0
-              ) {
-                xPos = Math.round(xPos * devicePixelRatio) / devicePixelRatio;
-                yPos = Math.round(yPos * devicePixelRatio) / devicePixelRatio;
-              }
-
-              css[transformKey] =
-                "translateX(" + xPos + "px) translateY(" + yPos + "px)";
-
-              if (transformKey !== "msTransform") {
-                // The Z transform will keep this in the GPU (faster, and prevents artifacts),
-                // but IE9 doesn't support 3d transforms and will choke.
-                css[transformKey] += " translateZ(0)";
-              }
-            } else {
-              if (_same.top) {
-                css.top = _pos.top + "px";
-              } else {
-                css.bottom = _pos.bottom + "px";
-              }
-
-              if (_same.left) {
-                css.left = _pos.left + "px";
-              } else {
-                css.right = _pos.right + "px";
-              }
-            }
-          };
-
-          var moved = false;
-          if (
-            (same.page.top || same.page.bottom) &&
-            (same.page.left || same.page.right)
-          ) {
-            css.position = "absolute";
-            transcribe(same.page, pos.page);
-          } else if (
-            (same.viewport.top || same.viewport.bottom) &&
-            (same.viewport.left || same.viewport.right)
-          ) {
-            css.position = "fixed";
-            transcribe(same.viewport, pos.viewport);
-          } else if (
-            typeof same.offset !== "undefined" &&
-            same.offset.top &&
-            same.offset.left
-          ) {
-            (function() {
-              css.position = "absolute";
-              var offsetParent = _this8.cache(
-                "target-offsetparent",
-                function() {
-                  return getOffsetParent(_this8.target);
-                }
-              );
-
-              if (getOffsetParent(_this8.element) !== offsetParent) {
-                defer(function() {
-                  _this8.element.parentNode.removeChild(_this8.element);
-                  offsetParent.appendChild(_this8.element);
-                });
-              }
-
-              transcribe(same.offset, pos.offset);
-              moved = true;
-            })();
-          } else {
-            css.position = "absolute";
-            transcribe({ top: true, left: true }, pos.page);
-          }
-
-          if (!moved) {
-            if (this.options.bodyElement) {
-              if (this.element.parentNode !== this.options.bodyElement) {
-                this.options.bodyElement.appendChild(this.element);
-              }
-            } else {
-              var isFullscreenElement = function isFullscreenElement(e) {
-                var d = e.ownerDocument;
-                var fe =
-                  d.fullscreenElement ||
-                  d.webkitFullscreenElement ||
-                  d.mozFullScreenElement ||
-                  d.msFullscreenElement;
-                return fe === e;
-              };
-
-              var offsetParentIsBody = true;
-
-              var currentNode = this.element.parentNode;
-              while (
-                currentNode &&
-                currentNode.nodeType === 1 &&
-                currentNode.tagName !== "BODY" &&
-                !isFullscreenElement(currentNode)
-              ) {
-                if (getComputedStyle(currentNode).position !== "static") {
-                  offsetParentIsBody = false;
-                  break;
-                }
-
-                currentNode = currentNode.parentNode;
-              }
-
-              if (!offsetParentIsBody) {
-                this.element.parentNode.removeChild(this.element);
-                this.element.ownerDocument.body.appendChild(this.element);
-              }
-            }
-          }
-
-          // Any css change will trigger a repaint, so let's avoid one if nothing changed
-          var writeCSS = {};
-          var write = false;
-          for (var key in css) {
-            var val = css[key];
-            var elVal = this.element.style[key];
-
-            if (elVal !== val) {
-              write = true;
-              writeCSS[key] = val;
-            }
-          }
-
-          if (write) {
-            defer(function() {
-              extend(_this8.element.style, writeCSS);
-              _this8.trigger("repositioned");
-            });
-          }
-        }
+      addClass(this.element, this.getClass('element'));
+      if (!(this.options.addTargetClasses === false)) {
+        addClass(this.target, this.getClass('target'));
       }
-    ]);
 
-    return TetherClass;
-  })(Evented);
-
-  TetherClass.modules = [];
-
-  TetherBase.position = position;
-
-  var Tether = extend(TetherClass, TetherBase);
-  /* globals TetherBase */
-
-  ("use strict");
-
-  var _slicedToArray = (function() {
-    function sliceIterator(arr, i) {
-      var _arr = [];
-      var _n = true;
-      var _d = false;
-      var _e = undefined;
-      try {
-        for (
-          var _i = arr[Symbol.iterator](), _s;
-          !(_n = (_s = _i.next()).done);
-          _n = true
-        ) {
-          _arr.push(_s.value);
-          if (i && _arr.length === i) break;
-        }
-      } catch (err) {
-        _d = true;
-        _e = err;
-      } finally {
-        try {
-          if (!_n && _i["return"]) _i["return"]();
-        } finally {
-          if (_d) throw _e;
-        }
+      if (!this.options.attachment) {
+        throw new Error('Tether Error: You must provide an attachment');
       }
-      return _arr;
-    }
-    return function(arr, i) {
-      if (Array.isArray(arr)) {
-        return arr;
-      } else if (Symbol.iterator in Object(arr)) {
-        return sliceIterator(arr, i);
+
+      this.targetAttachment = parseAttachment(this.options.targetAttachment);
+      this.attachment = parseAttachment(this.options.attachment);
+      this.offset = parseOffset(this.options.offset);
+      this.targetOffset = parseOffset(this.options.targetOffset);
+
+      if (typeof this.scrollParents !== 'undefined') {
+        this.disable();
+      }
+
+      if (this.targetModifier === 'scroll-handle') {
+        this.scrollParents = [this.target];
       } else {
-        throw new TypeError(
-          "Invalid attempt to destructure non-iterable instance"
-        );
+        this.scrollParents = getScrollParents(this.target);
       }
-    };
-  })();
 
-  var _TetherBase$Utils = TetherBase.Utils;
-  var getBounds = _TetherBase$Utils.getBounds;
-  var extend = _TetherBase$Utils.extend;
-  var updateClasses = _TetherBase$Utils.updateClasses;
-  var defer = _TetherBase$Utils.defer;
-
-  var BOUNDS_FORMAT = ["left", "top", "right", "bottom"];
-
-  function getBoundingRect(tether, to) {
-    if (to === "scrollParent") {
-      to = tether.scrollParents[0];
-    } else if (to === "window") {
-      to = [
-        pageXOffset,
-        pageYOffset,
-        innerWidth + pageXOffset,
-        innerHeight + pageYOffset
-      ];
+      if (!(this.options.enabled === false)) {
+        this.enable(pos);
+      }
     }
-
-    if (to === document) {
-      to = to.documentElement;
-    }
-
-    if (typeof to.nodeType !== "undefined") {
-      (function() {
-        var node = to;
-        var size = getBounds(to);
-        var pos = size;
-        var style = getComputedStyle(to);
-
-        to = [pos.left, pos.top, size.width + pos.left, size.height + pos.top];
-
-        // Account any parent Frames scroll offset
-        if (node.ownerDocument !== document) {
-          var win = node.ownerDocument.defaultView;
-          to[0] += win.pageXOffset;
-          to[1] += win.pageYOffset;
-          to[2] += win.pageXOffset;
-          to[3] += win.pageYOffset;
-        }
-
-        BOUNDS_FORMAT.forEach(function(side, i) {
-          side = side[0].toUpperCase() + side.substr(1);
-          if (side === "Top" || side === "Left") {
-            to[i] += parseFloat(style["border" + side + "Width"]);
+  }, {
+    key: 'getTargetBounds',
+    value: function getTargetBounds() {
+      if (typeof this.targetModifier !== 'undefined') {
+        if (this.targetModifier === 'visible') {
+          if (this.target === document.body) {
+            return { top: pageYOffset, left: pageXOffset, height: innerHeight, width: innerWidth };
           } else {
-            to[i] -= parseFloat(style["border" + side + "Width"]);
+            var bounds = getBounds(this.target);
+
+            var out = {
+              height: bounds.height,
+              width: bounds.width,
+              top: bounds.top,
+              left: bounds.left
+            };
+
+            out.height = Math.min(out.height, bounds.height - (pageYOffset - bounds.top));
+            out.height = Math.min(out.height, bounds.height - (bounds.top + bounds.height - (pageYOffset + innerHeight)));
+            out.height = Math.min(innerHeight, out.height);
+            out.height -= 2;
+
+            out.width = Math.min(out.width, bounds.width - (pageXOffset - bounds.left));
+            out.width = Math.min(out.width, bounds.width - (bounds.left + bounds.width - (pageXOffset + innerWidth)));
+            out.width = Math.min(innerWidth, out.width);
+            out.width -= 2;
+
+            if (out.top < pageYOffset) {
+              out.top = pageYOffset;
+            }
+            if (out.left < pageXOffset) {
+              out.left = pageXOffset;
+            }
+
+            return out;
           }
-        });
-      })();
+        } else if (this.targetModifier === 'scroll-handle') {
+          var bounds = undefined;
+          var target = this.target;
+          if (target === document.body) {
+            target = document.documentElement;
+
+            bounds = {
+              left: pageXOffset,
+              top: pageYOffset,
+              height: innerHeight,
+              width: innerWidth
+            };
+          } else {
+            bounds = getBounds(target);
+          }
+
+          var style = getComputedStyle(target);
+
+          var hasBottomScroll = target.scrollWidth > target.clientWidth || [style.overflow, style.overflowX].indexOf('scroll') >= 0 || this.target !== document.body;
+
+          var scrollBottom = 0;
+          if (hasBottomScroll) {
+            scrollBottom = 15;
+          }
+
+          var height = bounds.height - parseFloat(style.borderTopWidth) - parseFloat(style.borderBottomWidth) - scrollBottom;
+
+          var out = {
+            width: 15,
+            height: height * 0.975 * (height / target.scrollHeight),
+            left: bounds.left + bounds.width - parseFloat(style.borderLeftWidth) - 15
+          };
+
+          var fitAdj = 0;
+          if (height < 408 && this.target === document.body) {
+            fitAdj = -0.00011 * Math.pow(height, 2) - 0.00727 * height + 22.58;
+          }
+
+          if (this.target !== document.body) {
+            out.height = Math.max(out.height, 24);
+          }
+
+          var scrollPercentage = this.target.scrollTop / (target.scrollHeight - height);
+          out.top = scrollPercentage * (height - out.height - fitAdj) + bounds.top + parseFloat(style.borderTopWidth);
+
+          if (this.target === document.body) {
+            out.height = Math.max(out.height, 24);
+          }
+
+          return out;
+        }
+      } else {
+        return getBounds(this.target);
+      }
     }
-
-    return to;
-  }
-
-  TetherBase.modules.push({
-    position: function position(_ref) {
-      var _this = this;
-
-      var top = _ref.top;
-      var left = _ref.left;
-      var targetAttachment = _ref.targetAttachment;
-
-      if (!this.options.constraints) {
-        return true;
+  }, {
+    key: 'clearCache',
+    value: function clearCache() {
+      this._cache = {};
+    }
+  }, {
+    key: 'cache',
+    value: function cache(k, getter) {
+      // More than one module will often need the same DOM info, so
+      // we keep a cache which is cleared on each position call
+      if (typeof this._cache === 'undefined') {
+        this._cache = {};
       }
 
-      var _cache = this.cache("element-bounds", function() {
-        return getBounds(_this.element);
+      if (typeof this._cache[k] === 'undefined') {
+        this._cache[k] = getter.call(this);
+      }
+
+      return this._cache[k];
+    }
+  }, {
+    key: 'enable',
+    value: function enable() {
+      var _this3 = this;
+
+      var pos = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+      if (!(this.options.addTargetClasses === false)) {
+        addClass(this.target, this.getClass('enabled'));
+      }
+      addClass(this.element, this.getClass('enabled'));
+      this.enabled = true;
+
+      this.scrollParents.forEach(function (parent) {
+        if (parent !== _this3.target.ownerDocument) {
+          parent.addEventListener('scroll', _this3.position);
+        }
       });
 
-      var height = _cache.height;
-      var width = _cache.width;
+      if (pos) {
+        this.position();
+      }
+    }
+  }, {
+    key: 'disable',
+    value: function disable() {
+      var _this4 = this;
 
-      if (width === 0 && height === 0 && typeof this.lastSize !== "undefined") {
+      removeClass(this.target, this.getClass('enabled'));
+      removeClass(this.element, this.getClass('enabled'));
+      this.enabled = false;
+
+      if (typeof this.scrollParents !== 'undefined') {
+        this.scrollParents.forEach(function (parent) {
+          parent.removeEventListener('scroll', _this4.position);
+        });
+      }
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy() {
+      var _this5 = this;
+
+      this.disable();
+
+      tethers.forEach(function (tether, i) {
+        if (tether === _this5) {
+          tethers.splice(i, 1);
+        }
+      });
+
+      // Remove any elements we were using for convenience from the DOM
+      if (tethers.length === 0) {
+        removeUtilElements();
+      }
+    }
+  }, {
+    key: 'updateAttachClasses',
+    value: function updateAttachClasses(elementAttach, targetAttach) {
+      var _this6 = this;
+
+      elementAttach = elementAttach || this.attachment;
+      targetAttach = targetAttach || this.targetAttachment;
+      var sides = ['left', 'top', 'bottom', 'right', 'middle', 'center'];
+
+      if (typeof this._addAttachClasses !== 'undefined' && this._addAttachClasses.length) {
+        // updateAttachClasses can be called more than once in a position call, so
+        // we need to clean up after ourselves such that when the last defer gets
+        // ran it doesn't add any extra classes from previous calls.
+        this._addAttachClasses.splice(0, this._addAttachClasses.length);
+      }
+
+      if (typeof this._addAttachClasses === 'undefined') {
+        this._addAttachClasses = [];
+      }
+      var add = this._addAttachClasses;
+
+      if (elementAttach.top) {
+        add.push(this.getClass('element-attached') + '-' + elementAttach.top);
+      }
+      if (elementAttach.left) {
+        add.push(this.getClass('element-attached') + '-' + elementAttach.left);
+      }
+      if (targetAttach.top) {
+        add.push(this.getClass('target-attached') + '-' + targetAttach.top);
+      }
+      if (targetAttach.left) {
+        add.push(this.getClass('target-attached') + '-' + targetAttach.left);
+      }
+
+      var all = [];
+      sides.forEach(function (side) {
+        all.push(_this6.getClass('element-attached') + '-' + side);
+        all.push(_this6.getClass('target-attached') + '-' + side);
+      });
+
+      defer(function () {
+        if (!(typeof _this6._addAttachClasses !== 'undefined')) {
+          return;
+        }
+
+        updateClasses(_this6.element, _this6._addAttachClasses, all);
+        if (!(_this6.options.addTargetClasses === false)) {
+          updateClasses(_this6.target, _this6._addAttachClasses, all);
+        }
+
+        delete _this6._addAttachClasses;
+      });
+    }
+  }, {
+    key: 'position',
+    value: function position() {
+      var _this7 = this;
+
+      var flushChanges = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+      // flushChanges commits the changes immediately, leave true unless you are positioning multiple
+      // tethers (in which case call Tether.Utils.flush yourself when you're done)
+
+      if (!this.enabled) {
+        return;
+      }
+
+      this.clearCache();
+
+      // Turn 'auto' attachments into the appropriate corner or edge
+      var targetAttachment = autoToFixedAttachment(this.targetAttachment, this.attachment);
+
+      this.updateAttachClasses(this.attachment, targetAttachment);
+
+      var elementPos = this.cache('element-bounds', function () {
+        return getBounds(_this7.element);
+      });
+
+      var width = elementPos.width;
+      var height = elementPos.height;
+
+      if (width === 0 && height === 0 && typeof this.lastSize !== 'undefined') {
         var _lastSize = this.lastSize;
 
-        // Handle the item getting hidden as a result of our positioning without glitching
-        // the classes in and out
+        // We cache the height and width to make it possible to position elements that are
+        // getting hidden.
         width = _lastSize.width;
         height = _lastSize.height;
+      } else {
+        this.lastSize = { width: width, height: height };
       }
 
-      var targetSize = this.cache("target-bounds", function() {
-        return _this.getTargetBounds();
+      var targetPos = this.cache('target-bounds', function () {
+        return _this7.getTargetBounds();
       });
+      var targetSize = targetPos;
 
-      var targetHeight = targetSize.height;
-      var targetWidth = targetSize.width;
+      // Get an actual px offset from the attachment
+      var offset = offsetToPx(attachmentToOffset(this.attachment), { width: width, height: height });
+      var targetOffset = offsetToPx(attachmentToOffset(targetAttachment), targetSize);
 
-      var allClasses = [
-        this.getClass("pinned"),
-        this.getClass("out-of-bounds")
-      ];
+      var manualOffset = offsetToPx(this.offset, { width: width, height: height });
+      var manualTargetOffset = offsetToPx(this.targetOffset, targetSize);
 
-      this.options.constraints.forEach(function(constraint) {
-        var outOfBoundsClass = constraint.outOfBoundsClass;
-        var pinnedClass = constraint.pinnedClass;
+      // Add the manually provided offset
+      offset = addOffset(offset, manualOffset);
+      targetOffset = addOffset(targetOffset, manualTargetOffset);
 
-        if (outOfBoundsClass) {
-          allClasses.push(outOfBoundsClass);
-        }
-        if (pinnedClass) {
-          allClasses.push(pinnedClass);
-        }
-      });
+      // It's now our goal to make (element position + offset) == (target position + target offset)
+      var left = targetPos.left + targetOffset.left - offset.left;
+      var top = targetPos.top + targetOffset.top - offset.top;
 
-      allClasses.forEach(function(cls) {
-        ["left", "top", "right", "bottom"].forEach(function(side) {
-          allClasses.push(cls + "-" + side);
+      for (var i = 0; i < TetherBase.modules.length; ++i) {
+        var _module2 = TetherBase.modules[i];
+        var ret = _module2.position.call(this, {
+          left: left,
+          top: top,
+          targetAttachment: targetAttachment,
+          targetPos: targetPos,
+          elementPos: elementPos,
+          offset: offset,
+          targetOffset: targetOffset,
+          manualOffset: manualOffset,
+          manualTargetOffset: manualTargetOffset,
+          scrollbarSize: scrollbarSize,
+          attachment: this.attachment
         });
-      });
 
-      var addClasses = [];
-
-      var tAttachment = extend({}, targetAttachment);
-      var eAttachment = extend({}, this.attachment);
-
-      this.options.constraints.forEach(function(constraint) {
-        var to = constraint.to;
-        var attachment = constraint.attachment;
-        var pin = constraint.pin;
-
-        if (typeof attachment === "undefined") {
-          attachment = "";
-        }
-
-        var changeAttachX = undefined,
-          changeAttachY = undefined;
-        if (attachment.indexOf(" ") >= 0) {
-          var _attachment$split = attachment.split(" ");
-
-          var _attachment$split2 = _slicedToArray(_attachment$split, 2);
-
-          changeAttachY = _attachment$split2[0];
-          changeAttachX = _attachment$split2[1];
+        if (ret === false) {
+          return false;
+        } else if (typeof ret === 'undefined' || typeof ret !== 'object') {
+          continue;
         } else {
-          changeAttachX = changeAttachY = attachment;
+          top = ret.top;
+          left = ret.left;
         }
+      }
 
-        var bounds = getBoundingRect(_this, to);
+      // We describe the position three different ways to give the optimizer
+      // a chance to decide the best possible way to position the element
+      // with the fewest repaints.
+      var next = {
+        // It's position relative to the page (absolute positioning when
+        // the element is a child of the body)
+        page: {
+          top: top,
+          left: left
+        },
 
-        if (changeAttachY === "target" || changeAttachY === "both") {
-          if (top < bounds[1] && tAttachment.top === "top") {
-            top += targetHeight;
-            tAttachment.top = "bottom";
-          }
-
-          if (top + height > bounds[3] && tAttachment.top === "bottom") {
-            top -= targetHeight;
-            tAttachment.top = "top";
-          }
+        // It's position relative to the viewport (fixed positioning)
+        viewport: {
+          top: top - pageYOffset,
+          bottom: pageYOffset - top - height + innerHeight,
+          left: left - pageXOffset,
+          right: pageXOffset - left - width + innerWidth
         }
+      };
 
-        if (changeAttachY === "together") {
-          if (tAttachment.top === "top") {
-            if (eAttachment.top === "bottom" && top < bounds[1]) {
-              top += targetHeight;
-              tAttachment.top = "bottom";
+      var doc = this.target.ownerDocument;
+      var win = doc.defaultView;
 
-              top += height;
-              eAttachment.top = "top";
-            } else if (
-              eAttachment.top === "top" &&
-              top + height > bounds[3] &&
-              top - (height - targetHeight) >= bounds[1]
-            ) {
-              top -= height - targetHeight;
-              tAttachment.top = "bottom";
+      var scrollbarSize = undefined;
+      if (win.innerHeight > doc.documentElement.clientHeight) {
+        scrollbarSize = this.cache('scrollbar-size', getScrollBarSize);
+        next.viewport.bottom -= scrollbarSize.height;
+      }
 
-              eAttachment.top = "bottom";
-            }
-          }
+      if (win.innerWidth > doc.documentElement.clientWidth) {
+        scrollbarSize = this.cache('scrollbar-size', getScrollBarSize);
+        next.viewport.right -= scrollbarSize.width;
+      }
 
-          if (tAttachment.top === "bottom") {
-            if (eAttachment.top === "top" && top + height > bounds[3]) {
-              top -= targetHeight;
-              tAttachment.top = "top";
+      if (['', 'static'].indexOf(doc.body.style.position) === -1 || ['', 'static'].indexOf(doc.body.parentElement.style.position) === -1) {
+        // Absolute positioning in the body will be relative to the page, not the 'initial containing block'
+        next.page.bottom = doc.body.scrollHeight - top - height;
+        next.page.right = doc.body.scrollWidth - left - width;
+      }
 
-              top -= height;
-              eAttachment.top = "bottom";
-            } else if (
-              eAttachment.top === "bottom" &&
-              top < bounds[1] &&
-              top + (height * 2 - targetHeight) <= bounds[3]
-            ) {
-              top += height - targetHeight;
-              tAttachment.top = "top";
-
-              eAttachment.top = "top";
-            }
-          }
-
-          if (tAttachment.top === "middle") {
-            if (top + height > bounds[3] && eAttachment.top === "top") {
-              top -= height;
-              eAttachment.top = "bottom";
-            } else if (top < bounds[1] && eAttachment.top === "bottom") {
-              top += height;
-              eAttachment.top = "top";
-            }
-          }
-        }
-
-        if (changeAttachX === "target" || changeAttachX === "both") {
-          if (left < bounds[0] && tAttachment.left === "left") {
-            left += targetWidth;
-            tAttachment.left = "right";
-          }
-
-          if (left + width > bounds[2] && tAttachment.left === "right") {
-            left -= targetWidth;
-            tAttachment.left = "left";
-          }
-        }
-
-        if (changeAttachX === "together") {
-          if (left < bounds[0] && tAttachment.left === "left") {
-            if (eAttachment.left === "right") {
-              left += targetWidth;
-              tAttachment.left = "right";
-
-              left += width;
-              eAttachment.left = "left";
-            } else if (eAttachment.left === "left") {
-              left += targetWidth;
-              tAttachment.left = "right";
-
-              left -= width;
-              eAttachment.left = "right";
-            }
-          } else if (left + width > bounds[2] && tAttachment.left === "right") {
-            if (eAttachment.left === "left") {
-              left -= targetWidth;
-              tAttachment.left = "left";
-
-              left -= width;
-              eAttachment.left = "right";
-            } else if (eAttachment.left === "right") {
-              left -= targetWidth;
-              tAttachment.left = "left";
-
-              left += width;
-              eAttachment.left = "left";
-            }
-          } else if (tAttachment.left === "center") {
-            if (left + width > bounds[2] && eAttachment.left === "left") {
-              left -= width;
-              eAttachment.left = "right";
-            } else if (left < bounds[0] && eAttachment.left === "right") {
-              left += width;
-              eAttachment.left = "left";
-            }
-          }
-        }
-
-        if (changeAttachY === "element" || changeAttachY === "both") {
-          if (top < bounds[1] && eAttachment.top === "bottom") {
-            top += height;
-            eAttachment.top = "top";
-          }
-
-          if (top + height > bounds[3] && eAttachment.top === "top") {
-            top -= height;
-            eAttachment.top = "bottom";
-          }
-        }
-
-        if (changeAttachX === "element" || changeAttachX === "both") {
-          if (left < bounds[0]) {
-            if (eAttachment.left === "right") {
-              left += width;
-              eAttachment.left = "left";
-            } else if (eAttachment.left === "center") {
-              left += width / 2;
-              eAttachment.left = "left";
-            }
-          }
-
-          if (left + width > bounds[2]) {
-            if (eAttachment.left === "left") {
-              left -= width;
-              eAttachment.left = "right";
-            } else if (eAttachment.left === "center") {
-              left -= width / 2;
-              eAttachment.left = "right";
-            }
-          }
-        }
-
-        if (typeof pin === "string") {
-          pin = pin.split(",").map(function(p) {
-            return p.trim();
+      if (typeof this.options.optimizations !== 'undefined' && this.options.optimizations.moveElement !== false && !(typeof this.targetModifier !== 'undefined')) {
+        (function () {
+          var offsetParent = _this7.cache('target-offsetparent', function () {
+            return getOffsetParent(_this7.target);
           });
-        } else if (pin === true) {
-          pin = ["top", "left", "right", "bottom"];
+          var offsetPosition = _this7.cache('target-offsetparent-bounds', function () {
+            return getBounds(offsetParent);
+          });
+          var offsetParentStyle = getComputedStyle(offsetParent);
+          var offsetParentSize = offsetPosition;
+
+          var offsetBorder = {};
+          ['Top', 'Left', 'Bottom', 'Right'].forEach(function (side) {
+            offsetBorder[side.toLowerCase()] = parseFloat(offsetParentStyle['border' + side + 'Width']);
+          });
+
+          offsetPosition.right = doc.body.scrollWidth - offsetPosition.left - offsetParentSize.width + offsetBorder.right;
+          offsetPosition.bottom = doc.body.scrollHeight - offsetPosition.top - offsetParentSize.height + offsetBorder.bottom;
+
+          if (next.page.top >= offsetPosition.top + offsetBorder.top && next.page.bottom >= offsetPosition.bottom) {
+            if (next.page.left >= offsetPosition.left + offsetBorder.left && next.page.right >= offsetPosition.right) {
+              // We're within the visible part of the target's scroll parent
+              var scrollTop = offsetParent.scrollTop;
+              var scrollLeft = offsetParent.scrollLeft;
+
+              // It's position relative to the target's offset parent (absolute positioning when
+              // the element is moved to be a child of the target's offset parent).
+              next.offset = {
+                top: next.page.top - offsetPosition.top + scrollTop - offsetBorder.top,
+                left: next.page.left - offsetPosition.left + scrollLeft - offsetBorder.left
+              };
+            }
+          }
+        })();
+      }
+
+      // We could also travel up the DOM and try each containing context, rather than only
+      // looking at the body, but we're gonna get diminishing returns.
+
+      this.move(next);
+
+      this.history.unshift(next);
+
+      if (this.history.length > 3) {
+        this.history.pop();
+      }
+
+      if (flushChanges) {
+        flush();
+      }
+
+      return true;
+    }
+
+    // THE ISSUE
+  }, {
+    key: 'move',
+    value: function move(pos) {
+      var _this8 = this;
+
+      if (!(typeof this.element.parentNode !== 'undefined')) {
+        return;
+      }
+
+      var same = {};
+
+      for (var type in pos) {
+        same[type] = {};
+
+        for (var key in pos[type]) {
+          var found = false;
+
+          for (var i = 0; i < this.history.length; ++i) {
+            var point = this.history[i];
+            if (typeof point[type] !== 'undefined' && !within(point[type][key], pos[type][key])) {
+              found = true;
+              break;
+            }
+          }
+
+          if (!found) {
+            same[type][key] = true;
+          }
+        }
+      }
+
+      var css = { top: '', left: '', right: '', bottom: '' };
+
+      var transcribe = function transcribe(_same, _pos) {
+        var hasOptimizations = typeof _this8.options.optimizations !== 'undefined';
+        var gpu = hasOptimizations ? _this8.options.optimizations.gpu : null;
+        if (gpu !== false) {
+          var yPos = undefined,
+              xPos = undefined;
+          if (_same.top) {
+            css.top = 0;
+            yPos = _pos.top;
+          } else {
+            css.bottom = 0;
+            yPos = -_pos.bottom;
+          }
+
+          if (_same.left) {
+            css.left = 0;
+            xPos = _pos.left;
+          } else {
+            css.right = 0;
+            xPos = -_pos.right;
+          }
+
+          if (typeof window.devicePixelRatio === 'number' && devicePixelRatio % 1 === 0) {
+            xPos = Math.round(xPos * devicePixelRatio) / devicePixelRatio;
+            yPos = Math.round(yPos * devicePixelRatio) / devicePixelRatio;
+          }
+
+          css[transformKey] = 'translateX(' + xPos + 'px) translateY(' + yPos + 'px)';
+
+          if (transformKey !== 'msTransform') {
+            // The Z transform will keep this in the GPU (faster, and prevents artifacts),
+            // but IE9 doesn't support 3d transforms and will choke.
+            css[transformKey] += " translateZ(0)";
+          }
+        } else {
+          if (_same.top) {
+            css.top = _pos.top + 'px';
+          } else {
+            css.bottom = _pos.bottom + 'px';
+          }
+
+          if (_same.left) {
+            css.left = _pos.left + 'px';
+          } else {
+            css.right = _pos.right + 'px';
+          }
+        }
+      };
+
+      var moved = false;
+      if ((same.page.top || same.page.bottom) && (same.page.left || same.page.right)) {
+        css.position = 'absolute';
+        transcribe(same.page, pos.page);
+      } else if ((same.viewport.top || same.viewport.bottom) && (same.viewport.left || same.viewport.right)) {
+        css.position = 'fixed';
+        transcribe(same.viewport, pos.viewport);
+      } else if (typeof same.offset !== 'undefined' && same.offset.top && same.offset.left) {
+        (function () {
+          css.position = 'absolute';
+          var offsetParent = _this8.cache('target-offsetparent', function () {
+            return getOffsetParent(_this8.target);
+          });
+
+          if (getOffsetParent(_this8.element) !== offsetParent) {
+            defer(function () {
+              _this8.element.parentNode.removeChild(_this8.element);
+              offsetParent.appendChild(_this8.element);
+            });
+          }
+
+          transcribe(same.offset, pos.offset);
+          moved = true;
+        })();
+      } else {
+        css.position = 'absolute';
+        transcribe({ top: true, left: true }, pos.page);
+      }
+
+      if (!moved) {
+        if (this.options.bodyElement) {
+          if (this.element.parentNode !== this.options.bodyElement) {
+            this.options.bodyElement.appendChild(this.element);
+          }
+        } else {
+          var isFullscreenElement = function isFullscreenElement(e) {
+            var d = e.ownerDocument;
+            var fe = d.fullscreenElement || d.webkitFullscreenElement || d.mozFullScreenElement || d.msFullscreenElement;
+            return fe === e;
+          };
+
+          var offsetParentIsBody = true;
+
+          var currentNode = this.element.parentNode;
+          while (currentNode && currentNode.nodeType === 1 && currentNode.tagName !== 'BODY' && !isFullscreenElement(currentNode)) {
+            if (getComputedStyle(currentNode).position !== 'static') {
+              offsetParentIsBody = false;
+              break;
+            }
+
+            currentNode = currentNode.parentNode;
+          }
+
+          if (!offsetParentIsBody) {
+            this.element.parentNode.removeChild(this.element);
+            this.element.ownerDocument.body.appendChild(this.element);
+          }
+        }
+      }
+
+      // Any css change will trigger a repaint, so let's avoid one if nothing changed
+      var writeCSS = {};
+      var write = false;
+      for (var key in css) {
+        var val = css[key];
+        var elVal = this.element.style[key];
+
+        if (elVal !== val) {
+          write = true;
+          writeCSS[key] = val;
+        }
+      }
+
+      if (write) {
+        defer(function () {
+          extend(_this8.element.style, writeCSS);
+          _this8.trigger('repositioned');
+        });
+      }
+    }
+  }]);
+
+  return TetherClass;
+})(Evented);
+
+TetherClass.modules = [];
+
+TetherBase.position = position;
+
+var Tether = extend(TetherClass, TetherBase);
+/* globals TetherBase */
+
+'use strict';
+
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
+var _TetherBase$Utils = TetherBase.Utils;
+var getBounds = _TetherBase$Utils.getBounds;
+var extend = _TetherBase$Utils.extend;
+var updateClasses = _TetherBase$Utils.updateClasses;
+var defer = _TetherBase$Utils.defer;
+
+var BOUNDS_FORMAT = ['left', 'top', 'right', 'bottom'];
+
+function getBoundingRect(tether, to) {
+  if (to === 'scrollParent') {
+    to = tether.scrollParents[0];
+  } else if (to === 'window') {
+    to = [pageXOffset, pageYOffset, innerWidth + pageXOffset, innerHeight + pageYOffset];
+  }
+
+  if (to === document) {
+    to = to.documentElement;
+  }
+
+  if (typeof to.nodeType !== 'undefined') {
+    (function () {
+      var node = to;
+      var size = getBounds(to);
+      var pos = size;
+      var style = getComputedStyle(to);
+
+      to = [pos.left, pos.top, size.width + pos.left, size.height + pos.top];
+
+      // Account any parent Frames scroll offset
+      if (node.ownerDocument !== document) {
+        var win = node.ownerDocument.defaultView;
+        to[0] += win.pageXOffset;
+        to[1] += win.pageYOffset;
+        to[2] += win.pageXOffset;
+        to[3] += win.pageYOffset;
+      }
+
+      BOUNDS_FORMAT.forEach(function (side, i) {
+        side = side[0].toUpperCase() + side.substr(1);
+        if (side === 'Top' || side === 'Left') {
+          to[i] += parseFloat(style['border' + side + 'Width']);
+        } else {
+          to[i] -= parseFloat(style['border' + side + 'Width']);
+        }
+      });
+    })();
+  }
+
+  return to;
+}
+
+TetherBase.modules.push({
+  position: function position(_ref) {
+    var _this = this;
+
+    var top = _ref.top;
+    var left = _ref.left;
+    var targetAttachment = _ref.targetAttachment;
+
+    if (!this.options.constraints) {
+      return true;
+    }
+
+    var _cache = this.cache('element-bounds', function () {
+      return getBounds(_this.element);
+    });
+
+    var height = _cache.height;
+    var width = _cache.width;
+
+    if (width === 0 && height === 0 && typeof this.lastSize !== 'undefined') {
+      var _lastSize = this.lastSize;
+
+      // Handle the item getting hidden as a result of our positioning without glitching
+      // the classes in and out
+      width = _lastSize.width;
+      height = _lastSize.height;
+    }
+
+    var targetSize = this.cache('target-bounds', function () {
+      return _this.getTargetBounds();
+    });
+
+    var targetHeight = targetSize.height;
+    var targetWidth = targetSize.width;
+
+    var allClasses = [this.getClass('pinned'), this.getClass('out-of-bounds')];
+
+    this.options.constraints.forEach(function (constraint) {
+      var outOfBoundsClass = constraint.outOfBoundsClass;
+      var pinnedClass = constraint.pinnedClass;
+
+      if (outOfBoundsClass) {
+        allClasses.push(outOfBoundsClass);
+      }
+      if (pinnedClass) {
+        allClasses.push(pinnedClass);
+      }
+    });
+
+    allClasses.forEach(function (cls) {
+      ['left', 'top', 'right', 'bottom'].forEach(function (side) {
+        allClasses.push(cls + '-' + side);
+      });
+    });
+
+    var addClasses = [];
+
+    var tAttachment = extend({}, targetAttachment);
+    var eAttachment = extend({}, this.attachment);
+
+    this.options.constraints.forEach(function (constraint) {
+      var to = constraint.to;
+      var attachment = constraint.attachment;
+      var pin = constraint.pin;
+
+      if (typeof attachment === 'undefined') {
+        attachment = '';
+      }
+
+      var changeAttachX = undefined,
+          changeAttachY = undefined;
+      if (attachment.indexOf(' ') >= 0) {
+        var _attachment$split = attachment.split(' ');
+
+        var _attachment$split2 = _slicedToArray(_attachment$split, 2);
+
+        changeAttachY = _attachment$split2[0];
+        changeAttachX = _attachment$split2[1];
+      } else {
+        changeAttachX = changeAttachY = attachment;
+      }
+
+      var bounds = getBoundingRect(_this, to);
+
+      if (changeAttachY === 'target' || changeAttachY === 'both') {
+        if (top < bounds[1] && tAttachment.top === 'top') {
+          top += targetHeight;
+          tAttachment.top = 'bottom';
         }
 
-        pin = pin || [];
+        if (top + height > bounds[3] && tAttachment.top === 'bottom') {
+          top -= targetHeight;
+          tAttachment.top = 'top';
+        }
+      }
 
-        var pinned = [];
-        var oob = [];
+      if (changeAttachY === 'together') {
+        if (tAttachment.top === 'top') {
+          if (eAttachment.top === 'bottom' && top < bounds[1]) {
+            top += targetHeight;
+            tAttachment.top = 'bottom';
 
-        if (top < bounds[1]) {
-          if (pin.indexOf("top") >= 0) {
-            top = bounds[1];
-            pinned.push("top");
-          } else {
-            oob.push("top");
+            top += height;
+            eAttachment.top = 'top';
+          } else if (eAttachment.top === 'top' && top + height > bounds[3] && top - (height - targetHeight) >= bounds[1]) {
+            top -= height - targetHeight;
+            tAttachment.top = 'bottom';
+
+            eAttachment.top = 'bottom';
           }
         }
 
-        if (top + height > bounds[3]) {
-          if (pin.indexOf("bottom") >= 0) {
-            top = bounds[3] - height;
-            pinned.push("bottom");
-          } else {
-            oob.push("bottom");
+        if (tAttachment.top === 'bottom') {
+          if (eAttachment.top === 'top' && top + height > bounds[3]) {
+            top -= targetHeight;
+            tAttachment.top = 'top';
+
+            top -= height;
+            eAttachment.top = 'bottom';
+          } else if (eAttachment.top === 'bottom' && top < bounds[1] && top + (height * 2 - targetHeight) <= bounds[3]) {
+            top += height - targetHeight;
+            tAttachment.top = 'top';
+
+            eAttachment.top = 'top';
           }
         }
 
+        if (tAttachment.top === 'middle') {
+          if (top + height > bounds[3] && eAttachment.top === 'top') {
+            top -= height;
+            eAttachment.top = 'bottom';
+          } else if (top < bounds[1] && eAttachment.top === 'bottom') {
+            top += height;
+            eAttachment.top = 'top';
+          }
+        }
+      }
+
+      if (changeAttachX === 'target' || changeAttachX === 'both') {
+        if (left < bounds[0] && tAttachment.left === 'left') {
+          left += targetWidth;
+          tAttachment.left = 'right';
+        }
+
+        if (left + width > bounds[2] && tAttachment.left === 'right') {
+          left -= targetWidth;
+          tAttachment.left = 'left';
+        }
+      }
+
+      if (changeAttachX === 'together') {
+        if (left < bounds[0] && tAttachment.left === 'left') {
+          if (eAttachment.left === 'right') {
+            left += targetWidth;
+            tAttachment.left = 'right';
+
+            left += width;
+            eAttachment.left = 'left';
+          } else if (eAttachment.left === 'left') {
+            left += targetWidth;
+            tAttachment.left = 'right';
+
+            left -= width;
+            eAttachment.left = 'right';
+          }
+        } else if (left + width > bounds[2] && tAttachment.left === 'right') {
+          if (eAttachment.left === 'left') {
+            left -= targetWidth;
+            tAttachment.left = 'left';
+
+            left -= width;
+            eAttachment.left = 'right';
+          } else if (eAttachment.left === 'right') {
+            left -= targetWidth;
+            tAttachment.left = 'left';
+
+            left += width;
+            eAttachment.left = 'left';
+          }
+        } else if (tAttachment.left === 'center') {
+          if (left + width > bounds[2] && eAttachment.left === 'left') {
+            left -= width;
+            eAttachment.left = 'right';
+          } else if (left < bounds[0] && eAttachment.left === 'right') {
+            left += width;
+            eAttachment.left = 'left';
+          }
+        }
+      }
+
+      if (changeAttachY === 'element' || changeAttachY === 'both') {
+        if (top < bounds[1] && eAttachment.top === 'bottom') {
+          top += height;
+          eAttachment.top = 'top';
+        }
+
+        if (top + height > bounds[3] && eAttachment.top === 'top') {
+          top -= height;
+          eAttachment.top = 'bottom';
+        }
+      }
+
+      if (changeAttachX === 'element' || changeAttachX === 'both') {
         if (left < bounds[0]) {
-          if (pin.indexOf("left") >= 0) {
-            left = bounds[0];
-            pinned.push("left");
-          } else {
-            oob.push("left");
+          if (eAttachment.left === 'right') {
+            left += width;
+            eAttachment.left = 'left';
+          } else if (eAttachment.left === 'center') {
+            left += width / 2;
+            eAttachment.left = 'left';
           }
         }
 
         if (left + width > bounds[2]) {
-          if (pin.indexOf("right") >= 0) {
-            left = bounds[2] - width;
-            pinned.push("right");
+          if (eAttachment.left === 'left') {
+            left -= width;
+            eAttachment.left = 'right';
+          } else if (eAttachment.left === 'center') {
+            left -= width / 2;
+            eAttachment.left = 'right';
+          }
+        }
+      }
+
+      if (typeof pin === 'string') {
+        pin = pin.split(',').map(function (p) {
+          return p.trim();
+        });
+      } else if (pin === true) {
+        pin = ['top', 'left', 'right', 'bottom'];
+      }
+
+      pin = pin || [];
+
+      var pinned = [];
+      var oob = [];
+
+      if (top < bounds[1]) {
+        if (pin.indexOf('top') >= 0) {
+          top = bounds[1];
+          pinned.push('top');
+        } else {
+          oob.push('top');
+        }
+      }
+
+      if (top + height > bounds[3]) {
+        if (pin.indexOf('bottom') >= 0) {
+          top = bounds[3] - height;
+          pinned.push('bottom');
+        } else {
+          oob.push('bottom');
+        }
+      }
+
+      if (left < bounds[0]) {
+        if (pin.indexOf('left') >= 0) {
+          left = bounds[0];
+          pinned.push('left');
+        } else {
+          oob.push('left');
+        }
+      }
+
+      if (left + width > bounds[2]) {
+        if (pin.indexOf('right') >= 0) {
+          left = bounds[2] - width;
+          pinned.push('right');
+        } else {
+          oob.push('right');
+        }
+      }
+
+      if (pinned.length) {
+        (function () {
+          var pinnedClass = undefined;
+          if (typeof _this.options.pinnedClass !== 'undefined') {
+            pinnedClass = _this.options.pinnedClass;
           } else {
-            oob.push("right");
+            pinnedClass = _this.getClass('pinned');
           }
-        }
 
-        if (pinned.length) {
-          (function() {
-            var pinnedClass = undefined;
-            if (typeof _this.options.pinnedClass !== "undefined") {
-              pinnedClass = _this.options.pinnedClass;
-            } else {
-              pinnedClass = _this.getClass("pinned");
-            }
-
-            addClasses.push(pinnedClass);
-            pinned.forEach(function(side) {
-              addClasses.push(pinnedClass + "-" + side);
-            });
-          })();
-        }
-
-        if (oob.length) {
-          (function() {
-            var oobClass = undefined;
-            if (typeof _this.options.outOfBoundsClass !== "undefined") {
-              oobClass = _this.options.outOfBoundsClass;
-            } else {
-              oobClass = _this.getClass("out-of-bounds");
-            }
-
-            addClasses.push(oobClass);
-            oob.forEach(function(side) {
-              addClasses.push(oobClass + "-" + side);
-            });
-          })();
-        }
-
-        if (pinned.indexOf("left") >= 0 || pinned.indexOf("right") >= 0) {
-          eAttachment.left = tAttachment.left = false;
-        }
-        if (pinned.indexOf("top") >= 0 || pinned.indexOf("bottom") >= 0) {
-          eAttachment.top = tAttachment.top = false;
-        }
-
-        if (
-          tAttachment.top !== targetAttachment.top ||
-          tAttachment.left !== targetAttachment.left ||
-          eAttachment.top !== _this.attachment.top ||
-          eAttachment.left !== _this.attachment.left
-        ) {
-          _this.updateAttachClasses(eAttachment, tAttachment);
-          _this.trigger("update", {
-            attachment: eAttachment,
-            targetAttachment: tAttachment
+          addClasses.push(pinnedClass);
+          pinned.forEach(function (side) {
+            addClasses.push(pinnedClass + '-' + side);
           });
-        }
-      });
+        })();
+      }
 
-      defer(function() {
-        if (!(_this.options.addTargetClasses === false)) {
-          updateClasses(_this.target, addClasses, allClasses);
-        }
-        updateClasses(_this.element, addClasses, allClasses);
-      });
-
-      return { top: top, left: left };
-    }
-  });
-  /* globals TetherBase */
-
-  ("use strict");
-
-  var _TetherBase$Utils = TetherBase.Utils;
-  var getBounds = _TetherBase$Utils.getBounds;
-  var updateClasses = _TetherBase$Utils.updateClasses;
-  var defer = _TetherBase$Utils.defer;
-
-  TetherBase.modules.push({
-    position: function position(_ref) {
-      var _this = this;
-
-      var top = _ref.top;
-      var left = _ref.left;
-
-      var _cache = this.cache("element-bounds", function() {
-        return getBounds(_this.element);
-      });
-
-      var height = _cache.height;
-      var width = _cache.width;
-
-      var targetPos = this.getTargetBounds();
-
-      var bottom = top + height;
-      var right = left + width;
-
-      var abutted = [];
-      if (top <= targetPos.bottom && bottom >= targetPos.top) {
-        ["left", "right"].forEach(function(side) {
-          var targetPosSide = targetPos[side];
-          if (targetPosSide === left || targetPosSide === right) {
-            abutted.push(side);
+      if (oob.length) {
+        (function () {
+          var oobClass = undefined;
+          if (typeof _this.options.outOfBoundsClass !== 'undefined') {
+            oobClass = _this.options.outOfBoundsClass;
+          } else {
+            oobClass = _this.getClass('out-of-bounds');
           }
+
+          addClasses.push(oobClass);
+          oob.forEach(function (side) {
+            addClasses.push(oobClass + '-' + side);
+          });
+        })();
+      }
+
+      if (pinned.indexOf('left') >= 0 || pinned.indexOf('right') >= 0) {
+        eAttachment.left = tAttachment.left = false;
+      }
+      if (pinned.indexOf('top') >= 0 || pinned.indexOf('bottom') >= 0) {
+        eAttachment.top = tAttachment.top = false;
+      }
+
+      if (tAttachment.top !== targetAttachment.top || tAttachment.left !== targetAttachment.left || eAttachment.top !== _this.attachment.top || eAttachment.left !== _this.attachment.left) {
+        _this.updateAttachClasses(eAttachment, tAttachment);
+        _this.trigger('update', {
+          attachment: eAttachment,
+          targetAttachment: tAttachment
         });
       }
+    });
 
-      if (left <= targetPos.right && right >= targetPos.left) {
-        ["top", "bottom"].forEach(function(side) {
-          var targetPosSide = targetPos[side];
-          if (targetPosSide === top || targetPosSide === bottom) {
-            abutted.push(side);
-          }
-        });
+    defer(function () {
+      if (!(_this.options.addTargetClasses === false)) {
+        updateClasses(_this.target, addClasses, allClasses);
       }
+      updateClasses(_this.element, addClasses, allClasses);
+    });
 
-      var allClasses = [];
-      var addClasses = [];
-
-      var sides = ["left", "top", "right", "bottom"];
-      allClasses.push(this.getClass("abutted"));
-      sides.forEach(function(side) {
-        allClasses.push(_this.getClass("abutted") + "-" + side);
-      });
-
-      if (abutted.length) {
-        addClasses.push(this.getClass("abutted"));
-      }
-
-      abutted.forEach(function(side) {
-        addClasses.push(_this.getClass("abutted") + "-" + side);
-      });
-
-      defer(function() {
-        if (!(_this.options.addTargetClasses === false)) {
-          updateClasses(_this.target, addClasses, allClasses);
-        }
-        updateClasses(_this.element, addClasses, allClasses);
-      });
-
-      return true;
-    }
-  });
-  /* globals TetherBase */
-
-  ("use strict");
-
-  var _slicedToArray = (function() {
-    function sliceIterator(arr, i) {
-      var _arr = [];
-      var _n = true;
-      var _d = false;
-      var _e = undefined;
-      try {
-        for (
-          var _i = arr[Symbol.iterator](), _s;
-          !(_n = (_s = _i.next()).done);
-          _n = true
-        ) {
-          _arr.push(_s.value);
-          if (i && _arr.length === i) break;
-        }
-      } catch (err) {
-        _d = true;
-        _e = err;
-      } finally {
-        try {
-          if (!_n && _i["return"]) _i["return"]();
-        } finally {
-          if (_d) throw _e;
-        }
-      }
-      return _arr;
-    }
-    return function(arr, i) {
-      if (Array.isArray(arr)) {
-        return arr;
-      } else if (Symbol.iterator in Object(arr)) {
-        return sliceIterator(arr, i);
-      } else {
-        throw new TypeError(
-          "Invalid attempt to destructure non-iterable instance"
-        );
-      }
-    };
-  })();
-
-  TetherBase.modules.push({
-    position: function position(_ref) {
-      var top = _ref.top;
-      var left = _ref.left;
-
-      if (!this.options.shift) {
-        return;
-      }
-
-      var shift = this.options.shift;
-      if (typeof this.options.shift === "function") {
-        shift = this.options.shift.call(this, { top: top, left: left });
-      }
-
-      var shiftTop = undefined,
-        shiftLeft = undefined;
-      if (typeof shift === "string") {
-        shift = shift.split(" ");
-        shift[1] = shift[1] || shift[0];
-
-        var _shift = shift;
-
-        var _shift2 = _slicedToArray(_shift, 2);
-
-        shiftTop = _shift2[0];
-        shiftLeft = _shift2[1];
-
-        shiftTop = parseFloat(shiftTop, 10);
-        shiftLeft = parseFloat(shiftLeft, 10);
-      } else {
-        shiftTop = shift.top;
-        shiftLeft = shift.left;
-      }
-
-      top += shiftTop;
-      left += shiftLeft;
-
-      return { top: top, left: left };
-    }
-  });
-  return Tether;
+    return { top: top, left: left };
+  }
 });
+/* globals TetherBase */
+
+'use strict';
+
+var _TetherBase$Utils = TetherBase.Utils;
+var getBounds = _TetherBase$Utils.getBounds;
+var updateClasses = _TetherBase$Utils.updateClasses;
+var defer = _TetherBase$Utils.defer;
+
+TetherBase.modules.push({
+  position: function position(_ref) {
+    var _this = this;
+
+    var top = _ref.top;
+    var left = _ref.left;
+
+    var _cache = this.cache('element-bounds', function () {
+      return getBounds(_this.element);
+    });
+
+    var height = _cache.height;
+    var width = _cache.width;
+
+    var targetPos = this.getTargetBounds();
+
+    var bottom = top + height;
+    var right = left + width;
+
+    var abutted = [];
+    if (top <= targetPos.bottom && bottom >= targetPos.top) {
+      ['left', 'right'].forEach(function (side) {
+        var targetPosSide = targetPos[side];
+        if (targetPosSide === left || targetPosSide === right) {
+          abutted.push(side);
+        }
+      });
+    }
+
+    if (left <= targetPos.right && right >= targetPos.left) {
+      ['top', 'bottom'].forEach(function (side) {
+        var targetPosSide = targetPos[side];
+        if (targetPosSide === top || targetPosSide === bottom) {
+          abutted.push(side);
+        }
+      });
+    }
+
+    var allClasses = [];
+    var addClasses = [];
+
+    var sides = ['left', 'top', 'right', 'bottom'];
+    allClasses.push(this.getClass('abutted'));
+    sides.forEach(function (side) {
+      allClasses.push(_this.getClass('abutted') + '-' + side);
+    });
+
+    if (abutted.length) {
+      addClasses.push(this.getClass('abutted'));
+    }
+
+    abutted.forEach(function (side) {
+      addClasses.push(_this.getClass('abutted') + '-' + side);
+    });
+
+    defer(function () {
+      if (!(_this.options.addTargetClasses === false)) {
+        updateClasses(_this.target, addClasses, allClasses);
+      }
+      updateClasses(_this.element, addClasses, allClasses);
+    });
+
+    return true;
+  }
+});
+/* globals TetherBase */
+
+'use strict';
+
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
+TetherBase.modules.push({
+  position: function position(_ref) {
+    var top = _ref.top;
+    var left = _ref.left;
+
+    if (!this.options.shift) {
+      return;
+    }
+
+    var shift = this.options.shift;
+    if (typeof this.options.shift === 'function') {
+      shift = this.options.shift.call(this, { top: top, left: left });
+    }
+
+    var shiftTop = undefined,
+        shiftLeft = undefined;
+    if (typeof shift === 'string') {
+      shift = shift.split(' ');
+      shift[1] = shift[1] || shift[0];
+
+      var _shift = shift;
+
+      var _shift2 = _slicedToArray(_shift, 2);
+
+      shiftTop = _shift2[0];
+      shiftLeft = _shift2[1];
+
+      shiftTop = parseFloat(shiftTop, 10);
+      shiftLeft = parseFloat(shiftLeft, 10);
+    } else {
+      shiftTop = shift.top;
+      shiftLeft = shift.left;
+    }
+
+    top += shiftTop;
+    left += shiftLeft;
+
+    return { top: top, left: left };
+  }
+});
+return Tether;
+
+}));
 
 },{}]},{},[105]);

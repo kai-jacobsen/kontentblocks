@@ -1,11 +1,9 @@
 .kb-template-selector--wrapper{
   padding: 0 0;
-//  background: #fafafa;
-//  border-bottom: 1px solid #ccc;
-//  overflow: hidden;
   position: absolute;
   right: 4px;
-  top: 2px;
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 101;
   font-family: sans-serif;
   font-size: 12px !important;

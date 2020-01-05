@@ -92,6 +92,7 @@ module.exports = Backbone.View.extend({
     });
 
     this.$('.kb-template-select').select2({
+      width:200,
       templateResult: function (state) {
         if (!state.id) {
           return state.text;

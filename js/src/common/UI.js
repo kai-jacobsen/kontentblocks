@@ -220,9 +220,12 @@ var Ui = {
         // doesn't work very well
         $('.kb-open').toggleClass('kb-open');
         $('.kb-module__body').hide();
-
         // tinyMCE doesn't like to be moved in the DOM
-        TinyMCE.removeEditors();
+        if (areaOver.View && areaOver.View.$el){
+          TinyMCE.removeEditors(areaOver.View.$el);
+        } else {
+          TinyMCE.removeEditors();
+        }
 
         // Add a global trigger to sortable.start, maybe other Blocks might need it
         $(document).trigger('kb_sortable_start', [event, ui]);
