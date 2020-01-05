@@ -237,9 +237,10 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         $renderId = $this->fields->getFieldRenderClass()->getIdString();
 
         echo "<div id='{$elementId}' data-kbpuid='{$this->uid}' class='postbox {$class} {$renderId}' data-kb-field-renderer='{$renderId}'>
-                <div class='kb-custom-wrapper'>
-                <div class='inside'>" .
+                <div class='kb-custom-wrapper'> 
+                <div class='inside'>";
              wp_nonce_field($this->getBaseId() . '_save', $this->getBaseId() . '_nc', true, true);
+
     }
 
     /**

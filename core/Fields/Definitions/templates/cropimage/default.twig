@@ -8,7 +8,6 @@
                 <img src='{{ image.size('full').src() }}'>
             {% endif %}
         </div>
-        <p class="description">Target Size = W:{{ Field.getArg('width') }}px, H:{{ Field.getArg('height') }}px</p>
         <div class="kb-field-image-meta kb-hide ">
             <div class="kb-field-image-title">
                 <label>{{ i18n.title }}</label>
@@ -22,6 +21,7 @@
                           name='{{ Form.getFieldName( 'caption') }}'>{{ value.caption }}</textarea>
             </div>
         </div>
+        <p class="description">Target Size = W:{{ Field.getArg('width') }}px, H:{{ Field.getArg('height') }}px</p>
         <input class='kb-js-image-id' type='hidden' name='{{ Form.getFieldName('id') }}' value='{{ value.id }}'>
         {#<input class='kb-js-image-alt' type='hidden' name='{{ Form.getFieldName( 'details', 'id' ) }}'#}
         {#value='{{ value.details.alt }}'>#}

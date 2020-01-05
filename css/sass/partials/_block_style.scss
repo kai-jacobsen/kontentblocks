@@ -103,7 +103,6 @@ h5.kb_properties_title {
 .kb_properties {
   background: #fff;
   padding: 10px;
-
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 8px;
@@ -113,7 +112,7 @@ h5.kb_properties_title {
 .edit input {
   width: 180px !important;
   margin-left: -3px;
-  margin-top: 5px;
+  //margin-top: 5px;
   background: #f9f9f9;
   font-size: 12px;
   border: 0;

@@ -114,6 +114,11 @@ class Utilities
         global $kbHiddenEditorCalled;
 
         if (!$kbHiddenEditorCalled) {
+            wp_enqueue_editor();
+            /** @var JSONTransport $jsonTransport */
+            $jsonTransport = Kontentblocks()->getService('utility.jsontransport');
+            $jsonTransport->registerData('tinymce', 'settings', self::editorDefaultSettings());
+
             echo "<div style='display: none;'>";
             self::editor('ghost', '', 'ghost', true, array('tinymce' => array('wp_skip_init' => false)));
             echo '</div>';
@@ -123,14 +128,7 @@ class Utilities
         $kbHiddenEditorCalled = true;
     }
 
-    /**
-     * @param string $id editors unique id
-     * @param string $data | initial content of the editor
-     * @param null $name
-     * @param bool $media | whether to render media buttons or not
-     * @param array $args | additional args
-     */
-    static public function editor($id, $data, $name = null, $media = false, $args = array())
+    public static function editorDefaultSettings()
     {
         global $wp_version;
 
@@ -161,6 +159,7 @@ class Utilities
             )
         );
 
+
         /*
          * autoresize behaviour is new from version 4
          */
@@ -181,9 +180,9 @@ class Utilities
         $settings = array(
             'wpautop' => true,
             // use wpautop?
-            'media_buttons' => $media,
+            'media_buttons' => false,
             // show insert/upload button(s)
-            'textarea_name' => $name,
+//            'textarea_name' => $name,
             // set the textarea name to something different, square brackets [] can be used here
             'tabindex' => '',
             'editor_css' => '',
@@ -213,12 +212,26 @@ class Utilities
 
         );
 
+        $settings = apply_filters('kb.tinymce.global.settings', $settings);
+        return $settings;
+
+    }
+
+    /**
+     * @param string $id editors unique id
+     * @param string $data | initial content of the editor
+     * @param null $name
+     * @param bool $media | whether to render media buttons or not
+     * @param array $args | additional args
+     */
+    static public function editor($id, $data, $name = null, $media = false, $args = array())
+    {
+        $settings = self::editorDefaultSettings();
+        $settings['textarea_name'] = $name;
+        $settings['media_buttons'] = $media;
         if (!empty($args)) {
             $settings = Utilities::arrayMergeRecursive($args, $settings);
         }
-
-        $settings = apply_filters('kb.tinymce.global.settings', $settings);
-
         wp_editor($data, $id . 'editor', $settings);
 
     }
