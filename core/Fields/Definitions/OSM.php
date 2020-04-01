@@ -59,6 +59,11 @@ Class OSM extends Field
             return array(
                 'lat' => '',
                 'lng' => '',
+                'state' => '',
+                'postcode' => '',
+                'village' => '',
+                'road' => '',
+                'house_number' => ''
             );
         }
 

@@ -26,7 +26,7 @@ module.exports = Backbone.View.extend({
     });
   },
   toggle: function () {
-    var state = Utilities.store.get(this.uid);
+    var state = Utilities.store.get(this.uid) || {open:true};
     this.$el.slideToggle(250);
     state = !state.open;
     Utilities.store.set(this.uid, {open: state});

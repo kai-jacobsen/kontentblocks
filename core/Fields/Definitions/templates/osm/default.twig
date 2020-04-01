@@ -4,13 +4,37 @@
         <div data-kb-osm-map></div>
 
         <div class="kb-field--osm-meta">
-            <label>Lat
-                <input data-kb-osm-lat type="text" name="{{ Form.getFieldName('lat') }}" value="{{ value.lat }}">
-            </label>
-            <label>Lng
-                <input data-kb-osm-lng type="text" name="{{ Form.getFieldName('lng') }}" value="{{ value.lng }}">
-            </label>
+            <div class="div">
+                <label>Lat
+                    <input data-kb-osm-lat data-prevent-send type="text" name="{{ Form.getFieldName('lat') }}" value="{{ value.lat }}">
+                </label>
+                <label>Lng
+                    <input data-kb-osm-lng data-prevent-send type="text" name="{{ Form.getFieldName('lng') }}" value="{{ value.lng }}">
+                </label>
+            </div>
+            <div style="margin-top: 20px;">
+                <label>Straße
+                    <input data-kb-osm-road type="text" name="{{ Form.getFieldName('road') }}" value="{{ value.road }}">
+                </label>
+                <label>Hausnummer
+                    <input data-kb-osm-housenumber type="text" name="{{ Form.getFieldName('house_number') }}"
+                           value="{{ value.house_number }}">
+                </label>
+            </div>
+            <div style="margin-top: 20px;">
+                <label>PLZ
+                    <input data-kb-osm-postcode type="text" name="{{ Form.getFieldName('postcode') }}"
+                           value="{{ value.postcode }}">
+                </label>
+                <label>Ort
+                    <input data-kb-osm-village type="text" name="{{ Form.getFieldName('village') }}"
+                           value="{{ value.village }}">
+                </label>
+                <label>Bundesland
+                    <input data-kb-osm-state type="text" name="{{ Form.getFieldName('state') }}"
+                           value="{{ value.state }}">
+                </label>
+            </div>
         </div>
-
     </div>
 {% endblock %}

@@ -13,11 +13,11 @@
                 <label>{{ i18n.title }}</label>
                 <input class='kb-js-image-title kb-observe' type="text"
                        name='{{ Form.getFieldName( 'title') }}'
-                       value='{{ value.title }}' readonly>
+                       value='{{ value.title }}'>
             </div>
             <div class="kb-field-image-description">
                 <label>{{ i18n.description }}</label>
-                <textarea readonly class='kb-js-image-description kb-observe' type="text"
+                <textarea class='kb-js-image-description kb-observe' type="text"
                           name='{{ Form.getFieldName( 'caption') }}'>{{ value.caption }}</textarea>
             </div>
         </div>

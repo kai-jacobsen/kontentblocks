@@ -74,7 +74,6 @@ module.exports = Backbone.View.extend({
   },
   render: function () {
     var settings;
-
     if (this.$el.hasClass('draft') && this.$el.html() == '') {
       this.renderPlaceholder();
     }

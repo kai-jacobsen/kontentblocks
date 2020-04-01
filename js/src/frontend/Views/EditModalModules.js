@@ -446,7 +446,6 @@ module.exports = Backbone.View.extend({
       KB.FieldControls.updateModels(res.data.json.Fields);
     }
 
-
     that.model.set('entityData', res.data.newModuleData);
     if (save) {
       that.model.trigger('module.model.updated', that.model);
