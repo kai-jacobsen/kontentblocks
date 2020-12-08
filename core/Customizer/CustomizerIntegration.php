@@ -84,7 +84,6 @@ class CustomizerIntegration
         /** @var Field $field */
         foreach ($this->fields as $field) {
             if (method_exists($field, 'addCustomizerSetting')){
-                d($field);
                 $field->addCustomizerSetting($this->customizeManager, $this);
             } else {
                 $this->customizeManager->add_setting(

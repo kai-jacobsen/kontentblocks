@@ -15,7 +15,7 @@ use WP_Customize_Media_Control;
  * @return array attachment id, title, caption
  *
  */
-Class Image extends Field
+class Image extends Field
 {
 
     public static $settings = array(
@@ -32,7 +32,7 @@ Class Image extends Field
     public static function uploadFilter($file)
     {
 
-        $dimensions = filter_input(INPUT_POST,'mindimension', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $dimensions = filter_input(INPUT_POST, 'mindimension', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
         if (!is_array($dimensions) || count($dimensions) !== 2) {
             return $file;
@@ -247,7 +247,7 @@ Class Image extends Field
         $customizeManager->add_setting(
             new ImageSetting($customizeManager, $integration->getSettingName($this), array(
                 'default' => $this->getArg('std'),
-                'type' => 'option',
+                'type' => 'theme_mod',
                 'field' => $this
             ))
         );

@@ -185,7 +185,6 @@ module.exports = {
     _.each(this.strings, function(string){
       res = res + string + '\n';
     });
-
     return res;
 
   }
@@ -642,6 +641,8 @@ var LayoutConfigurations =
 module.exports = LayoutConfigurations;
 },{"common/Ajax":2,"common/Config":4,"common/Logger":7,"common/Notice":8,"templates/backend/extensions/layout-item.hbs":26}],15:[function(require,module,exports){
 var Index = require('common/Index');
+
+
 KBFieldContent = function () {
   var that = this;
   YoastSEO.app.registerPlugin('kbfieldcontent', {status: 'ready'});
@@ -670,11 +671,13 @@ KBFieldContent.prototype.contentModification = function (data) {
   return data + Index.concatStrings();
 };
 
-jQuery(document).ready(function () {
-  if (window.YoastSEO) {
+jQuery(window).on(
+  "YoastSEO:ready",
+  function () {
     new KBFieldContent();
   }
-});
+);
+
 
 },{"common/Index":6}],16:[function(require,module,exports){
 var ModuleBrowserList = require('shared/ModuleBrowser/ModuleBrowserList');
@@ -1077,89 +1080,119 @@ module.exports = Backbone.View.extend({
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<h4>"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.publicName : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? lookupProperty(depth0,"module") : depth0)) != null ? lookupProperty(stack1,"settings") : stack1)) != null ? lookupProperty(stack1,"publicName") : stack1), depth0))
     + "</h4>\n<p class=\"description\">\n    <em>Post ID:</em>"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.postObject : stack1)) != null ? stack1.ID : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? lookupProperty(depth0,"module") : depth0)) != null ? lookupProperty(stack1,"postObject") : stack1)) != null ? lookupProperty(stack1,"ID") : stack1), depth0))
     + "<br>\n    <em>Post Title:</em>"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.postObject : stack1)) != null ? stack1.post_title : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? lookupProperty(depth0,"module") : depth0)) != null ? lookupProperty(stack1,"postObject") : stack1)) != null ? lookupProperty(stack1,"post_title") : stack1), depth0))
     + "<br>\n</p>\n<div class=\"kb-js-duplicate-clipboard kb-clipboard-action\">"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.Common : stack1)) != null ? stack1.duplicate : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? lookupProperty(depth0,"i18n") : depth0)) != null ? lookupProperty(stack1,"Common") : stack1)) != null ? lookupProperty(stack1,"duplicate") : stack1), depth0))
     + "</div>\n<div class=\"kb-js-move-clipboard kb-clipboard-action\">"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.Common : stack1)) != null ? stack1.move : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? lookupProperty(depth0,"i18n") : depth0)) != null ? lookupProperty(stack1,"Common") : stack1)) != null ? lookupProperty(stack1,"move") : stack1), depth0))
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":48}],25:[function(require,module,exports){
+},{"hbsfy/runtime":51}],25:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=container.escapeExpression, alias2=container.lambda;
+    var stack1, helper, alias1=container.escapeExpression, alias2=container.lambda, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<li>\n    <details>\n        <summary>\n            "
-    + alias1(((helper = (helper = helpers.time || (depth0 != null ? depth0.time : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"time","hash":{},"data":data,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":22}}}) : helper)))
+    + alias1(((helper = (helper = lookupProperty(helpers,"time") || (depth0 != null ? lookupProperty(depth0,"time") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"time","hash":{},"data":data,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":22}}}) : helper)))
     + "\n        </summary>\n        <div class='actions' data-id='"
-    + alias1(alias2(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.id : stack1), depth0))
+    + alias1(alias2(((stack1 = (depth0 != null ? lookupProperty(depth0,"item") : depth0)) != null ? lookupProperty(stack1,"id") : stack1), depth0))
     + "'>\n            <span class='js-restore'>Restore</span>\n            <p class='description'><b>Comment:</b> "
-    + alias1(alias2(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.comment : stack1), depth0))
+    + alias1(alias2(((stack1 = (depth0 != null ? lookupProperty(depth0,"item") : depth0)) != null ? lookupProperty(stack1,"comment") : stack1), depth0))
     + " ("
-    + alias1(alias2(((stack1 = (depth0 != null ? depth0.item : depth0)) != null ? stack1.username : stack1), depth0))
+    + alias1(alias2(((stack1 = (depth0 != null ? lookupProperty(depth0,"item") : depth0)) != null ? lookupProperty(stack1,"username") : stack1), depth0))
     + ")</p>\n        </div>\n    </details>\n</li>";
 },"useData":true});
 
-},{"hbsfy/runtime":48}],26:[function(require,module,exports){
+},{"hbsfy/runtime":51}],26:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function";
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<option value='"
-    + ((stack1 = ((helper = (helper = helpers.key || (depth0 != null ? depth0.key : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":26}}}) : helper))) != null ? stack1 : "")
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"key") || (depth0 != null ? lookupProperty(depth0,"key") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":26}}}) : helper))) != null ? stack1 : "")
     + "'>"
-    + ((stack1 = ((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":40}}}) : helper))) != null ? stack1 : "")
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"name") || (depth0 != null ? lookupProperty(depth0,"name") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":40}}}) : helper))) != null ? stack1 : "")
     + "</option>";
 },"useData":true});
 
-},{"hbsfy/runtime":48}],27:[function(require,module,exports){
+},{"hbsfy/runtime":51}],27:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"kbmb-icon "
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.iconclass : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? lookupProperty(depth0,"module") : depth0)) != null ? lookupProperty(stack1,"settings") : stack1)) != null ? lookupProperty(stack1,"iconclass") : stack1), depth0))
     + "\"></div>\n<div class=\"kbmb-hl\">"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? lookupProperty(depth0,"module") : depth0)) != null ? lookupProperty(stack1,"settings") : stack1)) != null ? lookupProperty(stack1,"name") : stack1), depth0))
     + "</div>\n<div class=\"kbmb-description\">"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.description : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? lookupProperty(depth0,"module") : depth0)) != null ? lookupProperty(stack1,"settings") : stack1)) != null ? lookupProperty(stack1,"description") : stack1), depth0))
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":48}],28:[function(require,module,exports){
+},{"hbsfy/runtime":51}],28:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1;
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"dashicons dashicons-plus kb-js-create-module\"></div>\n<div class=\"kbmb-hl\">"
-    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.parentObject : stack1)) != null ? stack1.post_title : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? lookupProperty(depth0,"module") : depth0)) != null ? lookupProperty(stack1,"parentObject") : stack1)) != null ? lookupProperty(stack1,"post_title") : stack1), depth0))
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":48}],29:[function(require,module,exports){
+},{"hbsfy/runtime":51}],29:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1;
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"module-browser--poster-wrap\">\n    <img src=\""
-    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.poster : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? lookupProperty(depth0,"module") : depth0)) != null ? lookupProperty(stack1,"settings") : stack1)) != null ? lookupProperty(stack1,"poster") : stack1), depth0))
     + "\" >\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":48}],30:[function(require,module,exports){
+},{"hbsfy/runtime":51}],30:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1227,7 +1260,7 @@ exports['default'] = inst;
 module.exports = exports['default'];
 
 
-},{"./handlebars/base":31,"./handlebars/exception":34,"./handlebars/no-conflict":44,"./handlebars/runtime":45,"./handlebars/safe-string":46,"./handlebars/utils":47}],31:[function(require,module,exports){
+},{"./handlebars/base":31,"./handlebars/exception":34,"./handlebars/no-conflict":47,"./handlebars/runtime":48,"./handlebars/safe-string":49,"./handlebars/utils":50}],31:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1250,7 +1283,9 @@ var _logger = require('./logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var VERSION = '4.5.3';
+var _internalProtoAccess = require('./internal/proto-access');
+
+var VERSION = '4.7.6';
 exports.VERSION = VERSION;
 var COMPILER_REVISION = 8;
 exports.COMPILER_REVISION = COMPILER_REVISION;
@@ -1326,6 +1361,13 @@ HandlebarsEnvironment.prototype = {
   },
   unregisterDecorator: function unregisterDecorator(name) {
     delete this.decorators[name];
+  },
+  /**
+   * Reset the memory of illegal property accesses that have already been logged.
+   * @deprecated should only be used in handlebars test-cases
+   */
+  resetLoggedPropertyAccesses: function resetLoggedPropertyAccesses() {
+    _internalProtoAccess.resetLoggedProperties();
   }
 };
 
@@ -1336,7 +1378,7 @@ exports.createFrame = _utils.createFrame;
 exports.logger = _logger2['default'];
 
 
-},{"./decorators":32,"./exception":34,"./helpers":35,"./logger":43,"./utils":47}],32:[function(require,module,exports){
+},{"./decorators":32,"./exception":34,"./helpers":35,"./internal/proto-access":44,"./logger":46,"./utils":50}],32:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1385,11 +1427,10 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../utils":47}],34:[function(require,module,exports){
+},{"../utils":50}],34:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
-
 var errorProps = ['description', 'fileName', 'lineNumber', 'endLineNumber', 'message', 'name', 'number', 'stack'];
 
 function Exception(message, node) {
@@ -1551,7 +1592,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../utils":47}],37:[function(require,module,exports){
+},{"../utils":50}],37:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1657,7 +1698,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../exception":34,"../utils":47}],38:[function(require,module,exports){
+},{"../exception":34,"../utils":50}],38:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1721,14 +1762,18 @@ exports['default'] = function (instance) {
     if (arguments.length != 2) {
       throw new _exception2['default']('#unless requires exactly one argument');
     }
-    return instance.helpers['if'].call(this, conditional, { fn: options.inverse, inverse: options.fn, hash: options.hash });
+    return instance.helpers['if'].call(this, conditional, {
+      fn: options.inverse,
+      inverse: options.fn,
+      hash: options.hash
+    });
   });
 };
 
 module.exports = exports['default'];
 
 
-},{"../exception":34,"../utils":47}],40:[function(require,module,exports){
+},{"../exception":34,"../utils":50}],40:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1760,21 +1805,18 @@ module.exports = exports['default'];
 'use strict';
 
 exports.__esModule = true;
-var dangerousPropertyRegex = /^(constructor|__defineGetter__|__defineSetter__|__lookupGetter__|__proto__)$/;
-
-exports.dangerousPropertyRegex = dangerousPropertyRegex;
 
 exports['default'] = function (instance) {
-  instance.registerHelper('lookup', function (obj, field) {
+  instance.registerHelper('lookup', function (obj, field, options) {
     if (!obj) {
+      // Note for 5.0: Change to "obj == null" in 5.0
       return obj;
     }
-    if (dangerousPropertyRegex.test(String(field)) && !Object.prototype.propertyIsEnumerable.call(obj, field)) {
-      return undefined;
-    }
-    return obj[field];
+    return options.lookupProperty(obj, field);
   });
 };
+
+module.exports = exports['default'];
 
 
 },{}],42:[function(require,module,exports){
@@ -1822,7 +1864,127 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../exception":34,"../utils":47}],43:[function(require,module,exports){
+},{"../exception":34,"../utils":50}],43:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports.createNewLookupObject = createNewLookupObject;
+
+var _utils = require('../utils');
+
+/**
+ * Create a new object with "null"-prototype to avoid truthy results on prototype properties.
+ * The resulting object can be used with "object[property]" to check if a property exists
+ * @param {...object} sources a varargs parameter of source objects that will be merged
+ * @returns {object}
+ */
+
+function createNewLookupObject() {
+  for (var _len = arguments.length, sources = Array(_len), _key = 0; _key < _len; _key++) {
+    sources[_key] = arguments[_key];
+  }
+
+  return _utils.extend.apply(undefined, [Object.create(null)].concat(sources));
+}
+
+
+},{"../utils":50}],44:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports.createProtoAccessControl = createProtoAccessControl;
+exports.resultIsAllowed = resultIsAllowed;
+exports.resetLoggedProperties = resetLoggedProperties;
+// istanbul ignore next
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
+var _createNewLookupObject = require('./create-new-lookup-object');
+
+var _logger = require('../logger');
+
+var logger = _interopRequireWildcard(_logger);
+
+var loggedProperties = Object.create(null);
+
+function createProtoAccessControl(runtimeOptions) {
+  var defaultMethodWhiteList = Object.create(null);
+  defaultMethodWhiteList['constructor'] = false;
+  defaultMethodWhiteList['__defineGetter__'] = false;
+  defaultMethodWhiteList['__defineSetter__'] = false;
+  defaultMethodWhiteList['__lookupGetter__'] = false;
+
+  var defaultPropertyWhiteList = Object.create(null);
+  // eslint-disable-next-line no-proto
+  defaultPropertyWhiteList['__proto__'] = false;
+
+  return {
+    properties: {
+      whitelist: _createNewLookupObject.createNewLookupObject(defaultPropertyWhiteList, runtimeOptions.allowedProtoProperties),
+      defaultValue: runtimeOptions.allowProtoPropertiesByDefault
+    },
+    methods: {
+      whitelist: _createNewLookupObject.createNewLookupObject(defaultMethodWhiteList, runtimeOptions.allowedProtoMethods),
+      defaultValue: runtimeOptions.allowProtoMethodsByDefault
+    }
+  };
+}
+
+function resultIsAllowed(result, protoAccessControl, propertyName) {
+  if (typeof result === 'function') {
+    return checkWhiteList(protoAccessControl.methods, propertyName);
+  } else {
+    return checkWhiteList(protoAccessControl.properties, propertyName);
+  }
+}
+
+function checkWhiteList(protoAccessControlForType, propertyName) {
+  if (protoAccessControlForType.whitelist[propertyName] !== undefined) {
+    return protoAccessControlForType.whitelist[propertyName] === true;
+  }
+  if (protoAccessControlForType.defaultValue !== undefined) {
+    return protoAccessControlForType.defaultValue;
+  }
+  logUnexpecedPropertyAccessOnce(propertyName);
+  return false;
+}
+
+function logUnexpecedPropertyAccessOnce(propertyName) {
+  if (loggedProperties[propertyName] !== true) {
+    loggedProperties[propertyName] = true;
+    logger.log('error', 'Handlebars: Access has been denied to resolve the property "' + propertyName + '" because it is not an "own property" of its parent.\n' + 'You can add a runtime option to disable the check or this warning:\n' + 'See https://handlebarsjs.com/api-reference/runtime-options.html#options-to-control-prototype-access for details');
+  }
+}
+
+function resetLoggedProperties() {
+  Object.keys(loggedProperties).forEach(function (propertyName) {
+    delete loggedProperties[propertyName];
+  });
+}
+
+
+},{"../logger":46,"./create-new-lookup-object":43}],45:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports.wrapHelper = wrapHelper;
+
+function wrapHelper(helper, transformOptionsFn) {
+  if (typeof helper !== 'function') {
+    // This should not happen, but apparently it does in https://github.com/wycats/handlebars.js/issues/1639
+    // We try to make the wrapper least-invasive by not wrapping it, if the helper is not a function.
+    return helper;
+  }
+  var wrapper = function wrapper() /* dynamic arguments */{
+    var options = arguments[arguments.length - 1];
+    arguments[arguments.length - 1] = transformOptionsFn(options);
+    return helper.apply(this, arguments);
+  };
+  return wrapper;
+}
+
+
+},{}],46:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1853,8 +2015,8 @@ var logger = {
 
     if (typeof console !== 'undefined' && logger.lookupLevel(logger.level) <= level) {
       var method = logger.methodMap[level];
+      // eslint-disable-next-line no-console
       if (!console[method]) {
-        // eslint-disable-line no-console
         method = 'log';
       }
 
@@ -1871,8 +2033,7 @@ exports['default'] = logger;
 module.exports = exports['default'];
 
 
-},{"./utils":47}],44:[function(require,module,exports){
-/* global window */
+},{"./utils":50}],47:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1893,7 +2054,7 @@ exports['default'] = function (Handlebars) {
 module.exports = exports['default'];
 
 
-},{}],45:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1923,6 +2084,10 @@ var _base = require('./base');
 
 var _helpers = require('./helpers');
 
+var _internalWrapHelper = require('./internal/wrapHelper');
+
+var _internalProtoAccess = require('./internal/proto-access');
+
 function checkRevision(compilerInfo) {
   var compilerRevision = compilerInfo && compilerInfo[0] || 1,
       currentRevision = _base.COMPILER_REVISION;
@@ -1942,7 +2107,6 @@ function checkRevision(compilerInfo) {
 }
 
 function template(templateSpec, env) {
-
   /* istanbul ignore next */
   if (!env) {
     throw new _exception2['default']('No environment passed to template');
@@ -1969,13 +2133,16 @@ function template(templateSpec, env) {
     }
     partial = env.VM.resolvePartial.call(this, partial, context, options);
 
-    var optionsWithHooks = Utils.extend({}, options, { hooks: this.hooks });
+    var extendedOptions = Utils.extend({}, options, {
+      hooks: this.hooks,
+      protoAccessControl: this.protoAccessControl
+    });
 
-    var result = env.VM.invokePartial.call(this, partial, context, optionsWithHooks);
+    var result = env.VM.invokePartial.call(this, partial, context, extendedOptions);
 
     if (result == null && env.compile) {
       options.partials[options.name] = env.compile(partial, templateSpec.compilerOptions, env);
-      result = options.partials[options.name](context, optionsWithHooks);
+      result = options.partials[options.name](context, extendedOptions);
     }
     if (result != null) {
       if (options.indent) {
@@ -1999,14 +2166,31 @@ function template(templateSpec, env) {
   var container = {
     strict: function strict(obj, name, loc) {
       if (!obj || !(name in obj)) {
-        throw new _exception2['default']('"' + name + '" not defined in ' + obj, { loc: loc });
+        throw new _exception2['default']('"' + name + '" not defined in ' + obj, {
+          loc: loc
+        });
       }
       return obj[name];
+    },
+    lookupProperty: function lookupProperty(parent, propertyName) {
+      var result = parent[propertyName];
+      if (result == null) {
+        return result;
+      }
+      if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+        return result;
+      }
+
+      if (_internalProtoAccess.resultIsAllowed(result, container.protoAccessControl, propertyName)) {
+        return result;
+      }
+      return undefined;
     },
     lookup: function lookup(depths, name) {
       var len = depths.length;
       for (var i = 0; i < len; i++) {
-        if (depths[i] && depths[i][name] != null) {
+        var result = depths[i] && container.lookupProperty(depths[i], name);
+        if (result != null) {
           return depths[i][name];
         }
       }
@@ -2042,6 +2226,15 @@ function template(templateSpec, env) {
       }
       return value;
     },
+    mergeIfNeeded: function mergeIfNeeded(param, common) {
+      var obj = param || common;
+
+      if (param && common && param !== common) {
+        obj = Utils.extend({}, common, param);
+      }
+
+      return obj;
+    },
     // An empty object to use as replacement for null-contexts
     nullContext: Object.seal({}),
 
@@ -2071,28 +2264,35 @@ function template(templateSpec, env) {
     function main(context /*, options*/) {
       return '' + templateSpec.main(container, context, container.helpers, container.partials, data, blockParams, depths);
     }
+
     main = executeDecorators(templateSpec.main, main, container, options.depths || [], data, blockParams);
     return main(context, options);
   }
+
   ret.isTop = true;
 
   ret._setup = function (options) {
     if (!options.partial) {
-      container.helpers = Utils.extend({}, env.helpers, options.helpers);
+      var mergedHelpers = Utils.extend({}, env.helpers, options.helpers);
+      wrapHelpersToPassLookupProperty(mergedHelpers, container);
+      container.helpers = mergedHelpers;
 
       if (templateSpec.usePartial) {
-        container.partials = Utils.extend({}, env.partials, options.partials);
+        // Use mergeIfNeeded here to prevent compiling global partials multiple times
+        container.partials = container.mergeIfNeeded(options.partials, env.partials);
       }
       if (templateSpec.usePartial || templateSpec.useDecorators) {
         container.decorators = Utils.extend({}, env.decorators, options.decorators);
       }
 
       container.hooks = {};
+      container.protoAccessControl = _internalProtoAccess.createProtoAccessControl(options);
 
       var keepHelperInHelpers = options.allowCallsToHelperMissing || templateWasPrecompiledWithCompilerV7;
       _helpers.moveHelperToHooks(container, 'helperMissing', keepHelperInHelpers);
       _helpers.moveHelperToHooks(container, 'blockHelperMissing', keepHelperInHelpers);
     } else {
+      container.protoAccessControl = options.protoAccessControl; // internal option
       container.helpers = options.helpers;
       container.partials = options.partials;
       container.decorators = options.decorators;
@@ -2213,8 +2413,22 @@ function executeDecorators(fn, prog, container, depths, data, blockParams) {
   return prog;
 }
 
+function wrapHelpersToPassLookupProperty(mergedHelpers, container) {
+  Object.keys(mergedHelpers).forEach(function (helperName) {
+    var helper = mergedHelpers[helperName];
+    mergedHelpers[helperName] = passLookupPropertyOption(helper, container);
+  });
+}
 
-},{"./base":31,"./exception":34,"./helpers":35,"./utils":47}],46:[function(require,module,exports){
+function passLookupPropertyOption(helper, container) {
+  var lookupProperty = container.lookupProperty;
+  return _internalWrapHelper.wrapHelper(helper, function (options) {
+    return Utils.extend({ lookupProperty: lookupProperty }, options);
+  });
+}
+
+
+},{"./base":31,"./exception":34,"./helpers":35,"./internal/proto-access":44,"./internal/wrapHelper":45,"./utils":50}],49:[function(require,module,exports){
 // Build out our basic SafeString type
 'use strict';
 
@@ -2231,7 +2445,7 @@ exports['default'] = SafeString;
 module.exports = exports['default'];
 
 
-},{}],47:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2242,7 +2456,6 @@ exports.isEmpty = isEmpty;
 exports.createFrame = createFrame;
 exports.blockParams = blockParams;
 exports.appendContextPath = appendContextPath;
-
 var escape = {
   '&': '&amp;',
   '<': '&lt;',
@@ -2358,7 +2571,7 @@ function appendContextPath(contextPath, id) {
 }
 
 
-},{}],48:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
 },{"handlebars/runtime":30}]},{},[12]);

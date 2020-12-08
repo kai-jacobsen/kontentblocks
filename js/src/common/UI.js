@@ -303,7 +303,6 @@ var Ui = {
   flushLocalStorage: function () {
     var hash = Config.get('env').hash;
     if (store.get('kbhash') !== hash) {
-      store.clear();
       store.set('kbhash', hash)
     }
   },

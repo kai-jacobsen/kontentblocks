@@ -302,7 +302,7 @@ function getPostPanelModel($panelId = null, $postId = null, $setup = true)
 {
     $panel = getPostPanel($panelId, $postId);
     if (is_a($panel, PostPanel::class)) {
-        if ($setup){
+        if ($setup) {
             return $panel->setupViewModel();
         }
         return $panel->getModel();

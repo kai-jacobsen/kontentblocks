@@ -3,11 +3,11 @@ KB.Events = {};
 _.extend(KB, Backbone.Events);
 _.extend(KB.Events, Backbone.Events);
 
+
 KB.currentModule = {};
 KB.currentArea = {};
 if (typeof global == 'undefined') { global = window }
 // requires
-
 var ViewsCollection = require('shared/ViewsCollection');
 var FieldControlsCollection = require('fields/FieldControlsCollection');
 var AreasCollection = require('backend/Collections/AreasCollection');

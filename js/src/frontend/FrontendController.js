@@ -5,6 +5,7 @@ _.extend(KB.Events, Backbone.Events);
 
 KB.currentModule = {};
 KB.currentArea = {};
+if (typeof global == 'undefined') { global = window }
 
 
 // requires

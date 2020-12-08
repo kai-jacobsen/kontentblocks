@@ -1,7 +1,6 @@
 module.exports = function (grunt) {
 
   require('time-grunt')(grunt);
-  var envify = require('envify/custom')
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),

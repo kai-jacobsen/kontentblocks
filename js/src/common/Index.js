@@ -27,7 +27,6 @@ module.exports = {
     _.each(this.strings, function(string){
       res = res + string + '\n';
     });
-
     return res;
 
   }

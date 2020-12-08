@@ -1,4 +1,6 @@
 var Index = require('common/Index');
+
+
 KBFieldContent = function () {
   var that = this;
   YoastSEO.app.registerPlugin('kbfieldcontent', {status: 'ready'});
@@ -27,8 +29,10 @@ KBFieldContent.prototype.contentModification = function (data) {
   return data + Index.concatStrings();
 };
 
-jQuery(document).ready(function () {
-  if (window.YoastSEO) {
+jQuery(window).on(
+  "YoastSEO:ready",
+  function () {
     new KBFieldContent();
   }
-});
+);
+

@@ -20,14 +20,15 @@ module.exports = BaseView.extend({
           var limit = settings.settings.charlimit;
           var $charlimit = that.$('.char-limit');
           editor.on('keyDown SetContent', function (ed, e) {
-            var content = tinyMCE.activeEditor.getContent();
+            var content = this.getContent({format: 'text'});
             var max = limit;
             var len = content.length;
+            var rest = len - max;
             if (len >= max) {
-              $charlimit.html('<span class="text-error">Limit reached</span>');
+              $charlimit.html('<span class="text-error" style="color: red;">Zu viele Zeichen:-' + rest +'</span>');
             } else {
               var charCount = max - len;
-              $charlimit.html(charCount + ' characters left');
+              $charlimit.html(charCount + ' Zeichen verbleiben');
             }
           })
         }

@@ -88,7 +88,7 @@ module.exports = BaseView.extend({
         that.setMarker(e.latlng.lat, e.latlng.lng, Object.assign({}, that.default, {
           road: result.properties.address.footway || result.properties.address.pedestrian || result.properties.address.road,
           postcode: result.properties.address.postcode,
-          village: result.properties.address.city,
+          village: result.properties.address.city || result.properties.address.town,
           state: result.properties.address.state || result.properties.address.city,
           house_number: result.properties.address.house_number || ''
         }), true)
