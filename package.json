@@ -22,7 +22,7 @@
     "grunt-exec": "^0.4.7",
     "grunt-notify": "^0.4.1",
     "grunt-sass": "^1.2.1",
-    "handlebars": "^4.0.11",
+    "handlebars": "^4.7.7",
     "hbsfy": "^2.8.1",
     "jshint-log-reporter": "^1.0.8",
     "tether": "^1.4.4"
