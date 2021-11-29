@@ -5913,7 +5913,7 @@ module.exports = BaseView.extend({
           })
           .on('ready', function () {
             that.ready(that);
-            let selection = that.frame.state().get('selection');
+            var selection = that.frame.state().get('selection');
             selection.add(that.attachment);
             console.log(selection);
           }).on('replace', function () {
