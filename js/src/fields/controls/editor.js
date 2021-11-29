@@ -6,35 +6,44 @@ module.exports = BaseView.extend({
   },
   render: function () {
     var that = this;
-    var settings = this.model.toJSON();
     this.$textarea = this.$('textarea');
+    var ed = tinymce.get(that.$textarea.attr('id'));
+    that.attachEvents(ed);
     tinymce.on('AddEditor', function (event) {
       var editor = event.editor;
-      if (editor && editor.id === that.$textarea.attr('id') && !that.editor) {
-        that.editor = editor;
-        editor.on('change', function () {
-          that.update(editor.getContent());
-        });
-
-        if (settings.settings && settings.settings.charlimit) {
-          var limit = settings.settings.charlimit;
-          var $charlimit = that.$('.char-limit');
-          editor.on('keyDown SetContent', function (ed, e) {
-            var content = this.getContent({format: 'text'});
-            var max = limit;
-            var len = content.length;
-            var rest = len - max;
-            if (len >= max) {
-              $charlimit.html('<span class="text-error" style="color: red;">Zu viele Zeichen:-' + rest +'</span>');
-            } else {
-              var charCount = max - len;
-              $charlimit.html(charCount + ' Zeichen verbleiben');
-            }
-          })
-        }
-
+      if (editor) {
+        that.attachEvents(editor);
       }
+
     });
+  },
+  attachEvents: function(editor) {
+    var that = this;
+    var settings = this.model.toJSON();
+    if (editor && editor.id === that.$textarea.attr('id') && !that.editor) {
+      that.editor = editor;
+      editor.on('change', function () {
+        that.update(editor.getContent());
+      });
+
+      if (settings.settings && settings.settings.charlimit) {
+        var limit = settings.settings.charlimit;
+        var $charlimit = that.$('.char-limit');
+        editor.on('keyDown SetContent', function (ed, e) {
+          var content = this.getContent({format: 'text'});
+          var max = limit;
+          var len = content.length;
+          var rest = len - max;
+          if (len >= max) {
+            $charlimit.html('<span class="text-error" style="color: red;">Zu viele Zeichen:-' + rest + '</span>');
+          } else {
+            var charCount = max - len;
+            $charlimit.html(charCount + ' Zeichen verbleiben');
+          }
+        })
+      }
+
+    }
   },
   derender: function () {
     this.stopListening();

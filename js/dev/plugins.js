@@ -1,4 +1,5 @@
-/*! Kontentblocks DevVersion 2020-12-08 */
+/*! Kontentblocks DevVersion 2021-11-29 */
+
 !function(a) {
     "use strict";
     function b(a, b) {
@@ -595,7 +596,9 @@
         }
         function aa(a, b, c) {
             var e = b, f = 0, g = 0;
-            do f += e.offsetLeft, g += e.offsetTop; while (e = e.offsetParent);
+            do {
+                f += e.offsetLeft, g += e.offsetTop;
+            } while (e = e.offsetParent);
             var h, i;
             c === !0 ? (h = a.pageX, i = a.pageY) : (h = a.clientX, i = a.clientY);
             var j = d();
@@ -764,7 +767,9 @@
                 if (!isNaN(a) && !isNaN(b)) {
                     var c = this.elements.dialog, e = c, f = 0, g = 0;
                     c.style.left && (f -= parseInt(c.style.left, 10)), c.style.top && (g -= parseInt(c.style.top, 10));
-                    do f += e.offsetLeft, g += e.offsetTop; while (e = e.offsetParent);
+                    do {
+                        f += e.offsetLeft, g += e.offsetTop;
+                    } while (e = e.offsetParent);
                     var h = a - f, i = b - g;
                     d() && (h *= -1), c.style.left = h + "px", c.style.top = i + "px";
                 }
@@ -1489,7 +1494,7 @@
             }
         }
         for (var i = startIndex || 0, n = startValue || 0; ;) {
-            var nextTab = string.indexOf("	", i);
+            var nextTab = string.indexOf("\t", i);
             if (nextTab < 0 || nextTab >= end) {
                 return n + (end - i);
             }
@@ -1530,7 +1535,7 @@
     };
     function findColumn(string, goal, tabSize) {
         for (var pos = 0, col = 0; ;) {
-            var nextTab = string.indexOf("	", pos);
+            var nextTab = string.indexOf("\t", pos);
             if (nextTab == -1) {
                 nextTab = string.length;
             }
@@ -3353,11 +3358,11 @@
                 }
                 pos += skipped + 1;
                 var txt$1 = void 0;
-                if (m[0] == "	") {
+                if (m[0] == "\t") {
                     var tabSize = builder.cm.options.tabSize, tabWidth = tabSize - builder.col % tabSize;
                     txt$1 = content.appendChild(elt("span", spaceStr(tabWidth), "cm-tab"));
                     txt$1.setAttribute("role", "presentation");
-                    txt$1.setAttribute("cm-text", "	");
+                    txt$1.setAttribute("cm-text", "\t");
                     builder.col += tabWidth;
                 } else if (m[0] == "\r" || m[0] == "\n") {
                     txt$1 = content.appendChild(elt("span", m[0] == "\r" ? "␍" : "␤", "cm-invalidchar"));
@@ -5181,8 +5186,8 @@
         }
     }
     var scrollbarModel = {
-        "native": NativeScrollbars,
-        "null": NullScrollbars
+        native: NativeScrollbars,
+        null: NullScrollbars
     };
     function initScrollbars(cm) {
         if (cm.display.scrollbars) {
@@ -8745,7 +8750,7 @@
             return cm.indentSelection("subtract");
         },
         insertTab: function(cm) {
-            return cm.replaceSelection("	");
+            return cm.replaceSelection("\t");
         },
         insertSoftTab: function(cm) {
             var spaces = [], ranges = cm.listSelections(), tabSize = cm.options.tabSize;
@@ -9440,7 +9445,7 @@
             }
         });
         option("specialChars", /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028\u2029\ufeff]/g, function(cm, val, old) {
-            cm.state.specialChars = new RegExp(val.source + (val.test("	") ? "" : "|	"), "g");
+            cm.state.specialChars = new RegExp(val.source + (val.test("\t") ? "" : "|\t"), "g");
             if (old != Init) {
                 cm.refresh();
             }
@@ -9849,7 +9854,7 @@
         if (cm.options.indentWithTabs) {
             for (var i = Math.floor(indentation / tabSize); i; --i) {
                 pos += tabSize;
-                indentString += "	";
+                indentString += "\t";
             }
         }
         if (pos < indentation) {
@@ -11980,7 +11985,7 @@
                     if (stream.eat("[")) {
                         if (stream.match("CDATA[")) return chain(inBlock("atom", "]]>")); else return null;
                     } else if (stream.match("--")) {
-                        return chain(inBlock("comment", "-->"));
+                        return chain(inBlock("comment", "--\x3e"));
                     } else if (stream.match("DOCTYPE", true, true)) {
                         stream.eatWhile(/[\w\._\-]/);
                         return chain(doctype(1));
@@ -12254,8 +12259,8 @@
                 if (context) return context.indent + indentUnit; else return state.baseIndent || 0;
             },
             electricInput: /<\/[\s\w:]+>$/,
-            blockCommentStart: "<!--",
-            blockCommentEnd: "-->",
+            blockCommentStart: "\x3c!--",
+            blockCommentEnd: "--\x3e",
             configuration: config.htmlMode ? "html" : "xml",
             helperType: config.htmlMode ? "html" : "xml",
             skipAttribute: function(state) {
@@ -12296,46 +12301,46 @@
                 style: "atom"
             };
             return {
-                "if": kw("if"),
-                "while": A,
-                "with": A,
-                "else": B,
-                "do": B,
-                "try": B,
-                "finally": B,
-                "return": D,
-                "break": D,
-                "continue": D,
-                "new": kw("new"),
-                "delete": C,
-                "void": C,
-                "throw": C,
-                "debugger": kw("debugger"),
-                "var": kw("var"),
-                "const": kw("var"),
+                if: kw("if"),
+                while: A,
+                with: A,
+                else: B,
+                do: B,
+                try: B,
+                finally: B,
+                return: D,
+                break: D,
+                continue: D,
+                new: kw("new"),
+                delete: C,
+                void: C,
+                throw: C,
+                debugger: kw("debugger"),
+                var: kw("var"),
+                const: kw("var"),
                 let: kw("var"),
-                "function": kw("function"),
-                "catch": kw("catch"),
-                "for": kw("for"),
-                "switch": kw("switch"),
-                "case": kw("case"),
-                "default": kw("default"),
-                "in": operator,
-                "typeof": operator,
-                "instanceof": operator,
-                "true": atom,
-                "false": atom,
-                "null": atom,
+                function: kw("function"),
+                catch: kw("catch"),
+                for: kw("for"),
+                switch: kw("switch"),
+                case: kw("case"),
+                default: kw("default"),
+                in: operator,
+                typeof: operator,
+                instanceof: operator,
+                true: atom,
+                false: atom,
+                null: atom,
                 undefined: atom,
                 NaN: atom,
                 Infinity: atom,
-                "this": kw("this"),
-                "class": kw("class"),
-                "super": kw("atom"),
-                "yield": C,
-                "export": kw("export"),
-                "import": kw("import"),
-                "extends": C,
+                this: kw("this"),
+                class: kw("class"),
+                super: kw("atom"),
+                yield: C,
+                export: kw("export"),
+                import: kw("import"),
+                extends: C,
                 await: C
             };
         }();
@@ -12497,7 +12502,7 @@
             variable: true,
             string: true,
             regexp: true,
-            "this": true,
+            this: true,
             "jsonld-keyword": true
         };
         function JSLexical(indented, column, type, align, prev, info) {
@@ -15733,7 +15738,7 @@ Date.patterns = {
         "use strict";
         var TRUE = true, FALSE = false, NULL = null, X = "x", Y = "y", WIDTH = "width", HEIGHT = "height", TOP = "top", LEFT = "left", BOTTOM = "bottom", RIGHT = "right", CENTER = "center", FLIP = "flip", FLIPINVERT = "flipinvert", SHIFT = "shift", QTIP, PROTOTYPE, CORNER, CHECKS, PLUGINS = {}, NAMESPACE = "qtip", ATTR_HAS = "data-hasqtip", ATTR_ID = "data-qtip-id", WIDGET = [ "ui-widget", "ui-tooltip" ], SELECTOR = "." + NAMESPACE, INACTIVE_EVENTS = "click dblclick mousedown mouseup mousemove mouseleave mouseenter".split(" "), CLASS_FIXED = NAMESPACE + "-fixed", CLASS_DEFAULT = NAMESPACE + "-default", CLASS_FOCUS = NAMESPACE + "-focus", CLASS_HOVER = NAMESPACE + "-hover", CLASS_DISABLED = NAMESPACE + "-disabled", replaceSuffix = "_replacedByqTip", oldtitle = "oldtitle", trackingBound, BROWSER = {
             ie: function() {
-                for (var v = 4, i = document.createElement("div"); (i.innerHTML = "<!--[if gt IE " + v + "]><i></i><![endif]-->") && i.getElementsByTagName("i")[0]; v += 1) {}
+                for (var v = 4, i = document.createElement("div"); (i.innerHTML = "\x3c!--[if gt IE " + v + "]><i></i><![endif]--\x3e") && i.getElementsByTagName("i")[0]; v += 1) {}
                 return v > 4 ? v : NaN;
             }(),
             iOS: parseFloat(("" + (/CPU.*OS ([0-9_]{1,5})|(CPU like).*AppleWebKit.*Mobile/i.exec(navigator.userAgent) || [ 0, "" ])[1]).replace("undefined", "3_2").replace("_", ".").replace("_", "")) || FALSE
@@ -15777,7 +15782,7 @@ Date.patterns = {
             }).my);
             this.tooltip = elements.tooltip = tooltip = $("<div/>", {
                 id: this._id,
-                "class": [ NAMESPACE, CLASS_DEFAULT, options.style.classes, cache.posClass ].join(" "),
+                class: [ NAMESPACE, CLASS_DEFAULT, options.style.classes, cache.posClass ].join(" "),
                 width: options.style.width || "",
                 height: options.style.height || "",
                 tracking: posOptions.target === "mouse" && posOptions.adjust.mouse,
@@ -15787,7 +15792,7 @@ Date.patterns = {
                 "aria-describedby": this._id + "-content",
                 "aria-hidden": TRUE
             }).toggleClass(CLASS_DISABLED, this.disabled).attr(ATTR_ID, this.id).data(NAMESPACE, this).appendTo(posOptions.container).append(elements.content = $("<div />", {
-                "class": NAMESPACE + "-content",
+                class: NAMESPACE + "-content",
                 id: this._id + "-content",
                 "aria-atomic": TRUE
             }));
@@ -16140,10 +16145,10 @@ Date.patterns = {
                 this._removeTitle();
             }
             elements.titlebar = $("<div />", {
-                "class": NAMESPACE + "-titlebar " + (this.options.style.widget ? createWidgetClass("header") : "")
+                class: NAMESPACE + "-titlebar " + (this.options.style.widget ? createWidgetClass("header") : "")
             }).append(elements.title = $("<div />", {
                 id: id,
-                "class": NAMESPACE + "-title",
+                class: NAMESPACE + "-title",
                 "aria-atomic": TRUE
             })).insertBefore(elements.content).delegate(".qtip-close", "mousedown keydown mouseup keyup mouseout", function(event) {
                 $(this).toggleClass("ui-state-active ui-state-focus", event.type.substr(-4) === "down");
@@ -16518,11 +16523,11 @@ Date.patterns = {
                 elements.button = button;
             } else {
                 elements.button = $("<a />", {
-                    "class": "qtip-close " + (this.options.style.widget ? "" : NAMESPACE + "-icon"),
+                    class: "qtip-close " + (this.options.style.widget ? "" : NAMESPACE + "-icon"),
                     title: close,
                     "aria-label": close
                 }).prepend($("<span />", {
-                    "class": "ui-icon ui-icon-close",
+                    class: "ui-icon ui-icon-close",
                     html: "&times;"
                 }));
             }
@@ -19928,7 +19933,7 @@ if (!("classList" in document.createElement("_"))) {
     (function() {
         "use strict";
         var WHITESPACE_CHARS, KNOWN_TLDS_FRAGMENT, LINK_REGEXP_TEXT, KNOWN_TLDS_REGEXP;
-        WHITESPACE_CHARS = [ " ", "	", "\n", "\r", " ", " ", " ", " ", " ", "\u2028", "\u2029" ];
+        WHITESPACE_CHARS = [ " ", "\t", "\n", "\r", " ", " ", " ", " ", " ", "\u2028", "\u2029" ];
         KNOWN_TLDS_FRAGMENT = "com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|" + "xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|" + "bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|" + "fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|" + "is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|" + "mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|" + "pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|" + "tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw";
         LINK_REGEXP_TEXT = "(" + "((?:(https?://|ftps?://|nntp://)|www\\d{0,3}[.]|[a-z0-9.\\-]+[.](" + KNOWN_TLDS_FRAGMENT + ")\\/)\\S+(?:[^\\s`!\\[\\]{};:'\".,?«»“”‘’]))" + ")|(([a-z0-9\\-]+\\.)?[a-z0-9\\-]+\\.(" + KNOWN_TLDS_FRAGMENT + "))";
         KNOWN_TLDS_REGEXP = new RegExp("^(" + KNOWN_TLDS_FRAGMENT + ")$", "i");
@@ -20826,7 +20831,7 @@ if (!("classList" in document.createElement("_"))) {
             firstButtonClass: "medium-editor-button-first",
             lastButtonClass: "medium-editor-button-last",
             standardizeSelectionStart: false,
-            "static": false,
+            static: false,
             sticky: false,
             stickyTopOffset: 0,
             updateOnEmptySelection: false,
@@ -23589,7 +23594,7 @@ if (!("classList" in document.createElement("_"))) {
                         $children.push($child);
                     }
                     var $childrenContainer = $("<ul></ul>", {
-                        "class": "select2-results__options select2-results__options--nested"
+                        class: "select2-results__options select2-results__options--nested"
                     });
                     $childrenContainer.append($children);
                     $option.append(label);

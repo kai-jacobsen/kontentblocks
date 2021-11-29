@@ -42,11 +42,13 @@ module.exports = BaseView.extend({
       this.frame.dispose();
     }
 
+
     // we only want to query "our" image attachment
     // value of post__in must be an array
 
     var queryargs = {};
-    if (this.model.get('value').id !== '') {
+    var preselected = this.model.get('value').id;
+    if (preselected !== undefined) {
       queryargs.post__in = [this.model.get('value').id];
     }
     wp.media.query(queryargs) // set the query
@@ -55,17 +57,20 @@ module.exports = BaseView.extend({
         // inside the callback 'this' refers to the result collection
         // there should be only one model, assign it to a var
         // if (queryargs.post__in){
-        var attachment = this.first();
-        that.attachment = attachment;
+        // var attachment = this.first();
+        // that.attachment = attachment;
         // }
         // this is a bit odd: if you want to access the 'sizes' in the modal
         // and if you need access to the image editor / replace image function
 
         // attachment_id must be set.
         // see media-models.js, Line ~370 / PostImage
-        if (attachment) {
+        var attachment = that.attachment
+
+        if (attachment && attachment.get('id', false)) {
           attachment.set('attachment_id', attachment.get('id'));
-          metadata = that.attachment.toJSON();
+          // metadata = attachment.toJSON();
+          metadata = {};
         } else {
           metadata = {};
           that.defaultFrame = 'select';
@@ -77,9 +82,11 @@ module.exports = BaseView.extend({
           state: that.defaultState, // default state, makes sense
           metadata: metadata, // the important bit, thats where the initial information come from
           imageEditView: that,
+          uploadedTo: 0,
           type: 'image',
           library: {
-            type: 'image'
+            type: 'image',
+            cache: false
           }
         });
         that.frame.on('update', function (attachmentObj) { // bind callback to 'update'
@@ -93,6 +100,9 @@ module.exports = BaseView.extend({
           })
           .on('ready', function () {
             that.ready(that);
+            let selection = that.frame.state().get('selection');
+            selection.add(that.attachment);
+            console.log(selection);
           }).on('replace', function () {
           that.replace(that.frame.image.attachment);
         }).on('select', function (what) {

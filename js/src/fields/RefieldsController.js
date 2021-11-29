@@ -7,6 +7,7 @@ Fields.registerObject('file-multiple', require('./controls/file-multiple'));
 Fields.registerObject('flexfields', require('./controls/flexfields'));
 Fields.registerObject('gallery', require('./controls/gallery'));
 Fields.registerObject('gallery2', require('./controls/gallery2'));
+Fields.registerObject('gallery-ext', require('./controls/gallery-ext'));
 Fields.registerObject('image', require('./controls/image'));
 Fields.registerObject('cropimage', require('./controls/cropimage'));
 Fields.registerObject('link', require('./controls/link'));

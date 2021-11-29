@@ -4,7 +4,6 @@ var Index = require('common/Index');
 KBFieldContent = function () {
   var that = this;
   YoastSEO.app.registerPlugin('kbfieldcontent', {status: 'ready'});
-
   /**
    * @param modification    {string}    The name of the filter
    * @param callable        {function}  The callable
@@ -16,7 +15,7 @@ KBFieldContent = function () {
   YoastSEO.app.registerModification('content', this.contentModification, 'kbfieldcontent', 5);
   if (KB.ChangeObserver) {
     KB.ChangeObserver.on('change', function () {
-      // YoastSEO.app.refresh();
+      YoastSEO.app.refresh();
     });
   }
 
@@ -26,13 +25,18 @@ KBFieldContent = function () {
  * @param data The data to modify
  */
 KBFieldContent.prototype.contentModification = function (data) {
+  console.log(Index.concatStrings());
   return data + Index.concatStrings();
 };
 
-jQuery(window).on(
-  "YoastSEO:ready",
-  function () {
-    new KBFieldContent();
-  }
-);
+if (typeof YoastSEO !== "undefined" && typeof YoastSEO.app !== "undefined") {
+  new KBFieldContent();
+} else {
+  jQuery(window).on(
+    "YoastSEO:ready",
+    function () {
+      new KBFieldContent();
+    }
+  );
+}
 

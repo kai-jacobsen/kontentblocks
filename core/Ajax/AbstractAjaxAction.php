@@ -2,7 +2,6 @@
 
 namespace Kontentblocks\Ajax;
 
-
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -48,5 +47,4 @@ class AbstractAjaxAction implements AjaxActionInterface
     {
         return new AjaxErrorResponse('no action implemented');
     }
-
 }

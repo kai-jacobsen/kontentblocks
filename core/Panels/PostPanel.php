@@ -101,7 +101,7 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
         $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
-        $savedData = $this->dataProvider->get(Utilities::buildContextKey($this->baseId));
+        $savedData = $this->dataProvider->get(Utilities::buildContextKey($this->baseId,$environment) );
         $this->model = new $this->args['modelClass']($savedData, $this);
         $this->setupFields();
         $this->model = $this->prepareModel();

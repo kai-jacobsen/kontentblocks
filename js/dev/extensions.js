@@ -159,31 +159,33 @@ module.exports = {
 module.exports = {
   fields: [],
   strings: [],
-  getFields: function(){
+  getFields: function () {
     this.fields = [];
     this.strings = [];
     var $fields = jQuery('[data-kbfuid]');
-    _.each($fields, function(el){
+    _.each($fields, function (el) {
       var id = jQuery(el).data('kbfuid');
       var field = KB.FieldControls.get(id);
-      if (field){
+      if (field) {
         this.fields.push(field);
       }
     }, this);
   },
-  getStrings: function(){
+  getStrings: function () {
     this.getFields();
-    _.each(this.fields, function(field){
-      if (field.FieldControlView){
-        this.strings.push(field.FieldControlView.toString()); 
+    _.each(this.fields, function (field) {
+      if (field.FieldControlView) {
+        this.strings.push(field.FieldControlView.toString());
       }
     }, this);
   },
-  concatStrings:function(){
+  concatStrings: function () {
     this.getStrings();
     var res = '';
-    _.each(this.strings, function(string){
-      res = res + string + '\n';
+    _.each(this.strings, function (string) {
+      if (string !== ''){
+        res = res + string + '\n';
+      }
     });
     return res;
 
@@ -457,7 +459,6 @@ module.exports = Backbone.Model.extend({
     this.set('backup-ui', require('extensions/BackupUI'));
     this.set('clipboard', require('extensions/Clipboard').init());
     this.set('yoast', require('extensions/YoastSeo'));
-
   }
 
 });
@@ -646,7 +647,6 @@ var Index = require('common/Index');
 KBFieldContent = function () {
   var that = this;
   YoastSEO.app.registerPlugin('kbfieldcontent', {status: 'ready'});
-
   /**
    * @param modification    {string}    The name of the filter
    * @param callable        {function}  The callable
@@ -658,7 +658,7 @@ KBFieldContent = function () {
   YoastSEO.app.registerModification('content', this.contentModification, 'kbfieldcontent', 5);
   if (KB.ChangeObserver) {
     KB.ChangeObserver.on('change', function () {
-      // YoastSEO.app.refresh();
+      YoastSEO.app.refresh();
     });
   }
 
@@ -668,15 +668,20 @@ KBFieldContent = function () {
  * @param data The data to modify
  */
 KBFieldContent.prototype.contentModification = function (data) {
+  console.log(Index.concatStrings());
   return data + Index.concatStrings();
 };
 
-jQuery(window).on(
-  "YoastSEO:ready",
-  function () {
-    new KBFieldContent();
-  }
-);
+if (typeof YoastSEO !== "undefined" && typeof YoastSEO.app !== "undefined") {
+  new KBFieldContent();
+} else {
+  jQuery(window).on(
+    "YoastSEO:ready",
+    function () {
+      new KBFieldContent();
+    }
+  );
+}
 
 
 },{"common/Index":6}],16:[function(require,module,exports){
@@ -1285,7 +1290,7 @@ var _logger2 = _interopRequireDefault(_logger);
 
 var _internalProtoAccess = require('./internal/proto-access');
 
-var VERSION = '4.7.6';
+var VERSION = '4.7.7';
 exports.VERSION = VERSION;
 var COMPILER_REVISION = 8;
 exports.COMPILER_REVISION = COMPILER_REVISION;
@@ -2170,7 +2175,7 @@ function template(templateSpec, env) {
           loc: loc
         });
       }
-      return obj[name];
+      return container.lookupProperty(obj, name);
     },
     lookupProperty: function lookupProperty(parent, propertyName) {
       var result = parent[propertyName];

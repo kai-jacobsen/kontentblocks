@@ -36,6 +36,7 @@ Class CheckboxGroup extends Field
             return array();
         }
 
+
         return $val;
     }
 
@@ -54,6 +55,15 @@ Class CheckboxGroup extends Field
         if (is_null( $new )) {
             return null;
         }
+
+        if (is_array($new) && is_array($old) && count($old) > count($new)){
+            foreach ($old as $index => $id) {
+                if (!in_array($id,$new)){
+                    $new[$index] = null;
+                }
+            }
+        }
+
         return $new;
     }
 

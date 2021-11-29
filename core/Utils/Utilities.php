@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Utils;
 
+use Kontentblocks\Backend\Environment\EnvironmentInterface;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\TermEnvironment;
 use Kontentblocks\Backend\Environment\UserEnvironment;
@@ -592,12 +593,18 @@ class Utilities
 
     /**
      * @param $key
+     * @param EnvironmentInterface|null $environment
      * @return string
      */
-    public static function buildContextKey($key)
+    public static function buildContextKey($key, EnvironmentInterface $environment = null)
     {
+        if (!is_null($environment)) {
+            if ($environment->getId() !== get_the_ID()) {
+                return $key;
+            }
+        }
         if (self::isPreview()) {
-            return '_preview_' . $key;
+            $key = '_preview_' . $key;
         }
         return $key;
     }

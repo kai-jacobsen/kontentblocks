@@ -42,7 +42,7 @@ class SimpleView
      */
     public function __construct($tpl = null, $data = array(), $concat = false, $path = null)
     {
-        $this->data = $data;
+        $this->data = apply_filters('kb.module.view.data',$data);
         $this->tplFile = $tpl;
         $this->concat = $concat;
         $this->engine = Kontentblocks()->getService('templating.twig.common');

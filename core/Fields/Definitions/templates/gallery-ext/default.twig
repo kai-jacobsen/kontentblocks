@@ -1,0 +1,9 @@
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+<div id='{{ Form.getInputFieldId() }}' data-fieldkey='{{ Field.getKey() }}'
+     data-arraykey='{{ Field.getArg('arrayKey') }}' data-module='{{ Field.getFieldId() }}'
+     class='kb-gallery-ext__stage'>
+    <input type="hidden" name="{{ Field.getFieldId() }}[{{ Field.getKey() }}][present]" value="yes">
+
+</div>
+{% endblock %}

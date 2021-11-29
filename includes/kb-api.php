@@ -51,6 +51,7 @@ function renderSingleArea($areaId, $post_id = null, $areaSettings = array(), $mo
     $postId = (is_null($post_id) && !is_null($post)) ? $post->ID : $post_id;
 
 
+
     if (is_null($postId)) {
         return null;
     }

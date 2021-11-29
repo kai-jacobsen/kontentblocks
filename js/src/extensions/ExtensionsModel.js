@@ -5,7 +5,6 @@ module.exports = Backbone.Model.extend({
     this.set('backup-ui', require('extensions/BackupUI'));
     this.set('clipboard', require('extensions/Clipboard').init());
     this.set('yoast', require('extensions/YoastSeo'));
-
   }
 
 });

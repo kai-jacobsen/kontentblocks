@@ -36,10 +36,11 @@ module.exports = BaseView.extend({
     var queryargs = {};
 
 
-    if (this.model.get('value').id !== '') {
+    var preselected = this.model.get('value').id;
+    if (preselected !== undefined) {
       queryargs.post__in = [this.model.get('value').id];
     }
-
+console.log(queryargs);
     wp.media.query(queryargs) // set the query
       .more() // execute the query, this will return an deferred object
       .done(function () { // attach callback, executes after the ajax call succeeded

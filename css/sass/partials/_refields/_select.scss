@@ -1,5 +1,31 @@
 .select-sortable{
   .select2-container--default .select2-selection--multiple .select2-selection__choice{
     float: none;
+    display: block;
+    padding-left: 0;
+    margin-left: 0;
+  }
+}
+
+.kb-field--select{
+
+  .select2-container--default .select2-selection--multiple .select2-selection__rendered{
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .select2-container--default .select2-selection--multiple .select2-selection__choice__display{
+    padding-left: 23px;
+  }
+
+  .select2-container--default .select2-selection--multiple .select2-selection__choice__remove{
+    height: 100%;
+  }
+
+  .select2-container .select2-search--inline{
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    background-color: #fafafa;
+    cursor: pointer;
   }
 }
